@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Activity;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class ActivityController extends Controller
+{
+    public function index()
+    {
+        $activities = Activity::published()
+            ->orderBy('start_at', 'asc')
+            ->with('posts')
+            ->get();
+
+        return view('activities.index', compact('activities'));
+    }
+
+    public function show($slug)
+    {
+        $activity = Activity::where('slug', $slug)
+            ->published()
+            ->with(['posts' => function ($query) {
+                $query->with('comments');
+            }])
+            ->firstOrFail();
+
+        return view('activities.show', compact('activity'));
+    }
+
+    public function edit($slug, Request $request)
+    {
+        $activity = Activity::where('slug', $slug)->firstOrFail();
+
+        return view('activities.edit', compact('activity'));
+    }
+
+    public function update($slug, Request $request)
+    {
+        $activity = Activity::where('slug', $slug)->firstOrFail();
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'start_at' => 'required|date',
+            'end_at' => 'nullable|date|after:start_at',
+            'location' => 'required|string|max:255',
+            'organizer_name' => 'required|string|max:255',
+            'organizer_phone' => 'nullable|string|max:50',
+            'organizer_email' => 'nullable|email|max:255',
+            'status' => 'required|in:published,archived',
+        ]);
+
+        if ($validated['title'] !== $activity->title) {
+            $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+        }
+
+        $activity->update($validated);
+
+        return redirect()->route('activities.edit', $activity->slug)
+            ->with('success', 'Aktivität erfolgreich aktualisiert.');
+    }
+}
