@@ -5,203 +5,191 @@
 @section('content')
     <h1 class="text-2xl font-bold text-gray-800 mb-6">Schichtkalender - Helfer gesucht</h1>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    @php
+        // Define colors for each activity-shift combination
+        $shiftColors = [
+            'Helfer für Märit - Aufbau und Standbetreuung' => [
+                'Aufbau Freitag' => 'bg-blue-500',
+                'Blumenstand Vormittag' => 'bg-green-500',
+                'Cafeteria-Team' => 'bg-yellow-500',
+                'Kinderbetreuung' => 'bg-purple-500',
+                'Abbau-Team' => 'bg-red-500',
+            ],
+            'Helferteam für Kerzenziehen gesucht' => [
+                'Wachsvorbereitung' => 'bg-indigo-500',
+                'Betreuung Kerzenzieh-Station' => 'bg-pink-500',
+                'Verkaufsstand' => 'bg-teal-500',
+                'Aufräumen und Reinigung' => 'bg-orange-500',
+            ],
+            'Helfer für Adventskranzbinden' => [
+                'Material vorbereiten' => 'bg-cyan-500',
+                'Kranzbinden Donnerstag' => 'bg-lime-500',
+            ],
+            'Team für Elternkafi am Schulsamstag' => [
+                'Kafi-Aufbau' => 'bg-amber-500',
+                'Kafi-Betreuung Vormittag' => 'bg-rose-500',
+            ],
+        ];
+
+        // Collect all unique shifts for legend
+        $legendItems = [];
+        foreach ($shiftsByDate as $shifts) {
+            foreach ($shifts as $shift) {
+                $key = $shift->activity->title . '::' . $shift->role;
+                if (!isset($legendItems[$key])) {
+                    $legendItems[$key] = [
+                        'activity' => $shift->activity->title,
+                        'role' => $shift->role,
+                        'color' => $shiftColors[$shift->activity->title][$shift->role] ?? 'bg-gray-500',
+                    ];
+                }
+            }
+        }
+    @endphp
+
+    <!-- Calendar Container -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <!-- Month Navigation -->
+        <div class="flex items-center justify-between p-4 border-b border-gray-200">
+            <a href="{{ route('calendar.index', ['month' => $date->copy()->subMonth()->month, 'year' => $date->copy()->subMonth()->year]) }}"
+               class="p-2 hover:bg-gray-100 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </a>
+
+            <h2 class="text-xl font-semibold text-gray-800">
+                {{ $date->locale('de')->monthName }} {{ $date->year }}
+            </h2>
+
+            <a href="{{ route('calendar.index', ['month' => $date->copy()->addMonth()->month, 'year' => $date->copy()->addMonth()->year]) }}"
+               class="p-2 hover:bg-gray-100 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+
         <!-- Calendar Grid -->
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <!-- Month Navigation -->
-                <div class="flex items-center justify-between mb-4">
-                    <a href="{{ route('calendar.index', ['month' => $date->copy()->subMonth()->month, 'year' => $date->copy()->subMonth()->year]) }}"
-                       class="p-2 hover:bg-gray-100 rounded-lg transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                    </a>
+        <div class="p-4">
+            <div class="grid grid-cols-7 gap-px bg-gray-200">
+                <!-- Weekday Headers -->
+                @foreach(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as $day)
+                    <div class="bg-gray-50 p-2 text-center text-sm font-medium text-gray-700">
+                        {{ $day }}
+                    </div>
+                @endforeach
 
-                    <h2 class="text-xl font-semibold text-gray-800">
-                        {{ $date->locale('de')->monthName }} {{ $date->year }}
-                    </h2>
+                <!-- Calendar Days -->
+                @php
+                    $startOfMonth = $date->copy()->startOfMonth();
+                    $endOfMonth = $date->copy()->endOfMonth();
+                    $startDate = $startOfMonth->copy()->startOfWeek();
+                    $endDate = $endOfMonth->copy()->endOfWeek();
+                    $currentDate = $startDate->copy();
+                @endphp
 
-                    <a href="{{ route('calendar.index', ['month' => $date->copy()->addMonth()->month, 'year' => $date->copy()->addMonth()->year]) }}"
-                       class="p-2 hover:bg-gray-100 rounded-lg transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
-                </div>
-
-                <!-- Calendar Grid -->
-                <div class="grid grid-cols-7 gap-px bg-gray-200">
-                    <!-- Weekday Headers -->
-                    @foreach(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as $day)
-                        <div class="bg-gray-50 p-2 text-center text-sm font-medium text-gray-700">
-                            {{ $day }}
-                        </div>
-                    @endforeach
-
-                    <!-- Calendar Days -->
+                @while($currentDate <= $endDate)
                     @php
-                        $startOfMonth = $date->copy()->startOfMonth();
-                        $endOfMonth = $date->copy()->endOfMonth();
-                        $startDate = $startOfMonth->copy()->startOfWeek();
-                        $endDate = $endOfMonth->copy()->endOfWeek();
-                        $currentDate = $startDate->copy();
+                        $isCurrentMonth = $currentDate->month === $date->month;
+                        $isToday = $currentDate->isToday();
+                        $dateKey = $currentDate->format('Y-m-d');
+                        $dayShifts = $shiftsByDate->get($dateKey, collect());
                     @endphp
 
-                    @while($currentDate <= $endDate)
-                        @php
-                            $isCurrentMonth = $currentDate->month === $date->month;
-                            $isToday = $currentDate->isToday();
-                            $dateKey = $currentDate->format('Y-m-d');
-                            $dayShifts = $shiftsByDate->get($dateKey, collect());
-                        @endphp
-
-                        <div class="bg-white min-h-[100px] p-2 {{ !$isCurrentMonth ? 'text-gray-400' : '' }} {{ $isToday ? 'bg-blue-50' : '' }}">
-                            <div class="font-medium text-sm mb-1 {{ $isToday ? 'text-blue-600' : '' }}">
+                    <div class="bg-white min-h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative">
+                        <div class="p-1">
+                            <div class="font-medium text-sm mb-1 {{ $isToday ? 'text-blue-600' : '' }} {{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
                                 {{ $currentDate->day }}
                             </div>
 
-                            @foreach($dayShifts->take(2) as $shift)
-                                <a href="{{ route('activities.show', $shift->activity->slug) }}"
-                                   class="block text-xs mb-1 truncate hover:text-steiner-blue transition-colors">
-                                    <span class="inline-block w-2 h-2 rounded-full mr-1
-                                        {{ $shift->filled >= $shift->needed ? 'bg-green-500' : 'bg-orange-500' }}">
-                                    </span>
-                                    <span class="{{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}" title="{{ $shift->activity->title }}: {{ $shift->role }}">
-                                        {{ Str::limit($shift->activity->title, 15) }}
-                                    </span>
-                                </a>
-                            @endforeach
-
-                            @if($dayShifts->count() > 2)
-                                <div class="text-xs text-gray-500">
-                                    +{{ $dayShifts->count() - 2 }} weitere
-                                </div>
-                            @endif
-                        </div>
-
-                        @php $currentDate->addDay(); @endphp
-                    @endwhile
-                </div>
-            </div>
-
-            <!-- Month's Shifts List -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Schichten im {{ $date->locale('de')->monthName }}</h3>
-
-                @if($shiftsByDate->isEmpty())
-                    <p class="text-gray-500">Keine Schichten in diesem Monat.</p>
-                @else
-                    <div class="space-y-3">
-                        @foreach($shiftsByDate->sortKeys() as $dateKey => $shifts)
-                            @php
-                                $shiftDate = \Carbon\Carbon::parse($dateKey);
-                            @endphp
-                            <div class="pb-3 border-b border-gray-100 last:border-0">
-                                <div class="font-medium text-gray-800 mb-2">
-                                    {{ $shiftDate->locale('de')->dayName }}, {{ $shiftDate->format('d.m.Y') }}
-                                </div>
-                                @foreach($shifts as $shift)
-                                    <div class="flex items-start space-x-3 ml-4 mb-2">
-                                        <div class="flex-1">
-                                            <a href="{{ route('activities.show', $shift->activity->slug) }}"
-                                               class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors">
-                                                {{ $shift->activity->title }}
-                                            </a>
-                                            <div class="text-sm text-gray-600">
-                                                <strong>{{ $shift->role }}</strong> - {{ $shift->time }}
-                                            </div>
-                                            <div class="text-sm mt-1">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                                                    {{ $shift->filled >= $shift->needed ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800' }}">
-                                                    {{ $shift->filled }}/{{ $shift->needed }} Helfer
-                                                </span>
-                                                @if($shift->filled < $shift->needed)
-                                                    <span class="text-orange-600 text-xs ml-2">
-                                                        Noch {{ $shift->needed - $shift->filled }} {{ ($shift->needed - $shift->filled) == 1 ? 'Helfer' : 'Helfer' }} gesucht!
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="space-y-1">
+                                @foreach($dayShifts as $shift)
+                                    @php
+                                        $color = $shiftColors[$shift->activity->title][$shift->role] ?? 'bg-gray-500';
+                                        $opacity = $shift->filled >= $shift->needed ? 'opacity-50' : '';
+                                    @endphp
+                                    <a href="{{ route('activities.show', $shift->activity->slug) }}"
+                                       class="block text-xs px-1 py-0.5 rounded {{ $color }} {{ $opacity }} text-white truncate hover:opacity-75 transition-opacity"
+                                       title="{{ $shift->activity->title }}: {{ $shift->role }} ({{ $shift->filled }}/{{ $shift->needed }} Helfer)">
+                                        {{ $shift->role }}
+                                    </a>
                                 @endforeach
                             </div>
-                        @endforeach
+                        </div>
                     </div>
-                @endif
+
+                    @php $currentDate->addDay(); @endphp
+                @endwhile
             </div>
         </div>
+    </div>
 
-        <!-- Sidebar -->
-        <div class="lg:col-span-1">
-            <!-- Upcoming Shifts -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Dringend Helfer gesucht</h3>
+    <!-- Month's Shifts List -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Alle Schichten im {{ $date->locale('de')->monthName }}</h3>
 
-                @if($upcomingShifts->isEmpty())
-                    <p class="text-gray-500">Keine offenen Schichten.</p>
-                @else
-                    <div class="space-y-4">
-                        @foreach($upcomingShifts as $shift)
-                            <div class="pb-4 border-b border-gray-100 last:border-0">
-                                <a href="{{ route('activities.show', $shift->activity->slug) }}"
-                                   class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors">
-                                    {{ $shift->activity->title }}
-                                </a>
-                                <div class="text-sm text-gray-600 mt-1">
-                                    <strong>{{ $shift->role }}</strong>
-                                </div>
-                                <div class="text-sm text-gray-600">
-                                    {{ $shift->parsed_date->format('d.m.Y') }}
-                                </div>
-                                <div class="mt-2">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
-                                        {{ $shift->needed - $shift->filled }} {{ ($shift->needed - $shift->filled) == 1 ? 'Platz frei' : 'Plätze frei' }}
-                                    </span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-
-            <!-- Activities Legend -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Aktivitäten mit Schichten</h3>
-                <div class="space-y-2">
-                    @foreach($activities->where('shifts', '>', 0) as $activity)
-                        <div class="flex items-start">
-                            <span class="inline-block w-3 h-3 rounded-full mr-2 mt-0.5
-                                {{ $activity->shifts->where('filled', '<', 'needed')->count() > 0 ? 'bg-orange-500' : 'bg-green-500' }}">
-                            </span>
-                            <div class="flex-1">
-                                <a href="{{ route('activities.show', $activity->slug) }}"
-                                   class="text-sm text-steiner-blue hover:text-steiner-dark transition-colors">
-                                    {{ $activity->title }}
-                                </a>
-                                <div class="text-xs text-gray-500">
-                                    {{ $activity->shifts->count() }} {{ $activity->shifts->count() == 1 ? 'Schicht' : 'Schichten' }}
-                                </div>
-                            </div>
+        @if($shiftsByDate->isEmpty())
+            <p class="text-gray-500">Keine Schichten in diesem Monat.</p>
+        @else
+            <div class="space-y-4">
+                @foreach($shiftsByDate->sortKeys() as $dateKey => $shifts)
+                    @php
+                        $shiftDate = \Carbon\Carbon::parse($dateKey);
+                    @endphp
+                    <div class="pb-4 border-b border-gray-100 last:border-0">
+                        <div class="font-medium text-gray-800 mb-3">
+                            {{ $shiftDate->locale('de')->dayName }}, {{ $shiftDate->format('d.m.Y') }}
                         </div>
-                    @endforeach
-                </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            @foreach($shifts as $shift)
+                                @php
+                                    $color = $shiftColors[$shift->activity->title][$shift->role] ?? 'bg-gray-500';
+                                @endphp
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-3 h-3 rounded-full {{ $color }} mt-1 flex-shrink-0"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <a href="{{ route('activities.show', $shift->activity->slug) }}"
+                                           class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block truncate">
+                                            {{ $shift->activity->title }}
+                                        </a>
+                                        <div class="text-sm text-gray-600">
+                                            <strong>{{ $shift->role }}</strong> - {{ $shift->time }}
+                                        </div>
+                                        <div class="text-sm mt-1">
+                                            @if($shift->filled >= $shift->needed)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                                    Besetzt
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                                                    {{ $shift->needed - $shift->filled }} {{ ($shift->needed - $shift->filled) == 1 ? 'Platz frei' : 'Plätze frei' }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
             </div>
+        @endif
+    </div>
 
-            <!-- Status Legend -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Legende</h3>
-                <div class="space-y-2">
-                    <div class="flex items-center">
-                        <span class="inline-block w-3 h-3 rounded-full bg-orange-500 mr-2"></span>
-                        <span class="text-sm text-gray-700">Helfer gesucht</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="inline-block w-3 h-3 rounded-full bg-green-500 mr-2"></span>
-                        <span class="text-sm text-gray-700">Schicht besetzt</span>
+    <!-- Legend -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Legende</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            @foreach($legendItems as $item)
+                <div class="flex items-start space-x-2">
+                    <div class="w-4 h-4 rounded {{ $item['color'] }} mt-0.5 flex-shrink-0"></div>
+                    <div class="text-sm">
+                        <span class="font-medium">{{ $item['activity'] }}</span><br>
+                        <span class="text-gray-600">{{ $item['role'] }}</span>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 @endsection
