@@ -253,27 +253,27 @@
                             @if($shift->volunteers->count() > 0)
                                 <div class="mb-3">
                                     <p class="text-sm font-medium text-gray-700 mb-2">Angemeldete Helfer:</p>
-                                    <div class="flex flex-wrap gap-2">
+                                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
                                         @foreach($shift->volunteers as $volunteer)
-                                            <span class="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-sm text-gray-700">
-                                                {{ $volunteer->name }}
+                                            <li class="flex items-center justify-between">
+                                                <span>{{ $volunteer->name }}</span>
                                                 @auth
                                                     @if($volunteer->user_id === auth()->id())
                                                         <form action="{{ route('shifts.withdraw', $shift) }}" method="POST" class="inline ml-2">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="text-red-600 hover:text-red-800">
-                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                                </svg>
+                                                            <button type="submit" class="text-xs text-red-600 hover:text-red-800 underline">
+                                                                Abmelden
                                                             </button>
                                                         </form>
                                                     @endif
                                                 @endauth
-                                            </span>
+                                            </li>
                                         @endforeach
-                                    </div>
+                                    </ul>
                                 </div>
+                            @else
+                                <p class="text-sm text-gray-500 mb-3">Noch keine Anmeldungen</p>
                             @endif
 
                             @auth

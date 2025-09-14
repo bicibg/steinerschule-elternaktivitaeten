@@ -46,18 +46,33 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
         ]);
 
         // Add shifts for Herbst-Flohmarkt
-        $activity1->shifts()->create([
+        $shift1 = $activity1->shifts()->create([
             'role' => 'Aufbau-Helfer',
             'time' => 'Samstag, 08:00 - 09:00 Uhr',
             'needed' => 4,
-            'filled' => 0,
+            'filled' => 2,
         ]);
 
-        $activity1->shifts()->create([
+        // Add sample volunteers
+        $shift1->volunteers()->create([
+            'name' => 'Peter Müller',
+            'email' => 'peter@example.com',
+        ]);
+        $shift1->volunteers()->create([
+            'name' => 'Anna Schmidt',
+            'email' => 'anna@example.com',
+        ]);
+
+        $shift2 = $activity1->shifts()->create([
             'role' => 'Standbetreuung Vormittag',
             'time' => 'Samstag, 09:00 - 12:30 Uhr',
             'needed' => 3,
-            'filled' => 0,
+            'filled' => 1,
+        ]);
+
+        $shift2->volunteers()->create([
+            'name' => 'Maria Weber',
+            'email' => 'maria@example.com',
         ]);
 
         $activity1->shifts()->create([

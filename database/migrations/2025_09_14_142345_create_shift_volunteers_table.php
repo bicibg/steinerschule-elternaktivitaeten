@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('shift_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
+            $table->string('email')->nullable();
             $table->timestamps();
 
             $table->index('shift_id');
