@@ -34,7 +34,7 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
         ]);
 
         $post1 = $activity1->posts()->create([
-            'author_name' => 'Anna Schmidt (2a)',
+            'author_name' => 'Anna Schmidt',
             'body' => 'Freue mich schon sehr auf den Flohmarkt! Gibt es auch einen Kindertisch, wo die Kinder selbst ihre Sachen verkaufen können?',
             'ip_hash' => hash('sha256', '192.168.1.1'),
         ]);

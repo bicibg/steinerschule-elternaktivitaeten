@@ -32,14 +32,14 @@ class UserSeeder extends Seeder
 
         // Sample parent users
         $users = [
-            ['name' => 'Anna Schmidt (2a)', 'email' => 'anna.schmidt@example.com'],
-            ['name' => 'Peter Müller (3b)', 'email' => 'peter.mueller@example.com'],
-            ['name' => 'Maria Weber (1a)', 'email' => 'maria.weber@example.com'],
-            ['name' => 'Thomas Fischer (4c)', 'email' => 'thomas.fischer@example.com'],
-            ['name' => 'Lisa Meier (2b)', 'email' => 'lisa.meier@example.com'],
-            ['name' => 'Michael Wagner (5a)', 'email' => 'michael.wagner@example.com'],
-            ['name' => 'Sandra Koch (3a)', 'email' => 'sandra.koch@example.com'],
-            ['name' => 'Stefan Bauer (1b)', 'email' => 'stefan.bauer@example.com'],
+            ['name' => 'Anna Schmidt', 'email' => 'anna.schmidt@example.com'],
+            ['name' => 'Peter Müller', 'email' => 'peter.mueller@example.com'],
+            ['name' => 'Maria Weber', 'email' => 'maria.weber@example.com'],
+            ['name' => 'Thomas Fischer', 'email' => 'thomas.fischer@example.com'],
+            ['name' => 'Lisa Meier', 'email' => 'lisa.meier@example.com'],
+            ['name' => 'Michael Wagner', 'email' => 'michael.wagner@example.com'],
+            ['name' => 'Sandra Koch', 'email' => 'sandra.koch@example.com'],
+            ['name' => 'Stefan Bauer', 'email' => 'stefan.bauer@example.com'],
         ];
 
         foreach ($users as $userData) {
