@@ -55,24 +55,51 @@ class CalendarController extends Controller
             }
         }
 
-        // Process production activities (show on every day within range)
+        // Process production activities (show spanning across dates)
+        $productionActivities = collect();
         foreach ($activities->where('activity_type', 'production') as $activity) {
             if ($activity->start_at && $activity->end_at) {
-                $current = $activity->start_at->copy()->startOfDay();
-                $end = $activity->end_at->copy()->endOfDay();
+                $actStart = $activity->start_at->copy()->startOfDay();
+                $actEnd = $activity->end_at->copy()->endOfDay();
 
-                while ($current <= $end) {
-                    if ($current->month == $currentMonth && $current->year == $currentYear) {
+                // Calculate display range within current month
+                $displayStart = $actStart->copy();
+                if ($displayStart < $startOfMonth) {
+                    $displayStart = $startOfMonth->copy();
+                }
+
+                $displayEnd = $actEnd->copy();
+                if ($displayEnd > $endOfMonth) {
+                    $displayEnd = $endOfMonth->copy();
+                }
+
+                // Only process if activity overlaps with current month
+                if ($displayStart <= $endOfMonth && $displayEnd >= $startOfMonth) {
+                    $productionActivities->push([
+                        'activity' => $activity,
+                        'start' => $displayStart,
+                        'end' => $displayEnd,
+                        'full_start' => $activity->start_at,
+                        'full_end' => $activity->end_at,
+                    ]);
+
+                    // Add calendar items for each day in the range
+                    $current = $displayStart->copy();
+                    while ($current <= $displayEnd) {
                         $calendarItems->push([
                             'type' => 'production',
                             'date' => $current->copy(),
                             'title' => $activity->title,
                             'activity' => $activity,
-                            'color' => 'bg-yellow-400',
+                            'color' => $this->getItemColor($activity),
                             'note' => $activity->participation_note,
+                            'date_range' => $displayStart->format('d.m') . '-' . $displayEnd->format('d.m'),
+                            'is_start' => $current->isSameDay($displayStart),
+                            'is_end' => $current->isSameDay($displayEnd),
+                            'is_middle' => !$current->isSameDay($displayStart) && !$current->isSameDay($displayEnd),
                         ]);
+                        $current->addDay();
                     }
-                    $current->addDay();
                 }
             }
         }
@@ -94,9 +121,45 @@ class CalendarController extends Controller
             }
         }
 
-        // Process flexible help activities
+        // Process flexible help activities (spanning activities)
         foreach ($activities->where('activity_type', 'flexible_help') as $activity) {
-            if ($activity->start_at) {
+            if ($activity->start_at && $activity->end_at) {
+                $actStart = $activity->start_at->copy()->startOfDay();
+                $actEnd = $activity->end_at->copy()->endOfDay();
+
+                // Calculate display range within current month
+                $displayStart = $actStart->copy();
+                if ($displayStart < $startOfMonth) {
+                    $displayStart = $startOfMonth->copy();
+                }
+
+                $displayEnd = $actEnd->copy();
+                if ($displayEnd > $endOfMonth) {
+                    $displayEnd = $endOfMonth->copy();
+                }
+
+                // Only process if activity overlaps with current month
+                if ($displayStart <= $endOfMonth && $displayEnd >= $startOfMonth) {
+                    // Add calendar items for each day in the range
+                    $current = $displayStart->copy();
+                    while ($current <= $displayEnd) {
+                        $calendarItems->push([
+                            'type' => 'flexible',
+                            'date' => $current->copy(),
+                            'title' => $activity->title,
+                            'activity' => $activity,
+                            'color' => $this->getItemColor($activity),
+                            'note' => 'Flexible Hilfe',
+                            'date_range' => $displayStart->format('d.m') . '-' . $displayEnd->format('d.m'),
+                            'is_start' => $current->isSameDay($displayStart),
+                            'is_end' => $current->isSameDay($displayEnd),
+                            'is_middle' => !$current->isSameDay($displayStart) && !$current->isSameDay($displayEnd),
+                        ]);
+                        $current->addDay();
+                    }
+                }
+            } elseif ($activity->start_at) {
+                // Single day flexible activity
                 $activityDate = $activity->start_at->copy();
                 if ($activityDate->month == $currentMonth && $activityDate->year == $currentYear) {
                     $calendarItems->push([
@@ -104,7 +167,7 @@ class CalendarController extends Controller
                         'date' => $activityDate,
                         'title' => $activity->title,
                         'activity' => $activity,
-                        'color' => 'bg-green-400',
+                        'color' => $this->getItemColor($activity),
                         'note' => 'Flexible Hilfe',
                     ]);
                 }
@@ -128,7 +191,7 @@ class CalendarController extends Controller
             ->sortBy('date')
             ->take(10);
 
-        return view('calendar.index', compact('itemsByDate', 'upcomingItems', 'date', 'currentMonth', 'currentYear', 'activities'));
+        return view('calendar.index', compact('itemsByDate', 'upcomingItems', 'date', 'currentMonth', 'currentYear', 'activities', 'productionActivities'));
     }
 
     private function parseShiftDate($timeString)
@@ -163,35 +226,46 @@ class CalendarController extends Controller
 
     private function getItemColor($activity, $shiftRole = null)
     {
-        // Define colors for different activities/shifts
-        $colors = [
-            'Helfer für Märit - Aufbau und Standbetreuung' => [
-                'Aufbau Freitag' => 'bg-blue-500',
-                'Blumenstand Vormittag' => 'bg-green-500',
-                'Cafeteria-Team' => 'bg-yellow-500',
-                'Kinderbetreuung' => 'bg-purple-500',
-                'Abbau-Team' => 'bg-red-500',
-            ],
-            'Helferteam für Kerzenziehen gesucht' => [
-                'Wachsvorbereitung' => 'bg-indigo-500',
-                'Betreuung Kerzenzieh-Station' => 'bg-pink-500',
-                'Verkaufsstand' => 'bg-teal-500',
-                'Aufräumen und Reinigung' => 'bg-orange-500',
-            ],
-            'Helfer für Adventskranzbinden' => [
-                'Material vorbereiten' => 'bg-cyan-500',
-                'Kranzbinden Donnerstag' => 'bg-lime-500',
-            ],
-            'Team für Elternkafi am Schulsamstag' => [
-                'Kafi-Aufbau' => 'bg-amber-500',
-                'Kafi-Betreuung Vormittag' => 'bg-rose-500',
-            ],
+        // Assign unique colors to each activity based on title hash
+        $activityColors = [
+            'Weihnachtsmärit' => 'bg-red-500',
+            'Ostereiersuche' => 'bg-yellow-500',
+            'Sommerfest' => 'bg-blue-500',
+            'Tag der offenen Tür' => 'bg-green-500',
+            'Theater-Requisiten' => 'bg-purple-500',
+            'Kuchen für Schulanlässe' => 'bg-pink-500',
+            'Kränze für Adventsspirale' => 'bg-indigo-500',
+            'Elternrat' => 'bg-orange-500',
+            'Finanzkommission' => 'bg-teal-500',
+            'Märit' => 'bg-amber-500',
+            'Kerzenziehen' => 'bg-rose-500',
+            'Klassenzimmer renovieren' => 'bg-cyan-500',
+            'Gartentag' => 'bg-lime-500',
+            'Skilager' => 'bg-sky-500',
+            'Theaterprojekt' => 'bg-violet-500',
         ];
 
-        if ($shiftRole && isset($colors[$activity->title][$shiftRole])) {
-            return $colors[$activity->title][$shiftRole];
+        // Check if activity has a predefined color
+        if (isset($activityColors[$activity->title])) {
+            return $activityColors[$activity->title];
         }
 
-        return 'bg-gray-500';
+        // Fallback to category-based colors
+        $categoryColors = [
+            'anlass' => 'bg-blue-500',
+            'haus_umgebung_taskforces' => 'bg-green-500',
+            'produktion' => 'bg-yellow-500',
+            'organisation' => 'bg-purple-500',
+            'verkauf' => 'bg-red-500',
+        ];
+
+        if (isset($categoryColors[$activity->category])) {
+            return $categoryColors[$activity->category];
+        }
+
+        // Generate color based on activity ID for consistency
+        $colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500',
+                   'bg-pink-500', 'bg-indigo-500', 'bg-orange-500', 'bg-teal-500', 'bg-cyan-500'];
+        return $colors[$activity->id % count($colors)];
     }
 }

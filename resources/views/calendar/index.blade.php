@@ -49,10 +49,10 @@
 
         <!-- Calendar Grid -->
         <div class="p-4">
-            <div class="grid grid-cols-7 gap-px bg-gray-200">
+            <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
                 <!-- Weekday Headers -->
                 @foreach(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as $day)
-                    <div class="bg-gray-50 p-2 text-center text-sm font-medium text-gray-700">
+                    <div class="bg-gray-50 py-0.5 px-1 text-center text-xs font-medium text-gray-700">
                         {{ $day }}
                     </div>
                 @endforeach
@@ -74,7 +74,7 @@
                         $dayItems = $itemsByDate->get($dateKey, collect());
                     @endphp
 
-                    <div class="bg-white h-[140px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative overflow-hidden">
+                    <div class="bg-white min-h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative overflow-hidden">
                         <div class="p-1 h-full flex flex-col">
                             <div class="font-medium text-sm mb-1 {{ $isToday ? 'text-blue-600' : '' }} {{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
                                 {{ $currentDate->day }}
@@ -82,17 +82,35 @@
 
                             <div class="space-y-1 flex-1 overflow-y-auto">
                                 @foreach($dayItems as $item)
+                                    @php
+                                        $isSpanning = ($item['type'] === 'production' || $item['type'] === 'flexible') && (isset($item['is_start']) || isset($item['is_middle']) || isset($item['is_end']));
+                                        $roundedClass = '';
+                                        if ($isSpanning) {
+                                            if (isset($item['is_start']) && isset($item['is_end'])) {
+                                                $roundedClass = 'rounded';
+                                            } elseif (isset($item['is_start'])) {
+                                                $roundedClass = 'rounded-l';
+                                            } elseif (isset($item['is_end'])) {
+                                                $roundedClass = 'rounded-r';
+                                            }
+                                        } else {
+                                            $roundedClass = 'rounded';
+                                        }
+                                    @endphp
                                     <a href="{{ route('activities.show', $item['activity']->slug) }}"
-                                       class="block text-xs px-1 py-0.5 rounded {{ $item['color'] }} text-white truncate hover:opacity-75 transition-opacity"
-                                       title="{{ $item['activity']->title }}: {{ $item['title'] }}{{ isset($item['shift']) ? ' (' . $item['shift']->filled . '/' . ($item['shift']->needed ?? '∞') . ' Helfer)' : '' }}">
+                                       class="block text-xs px-1 py-0.5 {{ $roundedClass }} {{ $item['color'] }} text-white hover:opacity-75 transition-opacity relative"
+                                       style="{{ $isSpanning && !isset($item['is_start']) ? 'text-indent: -9999px;' : '' }}"
+                                       title="{{ $item['activity']->title }}{{ isset($item['shift']) ? ': ' . $item['title'] . ' (' . $item['shift']->filled . '/' . ($item['shift']->needed ?? '∞') . ' Helfer)' : '' }}{{ isset($item['date_range']) ? ' (' . $item['date_range'] . ')' : '' }}">
                                         @if($item['type'] === 'shift')
                                             {{ $item['title'] }}
-                                        @elseif($item['type'] === 'production')
-                                            🏭 {{ Str::limit($item['activity']->title, 20) }}
+                                        @elseif($isSpanning)
+                                            @if(isset($item['is_start']))
+                                                {{ $item['activity']->title }}
+                                            @else
+                                                &nbsp;
+                                            @endif
                                         @elseif($item['type'] === 'meeting')
-                                            📅 {{ Str::limit($item['activity']->title, 20) }}
-                                        @elseif($item['type'] === 'flexible')
-                                            🤝 {{ Str::limit($item['activity']->title, 20) }}
+                                            {{ Str::limit($item['activity']->title, 20) }}
                                         @else
                                             {{ Str::limit($item['title'], 25) }}
                                         @endif
@@ -112,104 +130,96 @@
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Alle Aktivitäten im {{ $date->locale('de')->monthName }}</h3>
 
-        @if($itemsByDate->isEmpty())
+        @if($itemsByDate->isEmpty() && (!isset($productionActivities) || $productionActivities->isEmpty()))
             <p class="text-gray-500">Keine Aktivitäten in diesem Monat.</p>
         @else
             <div class="space-y-4">
+                @php
+                    // Group production activities separately
+                    $displayedProduction = collect();
+                @endphp
+
+                @if(isset($productionActivities) && $productionActivities->isNotEmpty())
+                    @foreach($productionActivities as $prod)
+                        <div class="pb-4 border-b border-gray-100 last:border-0">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 mt-1 flex-shrink-0"></div>
+                                <div class="flex-1 min-w-0">
+                                    <a href="{{ route('activities.show', $prod['activity']->slug) }}"
+                                       class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
+                                        {{ $prod['activity']->title }}
+                                    </a>
+                                    <div class="text-sm text-gray-600">
+                                        <span class="text-yellow-700 font-medium">Produktion</span>
+                                        - {{ $prod['start']->format('d.m') }} bis {{ $prod['end']->format('d.m.Y') }}
+                                        @if($prod['activity']->participation_note)
+                                            <br>{{ $prod['activity']->participation_note }}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @php
+                            $displayedProduction->push($prod['activity']->id);
+                        @endphp
+                    @endforeach
+                @endif
+
                 @foreach($itemsByDate->sortKeys() as $dateKey => $items)
                     @php
                         $itemDate = \Carbon\Carbon::parse($dateKey);
+                        // Filter out production activities as they're shown separately
+                        $filteredItems = $items->filter(function($item) use ($displayedProduction) {
+                            return $item['type'] !== 'production' || !$displayedProduction->contains($item['activity']->id);
+                        });
                     @endphp
-                    <div class="pb-4 border-b border-gray-100 last:border-0">
-                        <div class="font-medium text-gray-800 mb-3">
-                            {{ $itemDate->locale('de')->dayName }}, {{ $itemDate->format('d.m.Y') }}
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            @foreach($items as $item)
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-3 h-3 rounded-full {{ $item['color'] }} mt-1 flex-shrink-0"></div>
-                                    <div class="flex-1 min-w-0">
-                                        <a href="{{ route('activities.show', $item['activity']->slug) }}"
-                                           class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
-                                            {{ $item['activity']->title }}
-                                        </a>
-                                        <div class="text-sm text-gray-600">
-                                            @if($item['type'] === 'shift')
-                                                <strong>{{ $item['title'] }}</strong>
-                                                @if(isset($item['shift']->time))
-                                                    - {{ $item['shift']->time }}
+                    @if($filteredItems->isNotEmpty())
+                        <div class="pb-4 border-b border-gray-100 last:border-0">
+                            <div class="font-medium text-gray-800 mb-3">
+                                {{ $itemDate->locale('de')->dayName }}, {{ $itemDate->format('d.m.Y') }}
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                @foreach($filteredItems as $item)
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-3 h-3 rounded-full {{ $item['color'] }} mt-1 flex-shrink-0"></div>
+                                        <div class="flex-1 min-w-0">
+                                            <a href="{{ route('activities.show', $item['activity']->slug) }}"
+                                               class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
+                                                {{ $item['activity']->title }}
+                                            </a>
+                                            <div class="text-sm text-gray-600">
+                                                @if($item['type'] === 'shift')
+                                                    <strong>{{ $item['title'] }}</strong>
+                                                    @if(isset($item['shift']->time))
+                                                        - {{ $item['shift']->time }}
+                                                    @endif
+                                                    @if(isset($item['shift']->needed))
+                                                        <span class="text-xs">
+                                                            ({{ $item['shift']->filled }}/{{ $item['shift']->needed }} Helfer)
+                                                        </span>
+                                                    @elseif(isset($item['shift']->flexible_capacity) && $item['shift']->flexible_capacity)
+                                                        <span class="text-xs text-green-600">Flexible Teilnahme</span>
+                                                    @endif
+                                                @elseif($item['type'] === 'meeting')
+                                                    <span class="text-blue-700 font-medium">Regelmässiges Treffen</span>
+                                                    @if($item['note'])
+                                                        - {{ $item['note'] }}
+                                                    @endif
+                                                @elseif($item['type'] === 'flexible')
+                                                    <span class="text-green-700 font-medium">Flexible Hilfe</span>
+                                                    @if($item['note'])
+                                                        - {{ $item['note'] }}
+                                                    @endif
                                                 @endif
-                                                @if(isset($item['shift']->needed))
-                                                    <span class="text-xs">
-                                                        ({{ $item['shift']->filled }}/{{ $item['shift']->needed }} Helfer)
-                                                    </span>
-                                                @elseif(isset($item['shift']->flexible_capacity) && $item['shift']->flexible_capacity)
-                                                    <span class="text-xs text-green-600">Flexible Teilnahme</span>
-                                                @endif
-                                            @elseif($item['type'] === 'production')
-                                                <span class="text-yellow-700">Produktion</span>
-                                                @if($item['note'])
-                                                    - {{ $item['note'] }}
-                                                @endif
-                                            @elseif($item['type'] === 'meeting')
-                                                <span class="text-blue-700">Treffen</span>
-                                                @if($item['note'])
-                                                    - {{ $item['note'] }}
-                                                @endif
-                                            @elseif($item['type'] === 'flexible')
-                                                <span class="text-green-700">Flexible Hilfe</span>
-                                                @if($item['note'])
-                                                    - {{ $item['note'] }}
-                                                @endif
-                                            @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
             </div>
         @endif
-    </div>
-
-    <!-- Legend -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Legende</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            @foreach($legendItems as $item)
-                <div class="flex items-start space-x-2">
-                    <div class="w-4 h-4 rounded {{ $item['color'] }} mt-0.5 flex-shrink-0"></div>
-                    <div class="text-sm">
-                        <span class="font-medium">{{ $item['activity'] }}</span><br>
-                        <span class="text-gray-600">
-                            @if($item['type'] === 'shift')
-                                {{ $item['title'] }}
-                            @elseif($item['type'] === 'production')
-                                Produktion{{ $item['note'] ? ': ' . $item['note'] : '' }}
-                            @elseif($item['type'] === 'meeting')
-                                Treffen{{ $item['note'] ? ': ' . $item['note'] : '' }}
-                            @elseif($item['type'] === 'flexible')
-                                Flexible Hilfe
-                            @endif
-                        </span>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="mt-4 pt-4 border-t border-gray-100">
-            <div class="text-sm text-gray-600 space-y-1">
-                <div class="flex items-center">
-                    <span class="mr-2">🏭</span> Produktion - Laufende Arbeiten über mehrere Tage
-                </div>
-                <div class="flex items-center">
-                    <span class="mr-2">📅</span> Regelmässige Treffen
-                </div>
-                <div class="flex items-center">
-                    <span class="mr-2">🤝</span> Flexible Hilfe - Jede Unterstützung willkommen
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
