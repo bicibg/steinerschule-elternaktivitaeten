@@ -16,15 +16,31 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <a href="{{ route('activities.index') }}" class="flex items-center">
-                        <svg class="h-10 w-auto" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="h-8 sm:h-10 w-auto" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
                             <text x="10" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="300" fill="#4a90a4" letter-spacing="2px">rudolf</text>
                             <text x="10" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#4a90a4" letter-spacing="1px">steinerschule</text>
                             <text x="160" y="20" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 160 20)">bern</text>
                             <text x="170" y="20" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 170 20)">ittigen</text>
                             <text x="180" y="25" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 180 25)">langnau</text>
                         </svg>
-                        <span class="ml-3 text-steiner-blue font-semibold text-lg">Elternaktivitäten</span>
+                        <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-sm sm:text-lg hidden sm:inline">Elternaktivitäten</span>
                     </a>
+                </div>
+                <div class="flex items-center space-x-2">
+                    @guest
+                        <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Anmelden</a>
+                        <form action="{{ route('demo.login') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="px-3 py-1.5 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors">DEMO</button>
+                        </form>
+                        <a href="{{ route('register') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors hidden sm:inline-block">Registrieren</a>
+                    @else
+                        <span class="text-sm text-steiner-blue mr-2">{{ Auth::user()->name }}</span>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="px-3 py-1.5 text-sm border border-gray-400 text-gray-600 rounded hover:bg-gray-100 transition-colors">Abmelden</button>
+                        </form>
+                    @endguest
                 </div>
             </div>
         </div>

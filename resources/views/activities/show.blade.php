@@ -72,8 +72,25 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Diskussion</h2>
+    <!-- Tabs for Forum and Shifts -->
+    <div x-data="{ activeTab: 'forum' }" class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-gray-200">
+            <button @click="activeTab = 'forum'"
+                    :class="activeTab === 'forum' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
+                    class="px-6 py-3 font-medium focus:outline-none transition-colors">
+                Forum
+            </button>
+            <button @click="activeTab = 'shifts'"
+                    :class="activeTab === 'shifts' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
+                    class="px-6 py-3 font-medium focus:outline-none transition-colors">
+                Schichten
+            </button>
+        </div>
+
+        <!-- Forum Tab Content -->
+        <div x-show="activeTab === 'forum'" class="p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Diskussion</h2>
 
         @php
             $num1 = rand(1, 10);
@@ -204,5 +221,78 @@
                 Noch keine Beiträge vorhanden. Seien Sie der Erste!
             </p>
         @endif
+        </div>
+
+        <!-- Shifts Tab Content -->
+        <div x-show="activeTab === 'shifts'" x-cloak class="p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Schichten & Helfer</h2>
+
+            @if($activity->shifts->count() > 0)
+                <div class="space-y-4">
+                    @foreach($activity->shifts as $shift)
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">{{ $shift->role }}</h3>
+                                    <p class="text-sm text-gray-600 mt-1">{{ $shift->time }}</p>
+                                </div>
+                                <div class="mt-2 sm:mt-0">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                                        {{ $shift->filled >= $shift->needed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $shift->filled }} / {{ $shift->needed }} besetzt
+                                    </span>
+                                </div>
+                            </div>
+
+                            @if($shift->volunteers->count() > 0)
+                                <div class="mb-3">
+                                    <p class="text-sm font-medium text-gray-700 mb-2">Angemeldete Helfer:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach($shift->volunteers as $volunteer)
+                                            <span class="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-sm text-gray-700">
+                                                {{ $volunteer->name }}
+                                                @auth
+                                                    @if($volunteer->user_id === auth()->id())
+                                                        <form action="{{ route('shifts.withdraw', $shift) }}" method="POST" class="inline ml-2">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="text-red-600 hover:text-red-800">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @endauth
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            @auth
+                                @if($shift->filled < $shift->needed && !$shift->volunteers->where('user_id', auth()->id())->count())
+                                    <form action="{{ route('shifts.signup', $shift) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="px-4 py-2 bg-steiner-blue text-white rounded-md hover:bg-steiner-dark transition-colors text-sm">
+                                            Für diese Schicht anmelden
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                <p class="text-sm text-gray-600">
+                                    <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
+                                    um sich für Schichten anzumelden.
+                                </p>
+                            @endauth
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-gray-500 text-center py-8">
+                    Für diese Aktivität wurden keine Schichten geplant.
+                </p>
+            @endif
+        </div>
     </div>
 @endsection

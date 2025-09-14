@@ -43,6 +43,35 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
             'ip_hash' => hash('sha256', '192.168.1.2'),
         ]);
 
+        // Add shifts for Herbst-Flohmarkt
+        $activity1->shifts()->create([
+            'role' => 'Aufbau-Helfer',
+            'time' => 'Samstag, 08:00 - 09:00 Uhr',
+            'needed' => 4,
+            'filled' => 0,
+        ]);
+
+        $activity1->shifts()->create([
+            'role' => 'Standbetreuung Vormittag',
+            'time' => 'Samstag, 09:00 - 12:30 Uhr',
+            'needed' => 3,
+            'filled' => 0,
+        ]);
+
+        $activity1->shifts()->create([
+            'role' => 'Standbetreuung Nachmittag',
+            'time' => 'Samstag, 12:30 - 16:00 Uhr',
+            'needed' => 3,
+            'filled' => 0,
+        ]);
+
+        $activity1->shifts()->create([
+            'role' => 'Abbau-Helfer',
+            'time' => 'Samstag, 16:00 - 17:00 Uhr',
+            'needed' => 4,
+            'filled' => 0,
+        ]);
+
         $post2 = $activity1->posts()->create([
             'author_name' => 'Peter Weber',
             'body' => 'Kann ich auch selbstgemachte Marmeladen und Chutneys verkaufen?',
@@ -63,6 +92,35 @@ Wir suchen noch Helfer für die Standbetreuung. Bitte meldet euch bei Thomas Web
             'organizer_phone' => '+41 31 234 56 78',
             'organizer_email' => 'thomas.weber@example.com',
             'status' => 'published',
+        ]);
+
+        // Add shifts for Kerzenstand Weihnachtsmarkt
+        $activity2->shifts()->create([
+            'role' => 'Standbetreuung Freitag',
+            'time' => 'Freitag, 10:00 - 14:00 Uhr',
+            'needed' => 2,
+            'filled' => 0,
+        ]);
+
+        $activity2->shifts()->create([
+            'role' => 'Standbetreuung Freitag',
+            'time' => 'Freitag, 14:00 - 18:00 Uhr',
+            'needed' => 2,
+            'filled' => 0,
+        ]);
+
+        $activity2->shifts()->create([
+            'role' => 'Standbetreuung Samstag',
+            'time' => 'Samstag, 10:00 - 14:00 Uhr',
+            'needed' => 2,
+            'filled' => 0,
+        ]);
+
+        $activity2->shifts()->create([
+            'role' => 'Kerzen vorbereiten',
+            'time' => 'Donnerstag, 16:00 - 18:00 Uhr',
+            'needed' => 3,
+            'filled' => 0,
         ]);
 
         $activity3 = Activity::create([

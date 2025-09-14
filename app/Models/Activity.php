@@ -57,4 +57,9 @@ class Activity extends Model
     {
         return $query->where('start_at', '>=', now())->orderBy('start_at');
     }
+
+    public function shifts()
+    {
+        return $this->hasMany(Shift::class);
+    }
 }
