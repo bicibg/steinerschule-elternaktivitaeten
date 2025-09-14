@@ -96,25 +96,11 @@
         <div x-show="{{ $activity->has_shifts ? "activeTab === 'forum'" : 'true' }}" class="p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Diskussion</h2>
 
-        @php
-            $num1 = rand(1, 10);
-            $num2 = rand(1, 10);
-            $captchaAnswer = $num1 + $num2;
-            session(['captcha_answer' => $captchaAnswer]);
-        @endphp
-
+        @auth
         <div class="bg-gray-50 rounded-lg p-4 mb-6">
             <h3 class="font-semibold text-gray-700 mb-3">Neuen Beitrag verfassen</h3>
             <form action="{{ route('posts.store', $activity->slug) }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <label for="author_name" class="block text-sm font-medium text-gray-700 mb-1">Ihr Name</label>
-                    <input type="text" id="author_name" name="author_name" required
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           placeholder="z.B. Anna (2a)"
-                           value="{{ old('author_name') }}"
-                           maxlength="100">
-                </div>
                 <div class="mb-3">
                     <label for="body" class="block text-sm font-medium text-gray-700 mb-1">Ihre Nachricht</label>
                     <textarea id="body" name="body" rows="3" required
@@ -123,17 +109,10 @@
                               maxlength="2000">{{ old('body') }}</textarea>
                 </div>
 
-                <div style="position: absolute; left: -9999px;">
-                    <label for="website">Website</label>
-                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
-                </div>
-
-                <div class="mb-3">
-                    <label for="captcha" class="block text-sm font-medium text-gray-700 mb-1">
-                        Sicherheitsfrage: Was ist {{ $num1 }} + {{ $num2 }}?
-                    </label>
-                    <input type="number" id="captcha" name="captcha" required
-                           class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <!-- Honeypot field -->
+                <div style="position: absolute; left: -9999px;" aria-hidden="true">
+                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    <input type="text" name="email_confirm" tabindex="-1" autocomplete="off">
                 </div>
 
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
@@ -141,6 +120,14 @@
                 </button>
             </form>
         </div>
+        @else
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <p class="text-sm text-yellow-800">
+                <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
+                um an der Diskussion teilzunehmen.
+            </p>
+        </div>
+        @endauth
 
         @if($activity->posts->count() > 0)
             <div class="space-y-4">
@@ -154,11 +141,13 @@
                             {!! nl2br(e($post->body)) !!}
                         </div>
 
+                        @auth
                         <button @click="showCommentForm = !showCommentForm"
                                 class="text-sm text-steiner-blue hover:text-steiner-dark">
                             <span x-show="!showCommentForm">Kommentieren</span>
                             <span x-show="showCommentForm" x-cloak>Kommentar abbrechen</span>
                         </button>
+                        @endauth
 
                         @if($post->comments->count() > 0)
                             <div class="mt-4 ml-6 space-y-3">
@@ -176,22 +165,10 @@
                             </div>
                         @endif
 
+                        @auth
                         <div x-show="showCommentForm" x-cloak class="mt-4 ml-6">
-                            @php
-                                $commentNum1 = rand(1, 10);
-                                $commentNum2 = rand(1, 10);
-                                $commentCaptchaAnswer = $commentNum1 + $commentNum2;
-                                session(['captcha_answer_comment_' . $post->id => $commentCaptchaAnswer]);
-                            @endphp
-
                             <form action="{{ route('comments.store', $post) }}" method="POST" class="bg-gray-50 rounded-lg p-3">
                                 @csrf
-                                <div class="mb-2">
-                                    <input type="text" name="author_name" required
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                                           placeholder="Ihr Name"
-                                           maxlength="100">
-                                </div>
                                 <div class="mb-2">
                                     <textarea name="body" rows="2" required
                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
@@ -199,17 +176,10 @@
                                               maxlength="800"></textarea>
                                 </div>
 
-                                <div style="position: absolute; left: -9999px;">
-                                    <label for="website_comment_{{ $post->id }}">Website</label>
-                                    <input type="text" id="website_comment_{{ $post->id }}" name="website" tabindex="-1" autocomplete="off">
-                                </div>
-
-                                <div class="mb-2">
-                                    <label class="block text-xs font-medium text-gray-700 mb-1">
-                                        Was ist {{ $commentNum1 }} + {{ $commentNum2 }}?
-                                    </label>
-                                    <input type="number" name="captcha" required
-                                           class="w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <!-- Honeypot fields -->
+                                <div style="position: absolute; left: -9999px;" aria-hidden="true">
+                                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                                    <input type="text" name="email_confirm" tabindex="-1" autocomplete="off">
                                 </div>
 
                                 <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm">
@@ -217,6 +187,7 @@
                                 </button>
                             </form>
                         </div>
+                        @endauth
                     </div>
                 @endforeach
             </div>
