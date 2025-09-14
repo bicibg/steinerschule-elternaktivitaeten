@@ -20,8 +20,7 @@
                     {{ $activity->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}
                     {{ $activity->label === 'important' ? 'bg-yellow-100 text-yellow-800' : '' }}
                     {{ $activity->label === 'featured' ? 'bg-blue-100 text-blue-800' : '' }}
-                    {{ $activity->label === 'last_minute' ? 'bg-orange-100 text-orange-800' : '' }}
-                    {{ $activity->label === 'help_needed' ? 'bg-purple-100 text-purple-800' : '' }}">
+                    {{ $activity->label === 'last_minute' ? 'bg-orange-100 text-orange-800' : '' }}">
                     {{ $activity->label_text }}
                 </span>
             @endif

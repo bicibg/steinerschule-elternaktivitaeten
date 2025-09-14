@@ -138,7 +138,6 @@ class ActivityResource extends Resource
                         'warning' => 'important',
                         'info' => 'featured',
                         'gray' => 'last_minute',
-                        'primary' => 'help_needed',
                     ])
                     ->formatStateUsing(fn (?string $state): ?string =>
                         $state ? \App\Models\Activity::getAvailableLabels()[$state] ?? null : null

@@ -76,7 +76,6 @@ class Activity extends Model
             'important' => 'Wichtig',
             'featured' => 'Hervorgehoben',
             'last_minute' => 'Last Minute',
-            'help_needed' => 'Hilfe benötigt',
         ];
     }
 
@@ -87,7 +86,6 @@ class Activity extends Model
             'important' => 'yellow',
             'featured' => 'blue',
             'last_minute' => 'orange',
-            'help_needed' => 'purple',
             default => 'gray',
         };
     }

@@ -16,17 +16,23 @@ class ActivitySeeder extends Seeder
     public function run(): void
     {
         $activity1 = Activity::create([
-            'title' => 'Osterbazar',
-            'description' => 'Dieser grosse Anlass findet traditionellerweise immer am Wochenende vor Ostern statt. In den Schulräumen und auf dem Hof werden viele Verkaufstände eingerichtet.
+            'title' => 'Helfer für Osterbazar - Aufbau und Standbetreuung',
+            'description' => 'Für unseren traditionellen Osterbazar am Wochenende vor Ostern suchen wir noch viele helfende Hände!
 
-Schülerarbeiten, Blumen, Bücher, Spielsachen, Kunsthandwerkliches und österliche Überraschungen werden verkauft. Für die Kinder gibt es verschiedenste Aktivitäten.
+AUFBAU FREITAG:
+Wir benötigen Helfer für den Aufbau der Stände, das Herrichten der Räume und die Dekoration. Arbeitszeit: 14:00 - 20:00 Uhr (auch stundenweise möglich).
 
-Im Sihlau-Restaurant, in Cafés und an Ständen kann sich jeder verpflegen und verwöhnen lassen. Im Rahmen des Osterverkaufs finden auch kulturelle Höhepunkte wie Konzerte oder Variétés statt.
+STANDBETREUUNG SAMSTAG:
+- Betreuung des Blumenstandes (Schichten à 2 Stunden)
+- Mithilfe beim Kinderprogramm (Filzen, Basteln)
+- Verkauf von Schülerarbeiten
+- Unterstützung in der Cafeteria
 
-Ein buntes Treiben, sowie gemütliche Treffpunkte zum Plaudern und Verweilen prägen das Bild dieses Anlasses.
+ABBAU SAMSTAG:
+Nach Marktende (16:00 Uhr) benötigen wir Unterstützung beim Aufräumen und Zurückstellen der Möbel.
 
-Viele Eltern engagieren sich neben ihrem wirtschaftlichen Beitrag in Aktivitäten, welche weitere finanzielle Mittel für die Schule erbringen. Von der Realisierung neuer Ideen und von der Initiativkraft lebt die Schule.',
-            'start_at' => now()->addDays(45)->setTime(9, 0),
+Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist willkommen!',
+            'start_at' => now()->addDays(45)->setTime(14, 0),
             'end_at' => now()->addDays(45)->setTime(16, 0),
             'location' => 'Schulgelände Steinerschule Langnau, Schlossstrasse 6',
             'organizer_name' => 'Maria Müller',
@@ -49,11 +55,11 @@ Viele Eltern engagieren sich neben ihrem wirtschaftlichen Beitrag in Aktivitäte
             'ip_hash' => hash('sha256', '192.168.1.2'),
         ]);
 
-        // Add shifts for Frühlingsmarkt
+        // Add shifts for Osterbazar
         $shift1 = $activity1->shifts()->create([
-            'role' => 'Aufbau am Vorabend',
-            'time' => 'Freitag, 17:00 - 20:00 Uhr',
-            'needed' => 6,
+            'role' => 'Aufbau Freitag',
+            'time' => 'Freitag, 14:00 - 20:00 Uhr',
+            'needed' => 8,
             'filled' => 2,
         ]);
 
@@ -72,9 +78,9 @@ Viele Eltern engagieren sich neben ihrem wirtschaftlichen Beitrag in Aktivitäte
         }
 
         $shift2 = $activity1->shifts()->create([
-            'role' => 'Cafeteria Vormittag',
-            'time' => 'Samstag, 09:00 - 12:30 Uhr',
-            'needed' => 4,
+            'role' => 'Blumenstand Vormittag',
+            'time' => 'Samstag, 09:00 - 11:00 Uhr',
+            'needed' => 2,
             'filled' => 1,
         ]);
 
@@ -88,8 +94,8 @@ Viele Eltern engagieren sich neben ihrem wirtschaftlichen Beitrag in Aktivitäte
         }
 
         $activity1->shifts()->create([
-            'role' => 'Cafeteria Nachmittag',
-            'time' => 'Samstag, 12:30 - 16:00 Uhr',
+            'role' => 'Cafeteria-Team',
+            'time' => 'Samstag, 11:00 - 14:00 Uhr',
             'needed' => 4,
             'filled' => 0,
         ]);
@@ -102,31 +108,43 @@ Viele Eltern engagieren sich neben ihrem wirtschaftlichen Beitrag in Aktivitäte
         ]);
 
         $activity1->shifts()->create([
-            'role' => 'Abbau und Aufräumen',
+            'role' => 'Abbau-Team',
             'time' => 'Samstag, 16:00 - 18:00 Uhr',
-            'needed' => 8,
+            'needed' => 10,
             'filled' => 0,
         ]);
 
         $post2 = $activity1->posts()->create([
             'author_name' => 'Stefan Bauer',
-            'body' => 'Suchen noch 2-3 Helfer für den Pizzastand. Wer hat Lust und Zeit? Die Schichten sind flexibel einteilbar.',
+            'body' => 'Für die Cafeteria suchen wir noch dringend Kuchenbäcker! Wer kann einen Kuchen beisteuern? Bitte bis Donnerstag melden.',
             'ip_hash' => hash('sha256', '192.168.1.3'),
         ]);
 
         $activity2 = Activity::create([
-            'title' => 'Kerzenziehen im Advent',
-            'description' => 'Tauchen Sie ein in eine lichtvolle Stimmung, in einen Ort der Ruhe und der Begegnung.
+            'title' => 'Helferteam für Kerzenziehen gesucht',
+            'description' => 'Für das traditionelle Kerzenziehen im Advent suchen wir engagierte Eltern!
 
-Die Eltern der jeweiligen 2. Klasse organisieren in der näheren Umgebung ein öffentliches, vorweihnachtliches Kerzenziehen. Eine Woche lang sich mit Gleichgesinnten treffen und in dieser stimmungsvollen Atmosphäre Kontakte knüpfen, Gedanken austauschen und den alltäglichen Kleinkram vergessen.
+AUFGABENBEREICHE:
 
-Die einen empfinden es als Meditation, als Abtauchen in Bienenwachs-Düfte und in eine angenehme Wärme, die anderen sehen es als erfüllende Arbeit, verbunden mit guten Gesprächen.
+1. WACHSVORBEREITUNG (Montag-Mittwoch)
+- Wachs schmelzen und vorbereiten
+- Farben mischen
+- Arbeitsplätze einrichten
 
-Wir suchen Frauen und Männer, die Zeit und Lust haben, sich für das Kerzenziehen zu engagieren. Exaktes Arbeiten ist ebenso wichtig wie die Freude am Material und an den Kerzen.
+2. BETREUUNG DER KERZENZIEH-STATIONEN (täglich)
+- Anleitung der Besucher beim Kerzenziehen
+- Wachs nachfüllen und Temperatur kontrollieren
+- Kinder beim Ziehen unterstützen
 
-Die Arbeitszeiten orientieren sich an der Kerzenart:
-- Baumkerzen: ca. 4 Stunden am Stück
-- Kranzkerzen: ca. 6-8 Stunden – am Stück oder verteilt auf zwei Tage',
+3. VERKAUFSSTAND
+- Fertige Kerzen verkaufen
+- Kasse führen
+- Beratung der Kunden
+
+Schichten: 3-4 Stunden, flexibel einteilbar
+Zeitraum: 1. bis 2. Adventswoche
+
+Bitte meldet euch für einzelne Tage oder regelmässige Schichten.',
             'start_at' => now()->addDays(20)->setTime(9, 0),
             'end_at' => now()->addDays(35)->setTime(17, 0),
             'location' => 'Werkraum Steinerschule Langnau',
@@ -140,9 +158,9 @@ Die Arbeitszeiten orientieren sich an der Kerzenart:
 
         // Add shifts for Kerzenziehen
         $shift3 = $activity2->shifts()->create([
-            'role' => 'Baumkerzen ziehen',
-            'time' => 'Montag Vormittag, 09:00 - 13:00 Uhr',
-            'needed' => 2,
+            'role' => 'Wachsvorbereitung',
+            'time' => 'Montag, 08:00 - 12:00 Uhr',
+            'needed' => 3,
             'filled' => 1,
         ]);
 
@@ -156,47 +174,52 @@ Die Arbeitszeiten orientieren sich an der Kerzenart:
         }
 
         $activity2->shifts()->create([
-            'role' => 'Standbetreuung Freitag',
-            'time' => 'Freitag, 14:00 - 18:00 Uhr',
+            'role' => 'Betreuung Kerzenzieh-Station',
+            'time' => 'Dienstag, 14:00 - 18:00 Uhr',
             'needed' => 2,
             'filled' => 0,
         ]);
 
         $activity2->shifts()->create([
-            'role' => 'Standbetreuung Samstag',
-            'time' => 'Samstag, 10:00 - 14:00 Uhr',
+            'role' => 'Verkaufsstand',
+            'time' => 'Mittwoch, 14:00 - 18:00 Uhr',
             'needed' => 2,
             'filled' => 0,
         ]);
 
         $activity2->shifts()->create([
-            'role' => 'Kerzen vorbereiten',
-            'time' => 'Donnerstag, 16:00 - 18:00 Uhr',
-            'needed' => 3,
+            'role' => 'Aufräumen und Reinigung',
+            'time' => 'Freitag, 18:00 - 20:00 Uhr',
+            'needed' => 4,
             'filled' => 0,
         ]);
 
         $activity3 = Activity::create([
-            'title' => 'Herbst-Märit Langnau',
-            'description' => 'Marktstände drinnen und draussen begleitet von Musik, Jodeln, Zauberei und Theater.
+            'title' => 'Mithilfe Herbst-Märit',
+            'description' => 'Der Herbst-Märit steht vor der Tür und wir brauchen eure Unterstützung!
 
-Jodlerklub Langnau: 11:00 - 15:00 Uhr durchgehend
-Puppentheater «Lubomir»: 10:30, 13:00 und 15:15 Uhr im Kellertheater (ab 4 Jahren)
-Zauberer «Fjodoro»: 11:45 und 14:15 Uhr
-Duo Adelante / Koro Mundartfolk: 10:00 und 16:00 Uhr
+BENÖTIGTE HELFER:
 
-Zusätzliche Aktivitäten:
-- Kistenklettern
-- Kerzenziehen
-- Crêpes
-- Olivenöl
-- Alpkäse
-- Blumenkränze
-- Marktkafi
-- Wolle und Gebackenes
-und vieles mehr!
+1. VORBEREITUNG (Freitag, 14:00-20:00)
+- Stände aufbauen
+- Beschilderung anbringen
+- Tische und Bänke aufstellen
 
-Ein buntes Treiben, sowie gemütliche Treffpunkte zum Plaudern und Verweilen prägen das Bild dieses Anlasses.',
+2. MARKTTAG (Samstag, verschiedene Schichten)
+- Crêpes-Stand (2er-Schichten)
+- Marktkafi-Team (Kaffee, Tee, Kuchen)
+- Kinderbereich betreuen (Kistenklettern, Basteln)
+- Parkplatz-Einweisung
+- Kassenführung verschiedene Stände
+
+3. BACKWAREN
+Wir freuen uns über selbstgebackene Kuchen, Waffeln, Zopf für den Verkauf. Bitte bis Donnerstag anmelden.
+
+4. ABBAU (Samstag ab 17:00)
+- Stände abbauen
+- Aufräumen und Reinigung
+
+Bitte tragt euch für Schichten ein. Auch stundenweise Hilfe ist willkommen!',
             'start_at' => now()->addDays(30)->setTime(9, 0),
             'end_at' => now()->addDays(30)->setTime(17, 0),
             'location' => 'Schulhaus Langnau, Turnhalle',
@@ -222,12 +245,31 @@ Ein buntes Treiben, sowie gemütliche Treffpunkte zum Plaudern und Verweilen pr�
 
         // Adventskranzbinden
         $activity4 = Activity::create([
-            'title' => 'Adventskranzbinden',
-            'description' => 'In der Woche vor dem ersten Advent werden in den Werkräumen der Schule Kränze, Türschmuck und weitere Adventsdekorationen für den Verkauf und für den Eigengebrauch kunstvoll gefertigt.
+            'title' => 'Helfer für Adventskranzbinden',
+            'description' => 'In der Woche vor dem ersten Advent binden wir Adventskränze und Dekorationen. Dafür suchen wir kreative Hände!
 
-Das Kranzteam ist froh um alle HelferInnen, die gerne mit Naturmaterial gestalten. Mit der Schulpost gelangt der Aufruf zur Mithilfe in die Familien.
+ARBEITEN:
 
-Gemeinsam entstehen wunderschöne Adventskränze und Dekorationen in gemütlicher Atmosphäre. Die Tradition des gemeinsamen Kranzbindens stärkt die Schulgemeinschaft und stimmt uns auf die besinnliche Adventszeit ein.',
+1. MATERIAL SAMMELN (Montag/Dienstag)
+- Tannenreisig schneiden und sortieren
+- Moos und Zapfen sammeln
+- Material zum Werkraum transportieren
+
+2. KRANZBINDEN (Mittwoch - Freitag)
+- Kränze binden (Anleitung vorhanden)
+- Türschmuck gestalten
+- Gestecke anfertigen
+- Dekoration mit Bändern und Kerzen
+
+3. VERKAUFSVORBEREITUNG (Freitag)
+- Kränze für Verkauf beschriften
+- Preise auszeichnen
+- Verkaufsraum vorbereiten
+
+Arbeitszeiten flexibel zwischen 14:00 und 20:00 Uhr.
+Keine Vorkenntnisse nötig - wir zeigen euch gerne die Techniken!
+
+Kinder können gerne mitgebracht werden.',
             'start_at' => now()->addDays(15)->setTime(14, 0),
             'end_at' => now()->addDays(18)->setTime(18, 0),
             'location' => 'Werkraum Steinerschule Langnau',
@@ -237,7 +279,7 @@ Gemeinsam entstehen wunderschöne Adventskränze und Dekorationen in gemütliche
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
-            'label' => 'help_needed',
+            'label' => 'important',
         ]);
 
         // Add shifts for Adventskranzbinden
@@ -257,14 +299,31 @@ Gemeinsam entstehen wunderschöne Adventskränze und Dekorationen in gemütliche
 
         // Elternkafi
         $activity5 = Activity::create([
-            'title' => 'Elternkafi an Schulsamstagen',
-            'description' => 'Das Elternkafi ist immer ein gemütlicher Treffpunkt an Schulsamstagen, am Tag der Offenen Tür und bei anderen Gelegenheiten.
+            'title' => 'Team für Elternkafi am Schulsamstag',
+            'description' => 'Für das Elternkafi am kommenden Schulsamstag benötigen wir dringend Helfer!
 
-Es findet wetterabhängig im Pavillon oder auf dem Schulhof statt und wird vom Elternrat organisiert. Es werden Kaffee, Tee und Gipfeli angeboten.
+AUFGABEN:
 
-Das Kafi ist morgens vor der Semesterfeier ab 07.45 Uhr, und bei trockenem Wetter auch nach der Feier bis 11.30 Uhr geöffnet.
+1. AUFBAU (7:00 - 7:45 Uhr)
+- Tische und Stühle aufstellen
+- Kaffeemaschine vorbereiten
+- Geschirr bereitstellen
 
-Der Elternrat freut sich auf Ihren Besuch! Die Einnahmen kommen vollständig der Schule zugute.',
+2. BETRIEB (7:45 - 11:30 Uhr)
+- Kaffee und Tee ausschenken
+- Gipfeli verkaufen
+- Kasse führen
+- Tische abräumen
+
+3. KUCHENBEITRÄGE
+Wer kann einen Kuchen beisteuern? Bitte bis Donnerstag melden.
+
+4. ABBAU (11:30 - 12:00 Uhr)
+- Aufräumen
+- Geschirr spülen
+- Möbel zurückstellen
+
+Bitte meldet euch für einzelne Schichten. Die Einnahmen kommen der Schule zugute.',
             'start_at' => now()->addDays(7)->setTime(7, 45),
             'end_at' => now()->addDays(7)->setTime(11, 30),
             'location' => 'Pavillon / Schulhof Steinerschule Langnau',
@@ -292,12 +351,5 @@ Der Elternrat freut sich auf Ihren Besuch! Die Einnahmen kommen vollständig der
             'filled' => 0,
         ]);
 
-        echo "\n=== Aktivitäten mit Edit-Links erstellt ===\n\n";
-
-        $activities = Activity::all();
-        foreach ($activities as $activity) {
-            echo "Aktivität: {$activity->title}\n";
-            echo "Edit URL: /aktivitaeten/{$activity->slug}/edit?token={$activity->edit_token}\n\n";
-        }
     }
 }

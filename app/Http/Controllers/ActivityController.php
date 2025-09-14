@@ -14,10 +14,9 @@ class ActivityController extends Controller
             ->orderByRaw("CASE
                 WHEN label = 'urgent' THEN 1
                 WHEN label = 'important' THEN 2
-                WHEN label = 'help_needed' THEN 3
-                WHEN label = 'featured' THEN 4
-                WHEN label = 'last_minute' THEN 5
-                ELSE 6
+                WHEN label = 'featured' THEN 3
+                WHEN label = 'last_minute' THEN 4
+                ELSE 5
             END")
             ->orderByRaw('COALESCE(start_at, end_at) ASC')
             ->with('posts')
