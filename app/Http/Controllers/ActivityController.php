@@ -8,9 +8,16 @@ use Illuminate\Support\Str;
 
 class ActivityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $activities = Activity::published()
+        $query = Activity::published();
+
+        // Filter by category if provided
+        if ($request->has('category') && $request->category !== 'all') {
+            $query->where('category', $request->category);
+        }
+
+        $activities = $query
             ->orderByRaw("CASE
                 WHEN label = 'urgent' THEN 1
                 WHEN label = 'important' THEN 2
@@ -22,7 +29,19 @@ class ActivityController extends Controller
             ->with('posts')
             ->get();
 
-        return view('activities.index', compact('activities'));
+        $categories = Activity::getAvailableCategories();
+        $selectedCategory = $request->get('category', 'all');
+
+        // Get counts per category
+        $categoryCounts = Activity::published()
+            ->selectRaw('category, COUNT(*) as count')
+            ->groupBy('category')
+            ->pluck('count', 'category')
+            ->toArray();
+
+        $totalCount = Activity::published()->count();
+
+        return view('activities.index', compact('activities', 'categories', 'selectedCategory', 'categoryCounts', 'totalCount'));
     }
 
     public function show($slug)

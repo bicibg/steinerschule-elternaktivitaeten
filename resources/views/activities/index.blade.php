@@ -3,11 +3,68 @@
 @section('title', 'Aktuelle Aktivitäten')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Aktuelle Aktivitäten</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Aktuelle Aktivitäten</h1>
+
+    <!-- Category Filter -->
+    <div class="mb-6 flex flex-wrap gap-2">
+        <a href="{{ route('activities.index', ['category' => 'all']) }}"
+           class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                  {{ $selectedCategory === 'all' ? 'bg-steiner-blue text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+            Alle Kategorien
+            @if($totalCount > 0)
+                <span class="ml-2 px-2 py-0.5 rounded-full text-xs {{ $selectedCategory === 'all' ? 'bg-white/20' : 'bg-gray-200' }}">
+                    {{ $totalCount }}
+                </span>
+            @endif
+        </a>
+        @foreach($categories as $key => $label)
+            <a href="{{ route('activities.index', ['category' => $key]) }}"
+               class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                      {{ $selectedCategory === $key ?
+                         match($key) {
+                             'anlass' => 'bg-blue-500 text-white',
+                             'haus_umgebung_taskforces' => 'bg-green-500 text-white',
+                             'produktion' => 'bg-yellow-500 text-white',
+                             'organisation' => 'bg-purple-500 text-white',
+                             'verkauf' => 'bg-pink-500 text-white',
+                             default => 'bg-gray-500 text-white'
+                         } :
+                         match($key) {
+                             'anlass' => 'bg-blue-100 text-blue-800 hover:bg-blue-200',
+                             'haus_umgebung_taskforces' => 'bg-green-100 text-green-800 hover:bg-green-200',
+                             'produktion' => 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
+                             'organisation' => 'bg-purple-100 text-purple-800 hover:bg-purple-200',
+                             'verkauf' => 'bg-pink-100 text-pink-800 hover:bg-pink-200',
+                             default => 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                         }
+                      }}">
+                {{ $label }}
+                @if(isset($categoryCounts[$key]) && $categoryCounts[$key] > 0)
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-xs {{ $selectedCategory === $key ? 'bg-white/20' : 'bg-white' }}">
+                        {{ $categoryCounts[$key] }}
+                    </span>
+                @endif
+            </a>
+        @endforeach
+    </div>
 
     @if($activities->isEmpty())
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center py-12">
-            <p class="text-gray-500">Zurzeit sind keine Aktivitäten geplant.</p>
+            <p class="text-gray-500">
+                @if($selectedCategory !== 'all' && isset($categories[$selectedCategory]))
+                    Keine Aktivitäten in der Kategorie "{{ $categories[$selectedCategory] }}" gefunden.
+                @else
+                    Zurzeit sind keine Aktivitäten geplant.
+                @endif
+            </p>
+            @if($selectedCategory !== 'all')
+                <a href="{{ route('activities.index') }}" class="mt-4 inline-flex items-center text-steiner-blue hover:text-steiner-dark">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7 7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Alle Aktivitäten anzeigen
+                </a>
+            @endif
         </div>
     @else
         <div class="space-y-4">
