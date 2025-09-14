@@ -97,13 +97,13 @@
                         $dayShifts = $shiftsByDate->get($dateKey, collect());
                     @endphp
 
-                    <div class="bg-white min-h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative">
-                        <div class="p-1">
+                    <div class="bg-white h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative overflow-hidden">
+                        <div class="p-1 h-full flex flex-col">
                             <div class="font-medium text-sm mb-1 {{ $isToday ? 'text-blue-600' : '' }} {{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
                                 {{ $currentDate->day }}
                             </div>
 
-                            <div class="space-y-1">
+                            <div class="space-y-1 flex-1 overflow-y-auto">
                                 @foreach($dayShifts as $shift)
                                     @php
                                         $color = $shiftColors[$shift->activity->title][$shift->role] ?? 'bg-gray-500';
@@ -125,7 +125,7 @@
         </div>
     </div>
 
-    <!-- Month's Shifts List -->
+    <!-- Combined Shifts List with Legend -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Alle Schichten im {{ $date->locale('de')->monthName }}</h3>
 
@@ -141,7 +141,7 @@
                         <div class="font-medium text-gray-800 mb-3">
                             {{ $shiftDate->locale('de')->dayName }}, {{ $shiftDate->format('d.m.Y') }}
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             @foreach($shifts as $shift)
                                 @php
                                     $color = $shiftColors[$shift->activity->title][$shift->role] ?? 'bg-gray-500';
@@ -150,22 +150,11 @@
                                     <div class="w-3 h-3 rounded-full {{ $color }} mt-1 flex-shrink-0"></div>
                                     <div class="flex-1 min-w-0">
                                         <a href="{{ route('activities.show', $shift->activity->slug) }}"
-                                           class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block truncate">
+                                           class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
                                             {{ $shift->activity->title }}
                                         </a>
                                         <div class="text-sm text-gray-600">
                                             <strong>{{ $shift->role }}</strong> - {{ $shift->time }}
-                                        </div>
-                                        <div class="text-sm mt-1">
-                                            @if($shift->filled >= $shift->needed)
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                                    Besetzt
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
-                                                    {{ $shift->needed - $shift->filled }} {{ ($shift->needed - $shift->filled) == 1 ? 'Platz frei' : 'Plätze frei' }}
-                                                </span>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -175,21 +164,5 @@
                 @endforeach
             </div>
         @endif
-    </div>
-
-    <!-- Legend -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Legende</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            @foreach($legendItems as $item)
-                <div class="flex items-start space-x-2">
-                    <div class="w-4 h-4 rounded {{ $item['color'] }} mt-0.5 flex-shrink-0"></div>
-                    <div class="text-sm">
-                        <span class="font-medium">{{ $item['activity'] }}</span><br>
-                        <span class="text-gray-600">{{ $item['role'] }}</span>
-                    </div>
-                </div>
-            @endforeach
-        </div>
     </div>
 @endsection
