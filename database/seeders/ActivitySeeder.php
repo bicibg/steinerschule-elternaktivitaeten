@@ -53,15 +53,19 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
             'filled' => 2,
         ]);
 
-        // Add sample volunteers
-        $shift1->volunteers()->create([
-            'name' => 'Peter Müller',
-            'email' => 'peter@example.com',
-        ]);
-        $shift1->volunteers()->create([
-            'name' => 'Anna Schmidt',
-            'email' => 'anna@example.com',
-        ]);
+        // Add sample volunteers with real users
+        $users = \App\Models\User::whereIn('email', [
+            'peter.mueller@example.com',
+            'anna.schmidt@example.com',
+        ])->get();
+
+        foreach ($users as $user) {
+            $shift1->volunteers()->create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        }
 
         $shift2 = $activity1->shifts()->create([
             'role' => 'Standbetreuung Vormittag',
@@ -70,10 +74,14 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
             'filled' => 1,
         ]);
 
-        $shift2->volunteers()->create([
-            'name' => 'Maria Weber',
-            'email' => 'maria@example.com',
-        ]);
+        $mariaUser = \App\Models\User::where('email', 'maria.weber@example.com')->first();
+        if ($mariaUser) {
+            $shift2->volunteers()->create([
+                'user_id' => $mariaUser->id,
+                'name' => $mariaUser->name,
+                'email' => $mariaUser->email,
+            ]);
+        }
 
         $activity1->shifts()->create([
             'role' => 'Standbetreuung Nachmittag',
@@ -114,12 +122,21 @@ Wir suchen noch Helfer für die Standbetreuung. Bitte meldet euch bei Thomas Web
         ]);
 
         // Add shifts for Kerzenstand Weihnachtsmarkt
-        $activity2->shifts()->create([
+        $shift3 = $activity2->shifts()->create([
             'role' => 'Standbetreuung Freitag',
             'time' => 'Freitag, 10:00 - 14:00 Uhr',
             'needed' => 2,
-            'filled' => 0,
+            'filled' => 1,
         ]);
+
+        $thomasUser = \App\Models\User::where('email', 'thomas.fischer@example.com')->first();
+        if ($thomasUser) {
+            $shift3->volunteers()->create([
+                'user_id' => $thomasUser->id,
+                'name' => $thomasUser->name,
+                'email' => $thomasUser->email,
+            ]);
+        }
 
         $activity2->shifts()->create([
             'role' => 'Standbetreuung Freitag',

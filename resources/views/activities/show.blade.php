@@ -207,7 +207,68 @@
             @if($activity->shifts->count() > 0)
                 <div class="space-y-4">
                     @foreach($activity->shifts as $shift)
-                        <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="border border-gray-200 rounded-lg p-4"
+                             x-data="{
+                                 shift_{{ $shift->id }}: {
+                                     filled: {{ $shift->filled }},
+                                     needed: {{ $shift->needed }},
+                                     volunteers: {{ $shift->volunteers->map(function($v) {
+                                         return ['id' => $v->id, 'name' => $v->name, 'user_id' => $v->user_id];
+                                     })->toJson() }},
+                                     loading: false,
+
+                                     async signup() {
+                                         this.loading = true;
+                                         try {
+                                             const response = await fetch('/api/shifts/{{ $shift->id }}/signup', {
+                                                 method: 'POST',
+                                                 headers: {
+                                                     'Content-Type': 'application/json',
+                                                     'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                                                 }
+                                             });
+                                             const data = await response.json();
+                                             if (data.success) {
+                                                 this.volunteers.push(data.volunteer);
+                                                 this.filled = data.filled;
+                                             }
+                                         } catch (error) {
+                                             console.error(error);
+                                         }
+                                         this.loading = false;
+                                     },
+
+                                     async withdraw() {
+                                         this.loading = true;
+                                         try {
+                                             const response = await fetch('/api/shifts/{{ $shift->id }}/withdraw', {
+                                                 method: 'DELETE',
+                                                 headers: {
+                                                     'Content-Type': 'application/json',
+                                                     'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                                                 }
+                                             });
+                                             const data = await response.json();
+                                             if (data.success) {
+                                                 this.volunteers = this.volunteers.filter(v => v.user_id !== {{ auth()->id() ?? 'null' }});
+                                                 this.filled = data.filled;
+                                             }
+                                         } catch (error) {
+                                             console.error(error);
+                                         }
+                                         this.loading = false;
+                                     },
+
+                                     get isSignedUp() {
+                                         return this.volunteers.some(v => v.user_id === {{ auth()->id() ?? 'null' }});
+                                     },
+
+                                     get isFull() {
+                                         return this.filled >= this.needed;
+                                     }
+                                 }
+                             }"
+                             x-init="">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
                                 <div>
                                     <h3 class="font-semibold text-gray-800">{{ $shift->role }}</h3>

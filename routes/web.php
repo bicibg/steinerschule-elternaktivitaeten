@@ -31,6 +31,14 @@ Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->
 Route::post('/shifts/{shift}/signup', [ShiftController::class, 'signup'])->name('shifts.signup')->middleware('auth');
 Route::delete('/shifts/{shift}/withdraw', [ShiftController::class, 'withdraw'])->name('shifts.withdraw')->middleware('auth');
 
+// API routes for Alpine.js
+Route::prefix('api')->group(function () {
+    Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup');
+    Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\ApiController::class, 'shiftWithdraw'])->name('api.shifts.withdraw');
+    Route::post('/activities/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store');
+    Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store');
+});
+
 Route::middleware(['verify.edit.token'])->group(function () {
     Route::get('/aktivitaeten/{slug}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
     Route::put('/aktivitaeten/{slug}', [ActivityController::class, 'update'])->name('activities.update');
