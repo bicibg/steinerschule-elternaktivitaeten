@@ -98,7 +98,7 @@ Zusätzlich gibt es einen Kinderbasar mit Bastelecke und Märchenerzählung.',
         $activities = Activity::all();
         foreach ($activities as $activity) {
             echo "Aktivität: {$activity->title}\n";
-            echo "Edit URL: " . url("/aktivitaeten/{$activity->slug}/edit?token={$activity->edit_token}") . "\n\n";
+            echo "Edit URL: /aktivitaeten/{$activity->slug}/edit?token={$activity->edit_token}\n\n";
         }
     }
 }
