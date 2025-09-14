@@ -42,10 +42,6 @@
                 <div class="flex items-center space-x-2">
                     @if(!Auth::check())
                         <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Anmelden</a>
-                        <form action="{{ route('demo.login') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="px-3 py-1.5 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors">DEMO</button>
-                        </form>
                         <a href="{{ route('register') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors hidden sm:inline-block">Registrieren</a>
                     @else
                         <span class="text-sm text-steiner-blue mr-2">{{ Auth::user()->name }}</span>
