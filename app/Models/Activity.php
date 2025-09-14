@@ -10,6 +10,7 @@ class Activity extends Model
     protected $fillable = [
         'title',
         'description',
+        'start_at',
         'end_at',
         'location',
         'organizer_name',
@@ -24,6 +25,7 @@ class Activity extends Model
     ];
 
     protected $casts = [
+        'start_at' => 'datetime',
         'end_at' => 'datetime',
     ];
 
@@ -56,7 +58,10 @@ class Activity extends Model
 
     public function scopeUpcoming($query)
     {
-        return $query->where('end_at', '>=', now())->orderBy('end_at');
+        return $query->where(function($q) {
+            $q->where('end_at', '>=', now())
+              ->orWhere('start_at', '>=', now());
+        })->orderBy('start_at');
     }
 
     public function shifts()

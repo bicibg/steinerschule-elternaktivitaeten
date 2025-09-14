@@ -28,12 +28,18 @@
         </div>
 
         <div class="space-y-2 text-gray-600 mb-6">
-            @if($activity->end_at)
+            @if($activity->start_at || $activity->end_at)
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
-                    Endet am {{ $activity->end_at->format('d.m.Y H:i') }} Uhr
+                    @if($activity->start_at && $activity->end_at)
+                        {{ $activity->start_at->format('d.m.Y H:i') }} - {{ $activity->end_at->format('d.m.Y H:i') }} Uhr
+                    @elseif($activity->start_at)
+                        Ab {{ $activity->start_at->format('d.m.Y H:i') }} Uhr
+                    @else
+                        Bis {{ $activity->end_at->format('d.m.Y H:i') }} Uhr
+                    @endif
                 </div>
             @endif
             @if($activity->location)

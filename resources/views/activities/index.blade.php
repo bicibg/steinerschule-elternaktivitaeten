@@ -30,12 +30,18 @@
                             </div>
 
                             <div class="space-y-1 text-sm text-gray-600 mb-3">
-                                @if($activity->end_at)
+                                @if($activity->start_at || $activity->end_at)
                                     <div class="flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
-                                        Endet am {{ $activity->end_at->format('d.m.Y H:i') }} Uhr
+                                        @if($activity->start_at && $activity->end_at)
+                                            {{ $activity->start_at->format('d.m.Y') }} - {{ $activity->end_at->format('d.m.Y') }}
+                                        @elseif($activity->start_at)
+                                            Ab {{ $activity->start_at->format('d.m.Y H:i') }}
+                                        @else
+                                            Bis {{ $activity->end_at->format('d.m.Y H:i') }}
+                                        @endif
                                     </div>
                                 @endif
                                 @if($activity->location)
@@ -80,24 +86,29 @@
                             </div>
                         </div>
 
-                        <div class="flex-shrink-0">
-                            <span class="inline-block px-3 py-1 text-sm font-medium rounded-full
-                                @if($activity->start_at->isFuture())
-                                    bg-blue-100 text-blue-800
-                                @elseif($activity->start_at->isToday())
-                                    bg-green-100 text-green-800
-                                @else
-                                    bg-gray-100 text-gray-800
-                                @endif">
-                                @if($activity->start_at->isFuture())
-                                    Bevorstehend
-                                @elseif($activity->start_at->isToday())
-                                    Heute
-                                @else
-                                    Vergangen
-                                @endif
-                            </span>
-                        </div>
+                        @php
+                            $referenceDate = $activity->start_at ?? $activity->end_at;
+                        @endphp
+                        @if($referenceDate)
+                            <div class="flex-shrink-0">
+                                <span class="inline-block px-3 py-1 text-sm font-medium rounded-full
+                                    @if($referenceDate->isFuture())
+                                        bg-blue-100 text-blue-800
+                                    @elseif($referenceDate->isToday())
+                                        bg-green-100 text-green-800
+                                    @else
+                                        bg-gray-100 text-gray-800
+                                    @endif">
+                                    @if($referenceDate->isFuture())
+                                        Bevorstehend
+                                    @elseif($referenceDate->isToday())
+                                        Heute
+                                    @else
+                                        Vergangen
+                                    @endif
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </a>
             @endforeach

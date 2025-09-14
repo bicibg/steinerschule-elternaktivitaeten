@@ -47,6 +47,9 @@ class ActivityResource extends Resource
                             ->required()
                             ->rows(8)
                             ->columnSpanFull(),
+                        Forms\Components\DateTimePicker::make('start_at')
+                            ->label('Beginnt am')
+                            ->displayFormat('d.m.Y H:i'),
                         Forms\Components\DateTimePicker::make('end_at')
                             ->label('Endet am')
                             ->displayFormat('d.m.Y H:i'),
@@ -105,6 +108,11 @@ class ActivityResource extends Resource
                     ->label('Organisator')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('start_at')
+                    ->label('Beginnt am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->placeholder('Kein Startdatum'),
                 Tables\Columns\TextColumn::make('end_at')
                     ->label('Endet am')
                     ->dateTime('d.m.Y H:i')

@@ -19,7 +19,7 @@ class ActivityController extends Controller
                 WHEN label = 'last_minute' THEN 5
                 ELSE 6
             END")
-            ->orderBy('end_at', 'asc')
+            ->orderByRaw('COALESCE(start_at, end_at) ASC')
             ->with('posts')
             ->get();
 
@@ -52,7 +52,8 @@ class ActivityController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'end_at' => 'nullable|date',
+            'start_at' => 'nullable|date',
+            'end_at' => 'nullable|date|after_or_equal:start_at',
             'location' => 'required|string|max:255',
             'organizer_name' => 'required|string|max:255',
             'organizer_phone' => 'nullable|string|max:50',
