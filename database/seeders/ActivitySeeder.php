@@ -16,8 +16,8 @@ class ActivitySeeder extends Seeder
     public function run(): void
     {
         $activity1 = Activity::create([
-            'title' => 'Helfer für Osterbazar - Aufbau und Standbetreuung',
-            'description' => 'Für unseren traditionellen Osterbazar am Wochenende vor Ostern suchen wir noch viele helfende Hände!
+            'title' => 'Helfer für Märit - Aufbau und Standbetreuung',
+            'description' => 'Für unseren traditionellen Märit im November suchen wir noch viele helfende Hände!
 
 AUFBAU FREITAG:
 Wir benötigen Helfer für den Aufbau der Stände, das Herrichten der Räume und die Dekoration. Arbeitszeit: 14:00 - 20:00 Uhr (auch stundenweise möglich).
@@ -32,8 +32,8 @@ ABBAU SAMSTAG:
 Nach Marktende (16:00 Uhr) benötigen wir Unterstützung beim Aufräumen und Zurückstellen der Möbel.
 
 Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist willkommen!',
-            'start_at' => now()->addDays(45)->setTime(14, 0),
-            'end_at' => now()->addDays(45)->setTime(16, 0),
+            'start_at' => now()->year(now()->year)->month(11)->day(9)->setTime(14, 0),
+            'end_at' => now()->year(now()->year)->month(11)->day(9)->setTime(16, 0),
             'location' => 'Schulgelände Steinerschule Langnau, Schlossstrasse 6',
             'organizer_name' => 'Maria Müller',
             'organizer_phone' => '+41 34 402 12 34',
@@ -45,17 +45,17 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
 
         $post1 = $activity1->posts()->create([
             'author_name' => 'Anna Schmidt',
-            'body' => 'Wunderbar! Wir werden mit selbstgemachten Bienenwachskerzen dabei sein. Gibt es noch freie Standplätze für Handarbeiten?',
+            'body' => 'Super! Ich kann beim Märit mit selbstgemachten Bienenwachskerzen dabei sein. Gibt es noch freie Standplätze für Handarbeiten?',
             'ip_hash' => hash('sha256', '192.168.1.1'),
         ]);
 
         $post1->comments()->create([
             'author_name' => 'Maria Müller',
-            'body' => 'Liebe Anna, ja es gibt noch einige Plätze im Handarbeitsbereich. Bitte melde dich bis Ende März bei mir für die Standreservierung.',
+            'body' => 'Liebe Anna, ja es gibt noch einige Plätze im Handarbeitsbereich. Bitte melde dich bis Ende Oktober bei mir für die Standreservierung.',
             'ip_hash' => hash('sha256', '192.168.1.2'),
         ]);
 
-        // Add shifts for Osterbazar
+        // Add shifts for Märit
         $shift1 = $activity1->shifts()->create([
             'role' => 'Aufbau Freitag',
             'time' => 'Freitag, 14:00 - 20:00 Uhr',
@@ -195,8 +195,8 @@ Bitte meldet euch für einzelne Tage oder regelmässige Schichten.',
         ]);
 
         $activity3 = Activity::create([
-            'title' => 'Mithilfe Herbst-Märit',
-            'description' => 'Der Herbst-Märit steht vor der Tür und wir brauchen eure Unterstützung!
+            'title' => 'Mithilfe Frühlings-Märit',
+            'description' => 'Der Frühlings-Märit steht vor der Tür und wir brauchen eure Unterstützung!
 
 BENÖTIGTE HELFER:
 
@@ -220,8 +220,8 @@ Wir freuen uns über selbstgebackene Kuchen, Waffeln, Zopf für den Verkauf. Bit
 - Aufräumen und Reinigung
 
 Bitte tragt euch für Schichten ein. Auch stundenweise Hilfe ist willkommen!',
-            'start_at' => now()->addDays(30)->setTime(9, 0),
-            'end_at' => now()->addDays(30)->setTime(17, 0),
+            'start_at' => now()->year(now()->year + 1)->month(3)->day(25)->setTime(9, 0),
+            'end_at' => now()->year(now()->year + 1)->month(3)->day(25)->setTime(17, 0),
             'location' => 'Schulhaus Langnau, Turnhalle',
             'organizer_name' => 'Sandra Koch',
             'organizer_phone' => '+41 31 345 67 89',
