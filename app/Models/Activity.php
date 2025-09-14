@@ -10,7 +10,6 @@ class Activity extends Model
     protected $fillable = [
         'title',
         'description',
-        'start_at',
         'end_at',
         'location',
         'organizer_name',
@@ -21,10 +20,10 @@ class Activity extends Model
         'edit_token',
         'has_forum',
         'has_shifts',
+        'label',
     ];
 
     protected $casts = [
-        'start_at' => 'datetime',
         'end_at' => 'datetime',
     ];
 
@@ -57,11 +56,40 @@ class Activity extends Model
 
     public function scopeUpcoming($query)
     {
-        return $query->where('start_at', '>=', now())->orderBy('start_at');
+        return $query->where('end_at', '>=', now())->orderBy('end_at');
     }
 
     public function shifts()
     {
         return $this->hasMany(Shift::class);
+    }
+
+    public static function getAvailableLabels(): array
+    {
+        return [
+            'urgent' => 'Dringend',
+            'important' => 'Wichtig',
+            'featured' => 'Hervorgehoben',
+            'last_minute' => 'Last Minute',
+            'help_needed' => 'Hilfe benötigt',
+        ];
+    }
+
+    public function getLabelColorAttribute(): string
+    {
+        return match($this->label) {
+            'urgent' => 'red',
+            'important' => 'yellow',
+            'featured' => 'blue',
+            'last_minute' => 'orange',
+            'help_needed' => 'purple',
+            default => 'gray',
+        };
+    }
+
+    public function getLabelTextAttribute(): ?string
+    {
+        $labels = self::getAvailableLabels();
+        return $labels[$this->label] ?? null;
     }
 }

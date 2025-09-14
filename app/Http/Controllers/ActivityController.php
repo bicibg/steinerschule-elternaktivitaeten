@@ -11,7 +11,15 @@ class ActivityController extends Controller
     public function index()
     {
         $activities = Activity::published()
-            ->orderBy('start_at', 'asc')
+            ->orderByRaw("CASE
+                WHEN label = 'urgent' THEN 1
+                WHEN label = 'important' THEN 2
+                WHEN label = 'help_needed' THEN 3
+                WHEN label = 'featured' THEN 4
+                WHEN label = 'last_minute' THEN 5
+                ELSE 6
+            END")
+            ->orderBy('end_at', 'asc')
             ->with('posts')
             ->get();
 
@@ -44,8 +52,7 @@ class ActivityController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_at' => 'required|date',
-            'end_at' => 'nullable|date|after:start_at',
+            'end_at' => 'nullable|date',
             'location' => 'required|string|max:255',
             'organizer_name' => 'required|string|max:255',
             'organizer_phone' => 'nullable|string|max:50',

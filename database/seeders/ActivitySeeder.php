@@ -16,18 +16,19 @@ class ActivitySeeder extends Seeder
     public function run(): void
     {
         $activity1 = Activity::create([
-            'title' => 'Herbst-Flohmarkt',
-            'description' => 'Zu Gast in der Aula der Steinerschule Langnau, freut sich die Schulgemeinschaft auf einen bunten Herbst-Flohmarkt mit vielen schönen Sachen für die ganze Familie.
+            'title' => 'Frühlingsmarkt',
+            'description' => 'Die Steinerschule Langnau lädt herzlich zum traditionellen Frühlingsmarkt ein! Ein buntes Markttreiben mit handgefertigten Produkten, kulinarischen Köstlichkeiten und einem vielfältigen Kinderprogramm erwartet Sie.
 
-Verkauft werden Kinderkleider, Spielsachen, Bücher, Haushaltsgegenstände und vieles mehr. Der Erlös kommt der Schule zugute.
+Im Angebot: Selbstgemachte Seifen, Kerzen, Holzspielzeug, Eurythmiekleider, Bücher aus dem Antiquariat, biologisches Gemüse und Setzlinge für den Garten. Die Schülerfirmen präsentieren ihre Produkte und in der Cafeteria gibt es hausgemachte Kuchen und fair gehandelten Kaffee.
 
-Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
-            'start_at' => now()->addDays(15)->setTime(9, 0),
-            'end_at' => now()->addDays(15)->setTime(16, 0),
-            'location' => 'Aula Steinerschule Langnau',
+Für die Kinder: Puppenspiel um 11 und 14 Uhr, Filzen, Kerzenziehen und eine Schatzsuche im Schulgarten.
+
+Der Erlös unterstützt die Anschaffung neuer Musikinstrumente für den Schulunterricht.',
+            'end_at' => now()->addDays(45)->setTime(16, 0),
+            'location' => 'Schulgelände Steinerschule Langnau, Schlossstrasse 6',
             'organizer_name' => 'Maria Müller',
-            'organizer_phone' => '+41 31 123 45 67',
-            'organizer_email' => 'maria.mueller@example.com',
+            'organizer_phone' => '+41 34 402 12 34',
+            'organizer_email' => 'maria.mueller@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -35,21 +36,21 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
 
         $post1 = $activity1->posts()->create([
             'author_name' => 'Anna Schmidt',
-            'body' => 'Freue mich schon sehr auf den Flohmarkt! Gibt es auch einen Kindertisch, wo die Kinder selbst ihre Sachen verkaufen können?',
+            'body' => 'Wunderbar! Wir werden mit selbstgemachten Bienenwachskerzen dabei sein. Gibt es noch freie Standplätze für Handarbeiten?',
             'ip_hash' => hash('sha256', '192.168.1.1'),
         ]);
 
         $post1->comments()->create([
             'author_name' => 'Maria Müller',
-            'body' => 'Ja, natürlich! Wir richten einen speziellen Kinderbereich ein. Die Kinder können gerne ihre eigenen Sachen verkaufen.',
+            'body' => 'Liebe Anna, ja es gibt noch einige Plätze im Handarbeitsbereich. Bitte melde dich bis Ende März bei mir für die Standreservierung.',
             'ip_hash' => hash('sha256', '192.168.1.2'),
         ]);
 
-        // Add shifts for Herbst-Flohmarkt
+        // Add shifts for Frühlingsmarkt
         $shift1 = $activity1->shifts()->create([
-            'role' => 'Aufbau-Helfer',
-            'time' => 'Samstag, 08:00 - 09:00 Uhr',
-            'needed' => 4,
+            'role' => 'Aufbau am Vorabend',
+            'time' => 'Freitag, 17:00 - 20:00 Uhr',
+            'needed' => 6,
             'filled' => 2,
         ]);
 
@@ -68,9 +69,9 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
         }
 
         $shift2 = $activity1->shifts()->create([
-            'role' => 'Standbetreuung Vormittag',
+            'role' => 'Cafeteria Vormittag',
             'time' => 'Samstag, 09:00 - 12:30 Uhr',
-            'needed' => 3,
+            'needed' => 4,
             'filled' => 1,
         ]);
 
@@ -84,47 +85,59 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
         }
 
         $activity1->shifts()->create([
-            'role' => 'Standbetreuung Nachmittag',
+            'role' => 'Cafeteria Nachmittag',
             'time' => 'Samstag, 12:30 - 16:00 Uhr',
+            'needed' => 4,
+            'filled' => 0,
+        ]);
+
+        $activity1->shifts()->create([
+            'role' => 'Kinderbetreuung',
+            'time' => 'Samstag, 10:00 - 15:00 Uhr',
             'needed' => 3,
             'filled' => 0,
         ]);
 
         $activity1->shifts()->create([
-            'role' => 'Abbau-Helfer',
-            'time' => 'Samstag, 16:00 - 17:00 Uhr',
-            'needed' => 4,
+            'role' => 'Abbau und Aufräumen',
+            'time' => 'Samstag, 16:00 - 18:00 Uhr',
+            'needed' => 8,
             'filled' => 0,
         ]);
 
         $post2 = $activity1->posts()->create([
-            'author_name' => 'Peter Weber',
-            'body' => 'Kann ich auch selbstgemachte Marmeladen und Chutneys verkaufen?',
+            'author_name' => 'Stefan Bauer',
+            'body' => 'Suchen noch 2-3 Helfer für den Pizzastand. Wer hat Lust und Zeit? Die Schichten sind flexibel einteilbar.',
             'ip_hash' => hash('sha256', '192.168.1.3'),
         ]);
 
         $activity2 = Activity::create([
-            'title' => 'Kerzenstand Weihnachtsmarkt',
-            'description' => 'Die Steinerschule Langnau betreibt wieder einen Kerzenstand auf dem Langnauer Weihnachtsmarkt.
+            'title' => 'Kerzenziehen im Advent',
+            'description' => 'Eine wundervolle Arbeit zugunsten der Steinerschule Langnau!
 
-Kinder und Erwachsene können bei uns schöne Kerzen ziehen. Das ist ein besonderes Erlebnis für die ganze Familie!
+Die einen empfinden es als Meditation, als Abtauchen in Bienenwachs-Düfte und in eine angenehme Wärme, die anderen sehen es als erfüllende Arbeit, verbunden mit guten Gesprächen.
 
-Wir suchen noch Helfer für die Standbetreuung. Bitte meldet euch bei Thomas Weber.',
-            'start_at' => now()->addDays(45)->setTime(10, 0),
-            'end_at' => now()->addDays(48)->setTime(20, 0),
-            'location' => 'Langnauer Weihnachtsmarkt, Stand Nr. 15',
-            'organizer_name' => 'Thomas Weber',
-            'organizer_phone' => '+41 31 234 56 78',
-            'organizer_email' => 'thomas.weber@example.com',
+Wir suchen Frauen und Männer, die Zeit und Lust haben, sich für das Kerzenziehen zu engagieren. Exaktes Arbeiten ist ebenso wichtig wie die Freude am Material und an den Kerzen.
+
+Die Arbeitszeiten orientieren sich an der Kerzenart:
+- Baumkerzen: ca. 4 Stunden am Stück (passt mit den Schulzeiten)
+- Kranzkerzen: ca. 6-8 Stunden – am Stück oder verteilt auf zwei Tage
+
+Sehr willkommen sind auch Zweierteams, die gemeinsam ins Kerzenziehen eintauchen wollen.',
+            'end_at' => now()->addDays(35)->setTime(17, 0),
+            'location' => 'Werkraum Steinerschule Langnau',
+            'organizer_name' => 'Manuela Weber',
+            'organizer_phone' => '+41 78 870 04 40',
+            'organizer_email' => 'manuela.weber@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => false,
             'has_shifts' => true,
         ]);
 
-        // Add shifts for Kerzenstand Weihnachtsmarkt
+        // Add shifts for Kerzenziehen
         $shift3 = $activity2->shifts()->create([
-            'role' => 'Standbetreuung Freitag',
-            'time' => 'Freitag, 10:00 - 14:00 Uhr',
+            'role' => 'Baumkerzen ziehen',
+            'time' => 'Montag Vormittag, 09:00 - 13:00 Uhr',
             'needed' => 2,
             'filled' => 1,
         ]);
@@ -166,7 +179,6 @@ Wir suchen noch Helfer für die Standbetreuung. Bitte meldet euch bei Thomas Web
 Es gibt handgefertigte Dekorationen, Spielzeug, Bücher, selbstgemachte Leckereien und vieles mehr.
 
 Zusätzlich gibt es einen Kinderbereich mit Bastelecke und Märchenerzählung.',
-            'start_at' => now()->addDays(30)->setTime(10, 0),
             'end_at' => now()->addDays(30)->setTime(17, 0),
             'location' => 'Schulhaus Langnau, Turnhalle',
             'organizer_name' => 'Sandra Koch',

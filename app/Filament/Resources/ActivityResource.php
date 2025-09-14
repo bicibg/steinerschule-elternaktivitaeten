@@ -77,10 +77,18 @@ class ActivityResource extends Resource
                             ])
                             ->default('draft')
                             ->required(),
+                        Forms\Components\Select::make('label')
+                            ->label('Kennzeichnung')
+                            ->options(\App\Models\Activity::getAvailableLabels())
+                            ->placeholder('Keine Kennzeichnung')
+                            ->helperText('Nur für Super-Admins sichtbar')
+                            ->visible(fn () => auth()->user()?->is_super_admin),
                         Forms\Components\Toggle::make('has_forum')
                             ->label('Diskussionsforum aktivieren'),
                         Forms\Components\Toggle::make('has_shifts')
-                            ->label('Schichtplanung aktivieren'),
+                            ->label('Schichtplanung aktivieren')
+                            ->reactive()
+                            ->helperText('Schichten können nach dem Speichern im Tab "Schichten" verwaltet werden'),
                     ]),
             ]);
     }
@@ -115,6 +123,19 @@ class ActivityResource extends Resource
                         'archived' => 'Archiviert',
                         default => $state,
                     }),
+                Tables\Columns\BadgeColumn::make('label')
+                    ->label('Kennzeichnung')
+                    ->colors([
+                        'danger' => 'urgent',
+                        'warning' => 'important',
+                        'info' => 'featured',
+                        'gray' => 'last_minute',
+                        'primary' => 'help_needed',
+                    ])
+                    ->formatStateUsing(fn (?string $state): ?string =>
+                        $state ? \App\Models\Activity::getAvailableLabels()[$state] ?? null : null
+                    )
+                    ->visible(fn () => auth()->user()?->is_super_admin),
                 Tables\Columns\IconColumn::make('has_forum')
                     ->label('Forum')
                     ->boolean()
@@ -151,7 +172,7 @@ class ActivityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ShiftsRelationManager::class,
         ];
     }
 

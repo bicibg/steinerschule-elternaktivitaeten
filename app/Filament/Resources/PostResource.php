@@ -28,18 +28,25 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('activity_id')
+                Forms\Components\Select::make('activity_id')
+                    ->label('Aktivität')
+                    ->relationship('activity', 'title')
                     ->required()
-                    ->numeric(),
+                    ->searchable(),
                 Forms\Components\TextInput::make('author_name')
+                    ->label('Autor')
                     ->required(),
                 Forms\Components\Textarea::make('body')
+                    ->label('Nachricht')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('ip_hash'),
+                Forms\Components\TextInput::make('ip_hash')
+                    ->label('IP-Hash'),
                 Forms\Components\Toggle::make('is_hidden')
+                    ->label('Versteckt')
                     ->required(),
-                Forms\Components\TextInput::make('hidden_reason'),
+                Forms\Components\TextInput::make('hidden_reason')
+                    ->label('Grund für Verstecken'),
             ]);
     }
 
@@ -47,25 +54,24 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('activity_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('activity.title')
+                    ->label('Aktivität')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('author_name')
+                    ->label('Autor')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('ip_hash')
+                Tables\Columns\TextColumn::make('body')
+                    ->label('Nachricht')
+                    ->limit(50)
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_hidden')
+                    ->label('Versteckt')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('hidden_reason')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Erstellt am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable(),
             ])
             ->filters([
                 //

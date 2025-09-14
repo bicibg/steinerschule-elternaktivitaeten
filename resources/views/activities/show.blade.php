@@ -12,35 +12,39 @@
         </a>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ $activity->title }}</h1>
+    <div class="bg-white rounded-lg shadow-sm border {{ $activity->label ? 'border-' . $activity->label_color . '-400 border-2' : 'border-gray-200' }} p-6 mb-6">
+        <div class="flex items-center gap-3 mb-4">
+            <h1 class="text-3xl font-bold text-gray-800">{{ $activity->title }}</h1>
+            @if($activity->label_text)
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                    {{ $activity->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}
+                    {{ $activity->label === 'important' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                    {{ $activity->label === 'featured' ? 'bg-blue-100 text-blue-800' : '' }}
+                    {{ $activity->label === 'last_minute' ? 'bg-orange-100 text-orange-800' : '' }}
+                    {{ $activity->label === 'help_needed' ? 'bg-purple-100 text-purple-800' : '' }}">
+                    {{ $activity->label_text }}
+                </span>
+            @endif
+        </div>
 
         <div class="space-y-2 text-gray-600 mb-6">
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                {{ $activity->start_at->format('d.m.Y') }}
-                @if($activity->end_at)
-                    - {{ $activity->end_at->format('d.m.Y') }}
-                @endif
-            </div>
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                {{ $activity->start_at->format('H:i') }} Uhr
-                @if($activity->end_at)
-                    - {{ $activity->end_at->format('H:i') }} Uhr
-                @endif
-            </div>
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                {{ $activity->location }}
-            </div>
+            @if($activity->end_at)
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Endet am {{ $activity->end_at->format('d.m.Y H:i') }} Uhr
+                </div>
+            @endif
+            @if($activity->location)
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    {{ $activity->location }}
+                </div>
+            @endif
         </div>
 
         <div class="prose max-w-none mb-6">
