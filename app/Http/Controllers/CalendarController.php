@@ -240,9 +240,20 @@ class CalendarController extends Controller
             'Märit' => 'bg-amber-500',
             'Kerzenziehen' => 'bg-rose-500',
             'Klassenzimmer renovieren' => 'bg-cyan-500',
-            'Gartentag' => 'bg-lime-500',
+            'Schulgarten-Pflege' => 'bg-lime-500',
+            'Gartentag' => 'bg-emerald-500',
             'Skilager' => 'bg-sky-500',
             'Theaterprojekt' => 'bg-violet-500',
+            'Pausenkiosk' => 'bg-fuchsia-500',
+            'Schulbibliothek Betreuung' => 'bg-slate-500',
+            'Flohmarkt im Frühling' => 'bg-stone-500',
+            'Johannifeuer - Sommerfest' => 'bg-red-600',
+            'Lagerwoche Zürich - Küchenteam gesucht' => 'bg-blue-600',
+            'Eurythmie-Aufführung - Helfer für Bühnenbild' => 'bg-purple-600',
+            'Adventssingen - Liedhefte vorbereiten' => 'bg-pink-600',
+            'Ostereiersuche im Schulgarten' => 'bg-yellow-600',
+            'Skilager Begleitung' => 'bg-sky-600',
+            'Theater-Requisiten herstellen' => 'bg-violet-600',
         ];
 
         // Check if activity has a predefined color
