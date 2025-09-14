@@ -10,6 +10,10 @@ Route::get('/', function () {
     return redirect('/aktivitaeten');
 });
 
+Route::get('/debug', function () {
+    return view('debug');
+});
+
 // Authentication routes
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
