@@ -10,6 +10,7 @@ class Activity extends Model
     protected $fillable = [
         'title',
         'description',
+        'participation_note',
         'start_at',
         'end_at',
         'location',
@@ -19,6 +20,9 @@ class Activity extends Model
         'slug',
         'status',
         'category',
+        'activity_type',
+        'recurring_pattern',
+        'show_in_calendar',
         'edit_token',
         'has_forum',
         'has_shifts',
@@ -28,6 +32,7 @@ class Activity extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
+        'show_in_calendar' => 'boolean',
     ];
 
     protected static function booted()
@@ -88,6 +93,16 @@ class Activity extends Model
             'produktion' => 'Produktion',
             'organisation' => 'Organisation',
             'verkauf' => 'Verkauf',
+        ];
+    }
+
+    public static function getActivityTypes(): array
+    {
+        return [
+            'shift_based' => 'Schichtbasiert',
+            'production' => 'Produktion',
+            'meeting' => 'Regelmässiges Treffen',
+            'flexible_help' => 'Flexible Hilfe',
         ];
     }
 

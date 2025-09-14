@@ -15,9 +15,11 @@ class ActivitySeeder extends Seeder
      */
     public function run(): void
     {
+        // Shift-based activity: Märit
         $activity1 = Activity::create([
             'title' => 'Helfer für Märit - Aufbau und Standbetreuung',
             'category' => 'anlass',
+            'activity_type' => 'shift_based',
             'description' => 'Für unseren traditionellen Märit im November suchen wir noch viele helfende Hände!
 
 AUFBAU FREITAG:
@@ -42,18 +44,7 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
-        ]);
-
-        $post1 = $activity1->posts()->create([
-            'author_name' => 'Anna Schmidt',
-            'body' => 'Super! Ich kann beim Märit mit selbstgemachten Bienenwachskerzen dabei sein. Gibt es noch freie Standplätze für Handarbeiten?',
-            'ip_hash' => hash('sha256', '192.168.1.1'),
-        ]);
-
-        $post1->comments()->create([
-            'author_name' => 'Maria Müller',
-            'body' => 'Liebe Anna, ja es gibt noch einige Plätze im Handarbeitsbereich. Bitte melde dich bis Ende Oktober bei mir für die Standreservierung.',
-            'ip_hash' => hash('sha256', '192.168.1.2'),
+            'show_in_calendar' => true,
         ]);
 
         // Add shifts for Märit
@@ -64,35 +55,12 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
             'filled' => 2,
         ]);
 
-        // Add sample volunteers with real users
-        $users = \App\Models\User::whereIn('email', [
-            'peter.mueller@example.com',
-            'anna.schmidt@example.com',
-        ])->get();
-
-        foreach ($users as $user) {
-            $shift1->volunteers()->create([
-                'user_id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]);
-        }
-
         $shift2 = $activity1->shifts()->create([
             'role' => 'Blumenstand Vormittag',
             'time' => 'Samstag, 09.11.' . now()->year . ', 09:00 - 11:00 Uhr',
             'needed' => 2,
             'filled' => 1,
         ]);
-
-        $mariaUser = \App\Models\User::where('email', 'maria.weber@example.com')->first();
-        if ($mariaUser) {
-            $shift2->volunteers()->create([
-                'user_id' => $mariaUser->id,
-                'name' => $mariaUser->name,
-                'email' => $mariaUser->email,
-            ]);
-        }
 
         $activity1->shifts()->create([
             'role' => 'Cafeteria-Team',
@@ -115,167 +83,111 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
             'filled' => 0,
         ]);
 
-        $post2 = $activity1->posts()->create([
-            'author_name' => 'Stefan Bauer',
-            'body' => 'Für die Cafeteria suchen wir noch dringend Kuchenbäcker! Wer kann einen Kuchen beisteuern? Bitte bis Donnerstag melden.',
-            'ip_hash' => hash('sha256', '192.168.1.3'),
-        ]);
-
+        // Production activity: Kuchen backen
         $activity2 = Activity::create([
-            'title' => 'Helferteam für Kerzenziehen gesucht',
+            'title' => '200 Kuchen für Märit backen',
             'category' => 'produktion',
-            'description' => 'Für das traditionelle Kerzenziehen im Advent suchen wir engagierte Eltern!
+            'activity_type' => 'production',
+            'description' => 'Wir benötigen 200 Kuchen für den Märit-Verkauf!
 
-AUFGABENBEREICHE:
+Jede Familie wird gebeten, mindestens 2 Kuchen beizusteuern. Die Kuchen können zu Hause gebacken werden und müssen bis Freitag, 8. November, 18:00 Uhr in der Schulküche abgegeben werden.
 
-1. WACHSVORBEREITUNG (Montag-Mittwoch)
-- Wachs schmelzen und vorbereiten
-- Farben mischen
-- Arbeitsplätze einrichten
+WICHTIG:
+- Bitte Allergene kennzeichnen (Nüsse, Gluten, etc.)
+- Kuchen in Einwegverpackungen oder beschrifteten Behältern
+- Beliebt sind: Zitronenkuchen, Schokoladenkuchen, Apfelkuchen, Marmorkuchen
+- Auch vegane und glutenfreie Kuchen sind sehr willkommen!
 
-2. BETREUUNG DER KERZENZIEH-STATIONEN (täglich)
-- Anleitung der Besucher beim Kerzenziehen
-- Wachs nachfüllen und Temperatur kontrollieren
-- Kinder beim Ziehen unterstützen
-
-3. VERKAUFSSTAND
-- Fertige Kerzen verkaufen
-- Kasse führen
-- Beratung der Kunden
-
-Schichten: 3-4 Stunden, flexibel einteilbar
-Zeitraum: 1. bis 2. Adventswoche
-
-Bitte meldet euch für einzelne Tage oder regelmässige Schichten.',
-            'start_at' => now()->addDays(20)->setTime(9, 0),
-            'end_at' => now()->addDays(35)->setTime(17, 0),
-            'location' => 'Werkraum Steinerschule Langnau',
-            'organizer_name' => 'Manuela Weber',
-            'organizer_phone' => '+41 78 870 04 40',
-            'organizer_email' => 'manuela.weber@steinerschule-langnau.ch',
-            'status' => 'published',
-            'has_forum' => false,
-            'has_shifts' => true,
-        ]);
-
-        // Add shifts for Kerzenziehen
-        $shift3 = $activity2->shifts()->create([
-            'role' => 'Wachsvorbereitung',
-            'time' => 'Montag, 02.12.' . now()->year . ', 08:00 - 12:00 Uhr',
-            'needed' => 3,
-            'filled' => 1,
-        ]);
-
-        $thomasUser = \App\Models\User::where('email', 'thomas.fischer@example.com')->first();
-        if ($thomasUser) {
-            $shift3->volunteers()->create([
-                'user_id' => $thomasUser->id,
-                'name' => $thomasUser->name,
-                'email' => $thomasUser->email,
-            ]);
-        }
-
-        $activity2->shifts()->create([
-            'role' => 'Betreuung Kerzenzieh-Station',
-            'time' => 'Dienstag, 03.12.' . now()->year . ', 14:00 - 18:00 Uhr',
-            'needed' => 2,
-            'filled' => 0,
-        ]);
-
-        $activity2->shifts()->create([
-            'role' => 'Verkaufsstand',
-            'time' => 'Mittwoch, 04.12.' . now()->year . ', 14:00 - 18:00 Uhr',
-            'needed' => 2,
-            'filled' => 0,
-        ]);
-
-        $activity2->shifts()->create([
-            'role' => 'Aufräumen und Reinigung',
-            'time' => 'Freitag, 06.12.' . now()->year . ', 18:00 - 20:00 Uhr',
-            'needed' => 4,
-            'filled' => 0,
-        ]);
-
-        $activity3 = Activity::create([
-            'title' => 'Mithilfe Frühlings-Märit',
-            'category' => 'anlass',
-            'description' => 'Der Frühlings-Märit steht vor der Tür und wir brauchen eure Unterstützung!
-
-BENÖTIGTE HELFER:
-
-1. VORBEREITUNG (Freitag, 14:00-20:00)
-- Stände aufbauen
-- Beschilderung anbringen
-- Tische und Bänke aufstellen
-
-2. MARKTTAG (Samstag, verschiedene Schichten)
-- Crêpes-Stand (2er-Schichten)
-- Marktkafi-Team (Kaffee, Tee, Kuchen)
-- Kinderbereich betreuen (Kistenklettern, Basteln)
-- Parkplatz-Einweisung
-- Kassenführung verschiedene Stände
-
-3. BACKWAREN
-Wir freuen uns über selbstgebackene Kuchen, Waffeln, Zopf für den Verkauf. Bitte bis Donnerstag anmelden.
-
-4. ABBAU (Samstag ab 17:00)
-- Stände abbauen
-- Aufräumen und Reinigung
-
-Bitte tragt euch für Schichten ein. Auch stundenweise Hilfe ist willkommen!',
-            'start_at' => now()->year(now()->year + 1)->month(3)->day(25)->setTime(9, 0),
-            'end_at' => now()->year(now()->year + 1)->month(3)->day(25)->setTime(17, 0),
-            'location' => 'Schulhaus Langnau, Turnhalle',
+Koordination über die WhatsApp-Gruppe "Märit Kuchen 2024".',
+            'participation_note' => 'Backen zu Hause möglich',
+            'start_at' => now()->year(now()->year)->month(10)->day(20),
+            'end_at' => now()->year(now()->year)->month(11)->day(8),
+            'location' => 'Zu Hause / Abgabe in Schulküche',
             'organizer_name' => 'Sandra Koch',
             'organizer_phone' => '+41 31 345 67 89',
             'organizer_email' => 'sandra.koch@example.com',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
+            'show_in_calendar' => true,
         ]);
 
-        $post3 = $activity3->posts()->create([
-            'author_name' => 'Lisa Meier',
-            'body' => 'Gibt es auch vegetarisches Essen am Märit?',
-            'ip_hash' => hash('sha256', '192.168.1.4'),
+        // Meeting activity: Elternrat
+        $activity3 = Activity::create([
+            'title' => 'Elternrat Sitzungen',
+            'category' => 'organisation',
+            'activity_type' => 'meeting',
+            'description' => 'Der Elternrat trifft sich jeden ersten Donnerstag im Monat zur Koordination der Elternaktivitäten.
+
+THEMEN:
+- Planung kommender Anlässe
+- Koordination der Helfergruppen
+- Budget-Besprechungen
+- Austausch mit Schulleitung
+
+Neue Mitglieder sind herzlich willkommen! Keine Verpflichtung zur regelmässigen Teilnahme.',
+            'recurring_pattern' => 'Jeden ersten Donnerstag im Monat',
+            'participation_note' => 'Offene Teilnahme, keine Anmeldung nötig',
+            'start_at' => now()->year(now()->year)->month(9)->day(1),
+            'end_at' => now()->year(now()->year + 1)->month(7)->day(31),
+            'location' => 'Lehrerzimmer',
+            'organizer_name' => 'Elternrat',
+            'organizer_phone' => '+41 34 402 12 40',
+            'organizer_email' => 'elternrat@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => false,
+            'has_shifts' => false,
+            'show_in_calendar' => true,
         ]);
 
-        $post3->comments()->create([
-            'author_name' => 'Sandra Koch',
-            'body' => 'Ja, wir haben eine grosse Auswahl an vegetarischen und veganen Speisen!',
-            'ip_hash' => hash('sha256', '192.168.1.5'),
-        ]);
-
-        // Adventskranzbinden
+        // Flexible help activity
         $activity4 = Activity::create([
-            'title' => 'Helfer für Adventskranzbinden',
-            'category' => 'produktion',
-            'description' => 'In der Woche vor dem ersten Advent binden wir Adventskränze und Dekorationen. Dafür suchen wir kreative Hände!
+            'title' => 'Gartenpflege - Herbstputz',
+            'category' => 'haus_umgebung_taskforces',
+            'activity_type' => 'flexible_help',
+            'description' => 'Grosser Herbstputz im Schulgarten!
+
+Wir treffen uns am Samstag für die Gartenpflege. Kommt vorbei, wann es euch passt - jede helfende Hand ist willkommen!
 
 ARBEITEN:
+- Laub rechen
+- Beete winterfest machen
+- Sträucher schneiden
+- Kompost umsetzen
+- Spielplatz reinigen
 
-1. MATERIAL SAMMELN (Montag/Dienstag)
-- Tannenreisig schneiden und sortieren
-- Moos und Zapfen sammeln
-- Material zum Werkraum transportieren
+Bringt gerne eigene Gartengeräte mit. Für Verpflegung ist gesorgt!',
+            'participation_note' => 'Flexible Teilnahme - kommt wann ihr könnt!',
+            'start_at' => now()->year(now()->year)->month(10)->day(26)->setTime(9, 0),
+            'end_at' => now()->year(now()->year)->month(10)->day(26)->setTime(16, 0),
+            'location' => 'Schulgarten',
+            'organizer_name' => 'Thomas Fischer',
+            'organizer_phone' => '+41 79 123 45 67',
+            'organizer_email' => 'garten@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => false,
+            'show_in_calendar' => true,
+        ]);
 
-2. KRANZBINDEN (Mittwoch - Freitag)
-- Kränze binden (Anleitung vorhanden)
-- Türschmuck gestalten
-- Gestecke anfertigen
-- Dekoration mit Bändern und Kerzen
+        // Shift-based with flexible capacity
+        $activity5 = Activity::create([
+            'title' => 'Adventskranzbinden',
+            'category' => 'produktion',
+            'activity_type' => 'shift_based',
+            'description' => 'In der Woche vor dem ersten Advent binden wir Adventskränze für den Verkauf.
 
-3. VERKAUFSVORBEREITUNG (Freitag)
-- Kränze für Verkauf beschriften
-- Preise auszeichnen
-- Verkaufsraum vorbereiten
+Je mehr Helfer, desto mehr Kränze können wir produzieren! Keine Vorkenntnisse nötig - wir zeigen euch die Techniken.
 
-Arbeitszeiten flexibel zwischen 14:00 und 20:00 Uhr.
-Keine Vorkenntnisse nötig - wir zeigen euch gerne die Techniken!
+MATERIAL:
+- Tannenreisig wird gestellt
+- Draht und Kerzen vorhanden
+- Dekoration kann mitgebracht werden
 
-Kinder können gerne mitgebracht werden.',
-            'start_at' => now()->addDays(15)->setTime(14, 0),
-            'end_at' => now()->addDays(18)->setTime(18, 0),
+Erlös geht an die Klassenkassen.',
+            'participation_note' => 'Je mehr Helfer, desto besser!',
+            'start_at' => now()->year(now()->year)->month(11)->day(27)->setTime(14, 0),
+            'end_at' => now()->year(now()->year)->month(11)->day(28)->setTime(18, 0),
             'location' => 'Werkraum Steinerschule Langnau',
             'organizer_name' => 'Elternrat',
             'organizer_phone' => '+41 34 402 12 40',
@@ -283,78 +195,106 @@ Kinder können gerne mitgebracht werden.',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
+            'show_in_calendar' => true,
             'label' => 'important',
         ]);
 
-        // Add shifts for Adventskranzbinden
-        $activity4->shifts()->create([
-            'role' => 'Material vorbereiten',
+        // Add shifts with flexible capacity
+        $activity5->shifts()->create([
+            'role' => 'Kranzbinden',
             'time' => 'Mittwoch, 27.11.' . now()->year . ', 14:00 - 18:00 Uhr',
-            'needed' => 3,
-            'filled' => 0,
+            'needed' => null,
+            'flexible_capacity' => true,
+            'filled' => 3,
         ]);
 
-        $activity4->shifts()->create([
-            'role' => 'Kranzbinden Donnerstag',
+        $activity5->shifts()->create([
+            'role' => 'Kranzbinden',
             'time' => 'Donnerstag, 28.11.' . now()->year . ', 14:00 - 18:00 Uhr',
-            'needed' => 5,
+            'needed' => null,
+            'flexible_capacity' => true,
             'filled' => 1,
         ]);
 
-        // Elternkafi
-        $activity5 = Activity::create([
-            'title' => 'Team für Elternkafi am Schulsamstag',
-            'category' => 'haus_umgebung_taskforces',
-            'description' => 'Für das Elternkafi am kommenden Schulsamstag benötigen wir dringend Helfer!
+        // Production: Kerzenziehen
+        $activity6 = Activity::create([
+            'title' => 'Kerzenziehen Produktion',
+            'category' => 'produktion',
+            'activity_type' => 'production',
+            'description' => 'Während der Adventszeit produzieren wir Bienenwachskerzen für den Verkauf.
 
-AUFGABEN:
+Die Kerzen können flexibel während der Öffnungszeiten gezogen werden. Material und Anleitung sind vorhanden.
 
-1. AUFBAU (7:00 - 7:45 Uhr)
-- Tische und Stühle aufstellen
-- Kaffeemaschine vorbereiten
-- Geschirr bereitstellen
+ÖFFNUNGSZEITEN:
+- Montag bis Freitag: 14:00 - 18:00 Uhr
+- Samstag: 10:00 - 16:00 Uhr
 
-2. BETRIEB (7:45 - 11:30 Uhr)
-- Kaffee und Tee ausschenken
-- Gipfeli verkaufen
-- Kasse führen
-- Tische abräumen
-
-3. KUCHENBEITRÄGE
-Wer kann einen Kuchen beisteuern? Bitte bis Donnerstag melden.
-
-4. ABBAU (11:30 - 12:00 Uhr)
-- Aufräumen
-- Geschirr spülen
-- Möbel zurückstellen
-
-Bitte meldet euch für einzelne Schichten. Die Einnahmen kommen der Schule zugute.',
-            'start_at' => now()->addDays(7)->setTime(7, 45),
-            'end_at' => now()->addDays(7)->setTime(11, 30),
-            'location' => 'Pavillon / Schulhof Steinerschule Langnau',
-            'organizer_name' => 'Elternrat',
-            'organizer_phone' => '+41 34 402 12 40',
-            'organizer_email' => 'elternrat@steinerschule-langnau.ch',
+Kinder können gerne mithelfen!',
+            'participation_note' => 'Kommt vorbei, wann es passt',
+            'start_at' => now()->year(now()->year)->month(12)->day(2),
+            'end_at' => now()->year(now()->year)->month(12)->day(20),
+            'location' => 'Werkstatt im Keller',
+            'organizer_name' => 'Lisa Meier',
+            'organizer_phone' => '+41 76 234 56 78',
+            'organizer_email' => 'kerzen@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => false,
-            'has_shifts' => true,
-            'label' => 'urgent',
+            'has_shifts' => false,
+            'show_in_calendar' => true,
         ]);
 
-        // Add shifts for Elternkafi
-        $activity5->shifts()->create([
-            'role' => 'Kafi-Aufbau',
-            'time' => 'Samstag, 21.09.' . now()->year . ', 07:00 - 07:45 Uhr',
-            'needed' => 2,
-            'filled' => 0,
+        // Add sample forum posts for some activities
+        $post1 = $activity1->posts()->create([
+            'author_name' => 'Anna Schmidt',
+            'body' => 'Ich kann beim Aufbau helfen und bringe noch 2 Helfer mit!',
+            'ip_hash' => hash('sha256', '192.168.1.1'),
         ]);
 
-        $activity5->shifts()->create([
-            'role' => 'Kafi-Betreuung Vormittag',
-            'time' => 'Samstag, 21.09.' . now()->year . ', 07:45 - 09:30 Uhr',
-            'needed' => 2,
-            'filled' => 0,
+        $post1->comments()->create([
+            'author_name' => 'Maria Müller',
+            'body' => 'Super! Danke Anna. Bitte kommt direkt zum Haupteingang.',
+            'ip_hash' => hash('sha256', '192.168.1.2'),
         ]);
 
+        $post2 = $activity2->posts()->create([
+            'author_name' => 'Stefan Bauer',
+            'body' => 'Wir backen 3 Zitronenkuchen und 2 vegane Schokoladenkuchen.',
+            'ip_hash' => hash('sha256', '192.168.1.3'),
+        ]);
+
+        $post3 = $activity4->posts()->create([
+            'author_name' => 'Peter Weber',
+            'body' => 'Ich bringe eine Motorsäge mit für die grösseren Äste.',
+            'ip_hash' => hash('sha256', '192.168.1.4'),
+        ]);
+
+        $post3->comments()->create([
+            'author_name' => 'Thomas Fischer',
+            'body' => 'Perfekt! Wir haben einige grosse Äste, die geschnitten werden müssen.',
+            'ip_hash' => hash('sha256', '192.168.1.5'),
+        ]);
+
+        // Add sample volunteers to shifts
+        $users = \App\Models\User::whereIn('email', [
+            'peter.mueller@example.com',
+            'anna.schmidt@example.com',
+            'maria.weber@example.com',
+        ])->get();
+
+        foreach ($users->take(2) as $user) {
+            $shift1->volunteers()->create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        }
+
+        if ($users->count() > 2) {
+            $shift2->volunteers()->create([
+                'user_id' => $users->skip(2)->first()->id,
+                'name' => $users->skip(2)->first()->name,
+                'email' => $users->skip(2)->first()->email,
+            ]);
+        }
     }
 }
