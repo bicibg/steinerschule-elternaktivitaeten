@@ -11,8 +11,8 @@ class CalendarController extends Controller
 {
     public function index(Request $request)
     {
-        $currentMonth = $request->get('month', now()->month);
-        $currentYear = $request->get('year', now()->year);
+        $currentMonth = (int) $request->get('month', now()->month);
+        $currentYear = (int) $request->get('year', now()->year);
 
         $date = now()->setYear($currentYear)->setMonth($currentMonth)->startOfMonth();
 
