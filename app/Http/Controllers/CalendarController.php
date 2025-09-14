@@ -226,57 +226,21 @@ class CalendarController extends Controller
 
     private function getItemColor($activity, $shiftRole = null)
     {
-        // Assign unique colors to each activity based on title hash
-        $activityColors = [
-            'Weihnachtsmärit' => 'bg-red-500',
-            'Ostereiersuche' => 'bg-yellow-500',
-            'Sommerfest' => 'bg-blue-500',
-            'Tag der offenen Tür' => 'bg-green-500',
-            'Theater-Requisiten' => 'bg-purple-500',
-            'Kuchen für Schulanlässe' => 'bg-pink-500',
-            'Kränze für Adventsspirale' => 'bg-indigo-500',
-            'Elternrat' => 'bg-orange-500',
-            'Finanzkommission' => 'bg-teal-500',
-            'Märit' => 'bg-amber-500',
-            'Kerzenziehen' => 'bg-rose-500',
-            'Klassenzimmer renovieren' => 'bg-cyan-500',
-            'Schulgarten-Pflege' => 'bg-lime-500',
-            'Gartentag' => 'bg-emerald-500',
-            'Skilager' => 'bg-sky-500',
-            'Theaterprojekt' => 'bg-violet-500',
-            'Pausenkiosk' => 'bg-fuchsia-500',
-            'Schulbibliothek Betreuung' => 'bg-slate-500',
-            'Flohmarkt im Frühling' => 'bg-stone-500',
-            'Johannifeuer - Sommerfest' => 'bg-red-600',
-            'Lagerwoche Zürich - Küchenteam gesucht' => 'bg-blue-600',
-            'Eurythmie-Aufführung - Helfer für Bühnenbild' => 'bg-purple-600',
-            'Adventssingen - Liedhefte vorbereiten' => 'bg-pink-600',
-            'Ostereiersuche im Schulgarten' => 'bg-yellow-600',
-            'Skilager Begleitung' => 'bg-sky-600',
-            'Theater-Requisiten herstellen' => 'bg-violet-600',
+        // Define available colors palette
+        $colors = [
+            'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500',
+            'bg-pink-500', 'bg-indigo-500', 'bg-orange-500', 'bg-teal-500', 'bg-cyan-500',
+            'bg-amber-500', 'bg-lime-500', 'bg-emerald-500', 'bg-sky-500', 'bg-violet-500',
+            'bg-fuchsia-500', 'bg-rose-500', 'bg-slate-500', 'bg-gray-500', 'bg-stone-500',
+            'bg-red-600', 'bg-blue-600', 'bg-green-600', 'bg-yellow-600', 'bg-purple-600',
+            'bg-pink-600', 'bg-indigo-600', 'bg-orange-600', 'bg-teal-600', 'bg-cyan-600',
         ];
 
-        // Check if activity has a predefined color
-        if (isset($activityColors[$activity->title])) {
-            return $activityColors[$activity->title];
-        }
+        // Generate a consistent hash based on activity ID (so color stays same for each activity)
+        // Using CRC32 for better distribution than simple modulo
+        $hash = crc32($activity->id . $activity->title);
+        $colorIndex = abs($hash) % count($colors);
 
-        // Fallback to category-based colors
-        $categoryColors = [
-            'anlass' => 'bg-blue-500',
-            'haus_umgebung_taskforces' => 'bg-green-500',
-            'produktion' => 'bg-yellow-500',
-            'organisation' => 'bg-purple-500',
-            'verkauf' => 'bg-red-500',
-        ];
-
-        if (isset($categoryColors[$activity->category])) {
-            return $categoryColors[$activity->category];
-        }
-
-        // Generate color based on activity ID for consistency
-        $colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500',
-                   'bg-pink-500', 'bg-indigo-500', 'bg-orange-500', 'bg-teal-500', 'bg-cyan-500'];
-        return $colors[$activity->id % count($colors)];
+        return $colors[$colorIndex];
     }
 }
