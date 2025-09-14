@@ -52,7 +52,7 @@
             <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
                 <!-- Weekday Headers -->
                 @foreach(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as $day)
-                    <div class="bg-gray-50 px-1 text-center text-xs font-medium text-gray-700">
+                    <div class="bg-gray-50 px-2 text-center text-sm font-medium text-gray-700">
                         {{ $day }}
                     </div>
                 @endforeach
