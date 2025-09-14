@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Schulkalender')
+@section('title', 'Schichtkalender')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schulkalender</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schichtkalender - Helfer gesucht</h1>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Calendar Grid -->
@@ -52,28 +52,30 @@
                         @php
                             $isCurrentMonth = $currentDate->month === $date->month;
                             $isToday = $currentDate->isToday();
-                            $dayEvents = $events->filter(function($event) use ($currentDate) {
-                                return $event->date->isSameDay($currentDate);
-                            });
+                            $dateKey = $currentDate->format('Y-m-d');
+                            $dayShifts = $shiftsByDate->get($dateKey, collect());
                         @endphp
 
-                        <div class="bg-white min-h-[80px] p-2 {{ !$isCurrentMonth ? 'text-gray-400' : '' }} {{ $isToday ? 'bg-blue-50' : '' }}">
+                        <div class="bg-white min-h-[100px] p-2 {{ !$isCurrentMonth ? 'text-gray-400' : '' }} {{ $isToday ? 'bg-blue-50' : '' }}">
                             <div class="font-medium text-sm mb-1 {{ $isToday ? 'text-blue-600' : '' }}">
                                 {{ $currentDate->day }}
                             </div>
 
-                            @foreach($dayEvents->take(2) as $event)
-                                <div class="text-xs mb-1 truncate">
-                                    <span class="inline-block w-2 h-2 rounded-full bg-{{ $event->type_color }}-500 mr-1"></span>
-                                    <span class="{{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
-                                        {{ $event->title }}
+                            @foreach($dayShifts->take(2) as $shift)
+                                <a href="{{ route('activities.show', $shift->activity->slug) }}"
+                                   class="block text-xs mb-1 truncate hover:text-steiner-blue transition-colors">
+                                    <span class="inline-block w-2 h-2 rounded-full mr-1
+                                        {{ $shift->filled >= $shift->needed ? 'bg-green-500' : 'bg-orange-500' }}">
                                     </span>
-                                </div>
+                                    <span class="{{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}" title="{{ $shift->activity->title }}: {{ $shift->role }}">
+                                        {{ Str::limit($shift->activity->title, 15) }}
+                                    </span>
+                                </a>
                             @endforeach
 
-                            @if($dayEvents->count() > 2)
+                            @if($dayShifts->count() > 2)
                                 <div class="text-xs text-gray-500">
-                                    +{{ $dayEvents->count() - 2 }} weitere
+                                    +{{ $dayShifts->count() - 2 }} weitere
                                 </div>
                             @endif
                         </div>
@@ -83,57 +85,46 @@
                 </div>
             </div>
 
-            <!-- Month's Events List -->
+            <!-- Month's Shifts List -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Termine im {{ $date->locale('de')->monthName }}</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Schichten im {{ $date->locale('de')->monthName }}</h3>
 
-                @if($events->isEmpty())
-                    <p class="text-gray-500">Keine Termine in diesem Monat.</p>
+                @if($shiftsByDate->isEmpty())
+                    <p class="text-gray-500">Keine Schichten in diesem Monat.</p>
                 @else
                     <div class="space-y-3">
-                        @foreach($events as $event)
-                            <div class="flex items-start space-x-3 pb-3 border-b border-gray-100 last:border-0">
-                                <div class="flex-shrink-0 text-center">
-                                    <div class="text-sm font-medium text-gray-500">
-                                        {{ $event->date->locale('de')->dayName }}
-                                    </div>
-                                    <div class="text-2xl font-bold text-gray-800">
-                                        {{ $event->date->day }}
-                                    </div>
+                        @foreach($shiftsByDate->sortKeys() as $dateKey => $shifts)
+                            @php
+                                $shiftDate = Carbon::parse($dateKey);
+                            @endphp
+                            <div class="pb-3 border-b border-gray-100 last:border-0">
+                                <div class="font-medium text-gray-800 mb-2">
+                                    {{ $shiftDate->locale('de')->dayName }}, {{ $shiftDate->format('d.m.Y') }}
                                 </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2">
-                                        <h4 class="font-medium text-gray-800">{{ $event->title }}</h4>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                                            {{ $event->type === 'holiday' ? 'bg-gray-100 text-gray-800' : '' }}
-                                            {{ $event->type === 'concert' ? 'bg-purple-100 text-purple-800' : '' }}
-                                            {{ $event->type === 'parent_evening' ? 'bg-blue-100 text-blue-800' : '' }}
-                                            {{ $event->type === 'festival' ? 'bg-green-100 text-green-800' : '' }}
-                                            {{ $event->type === 'other' ? 'bg-yellow-100 text-yellow-800' : '' }}">
-                                            {{ $event->type_label }}
-                                        </span>
+                                @foreach($shifts as $shift)
+                                    <div class="flex items-start space-x-3 ml-4 mb-2">
+                                        <div class="flex-1">
+                                            <a href="{{ route('activities.show', $shift->activity->slug) }}"
+                                               class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors">
+                                                {{ $shift->activity->title }}
+                                            </a>
+                                            <div class="text-sm text-gray-600">
+                                                <strong>{{ $shift->role }}</strong> - {{ $shift->time }}
+                                            </div>
+                                            <div class="text-sm mt-1">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+                                                    {{ $shift->filled >= $shift->needed ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800' }}">
+                                                    {{ $shift->filled }}/{{ $shift->needed }} Helfer
+                                                </span>
+                                                @if($shift->filled < $shift->needed)
+                                                    <span class="text-orange-600 text-xs ml-2">
+                                                        Noch {{ $shift->needed - $shift->filled }} {{ ($shift->needed - $shift->filled) == 1 ? 'Helfer' : 'Helfer' }} gesucht!
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
-                                    @if($event->formatted_time)
-                                        <div class="text-sm text-gray-600 mt-1">
-                                            <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            {{ $event->formatted_time }}
-                                        </div>
-                                    @endif
-                                    @if($event->location)
-                                        <div class="text-sm text-gray-600">
-                                            <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                            </svg>
-                                            {{ $event->location }}
-                                        </div>
-                                    @endif
-                                    @if($event->description)
-                                        <p class="text-sm text-gray-700 mt-2">{{ $event->description }}</p>
-                                    @endif
-                                </div>
+                                @endforeach
                             </div>
                         @endforeach
                     </div>
@@ -141,67 +132,74 @@
             </div>
         </div>
 
-        <!-- Upcoming Events Sidebar -->
+        <!-- Sidebar -->
         <div class="lg:col-span-1">
+            <!-- Upcoming Shifts -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Nächste Termine</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Dringend Helfer gesucht</h3>
 
-                @if($upcomingEvents->isEmpty())
-                    <p class="text-gray-500">Keine anstehenden Termine.</p>
+                @if($upcomingShifts->isEmpty())
+                    <p class="text-gray-500">Keine offenen Schichten.</p>
                 @else
                     <div class="space-y-4">
-                        @foreach($upcomingEvents as $event)
+                        @foreach($upcomingShifts as $shift)
                             <div class="pb-4 border-b border-gray-100 last:border-0">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">{{ $event->title }}</h4>
-                                        <div class="text-sm text-gray-600 mt-1">
-                                            {{ $event->date->format('d.m.Y') }}
-                                            @if($event->formatted_time)
-                                                <br>{{ $event->formatted_time }}
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
-                                        {{ $event->type === 'holiday' ? 'bg-gray-100 text-gray-800' : '' }}
-                                        {{ $event->type === 'concert' ? 'bg-purple-100 text-purple-800' : '' }}
-                                        {{ $event->type === 'parent_evening' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $event->type === 'festival' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $event->type === 'other' ? 'bg-yellow-100 text-yellow-800' : '' }}">
-                                        {{ $event->type_label }}
+                                <a href="{{ route('activities.show', $shift->activity->slug) }}"
+                                   class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors">
+                                    {{ $shift->activity->title }}
+                                </a>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    <strong>{{ $shift->role }}</strong>
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    {{ $shift->parsed_date->format('d.m.Y') }}
+                                </div>
+                                <div class="mt-2">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                                        {{ $shift->needed - $shift->filled }} {{ ($shift->needed - $shift->filled) == 1 ? 'Platz frei' : 'Plätze frei' }}
                                     </span>
                                 </div>
-                                @if($event->location)
-                                    <div class="text-sm text-gray-600 mt-2">
-                                        <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        {{ $event->location }}
-                                    </div>
-                                @endif
                             </div>
                         @endforeach
                     </div>
                 @endif
             </div>
 
-            <!-- Legend -->
+            <!-- Activities Legend -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Aktivitäten mit Schichten</h3>
+                <div class="space-y-2">
+                    @foreach($activities->where('shifts', '>', 0) as $activity)
+                        <div class="flex items-start">
+                            <span class="inline-block w-3 h-3 rounded-full mr-2 mt-0.5
+                                {{ $activity->shifts->where('filled', '<', 'needed')->count() > 0 ? 'bg-orange-500' : 'bg-green-500' }}">
+                            </span>
+                            <div class="flex-1">
+                                <a href="{{ route('activities.show', $activity->slug) }}"
+                                   class="text-sm text-steiner-blue hover:text-steiner-dark transition-colors">
+                                    {{ $activity->title }}
+                                </a>
+                                <div class="text-xs text-gray-500">
+                                    {{ $activity->shifts->count() }} {{ $activity->shifts->count() == 1 ? 'Schicht' : 'Schichten' }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Status Legend -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Legende</h3>
                 <div class="space-y-2">
-                    @foreach(App\Models\CalendarEvent::getTypeLabels() as $type => $label)
-                        <div class="flex items-center">
-                            <span class="inline-block w-3 h-3 rounded-full mr-2
-                                {{ $type === 'holiday' ? 'bg-gray-500' : '' }}
-                                {{ $type === 'concert' ? 'bg-purple-500' : '' }}
-                                {{ $type === 'parent_evening' ? 'bg-blue-500' : '' }}
-                                {{ $type === 'festival' ? 'bg-green-500' : '' }}
-                                {{ $type === 'other' ? 'bg-yellow-500' : '' }}">
-                            </span>
-                            <span class="text-sm text-gray-700">{{ $label }}</span>
-                        </div>
-                    @endforeach
+                    <div class="flex items-center">
+                        <span class="inline-block w-3 h-3 rounded-full bg-orange-500 mr-2"></span>
+                        <span class="text-sm text-gray-700">Helfer gesucht</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="inline-block w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                        <span class="text-sm text-gray-700">Schicht besetzt</span>
+                    </div>
                 </div>
             </div>
         </div>
