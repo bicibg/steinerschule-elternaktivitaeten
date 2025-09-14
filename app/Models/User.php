@@ -52,6 +52,8 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->is_admin === true;
+        // Explicitly check for admin status
+        // Handle both boolean and integer values from database
+        return (bool) $this->is_admin;
     }
 }
