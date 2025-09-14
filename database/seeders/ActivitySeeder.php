@@ -17,6 +17,7 @@ class ActivitySeeder extends Seeder
     {
         $activity1 = Activity::create([
             'title' => 'Helfer für Märit - Aufbau und Standbetreuung',
+            'category' => 'anlass',
             'description' => 'Für unseren traditionellen Märit im November suchen wir noch viele helfende Hände!
 
 AUFBAU FREITAG:
@@ -122,6 +123,7 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
 
         $activity2 = Activity::create([
             'title' => 'Helferteam für Kerzenziehen gesucht',
+            'category' => 'produktion',
             'description' => 'Für das traditionelle Kerzenziehen im Advent suchen wir engagierte Eltern!
 
 AUFGABENBEREICHE:
@@ -196,6 +198,7 @@ Bitte meldet euch für einzelne Tage oder regelmässige Schichten.',
 
         $activity3 = Activity::create([
             'title' => 'Mithilfe Frühlings-Märit',
+            'category' => 'anlass',
             'description' => 'Der Frühlings-Märit steht vor der Tür und wir brauchen eure Unterstützung!
 
 BENÖTIGTE HELFER:
@@ -246,6 +249,7 @@ Bitte tragt euch für Schichten ein. Auch stundenweise Hilfe ist willkommen!',
         // Adventskranzbinden
         $activity4 = Activity::create([
             'title' => 'Helfer für Adventskranzbinden',
+            'category' => 'produktion',
             'description' => 'In der Woche vor dem ersten Advent binden wir Adventskränze und Dekorationen. Dafür suchen wir kreative Hände!
 
 ARBEITEN:
@@ -300,6 +304,7 @@ Kinder können gerne mitgebracht werden.',
         // Elternkafi
         $activity5 = Activity::create([
             'title' => 'Team für Elternkafi am Schulsamstag',
+            'category' => 'haus_umgebung_taskforces',
             'description' => 'Für das Elternkafi am kommenden Schulsamstag benötigen wir dringend Helfer!
 
 AUFGABEN:

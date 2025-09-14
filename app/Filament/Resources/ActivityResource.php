@@ -80,6 +80,11 @@ class ActivityResource extends Resource
                             ])
                             ->default('draft')
                             ->required(),
+                        Forms\Components\Select::make('category')
+                            ->label('Kategorie')
+                            ->options(\App\Models\Activity::getAvailableCategories())
+                            ->placeholder('Keine Kategorie')
+                            ->helperText('Wählen Sie eine Kategorie für diese Aktivität'),
                         Forms\Components\Select::make('label')
                             ->label('Kennzeichnung')
                             ->options(\App\Models\Activity::getAvailableLabels())
@@ -108,6 +113,16 @@ class ActivityResource extends Resource
                     ->label('Organisator')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\BadgeColumn::make('category')
+                    ->label('Kategorie')
+                    ->formatStateUsing(fn ($state) => \App\Models\Activity::getAvailableCategories()[$state] ?? '-')
+                    ->colors([
+                        'primary' => 'anlass',
+                        'success' => 'haus_umgebung_taskforces',
+                        'warning' => 'produktion',
+                        'info' => 'organisation',
+                        'danger' => 'verkauf',
+                    ]),
                 Tables\Columns\TextColumn::make('start_at')
                     ->label('Beginnt am')
                     ->dateTime('d.m.Y H:i')

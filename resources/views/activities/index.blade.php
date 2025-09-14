@@ -17,6 +17,16 @@
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-2">
                                 <h2 class="text-xl font-semibold text-gray-800">{{ $activity->title }}</h2>
+                                @if($activity->category_text)
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium
+                                        {{ $activity->category === 'anlass' ? 'bg-blue-100 text-blue-800' : '' }}
+                                        {{ $activity->category === 'haus_umgebung_taskforces' ? 'bg-green-100 text-green-800' : '' }}
+                                        {{ $activity->category === 'produktion' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                        {{ $activity->category === 'organisation' ? 'bg-purple-100 text-purple-800' : '' }}
+                                        {{ $activity->category === 'verkauf' ? 'bg-pink-100 text-pink-800' : '' }}">
+                                        {{ $activity->category_text }}
+                                    </span>
+                                @endif
                                 @if($activity->label_text)
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         {{ $activity->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}

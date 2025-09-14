@@ -18,6 +18,7 @@ class Activity extends Model
         'organizer_email',
         'slug',
         'status',
+        'category',
         'edit_token',
         'has_forum',
         'has_shifts',
@@ -79,6 +80,17 @@ class Activity extends Model
         ];
     }
 
+    public static function getAvailableCategories(): array
+    {
+        return [
+            'anlass' => 'Anlass',
+            'haus_umgebung_taskforces' => 'Haus, Umgebung und Taskforces',
+            'produktion' => 'Produktion',
+            'organisation' => 'Organisation',
+            'verkauf' => 'Verkauf',
+        ];
+    }
+
     public function getLabelColorAttribute(): string
     {
         return match($this->label) {
@@ -94,5 +106,11 @@ class Activity extends Model
     {
         $labels = self::getAvailableLabels();
         return $labels[$this->label] ?? null;
+    }
+
+    public function getCategoryTextAttribute(): ?string
+    {
+        $categories = self::getAvailableCategories();
+        return $categories[$this->category] ?? null;
     }
 }

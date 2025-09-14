@@ -15,6 +15,16 @@
     <div class="bg-white rounded-lg shadow-sm border {{ $activity->label ? 'border-' . $activity->label_color . '-400 border-2' : 'border-gray-200' }} p-6 mb-6">
         <div class="flex items-center gap-3 mb-4">
             <h1 class="text-3xl font-bold text-gray-800">{{ $activity->title }}</h1>
+            @if($activity->category_text)
+                <span class="inline-flex items-center px-3 py-1 rounded text-sm font-medium
+                    {{ $activity->category === 'anlass' ? 'bg-blue-100 text-blue-800' : '' }}
+                    {{ $activity->category === 'haus_umgebung_taskforces' ? 'bg-green-100 text-green-800' : '' }}
+                    {{ $activity->category === 'produktion' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                    {{ $activity->category === 'organisation' ? 'bg-purple-100 text-purple-800' : '' }}
+                    {{ $activity->category === 'verkauf' ? 'bg-pink-100 text-pink-800' : '' }}">
+                    {{ $activity->category_text }}
+                </span>
+            @endif
             @if($activity->label_text)
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                     {{ $activity->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}
