@@ -83,7 +83,7 @@
                                 {{ $currentDate->day }}
                             </div>
 
-                            <div class="space-y-1 flex-1 overflow-y-auto">
+                            <div class="space-y-0.5 flex-1 overflow-y-auto">
                                 @foreach($dayItems as $item)
                                     @php
                                         $isSpanning = ($item['type'] === 'production' || $item['type'] === 'flexible') && (isset($item['is_start']) || isset($item['is_middle']) || isset($item['is_end']));
