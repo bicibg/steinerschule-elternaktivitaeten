@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-6">
-        <a href="{{ route('activities.index') }}" class="inline-flex items-center text-steiner-blue hover:text-steiner-dark">
+        <a href="{{ route('activities.index') }}" class="inline-flex items-center text-[#4a90a4] hover:text-[#2c5aa0]">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -53,17 +53,17 @@
                 <p class="font-medium">{{ $activity->organizer_name }}</p>
                 @if($activity->organizer_phone)
                     <p class="mt-1">
-                        <a href="tel:{{ $activity->organizer_phone }}" class="text-steiner-blue hover:text-steiner-dark">
+                        <a href="tel:{{ $activity->organizer_phone }}" class="text-[#4a90a4] hover:text-[#2c5aa0]">
                             {{ $activity->organizer_phone }}
                         </a>
                     </p>
                 @endif
                 @if($activity->organizer_email)
                     <p class="mt-1" x-data="{ revealed: false }">
-                        <button @click="revealed = true" x-show="!revealed" class="text-steiner-blue hover:text-steiner-dark underline">
+                        <button @click="revealed = true" x-show="!revealed" class="text-[#4a90a4] hover:text-[#2c5aa0] underline">
                             E-Mail anzeigen
                         </button>
-                        <a x-show="revealed" x-cloak href="mailto:{{ $activity->organizer_email }}" class="text-steiner-blue hover:text-steiner-dark">
+                        <a x-show="revealed" x-cloak href="mailto:{{ $activity->organizer_email }}" class="text-[#4a90a4] hover:text-[#2c5aa0]">
                             {{ $activity->organizer_email }}
                         </a>
                     </p>
@@ -79,12 +79,12 @@
         <!-- Tab Navigation - Show both tabs -->
         <div class="flex border-b border-gray-200">
             <button @click="activeTab = 'forum'"
-                    :class="activeTab === 'forum' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
+                    :class="activeTab === 'forum' ? 'border-b-2 border-[#4a90a4] text-[#4a90a4]' : 'text-gray-600 hover:text-gray-800'"
                     class="px-6 py-3 font-medium focus:outline-none transition-colors">
                 Diskussion
             </button>
             <button @click="activeTab = 'shifts'"
-                    :class="activeTab === 'shifts' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
+                    :class="activeTab === 'shifts' ? 'border-b-2 border-[#4a90a4] text-[#4a90a4]' : 'text-gray-600 hover:text-gray-800'"
                     class="px-6 py-3 font-medium focus:outline-none transition-colors">
                 Schichten
             </button>
@@ -155,7 +155,7 @@
                         </div>
 
                         <button @click="showCommentForm = !showCommentForm"
-                                class="text-sm text-steiner-blue hover:text-steiner-dark">
+                                class="text-sm text-[#4a90a4] hover:text-[#2c5aa0]">
                             <span x-show="!showCommentForm">Kommentieren</span>
                             <span x-show="showCommentForm" x-cloak>Kommentar abbrechen</span>
                         </button>
@@ -280,14 +280,14 @@
                                 @if($shift->filled < $shift->needed && !$shift->volunteers->where('user_id', auth()->id())->count())
                                     <form action="{{ route('shifts.signup', $shift) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="px-4 py-2 bg-steiner-blue text-white rounded-md hover:bg-steiner-dark transition-colors text-sm">
+                                        <button type="submit" class="px-4 py-2 bg-[#4a90a4] text-white rounded-md hover:bg-[#2c5aa0] transition-colors text-sm">
                                             Für diese Schicht anmelden
                                         </button>
                                     </form>
                                 @endif
                             @else
                                 <p class="text-sm text-gray-600">
-                                    <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
+                                    <a href="{{ route('login') }}" class="text-[#4a90a4] hover:text-[#2c5aa0] underline">Melden Sie sich an</a>,
                                     um sich für Schichten anzumelden.
                                 </p>
                             @endauth
