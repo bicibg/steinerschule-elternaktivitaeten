@@ -26,6 +26,19 @@
                         <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-sm sm:text-lg hidden sm:inline">Elternaktivitäten</span>
                     </a>
                 </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="flex items-center space-x-4">
+                    <a href="{{ route('activities.index') }}"
+                       class="px-3 py-1.5 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                        Aktivitäten
+                    </a>
+                    <a href="{{ route('calendar.index') }}"
+                       class="px-3 py-1.5 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                        Kalender
+                    </a>
+                </nav>
+
                 <div class="flex items-center space-x-2">
                     @if(!Auth::check())
                         <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Anmelden</a>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\CalendarController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,6 +31,8 @@ Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordControll
 
 Route::get('/aktivitaeten', [ActivityController::class, 'index'])->name('activities.index');
 Route::get('/aktivitaeten/{slug}', [ActivityController::class, 'show'])->name('activities.show');
+
+Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');
 
 Route::post('/aktivitaeten/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
 Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
