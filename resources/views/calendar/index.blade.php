@@ -141,19 +141,40 @@
                     // Group spanning activities (production and flexible) separately
                     $displayedSpanning = collect();
                     $spanningActivities = collect();
+                    $seenActivities = collect();
 
                     // Group production and flexible activities by their activity ID
                     foreach($itemsByDate as $dateKey => $items) {
                         foreach($items as $item) {
-                            if (($item['type'] === 'production' || $item['type'] === 'flexible') && isset($item['is_start'])) {
-                                $spanningActivities->push([
-                                    'activity' => $item['activity'],
-                                    'type' => $item['type'],
-                                    'color' => $item['color'],
-                                    'date_range' => $item['date_range'] ?? null,
-                                    'note' => $item['note'] ?? null,
-                                ]);
-                                $displayedSpanning->push($item['activity']->id);
+                            if (($item['type'] === 'production' || $item['type'] === 'flexible')) {
+                                // Only add once per activity
+                                if (!$seenActivities->contains($item['activity']->id)) {
+                                    $seenActivities->push($item['activity']->id);
+
+                                    // Find the first and last date for this activity in the month
+                                    $activityDates = collect();
+                                    foreach($itemsByDate as $dk => $dayItems) {
+                                        foreach($dayItems as $di) {
+                                            if ($di['activity']->id === $item['activity']->id) {
+                                                $activityDates->push(\Carbon\Carbon::parse($dk));
+                                            }
+                                        }
+                                    }
+
+                                    if ($activityDates->isNotEmpty()) {
+                                        $startDate = $activityDates->min();
+                                        $endDate = $activityDates->max();
+
+                                        $spanningActivities->push([
+                                            'activity' => $item['activity'],
+                                            'type' => $item['type'],
+                                            'color' => $item['color'],
+                                            'date_range' => $startDate->format('d.m') . '-' . $endDate->format('d.m'),
+                                            'note' => $item['note'] ?? null,
+                                        ]);
+                                        $displayedSpanning->push($item['activity']->id);
+                                    }
+                                }
                             }
                         }
                     }
