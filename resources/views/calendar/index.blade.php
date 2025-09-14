@@ -49,14 +49,17 @@
 
         <!-- Calendar Grid -->
         <div class="p-4">
-            <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
-                <!-- Weekday Headers -->
+            <!-- Weekday Headers -->
+            <div class="grid grid-cols-7 gap-px bg-gray-200 mb-px">
                 @foreach(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as $day)
-                    <div class="bg-gray-50 px-2 text-center text-sm font-medium text-gray-700">
+                    <div class="bg-gray-50 py-1 px-2 text-center text-sm font-medium text-gray-700">
                         {{ $day }}
                     </div>
                 @endforeach
+            </div>
 
+            <!-- Calendar Days -->
+            <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
                 <!-- Calendar Days -->
                 @php
                     $startOfMonth = $date->copy()->startOfMonth();
