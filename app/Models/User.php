@@ -24,6 +24,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'is_admin',
+        'is_super_admin',
     ];
 
     /**
@@ -47,13 +48,13 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_super_admin' => 'boolean',
         ];
     }
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // Explicitly check for admin status
-        // Handle both boolean and integer values from database
-        return (bool) $this->is_admin;
+        // Super admins always have access, or regular admins
+        return (bool) $this->is_super_admin || (bool) $this->is_admin;
     }
 }

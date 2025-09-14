@@ -41,7 +41,15 @@ class UserResource extends Resource
                     ->required(fn (string $context): bool => $context === 'create'),
                 Forms\Components\Toggle::make('is_admin')
                     ->label('Administrator')
-                    ->helperText('Administratoren können auf das Admin-Panel zugreifen'),
+                    ->helperText('Administratoren können auf das Admin-Panel zugreifen')
+                    ->disabled(fn () => !auth()->user()->is_super_admin)
+                    ->dehydrated(fn () => auth()->user()->is_super_admin),
+                Forms\Components\Toggle::make('is_super_admin')
+                    ->label('Super Administrator')
+                    ->helperText('Super-Administratoren können andere Administratoren verwalten')
+                    ->visible(fn () => auth()->user()->is_super_admin)
+                    ->disabled(fn (?User $record) => $record?->id === auth()->id())
+                    ->dehydrated(fn () => auth()->user()->is_super_admin),
             ]);
     }
 
@@ -60,6 +68,12 @@ class UserResource extends Resource
                     ->boolean()
                     ->trueIcon('heroicon-o-check-badge')
                     ->falseIcon('heroicon-o-x-circle'),
+                Tables\Columns\IconColumn::make('is_super_admin')
+                    ->label('Super Admin')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-shield-check')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->visible(fn () => auth()->user()->is_super_admin),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')
