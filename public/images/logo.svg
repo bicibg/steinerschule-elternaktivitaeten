@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'>
+    <text x='10' y='25' font-family='Arial, sans-serif' font-size='16' font-weight='300' fill='#4a90a4' letter-spacing='2px'>rudolf</text>
+    <text x='10' y='45' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='#4a90a4' letter-spacing='1px'>steinerschule</text>
+    <text x='160' y='20' font-family='Arial, sans-serif' font-size='8' fill='#4a90a4' transform='rotate(-90 160 20)'>bern</text>
+    <text x='170' y='20' font-family='Arial, sans-serif' font-size='8' fill='#4a90a4' transform='rotate(-90 170 20)'>ittigen</text>
+    <text x='180' y='25' font-family='Arial, sans-serif' font-size='8' fill='#4a90a4' transform='rotate(-90 180 25)'>langnau</text>
+</svg>

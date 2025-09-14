@@ -19,8 +19,15 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Benutzer';
+    protected static ?string $navigationGroup = 'Benutzerverwaltung';
     protected static ?string $modelLabel = 'Benutzer';
     protected static ?string $pluralModelLabel = 'Benutzer';
+    protected static ?int $navigationSort = 10;
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->is_super_admin ?? false;
+    }
 
     public static function form(Form $form): Form
     {

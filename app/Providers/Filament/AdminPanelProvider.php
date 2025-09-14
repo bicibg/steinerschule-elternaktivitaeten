@@ -30,10 +30,20 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->passwordReset()
+            ->emailVerification()
+            ->profile()
             ->colors([
                 'primary' => Color::rgb('rgb(74, 144, 164)'), // Steiner blue
             ])
             ->darkMode(false)
+            ->brandName('Steinerschule Langnau')
+            ->brandLogo(asset('images/logo.svg'))
+            ->favicon(asset('favicon.ico'))
+            ->navigationGroups([
+                'Aktivitäten',
+                'Kommunikation',
+                'Benutzerverwaltung',
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([])

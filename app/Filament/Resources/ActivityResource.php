@@ -20,6 +20,7 @@ class ActivityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
     protected static ?string $navigationLabel = 'Aktivitäten';
+    protected static ?string $navigationGroup = 'Aktivitäten';
     protected static ?string $modelLabel = 'Aktivität';
     protected static ?string $pluralModelLabel = 'Aktivitäten';
     protected static ?int $navigationSort = 1;
