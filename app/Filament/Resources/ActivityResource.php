@@ -12,37 +12,75 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class ActivityResource extends Resource
 {
     protected static ?string $model = Activity::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+    protected static ?string $navigationLabel = 'Aktivitäten';
+    protected static ?string $modelLabel = 'Aktivität';
+    protected static ?string $pluralModelLabel = 'Aktivitäten';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\DateTimePicker::make('start_at')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end_at'),
-                Forms\Components\TextInput::make('location')
-                    ->required(),
-                Forms\Components\TextInput::make('organizer_name')
-                    ->required(),
-                Forms\Components\TextInput::make('organizer_phone')
-                    ->tel(),
-                Forms\Components\TextInput::make('organizer_email')
-                    ->email(),
-                Forms\Components\TextInput::make('slug')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
+                Forms\Components\Section::make('Aktivitätsinformationen')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label('Titel')
+                            ->required()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
+                                $operation === 'create' ? $set('slug', Str::slug($state)) : null
+                            ),
+                        Forms\Components\Hidden::make('slug')
+                            ->dehydrateStateUsing(fn ($state, Forms\Get $get) =>
+                                $state ?? Str::slug($get('title'))
+                            ),
+                        Forms\Components\Textarea::make('description')
+                            ->label('Beschreibung')
+                            ->required()
+                            ->rows(8)
+                            ->columnSpanFull(),
+                        Forms\Components\DateTimePicker::make('end_at')
+                            ->label('Endet am')
+                            ->displayFormat('d.m.Y H:i'),
+                        Forms\Components\TextInput::make('location')
+                            ->label('Ort')
+                            ->helperText('Optional - leer lassen für allgemeine Aktivitäten'),
+                    ]),
+                Forms\Components\Section::make('Organisator')
+                    ->schema([
+                        Forms\Components\TextInput::make('organizer_name')
+                            ->label('Name')
+                            ->required(),
+                        Forms\Components\TextInput::make('organizer_phone')
+                            ->label('Telefon')
+                            ->tel(),
+                        Forms\Components\TextInput::make('organizer_email')
+                            ->label('E-Mail')
+                            ->email(),
+                    ]),
+                Forms\Components\Section::make('Einstellungen')
+                    ->schema([
+                        Forms\Components\Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'draft' => 'Entwurf',
+                                'published' => 'Veröffentlicht',
+                                'archived' => 'Archiviert',
+                            ])
+                            ->default('draft')
+                            ->required(),
+                        Forms\Components\Toggle::make('has_forum')
+                            ->label('Diskussionsforum aktivieren'),
+                        Forms\Components\Toggle::make('has_shifts')
+                            ->label('Schichtplanung aktivieren'),
+                    ]),
             ]);
     }
 
@@ -51,33 +89,54 @@ class ActivityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('start_at')
-                    ->dateTime()
+                    ->label('Titel')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('organizer_name')
+                    ->label('Organisator')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('location')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('organizer_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('organizer_phone')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('organizer_email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Endet am')
+                    ->dateTime('d.m.Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->placeholder('Kein Enddatum'),
+                Tables\Columns\BadgeColumn::make('status')
+                    ->label('Status')
+                    ->colors([
+                        'gray' => 'draft',
+                        'success' => 'published',
+                        'warning' => 'archived',
+                    ])
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'draft' => 'Entwurf',
+                        'published' => 'Veröffentlicht',
+                        'archived' => 'Archiviert',
+                        default => $state,
+                    }),
+                Tables\Columns\IconColumn::make('has_forum')
+                    ->label('Forum')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-chat-bubble-left-right')
+                    ->falseIcon('heroicon-o-x-circle'),
+                Tables\Columns\IconColumn::make('has_shifts')
+                    ->label('Schichten')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-user-group')
+                    ->falseIcon('heroicon-o-x-circle'),
+                Tables\Columns\TextColumn::make('url')
+                    ->label('Link')
+                    ->getStateUsing(fn (Activity $record): string =>
+                        url("/aktivitaeten/{$record->slug}")
+                    )
+                    ->url(fn (Activity $record): string =>
+                        url("/aktivitaeten/{$record->slug}")
+                    )
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-m-arrow-top-right-on-square')
+                    ->iconPosition('after')
+                    ->limit(1)
+                    ->tooltip('Aktivität anzeigen'),
             ])
             ->filters([
                 //

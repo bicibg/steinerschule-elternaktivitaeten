@@ -10,10 +10,13 @@ class EditActivity extends EditRecord
 {
     protected static string $resource = ActivityResource::class;
 
+    protected static ?string $title = 'Aktivität bearbeiten';
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->label('Löschen'),
         ];
     }
 }
