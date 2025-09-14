@@ -95,7 +95,7 @@
                     <div class="space-y-3">
                         @foreach($shiftsByDate->sortKeys() as $dateKey => $shifts)
                             @php
-                                $shiftDate = Carbon::parse($dateKey);
+                                $shiftDate = \Carbon\Carbon::parse($dateKey);
                             @endphp
                             <div class="pb-3 border-b border-gray-100 last:border-0">
                                 <div class="font-medium text-gray-800 mb-2">

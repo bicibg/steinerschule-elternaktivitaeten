@@ -58,7 +58,7 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
         // Add shifts for Märit
         $shift1 = $activity1->shifts()->create([
             'role' => 'Aufbau Freitag',
-            'time' => 'Freitag, 14:00 - 20:00 Uhr',
+            'time' => 'Freitag, 08.11.' . now()->year . ', 14:00 - 20:00 Uhr',
             'needed' => 8,
             'filled' => 2,
         ]);
@@ -79,7 +79,7 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
 
         $shift2 = $activity1->shifts()->create([
             'role' => 'Blumenstand Vormittag',
-            'time' => 'Samstag, 09:00 - 11:00 Uhr',
+            'time' => 'Samstag, 09.11.' . now()->year . ', 09:00 - 11:00 Uhr',
             'needed' => 2,
             'filled' => 1,
         ]);
@@ -95,21 +95,21 @@ Bitte meldet euch für einzelne Schichten oder den ganzen Tag. Jede Hilfe ist wi
 
         $activity1->shifts()->create([
             'role' => 'Cafeteria-Team',
-            'time' => 'Samstag, 11:00 - 14:00 Uhr',
+            'time' => 'Samstag, 09.11.' . now()->year . ', 11:00 - 14:00 Uhr',
             'needed' => 4,
             'filled' => 0,
         ]);
 
         $activity1->shifts()->create([
             'role' => 'Kinderbetreuung',
-            'time' => 'Samstag, 10:00 - 15:00 Uhr',
+            'time' => 'Samstag, 09.11.' . now()->year . ', 10:00 - 15:00 Uhr',
             'needed' => 3,
             'filled' => 0,
         ]);
 
         $activity1->shifts()->create([
             'role' => 'Abbau-Team',
-            'time' => 'Samstag, 16:00 - 18:00 Uhr',
+            'time' => 'Samstag, 09.11.' . now()->year . ', 16:00 - 18:00 Uhr',
             'needed' => 10,
             'filled' => 0,
         ]);
@@ -159,7 +159,7 @@ Bitte meldet euch für einzelne Tage oder regelmässige Schichten.',
         // Add shifts for Kerzenziehen
         $shift3 = $activity2->shifts()->create([
             'role' => 'Wachsvorbereitung',
-            'time' => 'Montag, 08:00 - 12:00 Uhr',
+            'time' => 'Montag, 02.12.' . now()->year . ', 08:00 - 12:00 Uhr',
             'needed' => 3,
             'filled' => 1,
         ]);
@@ -175,21 +175,21 @@ Bitte meldet euch für einzelne Tage oder regelmässige Schichten.',
 
         $activity2->shifts()->create([
             'role' => 'Betreuung Kerzenzieh-Station',
-            'time' => 'Dienstag, 14:00 - 18:00 Uhr',
+            'time' => 'Dienstag, 03.12.' . now()->year . ', 14:00 - 18:00 Uhr',
             'needed' => 2,
             'filled' => 0,
         ]);
 
         $activity2->shifts()->create([
             'role' => 'Verkaufsstand',
-            'time' => 'Mittwoch, 14:00 - 18:00 Uhr',
+            'time' => 'Mittwoch, 04.12.' . now()->year . ', 14:00 - 18:00 Uhr',
             'needed' => 2,
             'filled' => 0,
         ]);
 
         $activity2->shifts()->create([
             'role' => 'Aufräumen und Reinigung',
-            'time' => 'Freitag, 18:00 - 20:00 Uhr',
+            'time' => 'Freitag, 06.12.' . now()->year . ', 18:00 - 20:00 Uhr',
             'needed' => 4,
             'filled' => 0,
         ]);
@@ -285,14 +285,14 @@ Kinder können gerne mitgebracht werden.',
         // Add shifts for Adventskranzbinden
         $activity4->shifts()->create([
             'role' => 'Material vorbereiten',
-            'time' => 'Mittwoch, 14:00 - 18:00 Uhr',
+            'time' => 'Mittwoch, 27.11.' . now()->year . ', 14:00 - 18:00 Uhr',
             'needed' => 3,
             'filled' => 0,
         ]);
 
         $activity4->shifts()->create([
             'role' => 'Kranzbinden Donnerstag',
-            'time' => 'Donnerstag, 14:00 - 18:00 Uhr',
+            'time' => 'Donnerstag, 28.11.' . now()->year . ', 14:00 - 18:00 Uhr',
             'needed' => 5,
             'filled' => 1,
         ]);
@@ -339,14 +339,14 @@ Bitte meldet euch für einzelne Schichten. Die Einnahmen kommen der Schule zugut
         // Add shifts for Elternkafi
         $activity5->shifts()->create([
             'role' => 'Kafi-Aufbau',
-            'time' => 'Samstag, 07:00 - 07:45 Uhr',
+            'time' => 'Samstag, 21.09.' . now()->year . ', 07:00 - 07:45 Uhr',
             'needed' => 2,
             'filled' => 0,
         ]);
 
         $activity5->shifts()->create([
             'role' => 'Kafi-Betreuung Vormittag',
-            'time' => 'Samstag, 07:45 - 09:30 Uhr',
+            'time' => 'Samstag, 21.09.' . now()->year . ', 07:45 - 09:30 Uhr',
             'needed' => 2,
             'filled' => 0,
         ]);
