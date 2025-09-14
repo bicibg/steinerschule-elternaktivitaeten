@@ -27,7 +27,7 @@
                     </a>
                 </div>
                 <div class="flex items-center space-x-2">
-                    @guest
+                    @if(!Auth::check())
                         <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-[#4a90a4] text-[#4a90a4] rounded hover:bg-[#4a90a4] hover:text-white transition-colors">Anmelden</a>
                         <form action="{{ route('demo.login') }}" method="POST" class="inline">
                             @csrf
@@ -40,7 +40,7 @@
                             @csrf
                             <button type="submit" class="px-3 py-1.5 text-sm border border-gray-400 text-gray-600 rounded hover:bg-gray-100 transition-colors">Abmelden</button>
                         </form>
-                    @endguest
+                    @endif
                 </div>
             </div>
         </div>
