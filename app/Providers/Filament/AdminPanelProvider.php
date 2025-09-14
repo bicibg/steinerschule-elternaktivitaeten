@@ -11,6 +11,8 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -36,9 +38,11 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::rgb('rgb(74, 144, 164)'), // Steiner blue
             ])
             ->darkMode(false)
-            ->brandName('Steinerschule Langnau')
+            ->brandName('Steinerschule Langnau - Verwaltung')
             ->brandLogo(asset('images/logo.svg'))
+            ->brandLogoHeight('3rem')
             ->favicon(asset('favicon.ico'))
+            ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
                 'Aktivitäten',
                 'Kommunikation',
@@ -62,6 +66,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn () => view('filament.admin.global-styles')
+            );
     }
 }
