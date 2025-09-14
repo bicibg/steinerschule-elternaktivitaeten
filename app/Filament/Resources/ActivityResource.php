@@ -126,17 +126,13 @@ class ActivityResource extends Resource
                     ->trueIcon('heroicon-o-user-group')
                     ->falseIcon('heroicon-o-x-circle'),
                 Tables\Columns\TextColumn::make('url')
-                    ->label('Link')
-                    ->getStateUsing(fn (Activity $record): string =>
-                        url("/aktivitaeten/{$record->slug}")
-                    )
+                    ->label('')
+                    ->getStateUsing(fn (Activity $record): string => '')
                     ->url(fn (Activity $record): string =>
                         url("/aktivitaeten/{$record->slug}")
                     )
                     ->openUrlInNewTab()
                     ->icon('heroicon-m-arrow-top-right-on-square')
-                    ->iconPosition('after')
-                    ->limit(1)
                     ->tooltip('Aktivität anzeigen'),
             ])
             ->filters([
