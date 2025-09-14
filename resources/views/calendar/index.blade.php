@@ -138,42 +138,63 @@
         @else
             <div class="space-y-4">
                 @php
-                    // Group production activities separately
-                    $displayedProduction = collect();
+                    // Group spanning activities (production and flexible) separately
+                    $displayedSpanning = collect();
+                    $spanningActivities = collect();
+
+                    // Group production and flexible activities by their activity ID
+                    foreach($itemsByDate as $dateKey => $items) {
+                        foreach($items as $item) {
+                            if (($item['type'] === 'production' || $item['type'] === 'flexible') && isset($item['is_start'])) {
+                                $spanningActivities->push([
+                                    'activity' => $item['activity'],
+                                    'type' => $item['type'],
+                                    'color' => $item['color'],
+                                    'date_range' => $item['date_range'] ?? null,
+                                    'note' => $item['note'] ?? null,
+                                ]);
+                                $displayedSpanning->push($item['activity']->id);
+                            }
+                        }
+                    }
                 @endphp
 
-                @if(isset($productionActivities) && $productionActivities->isNotEmpty())
-                    @foreach($productionActivities as $prod)
-                        <div class="pb-4 border-b border-gray-100 last:border-0">
-                            <div class="flex items-start space-x-3">
-                                <div class="w-3 h-3 rounded-full bg-yellow-500 mt-1 flex-shrink-0"></div>
-                                <div class="flex-1 min-w-0">
-                                    <a href="{{ route('activities.show', $prod['activity']->slug) }}"
-                                       class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
-                                        {{ $prod['activity']->title }}
-                                    </a>
-                                    <div class="text-sm text-gray-600">
+                @foreach($spanningActivities as $spanning)
+                    <div class="pb-4 border-b border-gray-100 last:border-0">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-3 h-3 rounded-full {{ $spanning['color'] }} mt-1 flex-shrink-0"></div>
+                            <div class="flex-1 min-w-0">
+                                <a href="{{ route('activities.show', $spanning['activity']->slug) }}"
+                                   class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
+                                    {{ $spanning['activity']->title }}
+                                </a>
+                                <div class="text-sm text-gray-600">
+                                    @if($spanning['type'] === 'production')
                                         <span class="text-yellow-700 font-medium">Produktion</span>
-                                        - {{ $prod['start']->format('d.m') }} bis {{ $prod['end']->format('d.m.Y') }}
-                                        @if($prod['activity']->participation_note)
-                                            <br>{{ $prod['activity']->participation_note }}
-                                        @endif
-                                    </div>
+                                    @elseif($spanning['type'] === 'flexible')
+                                        <span class="text-green-700 font-medium">Flexible Hilfe</span>
+                                    @endif
+                                    @if($spanning['date_range'])
+                                        - {{ $spanning['date_range'] }}
+                                    @endif
+                                    @if($spanning['activity']->participation_note)
+                                        <br>{{ $spanning['activity']->participation_note }}
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $displayedProduction->push($prod['activity']->id);
-                        @endphp
-                    @endforeach
-                @endif
+                    </div>
+                @endforeach
 
                 @foreach($itemsByDate->sortKeys() as $dateKey => $items)
                     @php
                         $itemDate = \Carbon\Carbon::parse($dateKey);
-                        // Filter out production activities as they're shown separately
-                        $filteredItems = $items->filter(function($item) use ($displayedProduction) {
-                            return $item['type'] !== 'production' || !$displayedProduction->contains($item['activity']->id);
+                        // Filter out spanning activities as they're shown separately
+                        $filteredItems = $items->filter(function($item) use ($displayedSpanning) {
+                            if (($item['type'] === 'production' || $item['type'] === 'flexible')) {
+                                return !$displayedSpanning->contains($item['activity']->id);
+                            }
+                            return true;
                         });
                     @endphp
                     @if($filteredItems->isNotEmpty())
