@@ -57,6 +57,9 @@ class ActivityController extends Controller
             $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
         }
 
+        $validated['has_forum'] = $request->has('has_forum');
+        $validated['has_shifts'] = $request->has('has_shifts');
+
         $activity->update($validated);
 
         return redirect()->route('activities.edit', $activity->slug)

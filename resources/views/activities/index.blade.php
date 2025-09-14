@@ -51,14 +51,28 @@
                                 <span class="text-sm text-gray-500">
                                     von <span class="font-medium">{{ $activity->organizer_name }}</span>
                                 </span>
-                                @if($activity->posts->count() > 0)
-                                    <div class="flex items-center text-sm text-gray-500">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                        </svg>
-                                        {{ $activity->posts->count() }} {{ $activity->posts->count() === 1 ? 'Beitrag' : 'Beiträge' }}
-                                    </div>
-                                @endif
+                                <div class="flex items-center gap-3">
+                                    @if($activity->has_forum && $activity->posts->count() > 0)
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                            </svg>
+                                            {{ $activity->posts->count() }} {{ $activity->posts->count() === 1 ? 'Beitrag' : 'Beiträge' }}
+                                        </div>
+                                    @endif
+                                    @if($activity->has_shifts && $activity->shifts->count() > 0)
+                                        @php
+                                            $totalNeeded = $activity->shifts->sum('needed');
+                                            $totalFilled = $activity->shifts->sum('filled');
+                                        @endphp
+                                        <div class="flex items-center text-sm {{ $totalFilled >= $totalNeeded ? 'text-green-600' : 'text-orange-600' }}">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                            </svg>
+                                            {{ $totalFilled }}/{{ $totalNeeded }}
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
 

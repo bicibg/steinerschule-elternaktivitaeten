@@ -98,6 +98,26 @@
                         </option>
                     </select>
                 </div>
+
+                <div class="md:col-span-2">
+                    <div class="space-y-3">
+                        <h3 class="text-sm font-medium text-gray-700">Funktionen aktivieren</h3>
+                        <div class="flex items-center space-x-6">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="has_forum" value="1"
+                                       {{ old('has_forum', $activity->has_forum) ? 'checked' : '' }}
+                                       class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
+                                <span class="ml-2 text-sm text-gray-700">Diskussionsforum</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="has_shifts" value="1"
+                                       {{ old('has_shifts', $activity->has_shifts) ? 'checked' : '' }}
+                                       class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
+                                <span class="ml-2 text-sm text-gray-700">Schichtplanung</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6 flex items-center justify-between">

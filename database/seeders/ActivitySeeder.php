@@ -29,6 +29,8 @@ Standanmeldungen bitte bis zum 20. Februar bei Maria Müller.',
             'organizer_phone' => '+41 31 123 45 67',
             'organizer_email' => 'maria.mueller@example.com',
             'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => true,
         ]);
 
         $post1 = $activity1->posts()->create([
@@ -92,6 +94,8 @@ Wir suchen noch Helfer für die Standbetreuung. Bitte meldet euch bei Thomas Web
             'organizer_phone' => '+41 31 234 56 78',
             'organizer_email' => 'thomas.weber@example.com',
             'status' => 'published',
+            'has_forum' => false,
+            'has_shifts' => true,
         ]);
 
         // Add shifts for Kerzenstand Weihnachtsmarkt
@@ -124,24 +128,26 @@ Wir suchen noch Helfer für die Standbetreuung. Bitte meldet euch bei Thomas Web
         ]);
 
         $activity3 = Activity::create([
-            'title' => 'Basar in Ittigen',
-            'description' => 'Traditioneller Basar mit bunten Marktständen und lokalen Produkten.
+            'title' => 'Herbst-Märit',
+            'description' => 'Traditioneller Herbst-Märit mit bunten Marktständen und lokalen Produkten.
 
-Es gibt handgefertigte Weihnachtsdekorationen, Spielzeug, Bücher, selbstgemachte Leckereien und vieles mehr.
+Es gibt handgefertigte Dekorationen, Spielzeug, Bücher, selbstgemachte Leckereien und vieles mehr.
 
-Zusätzlich gibt es einen Kinderbasar mit Bastelecke und Märchenerzählung.',
+Zusätzlich gibt es einen Kinderbereich mit Bastelecke und Märchenerzählung.',
             'start_at' => now()->addDays(30)->setTime(10, 0),
             'end_at' => now()->addDays(30)->setTime(17, 0),
-            'location' => 'Schulhaus Ittigen, Turnhalle',
+            'location' => 'Schulhaus Langnau, Turnhalle',
             'organizer_name' => 'Sandra Koch',
             'organizer_phone' => '+41 31 345 67 89',
             'organizer_email' => 'sandra.koch@example.com',
             'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => false,
         ]);
 
         $post3 = $activity3->posts()->create([
             'author_name' => 'Lisa Meier',
-            'body' => 'Gibt es auch vegetarisches Essen am Basar?',
+            'body' => 'Gibt es auch vegetarisches Essen am Märit?',
             'ip_hash' => hash('sha256', '192.168.1.4'),
         ]);
 

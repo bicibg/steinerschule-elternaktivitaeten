@@ -19,6 +19,8 @@ class Activity extends Model
         'slug',
         'status',
         'edit_token',
+        'has_forum',
+        'has_shifts',
     ];
 
     protected $casts = [

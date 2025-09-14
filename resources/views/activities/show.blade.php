@@ -72,14 +72,16 @@
         </div>
     </div>
 
+    @if($activity->has_forum || $activity->has_shifts)
     <!-- Tabs for Forum and Shifts -->
-    <div x-data="{ activeTab: 'forum' }" class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <!-- Tab Navigation -->
+    <div x-data="{ activeTab: '{{ $activity->has_forum ? 'forum' : 'shifts' }}' }" class="bg-white rounded-lg shadow-sm border border-gray-200">
+        @if($activity->has_forum && $activity->has_shifts)
+        <!-- Tab Navigation - Show both tabs -->
         <div class="flex border-b border-gray-200">
             <button @click="activeTab = 'forum'"
                     :class="activeTab === 'forum' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
                     class="px-6 py-3 font-medium focus:outline-none transition-colors">
-                Forum
+                Diskussion
             </button>
             <button @click="activeTab = 'shifts'"
                     :class="activeTab === 'shifts' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
@@ -87,9 +89,11 @@
                 Schichten
             </button>
         </div>
+        @endif
 
+        @if($activity->has_forum)
         <!-- Forum Tab Content -->
-        <div x-show="activeTab === 'forum'" class="p-6">
+        <div x-show="{{ $activity->has_shifts ? "activeTab === 'forum'" : 'true' }}" class="p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Diskussion</h2>
 
         @php
@@ -222,9 +226,11 @@
             </p>
         @endif
         </div>
+        @endif
 
+        @if($activity->has_shifts)
         <!-- Shifts Tab Content -->
-        <div x-show="activeTab === 'shifts'" x-cloak class="p-6">
+        <div x-show="{{ $activity->has_forum ? "activeTab === 'shifts'" : 'true' }}" x-cloak class="p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Schichten & Helfer</h2>
 
             @if($activity->shifts->count() > 0)
@@ -294,5 +300,7 @@
                 </p>
             @endif
         </div>
+        @endif
     </div>
+    @endif
 @endsection
