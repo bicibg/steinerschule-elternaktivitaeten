@@ -15,17 +15,8 @@ class FilamentAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip check for login page
-        if ($request->routeIs('filament.admin.auth.login')) {
-            return $next($request);
-        }
-
-        if (!auth()->check()) {
-            return redirect()->route('filament.admin.auth.login');
-        }
-
-        if (!auth()->user()->is_admin) {
-            abort(403, 'Unauthorized - Admin access required');
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized');
         }
 
         return $next($request);
