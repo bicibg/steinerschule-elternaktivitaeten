@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-6">
-        <a href="{{ route('activities.show', $activity->slug) }}" class="inline-flex items-center text-[#4a90a4] hover:text-[#2c5aa0]">
+        <a href="{{ route('activities.show', $activity->slug) }}" class="inline-flex items-center text-steiner-blue hover:text-steiner-dark">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -106,13 +106,13 @@
                             <label class="flex items-center">
                                 <input type="checkbox" name="has_forum" value="1"
                                        {{ old('has_forum', $activity->has_forum) ? 'checked' : '' }}
-                                       class="rounded border-gray-300 text-[#4a90a4] focus:ring-[#4a90a4]">
+                                       class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
                                 <span class="ml-2 text-sm text-gray-700">Diskussionsforum</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" name="has_shifts" value="1"
                                        {{ old('has_shifts', $activity->has_shifts) ? 'checked' : '' }}
-                                       class="rounded border-gray-300 text-[#4a90a4] focus:ring-[#4a90a4]">
+                                       class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
                                 <span class="ml-2 text-sm text-gray-700">Schichtplanung</span>
                             </label>
                         </div>
