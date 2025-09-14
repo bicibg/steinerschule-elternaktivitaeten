@@ -22,6 +22,12 @@ Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register
 Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login');
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
+// Password Reset Routes
+Route::get('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
+
 Route::get('/aktivitaeten', [ActivityController::class, 'index'])->name('activities.index');
 Route::get('/aktivitaeten/{slug}', [ActivityController::class, 'show'])->name('activities.show');
 

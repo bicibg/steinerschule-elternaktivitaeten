@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\User;
+use App\Filament\Resources\ActivityResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -28,8 +29,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::rgb('rgb(74, 144, 164)'), // Steiner blue
             ])
             ->darkMode(false)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -47,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\RedirectToActivities::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

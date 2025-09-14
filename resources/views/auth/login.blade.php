@@ -41,6 +41,12 @@
                 </button>
             </form>
 
+            <div class="mt-4 text-center">
+                <a href="{{ route('password.request') }}" class="text-sm text-steiner-blue hover:text-steiner-dark">
+                    Passwort vergessen?
+                </a>
+            </div>
+
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Noch kein Konto?
