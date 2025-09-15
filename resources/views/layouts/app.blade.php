@@ -41,6 +41,10 @@
                        class="px-3 py-1.5 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Pinnwand
                     </a>
+                    <a href="{{ route('activities.index') }}"
+                       class="px-3 py-1.5 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                        Elternaktivitäten
+                    </a>
                     <a href="{{ route('calendar.index') }}"
                        class="px-3 py-1.5 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Kalender
@@ -102,6 +106,10 @@
                     <a href="{{ route('bulletin.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Pinnwand
+                    </a>
+                    <a href="{{ route('activities.index') }}"
+                       class="block px-3 py-2 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
+                        Elternaktivitäten
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">

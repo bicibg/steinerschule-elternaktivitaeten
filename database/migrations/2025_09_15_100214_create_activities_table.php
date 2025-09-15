@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
             $table->string('slug')->unique();
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->string('category')->nullable();
-            $table->string('contact_name')->nullable();
+            $table->string('contact_name');
             $table->string('contact_email')->nullable();
             $table->string('contact_phone')->nullable();
             $table->string('meeting_time')->nullable(); // e.g., "Jeden Donnerstag, 19:00 Uhr"
             $table->string('meeting_location')->nullable();
+            $table->boolean('has_forum')->default(true);
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();

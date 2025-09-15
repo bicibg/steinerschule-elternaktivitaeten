@@ -35,6 +35,12 @@ Route::get('/pinnwand/{slug}', [BulletinController::class, 'show'])->name('bulle
 
 Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');
 
+// Activity routes
+Route::get('/elternaktivitaeten', [App\Http\Controllers\ActivityController::class, 'index'])->name('activities.index');
+Route::get('/elternaktivitaeten/{slug}', [App\Http\Controllers\ActivityController::class, 'show'])->name('activities.show');
+Route::post('/elternaktivitaeten/{slug}/posts', [App\Http\Controllers\ActivityPostController::class, 'store'])->name('activity-posts.store')->middleware('auth');
+Route::post('/activity-posts/{post}/comments', [App\Http\Controllers\ActivityPostController::class, 'storeComment'])->name('activity-comments.store')->middleware('auth');
+
 // School Calendar routes
 Route::get('/schulkalender', [SchoolCalendarController::class, 'index'])->name('school-calendar.index');
 Route::middleware(['auth'])->group(function () {
