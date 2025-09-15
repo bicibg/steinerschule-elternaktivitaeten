@@ -74,6 +74,15 @@
                                  @click.away="userMenuOpen = false"
                                  x-cloak
                                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Profil bearbeiten
+                                </a>
+                                @if(Auth::user()->is_admin)
+                                    <a href="/admin" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Admin Panel
+                                    </a>
+                                @endif
+                                <hr class="my-1">
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
                                     <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -136,6 +145,16 @@
                             <span class="block font-medium">{{ Auth::user()->name }}</span>
                             <span class="text-xs text-gray-500">{{ Auth::user()->email }}</span>
                         </div>
+                        <a href="{{ route('profile.edit') }}"
+                           class="block px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
+                            Profil bearbeiten
+                        </a>
+                        @if(Auth::user()->is_admin)
+                            <a href="/admin"
+                               class="block px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
+                                Admin Panel
+                            </a>
+                        @endif
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"

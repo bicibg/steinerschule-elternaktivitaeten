@@ -58,6 +58,13 @@ Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->
 Route::post('/shifts/{shift}/signup', [ShiftController::class, 'signup'])->name('shifts.signup')->middleware('auth');
 Route::delete('/shifts/{shift}/withdraw', [ShiftController::class, 'withdraw'])->name('shifts.withdraw')->middleware('auth');
 
+// Profile routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
+
 // API routes for Alpine.js
 Route::prefix('api')->group(function () {
     Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup');
