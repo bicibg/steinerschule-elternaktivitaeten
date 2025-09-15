@@ -137,7 +137,7 @@
                                         };
                                     @endphp
                                     <span class="text-gray-700 font-medium">{{ $typeLabel }}</span>
-                                    - {{ $event->start_date->format('d.m') }}@if($event->end_date && !$event->start_date->isSameDay($event->end_date))-{{ $event->end_date->format('d.m') }}@endif
+                                    - {{ $event->start_date->format('d.m.Y') }}@if($event->end_date && !$event->start_date->isSameDay($event->end_date)) - {{ $event->end_date->format('d.m.Y') }}@endif
                                     @if($event->description)
                                         <br>{{ $event->description }}
                                     @endif

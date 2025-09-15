@@ -167,14 +167,10 @@
 
                                         $dateRangeStr = '';
                                         if ($actualStart && $actualEnd) {
-                                            // Show full date with year if different years, otherwise just day.month
-                                            if ($actualStart->year != $actualEnd->year) {
-                                                $dateRangeStr = $actualStart->format('d.m.Y') . '-' . $actualEnd->format('d.m.Y');
-                                            } else {
-                                                $dateRangeStr = $actualStart->format('d.m') . '-' . $actualEnd->format('d.m');
-                                            }
+                                            // Always show year for clarity, with spacing around dash
+                                            $dateRangeStr = $actualStart->format('d.m.Y') . ' - ' . $actualEnd->format('d.m.Y');
                                         } elseif ($actualStart) {
-                                            $dateRangeStr = $actualStart->format('d.m');
+                                            $dateRangeStr = $actualStart->format('d.m.Y');
                                         }
 
                                         $spanningActivities->push([
