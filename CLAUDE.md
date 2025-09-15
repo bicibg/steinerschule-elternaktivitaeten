@@ -5,6 +5,7 @@
 ### Important Instructions
 - **NO SIGNING**: Do not sign commits with Claude's name or attribution
 - Simple commit messages without emoji or attribution
+- **CRITICAL THINKING**: Criticize ideas and brainstorm alternatives. Don't agree for the sake of being agreeable
 
 ### Project Structure
 - Laravel 12 application for school parent activities
