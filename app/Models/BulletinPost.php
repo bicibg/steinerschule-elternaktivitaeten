@@ -88,7 +88,7 @@ class BulletinPost extends Model
     public static function getAvailableCategories(): array
     {
         return [
-            'anlass' => 'Anlass',
+            'anlass' => 'Anlässe',
             'haus_umgebung_taskforces' => 'Haus, Umgebung und Taskforces',
             'produktion' => 'Produktion',
             'organisation' => 'Organisation',

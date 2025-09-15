@@ -54,13 +54,11 @@ class Activity extends Model
     public static function getCategories(): array
     {
         return [
-            'anlass' => 'Anlässe & Feste',
+            'anlass' => 'Anlässe',
             'haus_umgebung_taskforces' => 'Haus, Umgebung und Taskforces',
             'produktion' => 'Produktion',
-            'organisation' => 'Organisation & Verwaltung',
-            'verkauf' => 'Verkauf & Märkte',
-            'paedagogik' => 'Pädagogische Unterstützung',
-            'kommunikation' => 'Kommunikation & Öffentlichkeit',
+            'organisation' => 'Organisation',
+            'verkauf' => 'Verkauf',
         ];
     }
 

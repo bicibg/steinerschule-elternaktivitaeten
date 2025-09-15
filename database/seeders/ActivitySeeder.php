@@ -9,327 +9,359 @@ class ActivitySeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Elternrat
-        $activity1 = Activity::create([
-            'title' => 'Elternrat',
-            'description' => 'Der Elternrat ist das zentrale Koordinationsgremium für alle Elternaktivitäten an unserer Schule. Wir treffen uns monatlich zur Planung und Organisation verschiedener Schulanlässe und Projekte.
-
-AUFGABEN:
-- Koordination aller Elternaktivitäten
-- Jahresplanung der Schulanlässe
-- Budgetverwaltung
-- Kommunikation zwischen Eltern und Schule
-- Neue Initiativen entwickeln
-
-Alle interessierten Eltern sind herzlich willkommen!',
-            'category' => 'organisation',
-            'contact_name' => 'Christine Brunner',
-            'contact_email' => 'elternrat@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 40',
-            'meeting_time' => 'Jeden ersten Dienstag im Monat, 20:00 Uhr',
-            'meeting_location' => 'Musikzimmer',
+        // ANLÄSSE
+        Activity::create([
+            'title' => 'Osterstand',
+            'description' => 'Organisation und Durchführung des Osterstandes mit Verkauf von Osterdekoration und selbstgemachten Produkten.',
+            'category' => 'anlass',
+            'contact_name' => 'Julia Winkler',
+            'contact_email' => 'osterstand@steinerschule-langnau.ch',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 1,
         ]);
 
-        // 2. Schulgarten-Gruppe
-        $activity2 = Activity::create([
-            'title' => 'Schulgarten-Gruppe',
-            'description' => 'Die Schulgarten-Gruppe pflegt und gestaltet unseren wunderschönen Schulgarten, der von den Klassen für den Gartenbauunterricht genutzt wird.
-
-TÄTIGKEITEN:
-- Saisonale Gartenarbeiten
-- Beete vorbereiten und bepflanzen
-- Kompostpflege
-- Gartengeräte warten
-- Erntefeste organisieren
-- Kinder beim Gärtnern unterstützen
-
-Der Garten ist während der Schulzeiten jederzeit zugänglich. Hilfe ist immer willkommen!',
-            'category' => 'haus_umgebung_taskforces',
-            'contact_name' => 'Markus Steiner',
-            'contact_email' => 'garten@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 55',
-            'meeting_time' => 'Samstags nach Absprache',
-            'meeting_location' => 'Schulgarten hinter der Turnhalle',
+        Activity::create([
+            'title' => 'Sponsorenlauf',
+            'description' => 'Jährlicher Sponsorenlauf zur Unterstützung von Schulprojekten. Die Kinder laufen Runden und sammeln Sponsorengelder.',
+            'category' => 'anlass',
+            'contact_name' => 'Julia Eisenhut, Matthias Rytz',
+            'contact_email' => 'sponsorenlauf@steinerschule-langnau.ch',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 2,
         ]);
 
-        // 3. Bibliotheksteam
-        $activity3 = Activity::create([
-            'title' => 'Schulbibliothek',
-            'description' => 'Das Bibliotheksteam betreut unsere Schulbibliothek und macht sie zu einem lebendigen Ort der Begegnung mit Büchern.
-
-AUFGABEN:
-- Ausleihe während der Öffnungszeiten
-- Neue Bücher katalogisieren
-- Lesungen organisieren
-- Buchempfehlungen für verschiedene Altersstufen
-- Bibliothek gemütlich gestalten
-
-Wir suchen besonders Eltern, die regelmässig einen Bibliotheksdienst übernehmen können.',
-            'category' => 'organisation',
-            'contact_name' => 'Monika Schmid',
-            'contact_email' => 'bibliothek@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 70',
-            'meeting_time' => 'Bibliotheksdienst: Mo & Do, 12:00-14:00 Uhr',
-            'meeting_location' => 'Schulbibliothek 1. Stock',
+        Activity::create([
+            'title' => 'Stand an der Trubschachen-Woche',
+            'description' => 'Präsentation der Schule und Verkaufsstand während der Trubschachen-Woche.',
+            'category' => 'anlass',
+            'contact_name' => 'Maria Mani, Selina Lüchiger',
+            'contact_email' => 'trubschachen@steinerschule-langnau.ch',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 3,
         ]);
 
-        // 4. Märit-Organisation
-        $activity4 = Activity::create([
-            'title' => 'Märit-Organisation',
-            'description' => 'Das Märit-Team organisiert unsere grossen Märkte: Weihnachtsmärit, Frühlingsmärit und weitere Verkaufsanlässe.
+        Activity::create([
+            'title' => 'Kaffeestube an der Trubschachen-Woche',
+            'description' => 'Bewirtung der Kaffeestube während der Trubschachen-Woche. Gemütlicher Treffpunkt für Besucher.',
+            'category' => 'anlass',
+            'contact_name' => 'Bylie Beese, Anna Stalder',
+            'contact_email' => 'kaffeestube@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
 
-BEREICHE:
-- Standplanung und -koordination
-- Werbung und Öffentlichkeitsarbeit
-- Helferkoordination
-- Cafeteria-Organisation
-- Auf- und Abbau
-- Dekoration
+        Activity::create([
+            'title' => 'Pflanzenmärit',
+            'description' => 'Verkauf von Setzlingen, Pflanzen und Gartenzubehör. HELFER GESUCHT!',
+            'category' => 'anlass',
+            'contact_name' => 'Helfer gesucht',
+            'contact_email' => 'pflanzenmarit@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
 
-Die Planung beginnt jeweils 3 Monate vor dem Anlass. Neue Ideen sind immer willkommen!',
-            'category' => 'verkauf',
-            'contact_name' => 'Ursula Zimmermann',
+        Activity::create([
+            'title' => 'Spielzeug- und Kinderkleiderbörse',
+            'description' => 'Zweimal jährlich stattfindende Börse für gebrauchte Spielsachen und Kinderkleidung. Im Umbruch - neue Organisatoren willkommen!',
+            'category' => 'anlass',
+            'contact_name' => 'Linda Denissen, Yael Stanca, Diego Stanca, Reinhart Rebling, Christina Mokos',
+            'contact_email' => 'boerse@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Märit-OK',
+            'description' => 'Organisationskomitee für alle Märkte der Schule. Koordination, Planung und Durchführung der verschiedenen Märkte.',
+            'category' => 'anlass',
+            'contact_name' => 'Swenja Heyers, Yves Bönzli',
             'contact_email' => 'marit@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 00',
-            'meeting_time' => 'Planungstreffen nach Ankündigung',
-            'meeting_location' => 'Lehrerzimmer',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 4,
         ]);
 
-        // 5. Festkreis
-        $activity5 = Activity::create([
-            'title' => 'Festkreis',
-            'description' => 'Der Festkreis gestaltet die Jahresfeste und besonderen Anlässe unserer Schule mit.
-
-JAHRESFESTE:
-- Michaeli-Fest
-- Laternenumzug
-- Adventsspirale
-- Dreikönigsspiel
-- Johannifeuer
-- Schuljahresabschluss
-
-Wir sorgen für die festliche Gestaltung und koordinieren die verschiedenen Beiträge der Klassen.',
-            'category' => 'anlass',
-            'contact_name' => 'Daniel Moser',
-            'contact_email' => 'feste@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 60',
-            'meeting_time' => 'Vor jedem Fest',
-            'has_forum' => true,
-            'is_active' => true,
-            'sort_order' => 5,
-        ]);
-
-        // 6. Pausenkiosk-Team
-        $activity6 = Activity::create([
-            'title' => 'Pausenkiosk',
-            'description' => 'Der Pausenkiosk bietet gesunde Znünis für unsere Schülerinnen und Schüler an.
-
-ANGEBOT:
-- Selbstgebackenes Vollkornbrot
-- Saisonale Früchte
-- Gemüsesticks
-- Gesunde Getränke
-- Spezielle Aktionen
-
-Der Erlös kommt den Klassenkassen zugute. Wir suchen Helfer für Einkauf, Vorbereitung und Verkauf.',
-            'category' => 'verkauf',
-            'contact_name' => 'Claudia Baumgartner',
-            'contact_email' => 'kiosk@steinerschule-langnau.ch',
-            'contact_phone' => '+41 76 456 78 90',
-            'meeting_time' => 'Verkauf: Di & Do, 09:30-10:00 Uhr',
-            'meeting_location' => 'Pausenhof',
-            'has_forum' => true,
-            'is_active' => true,
-            'sort_order' => 6,
-        ]);
-
-        // 7. Handarbeitskreis
-        $activity7 = Activity::create([
-            'title' => 'Handarbeitskreis',
-            'description' => 'Der Handarbeitskreis trifft sich regelmässig zum gemeinsamen Handarbeiten und zur Herstellung von Produkten für den Märit.
-
-AKTIVITÄTEN:
-- Puppen und Wichtel nähen
-- Jahreszeitenschmuck herstellen
-- Stricken und Häkeln
-- Filzen
-- Kerzen ziehen
-- Naturmaterialien verarbeiten
-
-Anfänger sind herzlich willkommen - wir helfen beim Erlernen der verschiedenen Techniken!',
-            'category' => 'produktion',
-            'contact_name' => 'Ruth Gerber',
-            'contact_email' => 'handarbeit@steinerschule-langnau.ch',
-            'contact_phone' => '+41 79 234 56 78',
-            'meeting_time' => 'Donnerstags, 19:30-21:30 Uhr',
-            'meeting_location' => 'Handarbeitsraum',
-            'has_forum' => true,
-            'is_active' => true,
-            'sort_order' => 7,
-        ]);
-
-        // 8. Musikgruppe
-        $activity8 = Activity::create([
-            'title' => 'Eltern-Musikgruppe',
-            'description' => 'Die Musikgruppe gestaltet musikalische Beiträge für Schulanlässe und trifft sich zum gemeinsamen Musizieren.
-
-REPERTOIRE:
-- Lieder für Jahresfeste
-- Instrumentalstücke
-- Begleitung bei Schulfeiern
-- Adventssingen
-- Sommerserenade
-
-Alle Instrumente und Niveaus sind willkommen. Notenkenntnisse sind hilfreich, aber nicht zwingend.',
-            'category' => 'anlass',
-            'contact_name' => 'Andreas Hofmann',
-            'contact_email' => 'musik@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 35',
-            'meeting_time' => 'Mittwochs, 20:00-21:30 Uhr',
-            'meeting_location' => 'Musiksaal',
-            'has_forum' => true,
-            'is_active' => true,
-            'sort_order' => 8,
-        ]);
-
-        // 9. Schulhaus-Verschönerung
-        $activity9 = Activity::create([
-            'title' => 'Schulhaus-Verschönerung',
-            'description' => 'Diese Gruppe kümmert sich um die Gestaltung und Verschönerung unserer Schulräume.
-
-PROJEKTE:
-- Klassenzimmer streichen
-- Wandbilder gestalten
-- Möbel restaurieren
-- Vorhänge nähen
-- Jahreszeitliche Dekoration
-- Pausenhof gestalten
-
-Handwerkliches Geschick ist willkommen, aber nicht Voraussetzung.',
+        // HAUS, UMGEBUNG UND TASKFORCES
+        Activity::create([
+            'title' => 'Putzorganisation',
+            'description' => 'Koordination und Organisation der Reinigung der Schulräume. Putzpläne erstellen und Putzmittel verwalten.',
             'category' => 'haus_umgebung_taskforces',
-            'contact_name' => 'Patrick Frei',
-            'contact_email' => 'schulhaus@steinerschule-langnau.ch',
-            'contact_phone' => '+41 79 345 67 89',
-            'meeting_time' => 'Arbeitseinsätze nach Ankündigung',
+            'contact_name' => 'Susann Glättli, Hans Baumgartner',
+            'contact_email' => 'putz@steinerschule-langnau.ch',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 9,
         ]);
 
-        // 10. Öffentlichkeitsarbeit
-        $activity10 = Activity::create([
+        Activity::create([
+            'title' => 'Mittagstisch',
+            'description' => 'Organisation und Durchführung des Mittagstisches für Schülerinnen und Schüler. Planung, Administration, Reinigung und Wäscheverwaltung.',
+            'category' => 'haus_umgebung_taskforces',
+            'contact_name' => 'Anna Stalder (Planung), Ioana Wigger (Reinigung), Hans Baumgartner (Putzmittel), Katharina Baumgartner (Wäsche)',
+            'contact_email' => 'mittagstisch@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Läuseteam',
+            'description' => 'Prävention und Behandlung bei Läusebefall. Regelmässige Kontrollen und Beratung für betroffene Familien.',
+            'category' => 'haus_umgebung_taskforces',
+            'contact_name' => 'Céline Zaugg',
+            'contact_email' => 'laeuseteam@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Wäsche',
+            'description' => 'Verwaltung und Pflege der Schulwäsche (Handtücher, Geschirrtücher, etc.).',
+            'category' => 'haus_umgebung_taskforces',
+            'contact_name' => 'Katharina Baumgartner',
+            'contact_email' => 'waesche@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Hausgruppe',
+            'description' => 'Unterhalt und kleine Reparaturen am Schulhaus. Handwerkliche Arbeiten und Instandhaltung.',
+            'category' => 'haus_umgebung_taskforces',
+            'contact_name' => 'Hans Baumgartner',
+            'contact_email' => 'hausgruppe@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Erneuerung Pausenplatzareal',
+            'description' => 'Projektgruppe zur Neugestaltung und Erneuerung des Pausenplatzes. Planung und Umsetzung von Spielgeräten und Gestaltungselementen.',
+            'category' => 'haus_umgebung_taskforces',
+            'contact_name' => 'Julia und Sami Eisenhut, Hans Baumgartner, Tinu Brenner, Tom Schick, Susanne Marienfeld',
+            'contact_email' => 'pausenplatz@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        // PRODUKTION
+        Activity::create([
+            'title' => 'Filzgruppe',
+            'description' => 'Herstellung von gefilzten Produkten für Märkte und Anlässe. Filzkurse und gemeinsames Filzen.',
+            'category' => 'produktion',
+            'contact_name' => 'Maria Mani',
+            'contact_email' => 'filzen@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Kerzenziehen',
+            'description' => 'Organisation des jährlichen Kerzenziehens. Herstellung von Bienenwachskerzen für den Verkauf.',
+            'category' => 'produktion',
+            'contact_name' => 'Rene Winkler',
+            'contact_email' => 'kerzen@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Puppen-Nähen',
+            'description' => 'Herstellung von Waldorfpuppen und anderen genähten Spielsachen für Märkte.',
+            'category' => 'produktion',
+            'contact_name' => 'Manila Dür',
+            'contact_email' => 'puppen@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Kranzgruppe',
+            'description' => 'Herstellung von Adventskränzen und anderen jahreszeitlichen Kränzen.',
+            'category' => 'produktion',
+            'contact_name' => 'Elsa Zürcher Ledermann',
+            'contact_email' => 'kranz@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Seifenherstellung',
+            'description' => 'Produktion von handgemachten Seifen für Märkte und Anlässe.',
+            'category' => 'produktion',
+            'contact_name' => 'Claudia Pereira',
+            'contact_email' => 'seife@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Backgruppe',
+            'description' => 'Backen von Brot, Kuchen und Gebäck für Schulanlässe und Märkte.',
+            'category' => 'produktion',
+            'contact_name' => 'Swenja Heyers, Matthias Frey',
+            'contact_email' => 'backen@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Tee-Produktion',
+            'description' => 'Herstellung und Verpackung von Kräutertees für den Verkauf.',
+            'category' => 'produktion',
+            'contact_name' => 'Anna Stalder',
+            'contact_email' => 'tee@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Päcklifischen',
+            'description' => 'Organisation des traditionellen Päcklifischens am Weihnachtsmarkt.',
+            'category' => 'produktion',
+            'contact_name' => 'Manuela Tschanz',
+            'contact_email' => 'paecklifischen@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Lebkuchenverzieren',
+            'description' => 'Lebkuchen backen und verzieren für den Weihnachtsmarkt.',
+            'category' => 'produktion',
+            'contact_name' => 'Tom',
+            'contact_email' => 'lebkuchen@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        // ORGANISATION
+        Activity::create([
+            'title' => 'Liegenschaftsverein der RSS Langnau',
+            'description' => 'Verwaltung der Schulliegenschaften. Der Vorstand besteht aus Christian Konopka, Hane Lory, Stefan Heppler, Martin Brenner und Hans Baumgartner (Kassier).',
+            'category' => 'organisation',
+            'contact_name' => 'Christian Konopka, Hane Lory, Stefan Heppler, Martin Brenner',
+            'contact_email' => 'liegenschaft@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Elternrat',
+            'description' => 'Koordination der Elternaktivitäten und Bindeglied zwischen Eltern und Schule.',
+            'category' => 'organisation',
+            'contact_name' => 'Tatjana Baumgartner, Maria Mani',
+            'contact_email' => 'elternrat@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Plakate',
+            'description' => 'Gestaltung und Aushang von Plakaten für Schulanlässe.',
+            'category' => 'organisation',
+            'contact_name' => 'Rebekka Schaerer',
+            'contact_email' => 'plakate@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'Qualitätsgruppe (WzQ)',
+            'description' => 'Qualitätsentwicklung und -sicherung an der Schule. Wege zur Qualität.',
+            'category' => 'organisation',
+            'contact_name' => 'Marianne Wey',
+            'contact_email' => 'wzq@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
             'title' => 'Öffentlichkeitsarbeit',
-            'description' => 'Das Team Öffentlichkeitsarbeit macht unsere Schule in der Region bekannt und pflegt den Kontakt zu den Medien.
-
-AUFGABEN:
-- Website-Inhalte pflegen
-- Social Media betreuen
-- Pressemitteilungen verfassen
-- Flyer und Plakate gestalten
-- Tag der offenen Tür organisieren
-- Schulbroschüre aktualisieren
-
-Wir suchen Menschen mit Freude an Kommunikation und Gestaltung.',
-            'category' => 'kommunikation',
-            'contact_name' => 'Sarah Weber',
+            'description' => 'Kommunikation nach aussen, Pressemitteilungen, Website und Social Media.',
+            'category' => 'organisation',
+            'contact_name' => 'Yves Bönzli',
             'contact_email' => 'pr@steinerschule-langnau.ch',
-            'contact_phone' => '+41 76 123 45 67',
-            'meeting_time' => 'Monatliches Online-Meeting',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 10,
         ]);
 
-        // 11. Eurythmie-Begleitung
-        $activity11 = Activity::create([
-            'title' => 'Eurythmie-Begleitung',
-            'description' => 'Unterstützung bei Eurythmie-Aufführungen und besonderen Eurythmie-Projekten.
-
-MITHILFE BEI:
-- Kostüme nähen und anpassen
-- Bühnengestaltung
-- Beleuchtung
-- Aufführungsorganisation
-- Garderobe während Aufführungen
-
-Die Eurythmie ist ein wichtiger Teil unserer Pädagogik - helfen Sie mit, sie zur Geltung zu bringen!',
-            'category' => 'paedagogik',
-            'contact_name' => 'Elisabeth Keller',
-            'contact_email' => 'eurythmie@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 50',
+        Activity::create([
+            'title' => 'Elterngesprächsgruppe (Erstgespräche)',
+            'description' => 'Führung von Erstgesprächen mit interessierten Eltern.',
+            'category' => 'organisation',
+            'contact_name' => 'Sandra Lanz, Heinz Ledermann, Tamás Mokos',
+            'contact_email' => 'erstgespraeche@steinerschule-langnau.ch',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 11,
         ]);
 
-        // 12. Lager-Begleitung
-        $activity12 = Activity::create([
-            'title' => 'Lager-Begleitung',
-            'description' => 'Eltern begleiten Klassenlager und Schulreisen als zusätzliche Betreuungspersonen.
-
-VERSCHIEDENE LAGER:
-- Skilager
-- Landschulwochen
-- Abschlussreisen
-- Wanderlager
-
-AUFGABEN:
-- Betreuung und Aufsicht
-- Küchenhilfe
-- Abendprogramm
-- Notfallbetreuung
-
-Eine tolle Gelegenheit, die Klasse Ihres Kindes näher kennenzulernen!',
-            'category' => 'anlass',
-            'contact_name' => 'Thomas Roth',
-            'contact_email' => 'sport@steinerschule-langnau.ch',
-            'contact_phone' => '+41 34 402 12 90',
+        Activity::create([
+            'title' => 'Forum',
+            'description' => 'Organisation und Moderation des Schulforums.',
+            'category' => 'organisation',
+            'contact_name' => 'Marisa Frey, Susanne Marienfeld',
+            'contact_email' => 'forum@steinerschule-langnau.ch',
             'has_forum' => true,
             'is_active' => true,
-            'sort_order' => 12,
         ]);
 
-        // Add some sample forum posts
-        $post1 = $activity1->posts()->create([
-            'author_name' => 'Maria Weber',
-            'body' => 'Ich möchte gerne dem Elternrat beitreten. Wie läuft das Aufnahmeverfahren?',
-            'ip_hash' => hash('sha256', '192.168.1.10'),
+        Activity::create([
+            'title' => 'Budgetkommission',
+            'description' => 'Budgetplanung und -kontrolle für die Schule.',
+            'category' => 'organisation',
+            'contact_name' => 'Marianne Wey',
+            'contact_email' => 'budget@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
         ]);
 
-        $post1->comments()->create([
-            'author_name' => 'Christine Brunner',
-            'body' => 'Herzlich willkommen! Kommen Sie einfach zur nächsten Sitzung am ersten Dienstag des Monats. Keine formelle Anmeldung nötig.',
-            'ip_hash' => hash('sha256', '192.168.1.11'),
+        Activity::create([
+            'title' => 'IT Langnau / RSS Cloud',
+            'description' => 'IT-Support und Verwaltung der digitalen Infrastruktur.',
+            'category' => 'organisation',
+            'contact_name' => 'Matthias Hartmann',
+            'contact_email' => 'it@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
         ]);
 
-        $post2 = $activity2->posts()->create([
-            'author_name' => 'Hans Müller',
-            'body' => 'Der Kompost muss dringend umgeschichtet werden. Wer kann am Samstag helfen?',
-            'ip_hash' => hash('sha256', '192.168.1.12'),
+        Activity::create([
+            'title' => 'Mediengruppe',
+            'description' => 'Medienpädagogik und Medienkonzept der Schule.',
+            'category' => 'organisation',
+            'contact_name' => 'Christa Aeschlimann, Christian Brendle',
+            'contact_email' => 'medien@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
         ]);
 
-        $activity6->posts()->create([
-            'author_name' => 'Laura Fischer',
-            'body' => 'Könnten wir auch vegane Snacks anbieten? Ich würde gerne Rezepte beisteuern.',
-            'ip_hash' => hash('sha256', '192.168.1.13'),
+        // VERKAUF
+        Activity::create([
+            'title' => 'ProBon-Aktion',
+            'description' => 'Organisation der ProBon-Verkaufsaktion zur Unterstützung der Schule.',
+            'category' => 'verkauf',
+            'contact_name' => 'Daniela Wüthrich',
+            'contact_email' => 'probon@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
         ]);
 
-        $activity7->posts()->create([
-            'author_name' => 'Susanne Meyer',
-            'body' => 'Ich bin Anfängerin im Nähen. Kann ich trotzdem mitmachen?',
-            'ip_hash' => hash('sha256', '192.168.1.14'),
+        Activity::create([
+            'title' => 'Lachsverkauf',
+            'description' => 'Jährlicher Verkauf von Räucherlachs zur Weihnachtszeit.',
+            'category' => 'verkauf',
+            'contact_name' => 'Gisela Wyss',
+            'contact_email' => 'lachs@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
+        ]);
+
+        Activity::create([
+            'title' => 'WELEDA-Bestellaktion',
+            'description' => 'Sammelbestellung von WELEDA-Produkten mit Rabatt für die Schulgemeinschaft.',
+            'category' => 'verkauf',
+            'contact_name' => 'Rémy Reist',
+            'contact_email' => 'weleda@steinerschule-langnau.ch',
+            'has_forum' => true,
+            'is_active' => true,
         ]);
     }
 }
