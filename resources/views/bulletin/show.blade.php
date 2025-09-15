@@ -294,15 +294,12 @@
                     @foreach($bulletinPost->shifts as $shift)
                         <div class="border border-gray-200 rounded-lg p-4"
                              x-data="{
+                                 filled: {{ $shift->filled }},
                                  needed: {{ $shift->needed }},
                                  volunteers: {{ $shift->volunteers->map(function($v) {
                                      return ['id' => $v->id, 'name' => $v->name, 'user_id' => $v->user_id];
                                  })->toJson() }},
                                  loading: false,
-
-                                 get filled() {
-                                     return this.volunteers.length;
-                                 },
 
                                  get isSignedUp() {
                                      return this.volunteers.some(v => v.user_id === {{ auth()->id() ?? 'null' }});
@@ -329,6 +326,7 @@
 
                                          if (data.success) {
                                              this.volunteers.push(data.volunteer);
+                                             this.filled = data.filled;
                                          }
                                      } catch (error) {
                                          console.error('Fehler:', error);
@@ -354,6 +352,7 @@
 
                                          if (data.success) {
                                              this.volunteers = this.volunteers.filter(v => v.user_id !== {{ auth()->id() ?? 'null' }});
+                                             this.filled = data.filled;
                                          }
                                      } catch (error) {
                                          console.error('Fehler:', error);
@@ -367,14 +366,12 @@
                                     <h3 class="font-semibold text-gray-800">{{ $shift->role }}</h3>
                                     <p class="text-sm text-gray-600 mt-1">{{ $shift->time }}</p>
                                 </div>
-                                @auth
                                 <div class="mt-2 sm:mt-0">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
                                           :class="filled >= needed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
-                                        <span x-text="filled"></span> / <span x-text="needed"></span> besetzt
+                                        <span x-text="filled"></span>/<span x-text="needed"></span> besetzt
                                     </span>
                                 </div>
-                                @endauth
                             </div>
 
                             @auth

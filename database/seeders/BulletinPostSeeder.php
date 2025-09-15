@@ -150,18 +150,18 @@ Detaillierte Schichtpläne folgen im Oktober.',
         ]);
 
         // Multiple shifts for Märit
-        $bulletinPost4->shifts()->create([
+        $shift1 = $bulletinPost4->shifts()->create([
             'role' => 'Aufbau Freitag',
             'time' => '29.11.' . now()->year . ', 14:00 - 20:00 Uhr',
             'needed' => 20,
-            'filled' => 5,
+            'filled' => 5,  // 5 people registered offline, 1 will be added online below
         ]);
 
         $bulletinPost4->shifts()->create([
             'role' => 'Cafeteria Vormittag',
             'time' => '30.11.' . now()->year . ', 09:00 - 12:00 Uhr',
             'needed' => 6,
-            'filled' => 2,
+            'filled' => 2,  // 2 people registered offline
         ]);
 
         $bulletinPost4->shifts()->create([
@@ -175,7 +175,7 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'role' => 'Kinderbereich',
             'time' => '30.11.' . now()->year . ', 10:00 - 16:00 Uhr',
             'needed' => 8,
-            'filled' => 3,
+            'filled' => 3,  // 3 people registered offline
         ]);
 
         $bulletinPost4->shifts()->create([
@@ -184,6 +184,17 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'needed' => 15,
             'filled' => 0,
         ]);
+
+        // Add a volunteer to the first shift
+        $users = \App\Models\User::where('is_admin', false)->first();
+        if ($users) {
+            \App\Models\ShiftVolunteer::create([
+                'shift_id' => $shift1->id,
+                'user_id' => $users->id,
+                'name' => $users->name,
+                'email' => $users->email,
+            ]);
+        }
 
         // 5. Adventssingen - Production activity
         $bulletinPost5 = BulletinPost::create([

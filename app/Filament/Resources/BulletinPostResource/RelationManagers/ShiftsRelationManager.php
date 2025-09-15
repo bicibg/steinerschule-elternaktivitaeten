@@ -96,7 +96,7 @@ class ShiftsRelationManager extends RelationManager
                             ->numeric()
                             ->default(0)
                             ->minValue(0)
-                            ->disabled(),
+                            ->helperText('Anzahl der offline/vorregistrierten Personen'),
                     ]),
             ]);
     }

@@ -26,7 +26,7 @@ class BulletinController extends Controller
                 ELSE 5
             END")
             ->orderByRaw('COALESCE(start_at, end_at) ASC')
-            ->with('posts')
+            ->with(['posts', 'shifts.volunteers'])
             ->get();
 
         $categories = BulletinPost::getAvailableCategories();
