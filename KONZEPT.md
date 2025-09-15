@@ -1,0 +1,134 @@
+# Konzept: Elternaktivitäten-Plattform für Steinerschule Langnau
+
+## Ausgangslage
+Die Steinerschule Langnau sucht eine Lösung zur effizienten Organisation von Elternaktivitäten und Freiwilligeneinsätzen. Als Alternative zu kostenpflichtigen Lösungen wie SignupNow.ch wurde eine massgeschneiderte Plattform entwickelt, die vom Elternteam unterstützt wird.
+
+## Unsere Lösung: elternaktivitäten.ch
+*(Domain-Name kann bei Bedarf angepasst werden)*
+
+### Was wir bieten
+Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
+- Aktivitätenverwaltung (Anlässe, Produktion, Verkauf, Haus/Umgebung)
+- Schichtplanung mit Freiwilligenanmeldung
+- Diskussionsforum für jede Aktivität
+- Schulkalender-Integration
+- Öffentliche Ansicht aller Aktivitäten und Kalender
+
+### Kernvorteile gegenüber SignupNow
+
+| Aspekt | **elternaktivitäten.ch** | SignupNow.ch |
+|--------|-------------------------|--------------|
+| **Kosten** | Minimale laufende Kosten | Kostenpflichtige Lizenzen |
+| **Fokus** | Alle Elternaktivitäten | Primär Mensa-Verwaltung |
+| **Anmeldung** | Sehr einfache Registrierung | Registrierung erforderlich |
+| **Anpassung** | Massgeschneidert - genau was benötigt wird | Generische Lösung |
+| **Design** | Steinerschule Design-Richtlinien möglich | Standard-Design |
+| **Support** | Direkt durch Elternteam | Externe Firma |
+
+## Einfache Handhabung
+
+### Für Organisatoren
+1. Aktivität erstellen (Name, Datum, benötigte Helfer)
+2. Helferanmeldungen übersichtlich verwalten
+3. Diskussionen moderieren
+
+### Für Helfer
+1. Aktivität auf der Webseite finden
+2. Einmalig registrieren (einfach und schnell)
+3. Für Schichten anmelden und mitdiskutieren
+
+### Für die Schulverwaltung
+- Zentrale Plattform für Aktivitäten, die Unterstützung suchen
+- Separater Informationsbereich für alle Elternaktivitäten
+- Einfache Moderation bei Bedarf
+
+## Praktische Beispiele
+
+**Märit-Organisation:**
+- 50 Helferschichten online verwalten
+- Eltern melden sich selbstständig an
+- Organisatoren sehen live, wo noch Hilfe benötigt wird
+
+**Gartentag:**
+- Diskussionsforum für Materialabsprachen
+- Zeitfenster-Anmeldung für Familien
+- Kontaktliste automatisch erstellt
+
+**Schulanlässe:**
+- Kalenderintegration zeigt alle Events
+- Prioritäten (Dringend/Wichtig) sofort sichtbar
+- Archivierung erledigter Aktivitäten
+
+## Investition & Nachhaltigkeit
+
+### Entwicklungsstand
+- Erste funktionsfähige Version bereits erstellt
+- Keine Entwicklungskosten für die Schule
+- Weitere Anpassungen nach Feedback möglich
+- Code kann bei Bedarf an andere Interessierte übergeben werden
+
+### Laufende Kosten
+- **Domain:** ca. CHF 20/Monat
+- **Hosting:** Vorerst kostenfrei (über bestehende Infrastruktur)
+- **Wartung:** durch Elternteam (freiwillig)
+- **Total:** ca. CHF 240/Jahr
+
+### Vergleich SignupNow
+- Grundmodul: CHF 85/Monat exkl. MwSt
+- Zusatzmodule: je CHF 25/Monat exkl. MwSt
+- **Für Elternaktivitäten relevant:** Mind. 2 Module nötig
+- **Gesamtkosten:** CHF 135/Monat = **CHF 1'620/Jahr** exkl. MwSt
+- Trotzdem nur Teilbereich abgedeckt
+- Keine individuellen Anpassungen möglich
+
+## Integration in Gesamtstrategie
+
+### Teil eines grösseren Konzepts
+Die Plattform ergänzt unsere weiteren Initiativen zur Förderung der Elternmitarbeit:
+
+**Offline-Massnahmen:**
+- **Märit-Stand (November 2025):** Informationsstand mit Broschüren, Flyern und Postern zu allen Elternaktivitäten
+- **Pizza-Lunch Events:** Networking-Veranstaltungen wo Aktivitätsvertreter direkt mit interessierten Eltern sprechen
+- **Persönliche Vernetzung:** Direkte Gespräche zwischen Organisatoren und potentiellen Helfern
+
+**Online-Plattform elternaktivitäten.ch:**
+- **365 Tage verfügbar:** Während Events nur punktuell stattfinden
+- **Aktuelle Informationen:** Immer auf dem neuesten Stand (vs. gedruckte Materialien)
+- **Direkte Anmeldung:** Sofort handeln wenn Interesse besteht
+- **Diskussionsforum:** Fragen stellen und Antworten erhalten
+- **Zukunft:** Weitere Funktionen wie Erinnerungen möglich
+
+### Erfolg durch Sichtbarkeit
+Für maximale Wirksamkeit benötigt die Plattform:
+- **Regelmässige Kommunikation** an Eltern (Newsletter)
+- **Integration auf Schulwebseite:** Idealerweise direkter Link auf www.steinerschule-bern.ch
+- **Erwähnung bei Elternabenden** und Schulveranstaltungen
+
+## Zeitplan
+
+**Aktueller Stand:**
+- Erste Version entwickelt und funktionsfähig
+- Bereit für Feedback und Tests
+
+**Nächste Schritte:**
+1. Entscheidung Schulleitung
+2. Testphase mit ausgewählten Aktivitäten
+3. Feedback sammeln und einarbeiten
+4. Kurze Einführung für Organisatoren (ca. 30 Minuten)
+5. Schrittweise Einführung nach Bedarf
+
+## Fazit
+
+✓ **Kostengünstig** - minimale laufende Kosten statt teure Lizenzen
+✓ **Massgeschneidert** für die Steinerschule Langnau
+✓ **Flexibel** - wir bauen genau was benötigt wird
+✓ **Umfassend** - alle Elternaktivitäten auf einer Plattform
+✓ **Nachhaltig** - durch Eltern-Community getragen
+
+## Webseite
+
+**elternaktivitäten.ch**
+
+---
+
+*Entwickelt von Eltern für Eltern - mit dem Ziel, unsere Schulgemeinschaft zu stärken.*
