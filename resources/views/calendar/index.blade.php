@@ -161,14 +161,27 @@
                                     }
 
                                     if ($activityDates->isNotEmpty()) {
-                                        $startDate = $activityDates->min();
-                                        $endDate = $activityDates->max();
+                                        // Use the actual activity dates, not just what's visible in this month
+                                        $actualStart = $item['activity']->start_at ?? $item['activity']->flexible_start;
+                                        $actualEnd = $item['activity']->end_at ?? $item['activity']->flexible_end;
+
+                                        $dateRangeStr = '';
+                                        if ($actualStart && $actualEnd) {
+                                            // Show full date with year if different years, otherwise just day.month
+                                            if ($actualStart->year != $actualEnd->year) {
+                                                $dateRangeStr = $actualStart->format('d.m.Y') . '-' . $actualEnd->format('d.m.Y');
+                                            } else {
+                                                $dateRangeStr = $actualStart->format('d.m') . '-' . $actualEnd->format('d.m');
+                                            }
+                                        } elseif ($actualStart) {
+                                            $dateRangeStr = $actualStart->format('d.m');
+                                        }
 
                                         $spanningActivities->push([
                                             'activity' => $item['activity'],
                                             'type' => $item['type'],
                                             'color' => $item['color'],
-                                            'date_range' => $startDate->format('d.m') . '-' . $endDate->format('d.m'),
+                                            'date_range' => $dateRangeStr,
                                             'note' => $item['note'] ?? null,
                                         ]);
                                         $displayedSpanning->push($item['activity']->id);
