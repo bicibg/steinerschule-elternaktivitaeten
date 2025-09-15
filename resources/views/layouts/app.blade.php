@@ -37,6 +37,10 @@
                        class="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Kalender
                     </a>
+                    <a href="{{ route('school-calendar.index') }}"
+                       class="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                        Schulkalender
+                    </a>
                 </nav>
 
                 <div class="flex items-center" x-data="{ open: false }">

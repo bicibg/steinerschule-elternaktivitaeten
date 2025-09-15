@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\SchoolCalendarController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +34,16 @@ Route::get('/aktivitaeten', [ActivityController::class, 'index'])->name('activit
 Route::get('/aktivitaeten/{slug}', [ActivityController::class, 'show'])->name('activities.show');
 
 Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');
+
+// School Calendar routes
+Route::get('/schulkalender', [SchoolCalendarController::class, 'index'])->name('school-calendar.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/schulkalender/create', [SchoolCalendarController::class, 'create'])->name('school-calendar.create');
+    Route::post('/schulkalender', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
+    Route::get('/schulkalender/{schoolEvent}/edit', [SchoolCalendarController::class, 'edit'])->name('school-calendar.edit');
+    Route::put('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'update'])->name('school-calendar.update');
+    Route::delete('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
+});
 
 Route::post('/aktivitaeten/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
 Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
