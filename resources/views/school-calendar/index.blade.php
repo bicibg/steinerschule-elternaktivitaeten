@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    <!-- Events List for the Month -->
+    <!-- Month's Activities List -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Alle Veranstaltungen im {{ $date->locale('de')->monthName }}</h3>
 
@@ -132,27 +132,24 @@
                             default => 'bg-steiner-blue'
                         };
                     @endphp
-                    <div class="flex items-start space-x-3 pb-3 border-b border-gray-100 last:border-0">
-                        <div class="w-3 h-3 rounded-full {{ $colorClass }} mt-1 flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <h4 class="font-medium text-gray-900">{{ $event->title }}</h4>
-                            <p class="text-sm text-gray-600 mt-1">
-                                {{ $event->start_date->format('d.m.Y') }}
-                                @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
-                                    - {{ $event->end_date->format('d.m.Y') }}
-                                @endif
-                                @if($event->event_time)
-                                    , {{ $event->event_time }}
-                                @elseif(!$event->all_day)
-                                    , {{ $event->start_date->format('H:i') }} Uhr
-                                @endif
-                            </p>
-                            @if($event->location)
-                                <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
-                            @endif
-                            @if($event->description)
-                                <p class="text-sm text-gray-600 mt-2">{{ $event->description }}</p>
-                            @endif
+                    <div class="pb-4 border-b border-gray-100 last:border-0">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-3 h-3 rounded-full {{ $colorClass }} mt-1 flex-shrink-0"></div>
+                            <div class="flex-1 min-w-0">
+                                <span class="font-medium text-steiner-blue block">
+                                    {{ $event->title }}
+                                </span>
+                                <div class="text-sm text-gray-600">
+                                    {{ $event->start_date->format('d.m.Y') }}
+                                    @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
+                                        - {{ $event->end_date->format('d.m.Y') }}
+                                    @endif
+                                    <br>
+                                    @if($event->description)
+                                        {{ $event->description }}
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endforeach
