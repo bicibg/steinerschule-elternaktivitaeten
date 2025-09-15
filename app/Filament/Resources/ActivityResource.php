@@ -75,11 +75,6 @@ class ActivityResource extends Resource
                         Forms\Components\Toggle::make('is_active')
                             ->label('Aktiv')
                             ->default(true),
-                        Forms\Components\TextInput::make('sort_order')
-                            ->label('Sortierreihenfolge')
-                            ->numeric()
-                            ->default(0)
-                            ->helperText('Niedrigere Zahlen werden zuerst angezeigt'),
                     ]),
             ]);
     }
@@ -91,9 +86,14 @@ class ActivityResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label('Titel')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(40),
                 Tables\Columns\TextColumn::make('contact_name')
-                    ->label('Kontaktperson')
+                    ->label('Kontakt')
+                    ->formatStateUsing(fn ($state) =>
+                        implode('<br>', array_filter(explode(' ', $state, 2)))
+                    )
+                    ->html()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('category')
@@ -119,12 +119,11 @@ class ActivityResource extends Resource
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Aktiv')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Sortierung')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('posts_count')
-                    ->label('Beiträge')
+                    ->label('')
                     ->counts('posts')
+                    ->icon('heroicon-o-chat-bubble-left-right')
+                    ->tooltip('Anzahl der Forumsbeiträge')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('url')
                     ->label('')
@@ -136,7 +135,7 @@ class ActivityResource extends Resource
                     ->icon('heroicon-m-arrow-top-right-on-square')
                     ->tooltip('Aktivität anzeigen'),
             ])
-            ->defaultSort('sort_order')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
                     ->label('Kategorie')

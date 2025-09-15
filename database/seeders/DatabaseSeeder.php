@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ActivitySeeder::class,
             BulletinPostSeeder::class,
-            SchoolEventSeeder::class
+            SchoolEventSeeder::class,
+            NotificationSeeder::class, // Run after users are created
         ]);
     }
 }

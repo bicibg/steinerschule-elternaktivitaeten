@@ -225,6 +225,98 @@
         </div>
     </header>
 
+    <!-- Notifications -->
+    @auth
+        @php
+            // Get all active notifications
+            $allActiveNotifications = \App\Models\Notification::active()->get();
+
+            // Separate priority and regular notifications
+            $priorityNotifications = $allActiveNotifications->where('is_priority', true)
+                ->filter(function($notification) {
+                    return !$notification->isDismissedBy(auth()->id());
+                });
+
+            $regularNotifications = $allActiveNotifications->where('is_priority', false)
+                ->filter(function($notification) {
+                    return !$notification->isDismissedBy(auth()->id());
+                })
+                ->sortByDesc('created_at')
+                ->take(3); // Show only last 3 regular notifications
+
+            // Combine priority and regular notifications
+            $activeNotifications = $priorityNotifications->concat($regularNotifications)
+                ->sortByDesc(function($notification) {
+                    // Priority notifications first, then by created_at
+                    return ($notification->is_priority ? '1' : '0') . $notification->created_at->format('YmdHis');
+                });
+        @endphp
+
+        @if($activeNotifications->count() > 0)
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="space-y-3 mt-4">
+                    @foreach($activeNotifications as $notification)
+                        <div x-data="{ show: true }"
+                             x-show="show"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-2"
+                             class="relative bg-white rounded-lg shadow-md border-l-4 border-{{ $notification->type_color }}-400 p-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-{{ $notification->type_color }}-100 rounded-full p-2">
+                                    <svg class="h-5 w-5 text-{{ $notification->type_color }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $notification->type_icon }}"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-6 flex-1">
+                                    <h3 class="text-sm font-semibold text-gray-900">
+                                        {{ $notification->title }}
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{ $notification->message }}
+                                    </p>
+                                </div>
+                                <div class="ml-4 flex-shrink-0">
+                                    <button @click="dismissNotification({{ $notification->id }}, $event)"
+                                            type="button"
+                                            aria-label="Schliessen"
+                                            class="inline-flex rounded-full p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-steiner-blue focus:ring-offset-2 transition-all">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <script>
+                function dismissNotification(notificationId, event) {
+                    const button = event.currentTarget;
+                    const notificationElement = button.closest('[x-data]');
+
+                    fetch(`/api/notifications/${notificationId}/dismiss`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'application/json',
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            // Hide the notification using Alpine.js
+                            Alpine.evaluate(notificationElement, 'show = false');
+                        }
+                    });
+                }
+            </script>
+        @endif
+    @endauth
+
     <main class="min-h-screen">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @if(session('success'))

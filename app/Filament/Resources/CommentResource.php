@@ -96,4 +96,9 @@ class CommentResource extends Resource
             'edit' => Pages\EditComment::route('/{record}/edit'),
         ];
     }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->is_super_admin ?? false;
+    }
 }

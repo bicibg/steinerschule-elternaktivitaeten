@@ -43,7 +43,7 @@ class Activity extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order')->orderBy('title');
+        return $query->orderBy('title');
     }
 
     public function posts()
@@ -55,7 +55,7 @@ class Activity extends Model
     {
         return [
             'anlass' => 'Anlässe & Feste',
-            'haus_umgebung_taskforces' => 'Haus & Umgebung / Taskforces',
+            'haus_umgebung_taskforces' => 'Haus, Umgebung und Taskforces',
             'produktion' => 'Produktion',
             'organisation' => 'Organisation & Verwaltung',
             'verkauf' => 'Verkauf & Märkte',

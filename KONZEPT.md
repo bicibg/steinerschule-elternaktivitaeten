@@ -61,6 +61,12 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 - Klickbare Events mit Detailansichten
 - Archivierung erledigter Aktivitäten
 
+**Kommunikation:**
+- Benachrichtigungssystem für wichtige Mitteilungen
+- Prioritätsbenachrichtigungen für dringende Informationen
+- Personalisierte Benutzerprofile mit Kontaktinformationen
+- Automatische Statusaktualisierung abgelaufener Aktivitäten
+
 ## Investition & Nachhaltigkeit
 
 ### Entwicklungsstand
@@ -109,8 +115,11 @@ Für maximale Wirksamkeit benötigt die Plattform:
 ## Zeitplan
 
 **Aktueller Stand:**
-- Erste Version entwickelt und funktionsfähig
-- Bereit für Feedback und Tests
+- Vollständig funktionsfähige Version implementiert
+- Benutzerprofile und Benachrichtigungssystem integriert
+- Deutsche Lokalisierung für Verwaltungsoberfläche
+- Automatisierte Aufgaben für Statusaktualisierungen
+- Bereit für Produktivbetrieb
 
 **Nächste Schritte:**
 1. Entscheidung Schulleitung

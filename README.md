@@ -45,11 +45,28 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - Mobile-friendly interface for all features
 - Category-based filtering across all sections
 
+### User Profiles
+- Personal profile pages with contact information
+- Phone number and remarks fields for additional details
+- Password management and security settings
+- Personal shift history and upcoming commitments
+- Public profile view for other users
+
+### Notification System
+- System-wide announcements for all users
+- Priority notifications for urgent information
+- Dismissible notifications with tracking
+- Type-based styling (urgent, reminder, announcement, info)
+- Automatic expiry management with scheduled jobs
+- Character limits with real-time counter
+
 ### Administration
 - Comprehensive admin panel for content management
 - Multi-tier user roles (User, Admin, Super Admin)
 - Content moderation capabilities
 - Activity and volunteer reporting
+- German localization for admin interface
+- Notification management for super admins only
 
 ## Technology Stack
 
@@ -57,9 +74,10 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - **Database**: SQLite
 - **Frontend**: Blade templates with Alpine.js
 - **Styling**: Tailwind CSS 4
-- **Admin Panel**: Filament 3
+- **Admin Panel**: Filament 3 (German localized)
 - **Build Tool**: Vite
 - **Authentication**: Laravel Breeze
+- **Scheduler**: Laravel Task Scheduling for automated jobs
 
 ## Requirements
 

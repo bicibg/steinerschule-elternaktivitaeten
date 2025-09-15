@@ -108,9 +108,14 @@ class BulletinPostResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label('Titel')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(40),
                 Tables\Columns\TextColumn::make('organizer_name')
                     ->label('Organisator')
+                    ->formatStateUsing(fn ($state) =>
+                        implode('<br>', array_filter(explode(' ', $state, 2)))
+                    )
+                    ->html()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('category')
@@ -124,15 +129,21 @@ class BulletinPostResource extends Resource
                         'danger' => 'verkauf',
                     ]),
                 Tables\Columns\TextColumn::make('start_at')
-                    ->label('Beginnt am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->placeholder('Kein Startdatum'),
+                    ->label('Beginnt')
+                    ->formatStateUsing(fn ($state) => $state ?
+                        $state->format('d.m.Y') . '<br>' .
+                        $state->format('H:i') . ' Uhr' : '-'
+                    )
+                    ->html()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('end_at')
-                    ->label('Endet am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->placeholder('Kein Enddatum'),
+                    ->label('Endet')
+                    ->formatStateUsing(fn ($state) => $state ?
+                        $state->format('d.m.Y') . '<br>' .
+                        $state->format('H:i') . ' Uhr' : '-'
+                    )
+                    ->html()
+                    ->sortable(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
@@ -158,16 +169,6 @@ class BulletinPostResource extends Resource
                         $state ? \App\Models\BulletinPost::getAvailableLabels()[$state] ?? null : null
                     )
                     ->visible(fn () => auth()->user()?->is_super_admin),
-                Tables\Columns\IconColumn::make('has_forum')
-                    ->label('Forum')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-chat-bubble-left-right')
-                    ->falseIcon('heroicon-o-x-circle'),
-                Tables\Columns\IconColumn::make('has_shifts')
-                    ->label('Schichten')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-user-group')
-                    ->falseIcon('heroicon-o-x-circle'),
                 Tables\Columns\TextColumn::make('url')
                     ->label('')
                     ->getStateUsing(fn (BulletinPost $record): string => '')
@@ -205,5 +206,10 @@ class BulletinPostResource extends Resource
             'create' => Pages\CreateBulletinPost::route('/create'),
             'edit' => Pages\EditBulletinPost::route('/{record}/edit'),
         ];
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->is_super_admin ?? false;
     }
 }

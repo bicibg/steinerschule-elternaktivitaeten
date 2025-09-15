@@ -176,4 +176,9 @@ class SchoolEventResource extends Resource
     {
         return auth()->user()?->is_super_admin ?? false;
     }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->is_super_admin ?? false;
+    }
 }
