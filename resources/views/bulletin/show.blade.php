@@ -369,7 +369,7 @@
                                 <div class="mt-2 sm:mt-0">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
                                           :class="filled >= needed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
-                                        <span x-text="filled"></span>/<span x-text="needed"></span> besetzt
+                                        <span x-text="filled"></span>/<span x-text="needed"></span>&nbsp;angemeldet
                                     </span>
                                 </div>
                             </div>
