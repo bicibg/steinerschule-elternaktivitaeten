@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('post_id')->constrained()->cascadeOnDelete();
-            $table->string('author_name');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('body');
             $table->string('ip_hash', 64)->nullable();
             $table->boolean('is_hidden')->default(false);

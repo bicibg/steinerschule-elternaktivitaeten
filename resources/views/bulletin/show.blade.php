@@ -126,7 +126,6 @@
         <!-- Forum Tab Content -->
         <div x-show="{{ $bulletinPost->has_shifts ? "activeTab === 'forum'" : 'true' }}" class="p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Diskussion</h2>
-
             @auth
             <div class="bg-gray-50 rounded-lg p-4 mb-6" x-data="{
                 body: '',
@@ -136,7 +135,7 @@
                     this.loading = true;
 
                     try {
-                        const response = await fetch('/api/activities/{{ $bulletinPost->slug }}/posts', {
+                        const response = await fetch('/api/pinnwand/{{ $bulletinPost->slug }}/posts', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -174,21 +173,17 @@
                     </button>
                 </div>
             </div>
-            @else
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                <p class="text-sm text-yellow-800">
-                    <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
-                    um an der Diskussion teilzunehmen.
-                </p>
-            </div>
-            @endauth
 
             @if($bulletinPost->posts->count() > 0)
                 <div class="space-y-4">
                     @foreach($bulletinPost->posts as $post)
                         <div class="border border-gray-200 rounded-lg p-4" x-data="{ showCommentForm: false }">
                             <div class="flex justify-between items-start mb-2">
-                                <h4 class="font-semibold text-gray-800">{{ $post->author_name }}</h4>
+                                <h4 class="font-semibold">
+                                    <a href="{{ route('profile.show', $post->user_id) }}" class="text-steiner-blue hover:text-steiner-dark hover:underline">
+                                        {{ $post->user->name }}
+                                    </a>
+                                </h4>
                                 <span class="text-sm text-gray-500">{{ $post->created_at->format('d.m.Y H:i') }}</span>
                             </div>
                             <div class="text-gray-700 mb-3">
@@ -208,7 +203,11 @@
                                     @foreach($post->comments as $comment)
                                         <div class="bg-gray-50 rounded-lg p-3">
                                             <div class="flex justify-between items-start mb-1">
-                                                <h5 class="font-medium text-gray-700 text-sm">{{ $comment->author_name }}</h5>
+                                                <h5 class="font-medium text-sm">
+                                                    <a href="{{ route('profile.show', $comment->user_id) }}" class="text-steiner-blue hover:text-steiner-dark hover:underline">
+                                                        {{ $comment->user->name }}
+                                                    </a>
+                                                </h5>
                                                 <span class="text-xs text-gray-500">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
                                             </div>
                                             <div class="text-gray-600 text-sm">
@@ -274,6 +273,14 @@
                     Noch keine Beiträge vorhanden. Seien Sie der Erste!
                 </p>
             @endif
+            @else
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p class="text-sm text-yellow-800">
+                    <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
+                    um an der Diskussion teilzunehmen.
+                </p>
+            </div>
+            @endauth
         </div>
         @endif
 
@@ -287,12 +294,15 @@
                     @foreach($bulletinPost->shifts as $shift)
                         <div class="border border-gray-200 rounded-lg p-4"
                              x-data="{
-                                 filled: {{ $shift->filled }},
                                  needed: {{ $shift->needed }},
                                  volunteers: {{ $shift->volunteers->map(function($v) {
                                      return ['id' => $v->id, 'name' => $v->name, 'user_id' => $v->user_id];
                                  })->toJson() }},
                                  loading: false,
+
+                                 get filled() {
+                                     return this.volunteers.length;
+                                 },
 
                                  get isSignedUp() {
                                      return this.volunteers.some(v => v.user_id === {{ auth()->id() ?? 'null' }});
@@ -319,7 +329,6 @@
 
                                          if (data.success) {
                                              this.volunteers.push(data.volunteer);
-                                             this.filled = data.filled;
                                          }
                                      } catch (error) {
                                          console.error('Fehler:', error);
@@ -345,7 +354,6 @@
 
                                          if (data.success) {
                                              this.volunteers = this.volunteers.filter(v => v.user_id !== {{ auth()->id() ?? 'null' }});
-                                             this.filled = data.filled;
                                          }
                                      } catch (error) {
                                          console.error('Fehler:', error);
@@ -359,43 +367,49 @@
                                     <h3 class="font-semibold text-gray-800">{{ $shift->role }}</h3>
                                     <p class="text-sm text-gray-600 mt-1">{{ $shift->time }}</p>
                                 </div>
+                                @auth
                                 <div class="mt-2 sm:mt-0">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
                                           :class="filled >= needed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
                                         <span x-text="filled"></span> / <span x-text="needed"></span> besetzt
                                     </span>
                                 </div>
+                                @endauth
                             </div>
 
-                            <div x-show="volunteers.length > 0" class="mb-3">
-                                <p class="text-sm font-medium text-gray-700 mb-2">Angemeldete Helfer:</p>
-                                <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                                    <template x-for="volunteer in volunteers" :key="volunteer.id">
-                                        <li class="flex items-center justify-between">
-                                            <template x-if="volunteer.user_id">
-                                                <a :href="'/profile/' + volunteer.user_id"
-                                                   class="text-steiner-blue hover:text-steiner-dark hover:underline"
-                                                   x-text="volunteer.name"></a>
-                                            </template>
-                                            <template x-if="!volunteer.user_id">
-                                                <span x-text="volunteer.name"></span>
-                                            </template>
-                                            @auth
-                                            <button x-show="volunteer.user_id === {{ auth()->id() }}"
-                                                    @click="withdraw()"
-                                                    :disabled="loading"
-                                                    class="text-xs text-red-600 hover:text-red-800 underline ml-2">
-                                                Abmelden
-                                            </button>
-                                            @endauth
-                                        </li>
-                                    </template>
-                                </ul>
-                            </div>
+                            @auth
+                            <template x-if="volunteers.length > 0">
+                                <div class="mb-3">
+                                    <p class="text-sm font-medium text-gray-700 mb-2">Angemeldete Helfer:</p>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                                        <template x-for="volunteer in volunteers" :key="volunteer.id">
+                                            <li class="flex items-center justify-between">
+                                                <template x-if="volunteer.user_id">
+                                                    <a :href="'/profile/' + volunteer.user_id"
+                                                       class="text-steiner-blue hover:text-steiner-dark hover:underline"
+                                                       x-text="volunteer.name"></a>
+                                                </template>
+                                                <template x-if="!volunteer.user_id">
+                                                    <span x-text="volunteer.name"></span>
+                                                </template>
+                                                <button x-show="volunteer.user_id === {{ auth()->id() }}"
+                                                        @click="withdraw()"
+                                                        :disabled="loading"
+                                                        class="text-xs text-red-600 hover:text-red-800 underline ml-2">
+                                                    Abmelden
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
 
-                            <p x-show="volunteers.length === 0" class="text-sm text-gray-500 mb-3">
-                                Noch keine Anmeldungen
-                            </p>
+                            <template x-if="volunteers.length === 0">
+                                <p class="text-sm text-gray-500 mb-3">
+                                    Noch keine Anmeldungen
+                                </p>
+                            </template>
+                            @endauth
 
                             @auth
                                 <button x-show="!isFull && !isSignedUp"

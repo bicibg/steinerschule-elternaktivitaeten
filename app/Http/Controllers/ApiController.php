@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\ActivityPost;
 use App\Models\BulletinPost;
 use App\Models\Post;
 use App\Models\Shift;
 use App\Models\ShiftVolunteer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 
 class ApiController extends Controller
 {
@@ -82,10 +83,6 @@ class ApiController extends Controller
 
         $helpRequest = BulletinPost::where('slug', $slug)->published()->firstOrFail();
 
-        $key = 'post-' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 1)) {
-            return response()->json(['error' => 'Bitte warten Sie 30 Sekunden'], 429);
-        }
 
         if ($request->filled('website') || $request->filled('email_confirm')) {
             return response()->json(['error' => 'Spam detected'], 400);
@@ -96,18 +93,17 @@ class ApiController extends Controller
         ]);
 
         $post = $helpRequest->posts()->create([
-            'author_name' => auth()->user()->name,
+            'user_id' => auth()->id(),
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
 
-        RateLimiter::hit($key, 30);
 
         return response()->json([
             'success' => true,
             'post' => [
                 'id' => $post->id,
-                'author_name' => $post->author_name,
+                'author_name' => $post->user->name,
                 'body' => nl2br(e($post->body)),
                 'created_at' => $post->created_at->format('d.m.Y H:i'),
             ],
@@ -120,10 +116,6 @@ class ApiController extends Controller
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
-        $key = 'comment-' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 1)) {
-            return response()->json(['error' => 'Bitte warten Sie 30 Sekunden'], 429);
-        }
 
         if ($request->filled('website') || $request->filled('email_confirm')) {
             return response()->json(['error' => 'Spam detected'], 400);
@@ -134,18 +126,85 @@ class ApiController extends Controller
         ]);
 
         $comment = $post->comments()->create([
-            'author_name' => auth()->user()->name,
+            'user_id' => auth()->id(),
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
 
-        RateLimiter::hit($key, 30);
 
         return response()->json([
             'success' => true,
             'comment' => [
                 'id' => $comment->id,
-                'author_name' => $comment->author_name,
+                'author_name' => $comment->user->name,
+                'body' => nl2br(e($comment->body)),
+                'created_at' => $comment->created_at->format('d.m.Y H:i'),
+            ],
+        ]);
+    }
+
+    public function storeActivityPost(Request $request, $slug)
+    {
+        if (!auth()->check()) {
+            return response()->json(['error' => 'Nicht angemeldet'], 401);
+        }
+
+        $activity = Activity::where('slug', $slug)->active()->firstOrFail();
+
+        if (!$activity->has_forum) {
+            return response()->json(['error' => 'Forum ist für diese Aktivität nicht aktiviert'], 403);
+        }
+
+
+        $validated = $request->validate([
+            'body' => 'required|string|max:2000',
+        ]);
+
+        $post = $activity->posts()->create([
+            'user_id' => auth()->id(),
+            'body' => $validated['body'],
+            'ip_hash' => hash('sha256', $request->ip()),
+        ]);
+
+
+        return response()->json([
+            'success' => true,
+            'post' => [
+                'id' => $post->id,
+                'author_name' => $post->user->name,
+                'body' => nl2br(e($post->body)),
+                'created_at' => $post->created_at->format('d.m.Y H:i'),
+            ],
+        ]);
+    }
+
+    public function storeActivityComment(Request $request, ActivityPost $post)
+    {
+        if (!auth()->check()) {
+            return response()->json(['error' => 'Nicht angemeldet'], 401);
+        }
+
+        if (!$post->activity->has_forum) {
+            return response()->json(['error' => 'Forum ist für diese Aktivität nicht aktiviert'], 403);
+        }
+
+
+        $validated = $request->validate([
+            'body' => 'required|string|max:800',
+        ]);
+
+        $comment = $post->comments()->create([
+            'user_id' => auth()->id(),
+            'body' => $validated['body'],
+            'ip_hash' => hash('sha256', $request->ip()),
+        ]);
+
+
+        return response()->json([
+            'success' => true,
+            'comment' => [
+                'id' => $comment->id,
+                'author_name' => $comment->user->name,
                 'body' => nl2br(e($comment->body)),
                 'created_at' => $comment->created_at->format('d.m.Y H:i'),
             ],

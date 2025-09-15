@@ -16,7 +16,7 @@ class BulletinPostSeeder extends Seeder
     public function run(): void
     {
         // 1. Lagerwoche Zurich - Shift-based activity
-        $helpRequest1 = BulletinPost::create([
+        $bulletinPost1 = BulletinPost::create([
             'title' => 'Lagerwoche Zürich - Küchenteam gesucht',
             'category' => 'anlass',
             'activity_type' => 'shift_based',
@@ -42,14 +42,14 @@ Unterkunft wird gestellt. Eine tolle Gelegenheit, die Klasse zu begleiten!',
             'show_in_calendar' => true,
         ]);
 
-        $helpRequest1->shifts()->create([
+        $bulletinPost1->shifts()->create([
             'role' => 'Küchenteam Montag-Mittwoch',
             'time' => '03.06.' . (now()->year + 1) . ' - 05.06.' . (now()->year + 1),
             'needed' => 2,
             'filled' => 0,
         ]);
 
-        $helpRequest1->shifts()->create([
+        $bulletinPost1->shifts()->create([
             'role' => 'Küchenteam Mittwoch-Freitag',
             'time' => '05.06.' . (now()->year + 1) . ' - 07.06.' . (now()->year + 1),
             'needed' => 2,
@@ -57,7 +57,7 @@ Unterkunft wird gestellt. Eine tolle Gelegenheit, die Klasse zu begleiten!',
         ]);
 
         // 2. Eurythmie-Aufführung - Shift-based
-        $helpRequest2 = BulletinPost::create([
+        $bulletinPost2 = BulletinPost::create([
             'title' => 'Eurythmie-Aufführung - Helfer für Bühnenbild',
             'category' => 'anlass',
             'activity_type' => 'shift_based',
@@ -80,14 +80,14 @@ Wir suchen Helfer für:
             'show_in_calendar' => true,
         ]);
 
-        $helpRequest2->shifts()->create([
+        $bulletinPost2->shifts()->create([
             'role' => 'Bühnenaufbau',
             'time' => '17.05.' . (now()->year + 1) . ', 15:00 - 18:00 Uhr',
             'needed' => 4,
             'filled' => 2,
         ]);
 
-        $helpRequest2->shifts()->create([
+        $bulletinPost2->shifts()->create([
             'role' => 'Garderobe während Aufführung',
             'time' => '17.05.' . (now()->year + 1) . ', 18:30 - 21:00 Uhr',
             'needed' => 2,
@@ -95,7 +95,7 @@ Wir suchen Helfer für:
         ]);
 
         // 3. Ostereiersuche - Flexible help
-        $helpRequest3 = BulletinPost::create([
+        $bulletinPost3 = BulletinPost::create([
             'title' => 'Ostereiersuche im Schulgarten',
             'category' => 'anlass',
             'activity_type' => 'flexible_help',
@@ -122,7 +122,7 @@ Je mehr Helfer, desto schöner wird das Fest!',
         ]);
 
         // 4. Weihnachtsbazar (Märit) - Major event with many shifts
-        $helpRequest4 = BulletinPost::create([
+        $bulletinPost4 = BulletinPost::create([
             'title' => 'Weihnachtsmärit - Grosser Helferaufruf',
             'category' => 'anlass',
             'activity_type' => 'shift_based',
@@ -150,35 +150,35 @@ Detaillierte Schichtpläne folgen im Oktober.',
         ]);
 
         // Multiple shifts for Märit
-        $helpRequest4->shifts()->create([
+        $bulletinPost4->shifts()->create([
             'role' => 'Aufbau Freitag',
             'time' => '29.11.' . now()->year . ', 14:00 - 20:00 Uhr',
             'needed' => 20,
             'filled' => 5,
         ]);
 
-        $helpRequest4->shifts()->create([
+        $bulletinPost4->shifts()->create([
             'role' => 'Cafeteria Vormittag',
             'time' => '30.11.' . now()->year . ', 09:00 - 12:00 Uhr',
             'needed' => 6,
             'filled' => 2,
         ]);
 
-        $helpRequest4->shifts()->create([
+        $bulletinPost4->shifts()->create([
             'role' => 'Cafeteria Nachmittag',
             'time' => '30.11.' . now()->year . ', 12:00 - 16:00 Uhr',
             'needed' => 6,
             'filled' => 0,
         ]);
 
-        $helpRequest4->shifts()->create([
+        $bulletinPost4->shifts()->create([
             'role' => 'Kinderbereich',
             'time' => '30.11.' . now()->year . ', 10:00 - 16:00 Uhr',
             'needed' => 8,
             'filled' => 3,
         ]);
 
-        $helpRequest4->shifts()->create([
+        $bulletinPost4->shifts()->create([
             'role' => 'Abbau',
             'time' => '30.11.' . now()->year . ', 16:00 - 19:00 Uhr',
             'needed' => 15,
@@ -186,7 +186,7 @@ Detaillierte Schichtpläne folgen im Oktober.',
         ]);
 
         // 5. Adventssingen - Production activity
-        $helpRequest5 = BulletinPost::create([
+        $bulletinPost5 = BulletinPost::create([
             'title' => 'Adventssingen - Liedhefte vorbereiten',
             'category' => 'produktion',
             'activity_type' => 'production',
@@ -212,7 +212,7 @@ Die Arbeit kann flexibel zwischen dem 15. und 25. November erledigt werden. Mate
         ]);
 
         // 6. Elternrat - Regular meeting
-        $helpRequest6 = BulletinPost::create([
+        $bulletinPost6 = BulletinPost::create([
             'title' => 'Elternrat Sitzungen',
             'category' => 'organisation',
             'activity_type' => 'meeting',
@@ -240,7 +240,7 @@ Alle interessierten Eltern sind willkommen!',
         ]);
 
         // 7. Schulgarten - Flexible help
-        $helpRequest7 = BulletinPost::create([
+        $bulletinPost7 = BulletinPost::create([
             'title' => 'Schulgarten-Pflege',
             'category' => 'haus_umgebung_taskforces',
             'activity_type' => 'flexible_help',
@@ -268,7 +268,7 @@ Kommt vorbei, wann immer ihr Zeit habt. Werkzeug vorhanden.',
         ]);
 
         // 8. Flohmarkt - Shift-based
-        $helpRequest8 = BulletinPost::create([
+        $bulletinPost8 = BulletinPost::create([
             'title' => 'Flohmarkt im Frühling',
             'category' => 'verkauf',
             'activity_type' => 'shift_based',
@@ -294,21 +294,21 @@ Helfer gesucht für Annahme, Sortierung und Verkauf.',
             'show_in_calendar' => true,
         ]);
 
-        $helpRequest8->shifts()->create([
+        $bulletinPost8->shifts()->create([
             'role' => 'Warenannahme Freitag',
             'time' => '14.03.' . (now()->year + 1) . ', 14:00 - 18:00 Uhr',
             'needed' => 5,
             'filled' => 1,
         ]);
 
-        $helpRequest8->shifts()->create([
+        $bulletinPost8->shifts()->create([
             'role' => 'Verkauf Vormittag',
             'time' => '15.03.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
             'needed' => 8,
             'filled' => 2,
         ]);
 
-        $helpRequest8->shifts()->create([
+        $bulletinPost8->shifts()->create([
             'role' => 'Aufräumen',
             'time' => '15.03.' . (now()->year + 1) . ', 14:00 - 16:00 Uhr',
             'needed' => 6,
@@ -316,7 +316,7 @@ Helfer gesucht für Annahme, Sortierung und Verkauf.',
         ]);
 
         // 9. Johannifeuer - Shift-based
-        $helpRequest9 = BulletinPost::create([
+        $bulletinPost9 = BulletinPost::create([
             'title' => 'Johannifeuer - Sommerfest',
             'category' => 'anlass',
             'activity_type' => 'shift_based',
@@ -341,21 +341,21 @@ Helfer für Auf-/Abbau, Feuerwache und Verpflegung gesucht.',
             'show_in_calendar' => true,
         ]);
 
-        $helpRequest9->shifts()->create([
+        $bulletinPost9->shifts()->create([
             'role' => 'Holz sammeln und Feuer vorbereiten',
             'time' => '24.06.' . (now()->year + 1) . ', 16:00 - 18:00 Uhr',
             'needed' => 6,
             'filled' => 2,
         ]);
 
-        $helpRequest9->shifts()->create([
+        $bulletinPost9->shifts()->create([
             'role' => 'Feuerwache',
             'time' => '24.06.' . (now()->year + 1) . ', 19:00 - 23:00 Uhr',
             'needed' => 4,
             'filled' => 1,
         ]);
 
-        $helpRequest9->shifts()->create([
+        $bulletinPost9->shifts()->create([
             'role' => 'Stockbrot-Station',
             'time' => '24.06.' . (now()->year + 1) . ', 19:00 - 21:00 Uhr',
             'needed' => 3,
@@ -363,7 +363,7 @@ Helfer für Auf-/Abbau, Feuerwache und Verpflegung gesucht.',
         ]);
 
         // 10. Kuchenbuffet für Anlässe - Production
-        $helpRequest10 = BulletinPost::create([
+        $bulletinPost10 = BulletinPost::create([
             'title' => 'Kuchen für Schulanlässe',
             'category' => 'produktion',
             'activity_type' => 'production',
@@ -389,7 +389,7 @@ Pro Anlass werden 15-20 Kuchen benötigt. Bitte bei Organisatoren melden.',
         ]);
 
         // 11. Bibliothek - Regular shifts with flexible capacity
-        $helpRequest11 = BulletinPost::create([
+        $bulletinPost11 = BulletinPost::create([
             'title' => 'Schulbibliothek Betreuung',
             'category' => 'organisation',
             'activity_type' => 'shift_based',
@@ -415,7 +415,7 @@ Einarbeitung wird geboten. Ideal für Bücherfreunde!',
             'show_in_calendar' => true,
         ]);
 
-        $helpRequest11->shifts()->create([
+        $bulletinPost11->shifts()->create([
             'role' => 'Bibliotheksdienst Montag',
             'time' => 'Montags, 12:00 - 14:00 Uhr',
             'needed' => null,
@@ -423,7 +423,7 @@ Einarbeitung wird geboten. Ideal für Bücherfreunde!',
             'filled' => 1,
         ]);
 
-        $helpRequest11->shifts()->create([
+        $bulletinPost11->shifts()->create([
             'role' => 'Bibliotheksdienst Donnerstag',
             'time' => 'Donnerstags, 12:00 - 14:00 Uhr',
             'needed' => null,
@@ -432,7 +432,7 @@ Einarbeitung wird geboten. Ideal für Bücherfreunde!',
         ]);
 
         // 12. Renovierung Klassenzimmer - Flexible help
-        $helpRequest12 = BulletinPost::create([
+        $bulletinPost12 = BulletinPost::create([
             'title' => 'Klassenzimmer renovieren',
             'category' => 'haus_umgebung_taskforces',
             'activity_type' => 'flexible_help',
@@ -459,7 +459,7 @@ Materialkosten werden übernommen. Jede helfende Hand willkommen!',
         ]);
 
         // 13. Pausenkiosk - Regular shifts
-        $helpRequest13 = BulletinPost::create([
+        $bulletinPost13 = BulletinPost::create([
             'title' => 'Pausenkiosk',
             'category' => 'verkauf',
             'activity_type' => 'shift_based',
@@ -485,14 +485,14 @@ Erlös für Klassenkassen. Helfer für Verkauf und Vorbereitung gesucht.',
             'show_in_calendar' => true,
         ]);
 
-        $helpRequest13->shifts()->create([
+        $bulletinPost13->shifts()->create([
             'role' => 'Kiosk Dienstag',
             'time' => 'Dienstags, 09:30 - 10:00 Uhr',
             'needed' => 2,
             'filled' => 1,
         ]);
 
-        $helpRequest13->shifts()->create([
+        $bulletinPost13->shifts()->create([
             'role' => 'Kiosk Donnerstag',
             'time' => 'Donnerstags, 09:30 - 10:00 Uhr',
             'needed' => 2,
@@ -500,7 +500,7 @@ Erlös für Klassenkassen. Helfer für Verkauf und Vorbereitung gesucht.',
         ]);
 
         // 14. Theater-Requisiten - Production
-        $helpRequest14 = BulletinPost::create([
+        $bulletinPost14 = BulletinPost::create([
             'title' => 'Theater-Requisiten herstellen',
             'category' => 'produktion',
             'activity_type' => 'production',
@@ -527,7 +527,7 @@ Kreative Köpfe und geschickte Hände gesucht!',
         ]);
 
         // 15. Skilager-Begleitung - Shift-based
-        $helpRequest15 = BulletinPost::create([
+        $bulletinPost15 = BulletinPost::create([
             'title' => 'Skilager Begleitung',
             'category' => 'anlass',
             'activity_type' => 'shift_based',
@@ -553,21 +553,21 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
             'label' => 'important',
         ]);
 
-        $helpRequest15->shifts()->create([
+        $bulletinPost15->shifts()->create([
             'role' => 'Begleitperson ganze Woche',
             'time' => '10.02.' . (now()->year + 1) . ' - 14.02.' . (now()->year + 1),
             'needed' => 4,
             'filled' => 1,
         ]);
 
-        $helpRequest15->shifts()->create([
+        $bulletinPost15->shifts()->create([
             'role' => 'Begleitung Mo-Mi',
             'time' => '10.02.' . (now()->year + 1) . ' - 12.02.' . (now()->year + 1),
             'needed' => 2,
             'filled' => 0,
         ]);
 
-        $helpRequest15->shifts()->create([
+        $bulletinPost15->shifts()->create([
             'role' => 'Begleitung Mi-Fr',
             'time' => '12.02.' . (now()->year + 1) . ' - 14.02.' . (now()->year + 1),
             'needed' => 2,
@@ -575,29 +575,36 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
         ]);
 
         // Add sample forum posts
-        $post1 = $helpRequest4->posts()->create([
-            'author_name' => 'Sabine Meier',
-            'body' => 'Ich übernehme gerne eine Schicht in der Cafeteria! Bringe auch 3 Kuchen mit.',
-            'ip_hash' => hash('sha256', '192.168.1.1'),
-        ]);
+        // Get some users for posts
+        $users = \App\Models\User::where('is_admin', false)->take(4)->get();
 
-        $post2 = $helpRequest7->posts()->create([
-            'author_name' => 'Thomas Weber',
-            'body' => 'Komme regelmässig dienstags vormittags vorbei. Wer möchte sich anschliessen?',
-            'ip_hash' => hash('sha256', '192.168.1.2'),
-        ]);
+        if ($users->count() >= 3) {
+            $post1 = $bulletinPost4->posts()->create([
+                'user_id' => $users[0]->id,
+                'body' => 'Ich übernehme gerne eine Schicht in der Cafeteria! Bringe auch 3 Kuchen mit.',
+                'ip_hash' => hash('sha256', '192.168.1.1'),
+            ]);
 
-        $post2->comments()->create([
-            'author_name' => 'Laura Fischer',
-            'body' => 'Super Idee! Ich komme nächsten Dienstag dazu.',
-            'ip_hash' => hash('sha256', '192.168.1.3'),
-        ]);
+            $post2 = $bulletinPost7->posts()->create([
+                'user_id' => $users[1]->id,
+                'body' => 'Komme regelmässig dienstags vormittags vorbei. Wer möchte sich anschliessen?',
+                'ip_hash' => hash('sha256', '192.168.1.2'),
+            ]);
 
-        $post3 = $helpRequest10->posts()->create([
-            'author_name' => 'Familie Schneider',
-            'body' => 'Wir backen 2 glutenfreie Kuchen für den Tag der offenen Tür.',
-            'ip_hash' => hash('sha256', '192.168.1.4'),
-        ]);
+            $post2->comments()->create([
+                'user_id' => $users[2]->id,
+                'body' => 'Super Idee! Ich komme nächsten Dienstag dazu.',
+                'ip_hash' => hash('sha256', '192.168.1.3'),
+            ]);
+
+            if ($users->count() >= 4) {
+                $post3 = $bulletinPost10->posts()->create([
+                    'user_id' => $users[3]->id,
+                    'body' => 'Wir backen 2 glutenfreie Kuchen für den Tag der offenen Tür.',
+                    'ip_hash' => hash('sha256', '192.168.1.4'),
+                ]);
+            }
+        }
 
         // Add sample volunteers to some shifts
         $users = \App\Models\User::whereIn('email', [
@@ -608,9 +615,9 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
 
         if ($users->count() > 0) {
             // Add volunteers to Märit
-            $märitShifts = $helpRequest4->shifts()->get();
-            if ($märitShifts->count() > 0 && $users->count() > 0) {
-                $märitShifts->first()->volunteers()->create([
+            $maeritShifts = $bulletinPost4->shifts()->get();
+            if ($maeritShifts->count() > 0 && $users->count() > 0) {
+                $maeritShifts->first()->volunteers()->create([
                     'user_id' => $users->first()->id,
                     'name' => $users->first()->name,
                     'email' => $users->first()->email,
@@ -618,7 +625,7 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
             }
 
             // Add volunteer to library
-            $libraryShifts = $helpRequest11->shifts()->get();
+            $libraryShifts = $bulletinPost11->shifts()->get();
             if ($libraryShifts->count() > 0 && $users->count() > 1) {
                 $libraryShifts->first()->volunteers()->create([
                     'user_id' => $users->skip(1)->first()->id,

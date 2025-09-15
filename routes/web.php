@@ -73,6 +73,8 @@ Route::prefix('api')->group(function () {
     Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\ApiController::class, 'shiftWithdraw'])->name('api.shifts.withdraw');
     Route::post('/pinnwand/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store');
     Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store');
+    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storeActivityPost'])->name('api.activity-posts.store');
+    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeActivityComment'])->name('api.activity-comments.store');
     Route::post('/notifications/{notification}/dismiss', [\App\Http\Controllers\NotificationController::class, 'dismiss'])->name('api.notifications.dismiss')->middleware('auth');
 });
 

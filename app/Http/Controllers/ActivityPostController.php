@@ -17,13 +17,17 @@ class ActivityPostController extends Controller
         }
 
         $validated = $request->validate([
-            'author_name' => 'required|string|max:100',
-            'body' => 'required|string|max:1000',
+            'body' => 'required|string|max:2000',
         ]);
 
+        $validated['user_id'] = auth()->id();
         $validated['ip_hash'] = hash('sha256', $request->ip());
 
         $post = $activity->posts()->create($validated);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'post' => $post]);
+        }
 
         return redirect()->route('activities.show', $activity->slug . '#post-' . $post->id)
             ->with('success', 'Ihr Beitrag wurde erfolgreich veröffentlicht.');
@@ -36,13 +40,17 @@ class ActivityPostController extends Controller
         }
 
         $validated = $request->validate([
-            'author_name' => 'required|string|max:100',
-            'body' => 'required|string|max:1000',
+            'body' => 'required|string|max:800',
         ]);
 
+        $validated['user_id'] = auth()->id();
         $validated['ip_hash'] = hash('sha256', $request->ip());
 
         $comment = $post->comments()->create($validated);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'comment' => $comment]);
+        }
 
         return redirect()->route('activities.show', $post->activity->slug . '#comment-' . $comment->id)
             ->with('success', 'Ihr Kommentar wurde erfolgreich veröffentlicht.');

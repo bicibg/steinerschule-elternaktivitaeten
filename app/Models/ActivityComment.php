@@ -8,7 +8,7 @@ class ActivityComment extends Model
 {
     protected $fillable = [
         'activity_post_id',
-        'author_name',
+        'user_id',
         'body',
         'ip_hash',
         'is_hidden',
@@ -26,5 +26,10 @@ class ActivityComment extends Model
     public function scopeVisible($query)
     {
         return $query->where('is_hidden', false);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

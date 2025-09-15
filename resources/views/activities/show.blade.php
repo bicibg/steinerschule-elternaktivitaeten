@@ -97,90 +97,166 @@
 
         <!-- Forum Section -->
         @if($activity->has_forum)
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Diskussionsforum</h2>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Diskussion</h2>
+                    @auth
+                    <!-- New Post Form -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6" x-data="{
+                        body: '',
+                        loading: false,
+                        async submitPost() {
+                            if (!this.body.trim() || this.loading) return;
+                            this.loading = true;
 
-                <!-- New Post Form -->
-                @if(Auth::check())
-                    <form action="{{ route('activity-posts.store', $activity->slug) }}" method="POST" class="mb-6">
-                        @csrf
-                        <div class="space-y-3">
-                            <input type="text" name="author_name" value="{{ Auth::user()->name }}" readonly
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
-                            <textarea name="body" rows="4" required
-                                      placeholder="Schreiben Sie hier Ihren Beitrag..."
-                                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-steiner-blue"></textarea>
-                            <button type="submit"
-                                    class="px-4 py-2 bg-steiner-blue text-white rounded-md hover:bg-steiner-dark transition-colors">
-                                Beitrag veröffentlichen
+                            try {
+                                const response = await fetch('/api/elternaktivitaeten/{{ $activity->slug }}/posts', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                                    },
+                                    body: JSON.stringify({ body: this.body })
+                                });
+
+                                const data = await response.json();
+
+                                if (data.success) {
+                                    this.body = '';
+                                    location.reload();
+                                }
+                            } catch (error) {
+                                console.error('Fehler:', error);
+                            }
+
+                            this.loading = false;
+                        }
+                    }">
+                        <h3 class="font-semibold text-gray-700 mb-3">Neuen Beitrag verfassen</h3>
+                        <div>
+                            <div class="mb-3">
+                                <textarea x-model="body" rows="3" required
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-steiner-blue focus:border-transparent"
+                                          placeholder="Ihre Nachricht..."
+                                          maxlength="2000"></textarea>
+                            </div>
+
+                            <button @click="submitPost()" :disabled="loading"
+                                    class="px-4 py-2 bg-steiner-blue text-white rounded-md hover:bg-steiner-dark transition-colors duration-200 disabled:opacity-50">
+                                <span x-show="!loading">Beitrag veröffentlichen</span>
+                                <span x-show="loading">Wird verarbeitet...</span>
                             </button>
                         </div>
-                    </form>
-                @else
-                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                        <p class="text-gray-600">
-                            <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark font-medium">Melden Sie sich an</a>,
-                            um einen Beitrag zu schreiben.
-                        </p>
                     </div>
-                @endif
 
-                <!-- Posts List -->
-                <div class="space-y-4">
-                    @forelse($activity->posts as $post)
-                        <div id="post-{{ $post->id }}" class="bg-gray-50 rounded-lg p-4">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="font-medium text-gray-800">{{ $post->author_name }}</span>
-                                <span class="text-sm text-gray-500">{{ $post->created_at->diffForHumans() }}</span>
-                            </div>
-                            <p class="text-gray-700 mb-3">{{ $post->body }}</p>
+                    <!-- Posts List -->
+                    @if($activity->posts->count() > 0)
+                        <div class="space-y-4">
+                            @foreach($activity->posts as $post)
+                                <div class="border border-gray-200 rounded-lg p-4" x-data="{ showCommentForm: false }">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h4 class="font-semibold">
+                                            <a href="{{ route('profile.show', $post->user_id) }}" class="text-steiner-blue hover:text-steiner-dark hover:underline">
+                                                {{ $post->user->name }}
+                                            </a>
+                                        </h4>
+                                        <span class="text-sm text-gray-500">{{ $post->created_at->format('d.m.Y H:i') }}</span>
+                                    </div>
+                                    <div class="text-gray-700 mb-3">
+                                        {!! nl2br(e($post->body)) !!}
+                                    </div>
 
-                            <!-- Comments -->
-                            @if($post->comments->count() > 0)
-                                <div class="ml-6 mt-3 space-y-3">
-                                    @foreach($post->comments as $comment)
-                                        <div id="comment-{{ $comment->id }}" class="bg-white rounded-lg p-3">
-                                            <div class="flex justify-between items-start mb-1">
-                                                <span class="font-medium text-gray-700 text-sm">{{ $comment->author_name }}</span>
-                                                <span class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
-                                            </div>
-                                            <p class="text-gray-600 text-sm">{{ $comment->body }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            <!-- Comment Form -->
-                            @if(Auth::check())
-                                <div class="mt-3" x-data="{ showCommentForm: false }">
+                                    @auth
                                     <button @click="showCommentForm = !showCommentForm"
                                             class="text-sm text-steiner-blue hover:text-steiner-dark">
-                                        Antworten
+                                        <span x-show="!showCommentForm">Kommentieren</span>
+                                        <span x-show="showCommentForm" x-cloak>Kommentar abbrechen</span>
                                     </button>
-                                    <form x-show="showCommentForm" x-cloak
-                                          action="{{ route('activity-comments.store', $post) }}" method="POST"
-                                          class="mt-3">
-                                        @csrf
-                                        <div class="space-y-2">
-                                            <input type="text" name="author_name" value="{{ Auth::user()->name }}" readonly
-                                                   class="w-full px-2 py-1 text-sm border border-gray-300 rounded bg-gray-50">
-                                            <textarea name="body" rows="2" required
-                                                      placeholder="Ihr Kommentar..."
-                                                      class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-steiner-blue"></textarea>
-                                            <button type="submit"
-                                                    class="px-3 py-1 text-sm bg-steiner-blue text-white rounded hover:bg-steiner-dark transition-colors">
-                                                Kommentar veröffentlichen
+                                    @endauth
+
+                                    @if($post->comments->count() > 0)
+                                        <div class="mt-4 ml-6 space-y-3">
+                                            @foreach($post->comments as $comment)
+                                                <div class="bg-gray-50 rounded-lg p-3">
+                                                    <div class="flex justify-between items-start mb-1">
+                                                        <h5 class="font-medium text-sm">
+                                                            <a href="{{ route('profile.show', $comment->user_id) }}" class="text-steiner-blue hover:text-steiner-dark hover:underline">
+                                                                {{ $comment->user->name }}
+                                                            </a>
+                                                        </h5>
+                                                        <span class="text-xs text-gray-500">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
+                                                    </div>
+                                                    <div class="text-gray-600 text-sm">
+                                                        {!! nl2br(e($comment->body)) !!}
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @auth
+                                    <div x-show="showCommentForm" x-cloak class="mt-4 ml-6" x-data="{
+                                        commentBody: '',
+                                        commentLoading: false,
+                                        async submitComment() {
+                                            if (!this.commentBody.trim() || this.commentLoading) return;
+                                            this.commentLoading = true;
+
+                                            try {
+                                                const response = await fetch('/api/activity-posts/{{ $post->id }}/comments', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                                                    },
+                                                    body: JSON.stringify({ body: this.commentBody })
+                                                });
+
+                                                const data = await response.json();
+
+                                                if (data.success) {
+                                                    this.commentBody = '';
+                                                    location.reload();
+                                                }
+                                            } catch (error) {
+                                                console.error('Fehler:', error);
+                                            }
+
+                                            this.commentLoading = false;
+                                        }
+                                    }">
+                                        <div class="bg-gray-50 rounded-lg p-3">
+                                            <div class="mb-2">
+                                                <textarea x-model="commentBody" rows="2" required
+                                                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-steiner-blue focus:border-transparent text-sm"
+                                                          placeholder="Ihr Kommentar..."
+                                                          maxlength="800"></textarea>
+                                            </div>
+
+                                            <button @click="submitComment()" :disabled="commentLoading"
+                                                    class="px-3 py-1 bg-steiner-blue text-white rounded-md hover:bg-steiner-dark transition-colors duration-200 text-sm disabled:opacity-50">
+                                                <span x-show="!commentLoading">Kommentar veröffentlichen</span>
+                                                <span x-show="commentLoading">Wird verarbeitet...</span>
                                             </button>
                                         </div>
-                                    </form>
+                                    </div>
+                                    @endauth
                                 </div>
-                            @endif
+                            @endforeach
                         </div>
-                    @empty
+                    @else
                         <p class="text-gray-500 text-center py-8">
                             Noch keine Beiträge vorhanden. Seien Sie der Erste!
                         </p>
-                    @endforelse
+                    @endif
+                    @else
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p class="text-sm text-yellow-800">
+                            <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
+                            um an der Diskussion teilzunehmen.
+                        </p>
+                    </div>
+                    @endauth
                 </div>
             </div>
         @endif
