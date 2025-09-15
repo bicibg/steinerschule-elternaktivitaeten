@@ -140,8 +140,8 @@
                                 </p>
                             @elseif($item['type'] === 'flexible')
                                 <p class="text-sm text-gray-600 mt-1">
-                                    Flexibler Zeitraum: {{ \Carbon\Carbon::parse($item['activity']->flexible_start)->format('d.m.Y') }}
-                                    - {{ \Carbon\Carbon::parse($item['activity']->flexible_end)->format('d.m.Y') }}
+                                    Flexibler Zeitraum: {{ \Carbon\Carbon::parse($item['activity']->flexible_start ?: $item['activity']->start_at)->format('d.m.Y') }}
+                                    - {{ \Carbon\Carbon::parse($item['activity']->flexible_end ?: $item['activity']->end_at)->format('d.m.Y') }}
                                 </p>
                             @endif
                             @if(isset($item['note']) && $item['note'])
