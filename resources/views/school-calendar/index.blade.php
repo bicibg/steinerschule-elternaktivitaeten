@@ -136,17 +136,25 @@
                         <div class="flex items-start space-x-3">
                             <div class="w-3 h-3 rounded-full {{ $colorClass }} mt-1 flex-shrink-0"></div>
                             <div class="flex-1 min-w-0">
-                                <span class="font-medium text-steiner-blue block">
+                                <span class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
                                     {{ $event->title }}
                                 </span>
                                 <div class="text-sm text-gray-600">
-                                    {{ $event->start_date->format('d.m.Y') }}
-                                    @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
-                                        - {{ $event->end_date->format('d.m.Y') }}
-                                    @endif
-                                    <br>
+                                    @php
+                                        $typeLabel = match($event->event_type) {
+                                            'festival' => 'Fest',
+                                            'meeting' => 'Treffen',
+                                            'performance' => 'Aufführung',
+                                            'holiday' => 'Ferien',
+                                            'sports' => 'Sport',
+                                            'excursion' => 'Ausflug',
+                                            default => 'Veranstaltung'
+                                        };
+                                    @endphp
+                                    <span class="text-gray-700 font-medium">{{ $typeLabel }}</span>
+                                    - {{ $event->start_date->format('d.m') }}@if($event->end_date && !$event->start_date->isSameDay($event->end_date))-{{ $event->end_date->format('d.m') }}@endif
                                     @if($event->description)
-                                        {{ $event->description }}
+                                        <br>{{ $event->description }}
                                     @endif
                                 </div>
                             </div>
