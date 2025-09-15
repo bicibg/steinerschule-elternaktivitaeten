@@ -90,15 +90,13 @@
                                         };
                                     @endphp
 
-                                    <div class="mb-0.5">
-                                        <div class="block text-xs px-0.5 {{ $roundedClass }} {{ $colorClass }} text-white truncate"
-                                             title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
-                                            @if(!$isSpanning || $eventData['is_start'])
-                                                {{ $event->title }}
-                                            @else
-                                                &nbsp;
-                                            @endif
-                                        </div>
+                                    <div class="block text-xs {{ $roundedClass }} {{ $colorClass }} text-white truncate"
+                                         title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
+                                        @if(!$isSpanning || $eventData['is_start'])
+                                            {{ $event->title }}
+                                        @else
+                                            &nbsp;
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
@@ -139,6 +137,9 @@
                                 {{ $event->start_date->format('d.m.Y') }}
                                 @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
                                     - {{ $event->end_date->format('d.m.Y') }}
+                                @endif
+                                @if($event->event_time)
+                                    , {{ $event->event_time }}
                                 @elseif(!$event->all_day)
                                     , {{ $event->start_date->format('H:i') }} Uhr
                                 @endif

@@ -25,7 +25,9 @@ class SchoolEventResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Schulveranstaltungen';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?string $navigationGroup = 'Schulverwaltung';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -49,6 +51,11 @@ class SchoolEventResource extends Resource
                     ->native(false)
                     ->displayFormat('d.m.Y')
                     ->afterOrEqual('start_date'),
+                Forms\Components\TextInput::make('event_time')
+                    ->label('Uhrzeit')
+                    ->placeholder('z.B. 19:00 Uhr')
+                    ->helperText('Nur zur Information, wenn nicht ganztägig')
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('location')
                     ->label('Ort')
                     ->maxLength(255),

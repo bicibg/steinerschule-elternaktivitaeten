@@ -14,6 +14,7 @@ class SchoolEvent extends Model
         'description',
         'start_date',
         'end_date',
+        'event_time',
         'location',
         'event_type',
         'color',
