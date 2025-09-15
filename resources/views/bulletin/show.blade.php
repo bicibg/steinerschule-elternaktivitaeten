@@ -4,11 +4,21 @@
 
 @section('content')
     <div class="mb-6">
-        <a href="{{ route('bulletin.index') }}" class="inline-flex items-center text-steiner-blue hover:text-steiner-dark">
+        @php
+            $referrer = request()->headers->get('referer');
+            $backRoute = route('bulletin.index');
+            $backText = 'Zurück zur Pinnwand';
+
+            if ($referrer && str_contains($referrer, '/kalender')) {
+                $backRoute = route('calendar.index');
+                $backText = 'Zurück zum Kalender';
+            }
+        @endphp
+        <a href="{{ $backRoute }}" class="inline-flex items-center text-steiner-blue hover:text-steiner-dark">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            Zurück zur Übersicht
+            {{ $backText }}
         </a>
     </div>
 

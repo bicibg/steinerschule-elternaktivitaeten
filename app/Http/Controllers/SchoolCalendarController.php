@@ -56,6 +56,11 @@ class SchoolCalendarController extends Controller
         return view('school-calendar.index', compact('date', 'eventsByDate', 'events', 'month', 'year'));
     }
 
+    public function show(SchoolEvent $schoolEvent)
+    {
+        return view('school-calendar.show', compact('schoolEvent'));
+    }
+
     public function create()
     {
         if (!auth()->user() || !auth()->user()->is_super_admin) {

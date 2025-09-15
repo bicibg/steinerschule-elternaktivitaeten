@@ -82,10 +82,11 @@
                                         };
                                     @endphp
 
-                                    <div class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $colorClass }} text-white hover:opacity-75 transition-opacity truncate"
-                                         title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
+                                    <a href="{{ route('school-calendar.show', $event) }}"
+                                       class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $colorClass }} text-white hover:opacity-75 transition-opacity truncate"
+                                       title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
                                         {{ $event->title }}
-                                    </div>
+                                    </a>
                                 @endforeach
                             </div>
                         </div>
@@ -121,9 +122,10 @@
                         <div class="flex items-start space-x-3">
                             <div class="w-3 h-3 rounded-full {{ $colorClass }} mt-1 flex-shrink-0"></div>
                             <div class="flex-1 min-w-0">
-                                <span class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
+                                <a href="{{ route('school-calendar.show', $event) }}"
+                                   class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
                                     {{ $event->title }}
-                                </span>
+                                </a>
                                 <div class="text-sm text-gray-600">
                                     @php
                                         $typeLabel = match($event->event_type) {

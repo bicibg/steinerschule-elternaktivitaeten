@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'update'])->name('school-calendar.update');
     Route::delete('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
 });
+Route::get('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'show'])->name('school-calendar.show');
 
 Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
 Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
