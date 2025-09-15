@@ -81,9 +81,9 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 ### Vergleich SignupNow
 - Grundmodul: CHF 85/Monat exkl. MwSt
 - Zusatzmodule: je CHF 25/Monat exkl. MwSt
-- **Für Elternaktivitäten relevant:** Mind. 2 Module nötig
-- **Gesamtkosten:** CHF 135/Monat = **CHF 1'620/Jahr** exkl. MwSt
-- Trotzdem nur Teilbereich abgedeckt
+- **Gesamtkosten:** Ab CHF 85/Monat = **CHF 1'020/Jahr** exkl. MwSt (nur Grundmodul)
+- Mit Zusatzmodulen entsprechend teurer
+- Nur Teilbereich der Elternaktivitäten abgedeckt
 - Keine individuellen Anpassungen möglich
 
 ## Integration in Gesamtstrategie
