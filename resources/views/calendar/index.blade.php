@@ -77,13 +77,13 @@
                         $dayItems = $itemsByDate->get($dateKey, collect());
                     @endphp
 
-                    <div class="bg-white min-h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative overflow-hidden">
-                        <div class="p-1 h-full flex flex-col">
-                            <div class="font-medium text-sm mb-1 {{ $isToday ? 'text-blue-600' : '' }} {{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
+                    <div class="bg-white h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative overflow-hidden">
+                        <div class="h-full flex flex-col">
+                            <div class="font-medium text-sm px-1 pt-0.5 {{ $isToday ? 'text-blue-600' : '' }} {{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
                                 {{ $currentDate->day }}
                             </div>
 
-                            <div class="space-y-0.5 flex-1 overflow-y-auto">
+                            <div class="flex-1 overflow-hidden">
                                 @foreach($dayItems as $item)
                                     @php
                                         $isSpanning = ($item['type'] === 'production' || $item['type'] === 'flexible') && (isset($item['is_start']) || isset($item['is_middle']) || isset($item['is_end']));
@@ -101,8 +101,7 @@
                                         }
                                     @endphp
                                     <a href="{{ route('activities.show', $item['activity']->slug) }}"
-                                       class="block text-xs px-1 py-0.5 {{ $roundedClass }} {{ $item['color'] }} text-white hover:opacity-75 transition-opacity relative"
-                                       style="{{ $isSpanning && !isset($item['is_start']) ? 'text-indent: -9999px;' : '' }}"
+                                       class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $item['color'] }} text-white hover:opacity-75 transition-opacity truncate"
                                        title="{{ $item['activity']->title }}{{ isset($item['shift']) ? ': ' . $item['title'] . ' (' . $item['shift']->filled . '/' . ($item['shift']->needed ?? '∞') . ' Helfer)' : '' }}{{ isset($item['date_range']) ? ' (' . $item['date_range'] . ')' : '' }}">
                                         @if($item['type'] === 'shift')
                                             {{ $item['title'] }}
@@ -113,9 +112,9 @@
                                                 &nbsp;
                                             @endif
                                         @elseif($item['type'] === 'meeting')
-                                            {{ Str::limit($item['activity']->title, 20) }}
+                                            {{ $item['activity']->title }}
                                         @else
-                                            {{ Str::limit($item['title'], 25) }}
+                                            {{ $item['title'] }}
                                         @endif
                                     </a>
                                 @endforeach
