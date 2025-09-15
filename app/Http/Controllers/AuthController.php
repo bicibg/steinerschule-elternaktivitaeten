@@ -23,7 +23,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/aktivitaeten');
+            return redirect()->intended('/pinnwand');
         }
 
         return back()->withErrors([
@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/aktivitaeten');
+        return redirect('/pinnwand');
     }
 
     public function loginDemo()
@@ -67,7 +67,7 @@ class AuthController extends Controller
 
         Auth::login($demoUser);
 
-        return redirect('/aktivitaeten')->with('success', 'Als Demo-Benutzer angemeldet.');
+        return redirect('/pinnwand')->with('success', 'Als Demo-Benutzer angemeldet.');
     }
 
     public function logout(Request $request)
@@ -77,6 +77,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/aktivitaeten');
+        return redirect('/pinnwand');
     }
 }

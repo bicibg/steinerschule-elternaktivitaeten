@@ -36,27 +36,27 @@
                 </div>
 
                 <!-- Desktop Navigation -->
-                <nav class="hidden sm:flex items-center space-x-3">
+                <nav class="hidden lg:flex items-center space-x-2 xl:space-x-3">
                     <a href="{{ route('bulletin.index') }}"
-                       class="px-3 py-1.5 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                       class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Pinnwand
                     </a>
                     <a href="{{ route('activities.index') }}"
-                       class="px-3 py-1.5 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                       class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Elternaktivitäten
                     </a>
                     <a href="{{ route('calendar.index') }}"
-                       class="px-3 py-1.5 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                       class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Kalender
                     </a>
                     <a href="{{ route('school-calendar.index') }}"
-                       class="px-3 py-1.5 text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                       class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Schulkalender
                     </a>
                 </nav>
 
                 <!-- Desktop User Menu -->
-                <div class="hidden sm:flex items-center" x-data="{ userMenuOpen: false }">
+                <div class="hidden lg:flex items-center" x-data="{ userMenuOpen: false }">
                     @if(!Auth::check())
                         <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Anmelden</a>
                         <a href="{{ route('register') }}" class="ml-2 px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Registrieren</a>
@@ -87,7 +87,7 @@
 
                 <!-- Mobile Hamburger Menu Button -->
                 <button @click="mobileMenuOpen = !mobileMenuOpen"
-                        class="sm:hidden p-2 rounded-md text-gray-600 hover:text-steiner-blue hover:bg-gray-100 transition-colors">
+                        class="lg:hidden p-2 rounded-md text-gray-600 hover:text-steiner-blue hover:bg-gray-100 transition-colors">
                     <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -101,7 +101,7 @@
             <div x-show="mobileMenuOpen"
                  x-cloak
                  @click.away="mobileMenuOpen = false"
-                 class="sm:hidden border-t border-gray-200">
+                 class="lg:hidden border-t border-gray-200">
                 <nav class="py-2">
                     <a href="{{ route('bulletin.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
