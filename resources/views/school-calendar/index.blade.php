@@ -67,19 +67,8 @@
                                 @foreach($dayEvents as $eventData)
                                     @php
                                         $event = $eventData['event'];
-                                        $isSpanning = $event->end_date && !$event->start_date->isSameDay($event->end_date);
-                                        $roundedClass = '';
-                                        if ($isSpanning) {
-                                            if ($eventData['is_start'] && $eventData['is_end']) {
-                                                $roundedClass = 'rounded';
-                                            } elseif ($eventData['is_start']) {
-                                                $roundedClass = 'rounded-l';
-                                            } elseif ($eventData['is_end']) {
-                                                $roundedClass = 'rounded-r';
-                                            }
-                                        } else {
-                                            $roundedClass = 'rounded';
-                                        }
+                                        // Don't treat any events as spanning - show each day separately with full rounded corners
+                                        $roundedClass = 'rounded';
 
                                         // Generate color based on event type
                                         $colorClass = match($event->event_type) {
@@ -95,11 +84,7 @@
 
                                     <div class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $colorClass }} text-white hover:opacity-75 transition-opacity truncate"
                                          title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
-                                        @if(!$isSpanning || $eventData['is_start'])
-                                            {{ $event->title }}
-                                        @else
-                                            &nbsp;
-                                        @endif
+                                        {{ $event->title }}
                                     </div>
                                 @endforeach
                             </div>
