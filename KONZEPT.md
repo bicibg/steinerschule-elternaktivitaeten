@@ -67,10 +67,9 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 ## Investition & Nachhaltigkeit
 
 ### Entwicklungsstand
-- Erste funktionsfähige Version bereits erstellt
+- Funktionsfähige Version bereits erstellt
 - Keine Entwicklungskosten für die Schule
 - Weitere Anpassungen nach Feedback möglich
-- Code kann bei Bedarf an andere Interessierte übergeben werden
 
 ### Laufende Kosten
 - **Domain:** ca. CHF 20/Monat
@@ -97,11 +96,11 @@ Die Plattform ergänzt unsere weiteren Initiativen zur Förderung der Elternmita
 - **Persönliche Vernetzung:** Direkte Gespräche zwischen Organisatoren und potentiellen Helfern
 
 **Online-Plattform elternaktivitäten.ch:**
-- **365 Tage verfügbar:** Während Events nur punktuell stattfinden
-- **Aktuelle Informationen:** Immer auf dem neuesten Stand (vs. gedruckte Materialien)
-- **Direkte Anmeldung:** Sofort handeln wenn Interesse besteht
-- **Diskussionsforum:** Fragen stellen und Antworten erhalten
-- **Zukunft:** Weitere Funktionen wie Erinnerungen möglich
+- **Zentrale Anlaufstelle:** Alle Elternaktivitäten auf einer Plattform
+- **Aktuelle Informationen:** Immer auf dem neuesten Stand
+- **Direkte Anmeldung:** Sofortiges Engagement bei Interesse
+- **Diskussionsforum:** Austausch und Koordination zwischen Eltern
+- **Erweiterbar:** Bei Bedarf zusätzliche Funktionen möglich
 
 ### Erfolg durch Sichtbarkeit
 Für maximale Wirksamkeit benötigt die Plattform:
