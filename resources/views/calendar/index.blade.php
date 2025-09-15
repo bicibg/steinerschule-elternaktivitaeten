@@ -144,7 +144,7 @@
                                     - {{ \Carbon\Carbon::parse($item['activity']->flexible_end)->format('d.m.Y') }}
                                 </p>
                             @endif
-                            @if($item['note'])
+                            @if(isset($item['note']) && $item['note'])
                                 <p class="text-sm text-gray-500 mt-1">{{ $item['note'] }}</p>
                             @endif
                         </div>
