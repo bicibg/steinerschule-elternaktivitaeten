@@ -171,4 +171,9 @@ class SchoolEventResource extends Resource
             'edit' => Pages\EditSchoolEvent::route('/{record}/edit'),
         ];
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->is_super_admin ?? false;
+    }
 }
