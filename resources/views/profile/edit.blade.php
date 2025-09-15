@@ -32,13 +32,32 @@
                     </div>
 
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse</label>
-                        <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-steiner-blue @error('email') border-red-500 @enderror"
-                               required>
-                        @error('email')
+                        <label class="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse</label>
+                        <input type="email" value="{{ $user->email }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                               disabled>
+                        <p class="mt-1 text-xs text-gray-500">E-Mail-Adresse kann nicht geändert werden</p>
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Telefonnummer</label>
+                        <input type="tel" name="phone" id="phone" value="{{ old('phone', $user->phone) }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-steiner-blue @error('phone') border-red-500 @enderror"
+                               placeholder="+41 79 123 45 67">
+                        @error('phone')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <div>
+                        <label for="remarks" class="block text-sm font-medium text-gray-700 mb-1">Bemerkungen</label>
+                        <textarea name="remarks" id="remarks" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-steiner-blue @error('remarks') border-red-500 @enderror"
+                                  placeholder="Optionale Informationen über Sie (z.B. Verfügbarkeit, besondere Fähigkeiten, etc.)">{{ old('remarks', $user->remarks) }}</textarea>
+                        @error('remarks')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-1 text-xs text-gray-500">Max. 500 Zeichen</p>
                     </div>
 
                     <div>

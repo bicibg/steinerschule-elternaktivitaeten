@@ -23,27 +23,29 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-sm border {{ $bulletinPost->label ? 'border-' . $bulletinPost->label_color . '-400 border-2' : 'border-gray-200' }} p-6 mb-6">
-        <div class="flex items-center gap-3 mb-4">
-            <h1 class="text-3xl font-bold text-gray-800">{{ $bulletinPost->title }}</h1>
-            @if($bulletinPost->category_text)
-                <span class="inline-flex items-center px-3 py-1 rounded text-sm font-medium
-                    {{ $bulletinPost->category === 'anlass' ? 'bg-blue-100 text-blue-800' : '' }}
-                    {{ $bulletinPost->category === 'haus_umgebung_taskforces' ? 'bg-green-100 text-green-800' : '' }}
-                    {{ $bulletinPost->category === 'produktion' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                    {{ $bulletinPost->category === 'organisation' ? 'bg-purple-100 text-purple-800' : '' }}
-                    {{ $bulletinPost->category === 'verkauf' ? 'bg-pink-100 text-pink-800' : '' }}">
-                    {{ $bulletinPost->category_text }}
-                </span>
-            @endif
-            @if($bulletinPost->label_text)
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                    {{ $bulletinPost->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}
-                    {{ $bulletinPost->label === 'important' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                    {{ $bulletinPost->label === 'featured' ? 'bg-blue-100 text-blue-800' : '' }}
-                    {{ $bulletinPost->label === 'last_minute' ? 'bg-orange-100 text-orange-800' : '' }}">
-                    {{ $bulletinPost->label_text }}
-                </span>
-            @endif
+        <div class="mb-4">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $bulletinPost->title }}</h1>
+            <div class="flex flex-wrap gap-2">
+                @if($bulletinPost->category_text)
+                    <span class="inline-flex items-center px-3 py-1 rounded text-sm font-medium
+                        {{ $bulletinPost->category === 'anlass' ? 'bg-blue-100 text-blue-800' : '' }}
+                        {{ $bulletinPost->category === 'haus_umgebung_taskforces' ? 'bg-green-100 text-green-800' : '' }}
+                        {{ $bulletinPost->category === 'produktion' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                        {{ $bulletinPost->category === 'organisation' ? 'bg-purple-100 text-purple-800' : '' }}
+                        {{ $bulletinPost->category === 'verkauf' ? 'bg-pink-100 text-pink-800' : '' }}">
+                        {{ $bulletinPost->category_text }}
+                    </span>
+                @endif
+                @if($bulletinPost->label_text)
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                        {{ $bulletinPost->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}
+                        {{ $bulletinPost->label === 'important' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                        {{ $bulletinPost->label === 'featured' ? 'bg-blue-100 text-blue-800' : '' }}
+                        {{ $bulletinPost->label === 'last_minute' ? 'bg-orange-100 text-orange-800' : '' }}">
+                        {{ $bulletinPost->label_text }}
+                    </span>
+                @endif
+            </div>
         </div>
 
         <div class="space-y-2 text-gray-600 mb-6">
@@ -370,7 +372,14 @@
                                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
                                     <template x-for="volunteer in volunteers" :key="volunteer.id">
                                         <li class="flex items-center justify-between">
-                                            <span x-text="volunteer.name"></span>
+                                            <template x-if="volunteer.user_id">
+                                                <a :href="'/profile/' + volunteer.user_id"
+                                                   class="text-steiner-blue hover:text-steiner-dark hover:underline"
+                                                   x-text="volunteer.name"></a>
+                                            </template>
+                                            <template x-if="!volunteer.user_id">
+                                                <span x-text="volunteer.name"></span>
+                                            </template>
                                             @auth
                                             <button x-show="volunteer.user_id === {{ auth()->id() }}"
                                                     @click="withdraw()"

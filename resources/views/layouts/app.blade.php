@@ -73,22 +73,53 @@
                             <div x-show="userMenuOpen"
                                  @click.away="userMenuOpen = false"
                                  x-cloak
-                                 class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Profil bearbeiten
-                                </a>
-                                @if(Auth::user()->is_admin)
-                                    <a href="/admin" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                        Admin Panel
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50 overflow-hidden">
+                                <!-- User Info Header -->
+                                <div class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                                    <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                                </div>
+
+                                <!-- Profile Actions -->
+                                <div class="py-1">
+                                    <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                        Profil bearbeiten
                                     </a>
+                                    <a href="{{ route('profile.shifts') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Meine Schichten
+                                    </a>
+                                </div>
+
+                                @if(Auth::user()->is_admin)
+                                    <div class="border-t border-gray-200">
+                                        <a href="/admin" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            Admin Panel
+                                        </a>
+                                    </div>
                                 @endif
-                                <hr class="my-1">
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                        Abmelden
-                                    </button>
-                                </form>
+
+                                <!-- Logout -->
+                                <div class="border-t border-gray-200">
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                            </svg>
+                                            Abmelden
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -111,7 +142,8 @@
                  x-cloak
                  @click.away="mobileMenuOpen = false"
                  class="lg:hidden border-t border-gray-200">
-                <nav class="py-2">
+                <!-- Main Navigation Links -->
+                <nav class="py-2 bg-white">
                     <a href="{{ route('bulletin.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Pinnwand
@@ -130,38 +162,63 @@
                     </a>
                 </nav>
 
-                <div class="border-t border-gray-200 py-2">
+                <!-- Thick separator between navigation and user menu -->
+                <div class="h-2 bg-gray-100 border-y border-gray-200"></div>
+
+                <!-- User Menu Section -->
+                <div class="py-2 bg-gray-50">
                     @if(!Auth::check())
                         <a href="{{ route('login') }}"
-                           class="block px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
+                           class="block px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-white transition-colors">
                             Anmelden
                         </a>
                         <a href="{{ route('register') }}"
-                           class="block px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
+                           class="block px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-white transition-colors">
                             Registrieren
                         </a>
                     @else
-                        <div class="px-3 py-2 text-sm text-gray-700">
-                            <span class="block font-medium">{{ Auth::user()->name }}</span>
-                            <span class="text-xs text-gray-500">{{ Auth::user()->email }}</span>
+                        <div class="px-3 py-3 bg-white border-b border-gray-200">
+                            <p class="font-medium text-sm text-gray-900">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
                         </div>
                         <a href="{{ route('profile.edit') }}"
-                           class="block px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
+                           class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-white transition-colors">
+                            <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
                             Profil bearbeiten
                         </a>
+                        <a href="{{ route('profile.shifts') }}"
+                           class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-white transition-colors">
+                            <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Meine Schichten
+                        </a>
                         @if(Auth::user()->is_admin)
-                            <a href="/admin"
-                               class="block px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
-                                Admin Panel
-                            </a>
+                            <div class="border-t border-gray-200 mt-1 pt-1">
+                                <a href="/admin"
+                                   class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-white transition-colors">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Admin Panel
+                                </a>
+                            </div>
                         @endif
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                    class="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-steiner-blue hover:bg-gray-50 transition-colors">
-                                Abmelden
-                            </button>
-                        </form>
+                        <div class="border-t border-gray-200 mt-1 pt-1">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                        class="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-white transition-colors">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    Abmelden
+                                </button>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div>

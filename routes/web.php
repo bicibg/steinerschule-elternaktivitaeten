@@ -59,10 +59,12 @@ Route::post('/shifts/{shift}/signup', [ShiftController::class, 'signup'])->name(
 Route::delete('/shifts/{shift}/withdraw', [ShiftController::class, 'withdraw'])->name('shifts.withdraw')->middleware('auth');
 
 // Profile routes
+Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/my-shifts', [App\Http\Controllers\ProfileController::class, 'shifts'])->name('profile.shifts');
 });
 
 // API routes for Alpine.js

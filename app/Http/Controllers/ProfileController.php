@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\ShiftVolunteer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function edit()
     {
@@ -26,13 +24,30 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'remarks' => ['nullable', 'string', 'max:500'],
         ]);
 
         $user->update($validated);
 
         return redirect()->route('profile.edit')
             ->with('success', 'Profil erfolgreich aktualisiert.');
+    }
+
+    public function show(User $user)
+    {
+        return view('profile.show', compact('user'));
+    }
+
+    public function shifts()
+    {
+        $user = auth()->user();
+
+        $volunteers = \App\Models\ShiftVolunteer::where('user_id', $user->id)
+            ->with(['shift.bulletinPost'])
+            ->get();
+
+        return view('profile.shifts', compact('volunteers'));
     }
 
     public function updatePassword(Request $request)
