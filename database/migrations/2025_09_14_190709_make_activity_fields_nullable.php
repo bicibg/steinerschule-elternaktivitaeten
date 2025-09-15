@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->dateTime('start_at')->nullable()->change();
             $table->string('location')->nullable()->change();
         });
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->dateTime('start_at')->nullable(false)->change();
             $table->string('location')->nullable(false)->change();
         });

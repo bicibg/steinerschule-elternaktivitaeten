@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('bulletin_post_id')->constrained()->cascadeOnDelete();
             $table->string('author_name');
             $table->text('body');
             $table->string('ip_hash', 64)->nullable();
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('hidden_reason')->nullable();
             $table->timestamps();
 
-            $table->index('activity_id');
+            $table->index('bulletin_post_id');
             $table->index('is_hidden');
             $table->index('created_at');
         });

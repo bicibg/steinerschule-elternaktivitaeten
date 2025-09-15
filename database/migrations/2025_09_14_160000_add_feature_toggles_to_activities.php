@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->boolean('has_forum')->default(true)->after('edit_token');
             $table->boolean('has_shifts')->default(true)->after('has_forum');
         });
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->dropColumn(['has_forum', 'has_shifts']);
         });
     }

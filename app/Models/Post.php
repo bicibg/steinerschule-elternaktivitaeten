@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     protected $fillable = [
-        'activity_id',
+        'bulletin_post_id',
         'author_name',
         'body',
         'ip_hash',
@@ -19,9 +19,9 @@ class Post extends Model
         'is_hidden' => 'boolean',
     ];
 
-    public function activity()
+    public function bulletinPost()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(BulletinPost::class);
     }
 
     public function comments()

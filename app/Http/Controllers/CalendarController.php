@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
+use App\Models\BulletinPost;
 use App\Models\Shift;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -19,7 +19,7 @@ class CalendarController extends Controller
         $endOfMonth = $date->copy()->endOfMonth();
 
         // Get ALL activities that should show in calendar for this month
-        $activities = Activity::published()
+        $activities = BulletinPost::published()
             ->where('show_in_calendar', true)
             ->where(function($query) use ($startOfMonth, $endOfMonth) {
                 // Activities that overlap with this month

@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('bulletin_post_id')->constrained()->cascadeOnDelete();
             $table->string('role');
             $table->string('time');
             $table->integer('needed')->default(1);
             $table->integer('filled')->default(0);
             $table->timestamps();
 
-            $table->index('activity_id');
+            $table->index('bulletin_post_id');
         });
     }
 

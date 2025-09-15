@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
+use App\Models\BulletinPost;
 use App\Models\Post;
 use App\Models\Shift;
 use App\Models\ShiftVolunteer;
@@ -80,7 +80,7 @@ class ApiController extends Controller
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
-        $activity = Activity::where('slug', $slug)->published()->firstOrFail();
+        $helpRequest = BulletinPost::where('slug', $slug)->published()->firstOrFail();
 
         $key = 'post-' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
@@ -95,7 +95,7 @@ class ApiController extends Controller
             'body' => 'required|string|max:2000',
         ]);
 
-        $post = $activity->posts()->create([
+        $post = $helpRequest->posts()->create([
             'author_name' => auth()->user()->name,
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),

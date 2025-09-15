@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
+use App\Models\BulletinPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class ActivityController extends Controller
+class BulletinController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Activity::published();
+        $query = BulletinPost::published();
 
         // Filter by category if provided
         if ($request->has('category') && $request->category !== 'all') {
             $query->where('category', $request->category);
         }
 
-        $activities = $query
+        $bulletinPosts = $query
             ->orderByRaw("CASE
                 WHEN label = 'urgent' THEN 1
                 WHEN label = 'important' THEN 2
@@ -29,43 +29,43 @@ class ActivityController extends Controller
             ->with('posts')
             ->get();
 
-        $categories = Activity::getAvailableCategories();
+        $categories = BulletinPost::getAvailableCategories();
         $selectedCategory = $request->get('category', 'all');
 
         // Get counts per category
-        $categoryCounts = Activity::published()
+        $categoryCounts = BulletinPost::published()
             ->selectRaw('category, COUNT(*) as count')
             ->groupBy('category')
             ->pluck('count', 'category')
             ->toArray();
 
-        $totalCount = Activity::published()->count();
+        $totalCount = BulletinPost::published()->count();
 
-        return view('activities.index', compact('activities', 'categories', 'selectedCategory', 'categoryCounts', 'totalCount'));
+        return view('bulletin.index', compact('bulletinPosts', 'categories', 'selectedCategory', 'categoryCounts', 'totalCount'));
     }
 
     public function show($slug)
     {
-        $activity = Activity::where('slug', $slug)
+        $bulletinPost = BulletinPost::where('slug', $slug)
             ->published()
             ->with(['posts' => function ($query) {
                 $query->with('comments');
             }])
             ->firstOrFail();
 
-        return view('activities.show', compact('activity'));
+        return view('bulletin.show', compact('bulletinPost'));
     }
 
     public function edit($slug, Request $request)
     {
-        $activity = Activity::where('slug', $slug)->firstOrFail();
+        $bulletinPost = BulletinPost::where('slug', $slug)->firstOrFail();
 
-        return view('activities.edit', compact('activity'));
+        return view('bulletin.edit', compact('bulletinPost'));
     }
 
     public function update($slug, Request $request)
     {
-        $activity = Activity::where('slug', $slug)->firstOrFail();
+        $bulletinPost = BulletinPost::where('slug', $slug)->firstOrFail();
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -79,16 +79,16 @@ class ActivityController extends Controller
             'status' => 'required|in:published,archived',
         ]);
 
-        if ($validated['title'] !== $activity->title) {
+        if ($validated['title'] !== $bulletinPost->title) {
             $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
         }
 
         $validated['has_forum'] = $request->has('has_forum');
         $validated['has_shifts'] = $request->has('has_shifts');
 
-        $activity->update($validated);
+        $bulletinPost->update($validated);
 
-        return redirect()->route('activities.edit', $activity->slug)
-            ->with('success', 'Aktivität erfolgreich aktualisiert.');
+        return redirect()->route('bulletin.edit', $bulletinPost->slug)
+            ->with('success', 'Eintrag erfolgreich aktualisiert.');
     }
 }

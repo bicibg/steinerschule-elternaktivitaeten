@@ -3,7 +3,7 @@
 @section('title', 'Schichtkalender')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schichtkalender - Helfer gesucht</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schichtkalender</h1>
 
     @php
         // Collect all unique items for legend
@@ -100,7 +100,7 @@
                                             $roundedClass = 'rounded';
                                         }
                                     @endphp
-                                    <a href="{{ route('activities.show', $item['activity']->slug) }}"
+                                    <a href="{{ route('bulletin.show', $item['activity']->slug) }}"
                                        class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $item['color'] }} text-white hover:opacity-75 transition-opacity truncate"
                                        title="{{ $item['activity']->title }}{{ isset($item['shift']) ? ': ' . $item['title'] . ' (' . $item['shift']->filled . '/' . ($item['shift']->needed ?? '∞') . ' Helfer)' : '' }}{{ isset($item['date_range']) ? ' (' . $item['date_range'] . ')' : '' }}">
                                         @if($item['type'] === 'shift')
@@ -130,10 +130,10 @@
 
     <!-- Month's Activities List -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Alle Aktivitäten im {{ $date->locale('de')->monthName }}</h3>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Alle Einträge im {{ $date->locale('de')->monthName }}</h3>
 
         @if($itemsByDate->isEmpty() && (!isset($productionActivities) || $productionActivities->isEmpty()))
-            <p class="text-gray-500">Keine Aktivitäten in diesem Monat.</p>
+            <p class="text-gray-500">Keine Einträge in diesem Monat.</p>
         @else
             <div class="space-y-4">
                 @php
@@ -193,7 +193,7 @@
                         <div class="flex items-start space-x-3">
                             <div class="w-3 h-3 rounded-full {{ $spanning['color'] }} mt-1 flex-shrink-0"></div>
                             <div class="flex-1 min-w-0">
-                                <a href="{{ route('activities.show', $spanning['activity']->slug) }}"
+                                <a href="{{ route('bulletin.show', $spanning['activity']->slug) }}"
                                    class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
                                     {{ $spanning['activity']->title }}
                                 </a>
@@ -236,7 +236,7 @@
                                     <div class="flex items-start space-x-3">
                                         <div class="w-3 h-3 rounded-full {{ $item['color'] }} mt-1 flex-shrink-0"></div>
                                         <div class="flex-1 min-w-0">
-                                            <a href="{{ route('activities.show', $item['activity']->slug) }}"
+                                            <a href="{{ route('bulletin.show', $item['activity']->slug) }}"
                                                class="font-medium text-steiner-blue hover:text-steiner-dark transition-colors block">
                                                 {{ $item['activity']->title }}
                                             </a>

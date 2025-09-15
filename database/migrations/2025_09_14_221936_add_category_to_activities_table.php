@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->enum('category', ['anlass', 'haus_umgebung_taskforces', 'produktion', 'organisation', 'verkauf'])
                 ->nullable()
                 ->after('status')
@@ -24,7 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->dropColumn('category');
         });
     }

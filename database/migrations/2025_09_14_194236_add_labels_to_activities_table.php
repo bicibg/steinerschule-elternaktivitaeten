@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->string('label')->nullable()->after('has_shifts');
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->dropColumn('label');
         });
     }

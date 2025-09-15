@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
+use App\Models\BulletinPost;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class PostController extends Controller
             return redirect()->route('login')->with('error', 'Bitte melden Sie sich an, um einen Beitrag zu verfassen.');
         }
 
-        $activity = Activity::where('slug', $slug)->published()->firstOrFail();
+        $helpRequest = BulletinPost::where('slug', $slug)->published()->firstOrFail();
 
         $key = 'post-' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
@@ -32,7 +32,7 @@ class PostController extends Controller
             'body' => 'required|string|max:2000',
         ]);
 
-        $post = $activity->posts()->create([
+        $post = $helpRequest->posts()->create([
             'author_name' => auth()->user()->name,
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
@@ -40,7 +40,7 @@ class PostController extends Controller
 
         RateLimiter::hit($key, 30);
 
-        return redirect()->route('activities.show', $activity->slug)
+        return redirect()->route('help-requests.show', $helpRequest->slug)
             ->with('success', 'Ihr Beitrag wurde erfolgreich veröffentlicht.');
     }
 
@@ -72,7 +72,7 @@ class PostController extends Controller
 
         RateLimiter::hit($key, 30);
 
-        return redirect()->route('activities.show', $post->activity->slug)
+        return redirect()->route('help-requests.show', $post->helpRequest->slug)
             ->with('success', 'Ihr Kommentar wurde erfolgreich veröffentlicht.');
     }
 }

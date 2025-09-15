@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->enum('activity_type', ['shift_based', 'production', 'meeting', 'flexible_help'])
                 ->default('shift_based')
                 ->after('category')
@@ -44,7 +44,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('bulletin_posts', function (Blueprint $table) {
             $table->dropColumn(['activity_type', 'recurring_pattern', 'show_in_calendar', 'participation_note']);
         });
 

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ActivityResource\Pages;
-use App\Filament\Resources\ActivityResource\RelationManagers;
-use App\Models\Activity;
+use App\Filament\Resources\BulletinPostResource\Pages;
+use App\Filament\Resources\BulletinPostResource\RelationManagers;
+use App\Models\BulletinPost;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,22 +14,22 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
-class ActivityResource extends Resource
+class BulletinPostResource extends Resource
 {
-    protected static ?string $model = Activity::class;
+    protected static ?string $model = BulletinPost::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
-    protected static ?string $navigationLabel = 'Aktivitäten';
-    protected static ?string $navigationGroup = 'Aktivitäten';
-    protected static ?string $modelLabel = 'Aktivität';
-    protected static ?string $pluralModelLabel = 'Aktivitäten';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static ?string $navigationLabel = 'Pinnwand';
+    protected static ?string $navigationGroup = 'Pinnwand';
+    protected static ?string $modelLabel = 'Eintrag';
+    protected static ?string $pluralModelLabel = 'Einträge';
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Aktivitätsinformationen')
+                Forms\Components\Section::make('Eintrag-Informationen')
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('Titel')
@@ -82,12 +82,12 @@ class ActivityResource extends Resource
                             ->required(),
                         Forms\Components\Select::make('category')
                             ->label('Kategorie')
-                            ->options(\App\Models\Activity::getAvailableCategories())
+                            ->options(\App\Models\BulletinPost::getAvailableCategories())
                             ->placeholder('Keine Kategorie')
                             ->helperText('Wählen Sie eine Kategorie für diese Aktivität'),
                         Forms\Components\Select::make('label')
                             ->label('Kennzeichnung')
-                            ->options(\App\Models\Activity::getAvailableLabels())
+                            ->options(\App\Models\BulletinPost::getAvailableLabels())
                             ->placeholder('Keine Kennzeichnung')
                             ->helperText('Nur für Super-Admins sichtbar')
                             ->visible(fn () => auth()->user()?->is_super_admin),
@@ -115,7 +115,7 @@ class ActivityResource extends Resource
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('category')
                     ->label('Kategorie')
-                    ->formatStateUsing(fn ($state) => \App\Models\Activity::getAvailableCategories()[$state] ?? '-')
+                    ->formatStateUsing(fn ($state) => \App\Models\BulletinPost::getAvailableCategories()[$state] ?? '-')
                     ->colors([
                         'primary' => 'anlass',
                         'success' => 'haus_umgebung_taskforces',
@@ -155,7 +155,7 @@ class ActivityResource extends Resource
                         'gray' => 'last_minute',
                     ])
                     ->formatStateUsing(fn (?string $state): ?string =>
-                        $state ? \App\Models\Activity::getAvailableLabels()[$state] ?? null : null
+                        $state ? \App\Models\BulletinPost::getAvailableLabels()[$state] ?? null : null
                     )
                     ->visible(fn () => auth()->user()?->is_super_admin),
                 Tables\Columns\IconColumn::make('has_forum')
@@ -170,13 +170,13 @@ class ActivityResource extends Resource
                     ->falseIcon('heroicon-o-x-circle'),
                 Tables\Columns\TextColumn::make('url')
                     ->label('')
-                    ->getStateUsing(fn (Activity $record): string => '')
-                    ->url(fn (Activity $record): string =>
-                        url("/aktivitaeten/{$record->slug}")
+                    ->getStateUsing(fn (BulletinPost $record): string => '')
+                    ->url(fn (BulletinPost $record): string =>
+                        url("/pinnwand/{$record->slug}")
                     )
                     ->openUrlInNewTab()
                     ->icon('heroicon-m-arrow-top-right-on-square')
-                    ->tooltip('Aktivität anzeigen'),
+                    ->tooltip('Eintrag anzeigen'),
             ])
             ->filters([
                 //
@@ -201,9 +201,9 @@ class ActivityResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListActivities::route('/'),
-            'create' => Pages\CreateActivity::route('/create'),
-            'edit' => Pages\EditActivity::route('/{record}/edit'),
+            'index' => Pages\ListBulletinPosts::route('/'),
+            'create' => Pages\CreateBulletinPost::route('/create'),
+            'edit' => Pages\EditBulletinPost::route('/{record}/edit'),
         ];
     }
 }

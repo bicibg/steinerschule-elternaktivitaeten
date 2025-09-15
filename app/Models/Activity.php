@@ -8,124 +8,59 @@ use Illuminate\Support\Str;
 class Activity extends Model
 {
     protected $fillable = [
-        'title',
-        'description',
-        'participation_note',
-        'start_at',
-        'end_at',
-        'location',
-        'organizer_name',
-        'organizer_phone',
-        'organizer_email',
+        'name',
         'slug',
-        'status',
+        'description',
         'category',
-        'activity_type',
-        'recurring_pattern',
-        'show_in_calendar',
-        'edit_token',
-        'has_forum',
-        'has_shifts',
-        'label',
+        'contact_name',
+        'contact_email',
+        'contact_phone',
+        'meeting_time',
+        'meeting_location',
+        'is_active',
+        'sort_order',
     ];
 
     protected $casts = [
-        'start_at' => 'datetime',
-        'end_at' => 'datetime',
-        'show_in_calendar' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     protected static function booted()
     {
         static::creating(function ($activity) {
             if (empty($activity->slug)) {
-                $activity->slug = Str::slug($activity->title) . '-' . Str::random(6);
-            }
-            if (empty($activity->edit_token)) {
-                $activity->edit_token = Str::random(64);
+                $activity->slug = Str::slug($activity->name) . '-' . Str::random(6);
             }
         });
     }
 
-    public function posts()
+    public function scopeActive($query)
     {
-        return $this->hasMany(Post::class)->where('is_hidden', false)->orderBy('created_at', 'desc');
+        return $query->where('is_active', true);
     }
 
-    public function allPosts()
+    public function scopeOrdered($query)
     {
-        return $this->hasMany(Post::class)->orderBy('created_at', 'desc');
+        return $query->orderBy('sort_order')->orderBy('name');
     }
 
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'published');
-    }
-
-    public function scopeUpcoming($query)
-    {
-        return $query->where(function($q) {
-            $q->where('end_at', '>=', now())
-              ->orWhere('start_at', '>=', now());
-        })->orderBy('start_at');
-    }
-
-    public function shifts()
-    {
-        return $this->hasMany(Shift::class);
-    }
-
-    public static function getAvailableLabels(): array
+    public static function getCategories(): array
     {
         return [
-            'urgent' => 'Dringend',
-            'important' => 'Wichtig',
-            'featured' => 'Hervorgehoben',
-            'last_minute' => 'Last Minute',
-        ];
-    }
-
-    public static function getAvailableCategories(): array
-    {
-        return [
-            'anlass' => 'Anlass',
-            'haus_umgebung_taskforces' => 'Haus, Umgebung und Taskforces',
+            'anlass' => 'Anlässe & Feste',
+            'haus_umgebung' => 'Haus & Umgebung',
+            'taskforce' => 'Taskforces',
             'produktion' => 'Produktion',
-            'organisation' => 'Organisation',
-            'verkauf' => 'Verkauf',
+            'organisation' => 'Organisation & Verwaltung',
+            'verkauf' => 'Verkauf & Märkte',
+            'paedagogik' => 'Pädagogische Unterstützung',
+            'kommunikation' => 'Kommunikation & Öffentlichkeit',
         ];
-    }
-
-    public static function getActivityTypes(): array
-    {
-        return [
-            'shift_based' => 'Schichtbasiert',
-            'production' => 'Produktion',
-            'meeting' => 'Regelmässiges Treffen',
-            'flexible_help' => 'Flexible Hilfe',
-        ];
-    }
-
-    public function getLabelColorAttribute(): string
-    {
-        return match($this->label) {
-            'urgent' => 'red',
-            'important' => 'yellow',
-            'featured' => 'blue',
-            'last_minute' => 'orange',
-            default => 'gray',
-        };
-    }
-
-    public function getLabelTextAttribute(): ?string
-    {
-        $labels = self::getAvailableLabels();
-        return $labels[$this->label] ?? null;
     }
 
     public function getCategoryTextAttribute(): ?string
     {
-        $categories = self::getAvailableCategories();
+        $categories = self::getCategories();
         return $categories[$this->category] ?? null;
     }
 }

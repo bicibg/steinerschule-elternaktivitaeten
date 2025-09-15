@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\ActivityResource\RelationManagers;
+namespace App\Filament\Resources\BulletinPostResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;

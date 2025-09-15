@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\ShiftController;
@@ -9,7 +9,7 @@ use App\Http\Controllers\SchoolCalendarController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/aktivitaeten');
+    return redirect('/pinnwand');
 });
 
 Route::get('/debug', function () {
@@ -30,8 +30,8 @@ Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordContro
 Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
-Route::get('/aktivitaeten', [ActivityController::class, 'index'])->name('activities.index');
-Route::get('/aktivitaeten/{slug}', [ActivityController::class, 'show'])->name('activities.show');
+Route::get('/pinnwand', [BulletinController::class, 'index'])->name('bulletin.index');
+Route::get('/pinnwand/{slug}', [BulletinController::class, 'show'])->name('bulletin.show');
 
 Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');
 
@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
 });
 
-Route::post('/aktivitaeten/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
+Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
 Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
 
 Route::post('/shifts/{shift}/signup', [ShiftController::class, 'signup'])->name('shifts.signup')->middleware('auth');
@@ -55,13 +55,13 @@ Route::delete('/shifts/{shift}/withdraw', [ShiftController::class, 'withdraw'])-
 Route::prefix('api')->group(function () {
     Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup');
     Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\ApiController::class, 'shiftWithdraw'])->name('api.shifts.withdraw');
-    Route::post('/activities/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store');
+    Route::post('/pinnwand/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store');
     Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store');
 });
 
 Route::middleware(['verify.edit.token'])->group(function () {
-    Route::get('/aktivitaeten/{slug}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
-    Route::put('/aktivitaeten/{slug}', [ActivityController::class, 'update'])->name('activities.update');
+    Route::get('/pinnwand/{slug}/edit', [BulletinController::class, 'edit'])->name('bulletin.edit');
+    Route::put('/pinnwand/{slug}', [BulletinController::class, 'update'])->name('bulletin.update');
 
     Route::post('/moderation/posts/{post}/hide', [ModerationController::class, 'togglePost'])->name('moderation.post.toggle');
     Route::post('/moderation/comments/{comment}/hide', [ModerationController::class, 'toggleComment'])->name('moderation.comment.toggle');

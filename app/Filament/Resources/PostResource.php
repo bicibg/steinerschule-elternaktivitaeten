@@ -28,9 +28,9 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('activity_id')
-                    ->label('Aktivität')
-                    ->relationship('activity', 'title')
+                Forms\Components\Select::make('help_request_id')
+                    ->label('Hilfegesuch')
+                    ->relationship('helpRequest', 'title')
                     ->required()
                     ->searchable(),
                 Forms\Components\TextInput::make('author_name')
@@ -54,8 +54,8 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('activity.title')
-                    ->label('Aktivität')
+                Tables\Columns\TextColumn::make('helpRequest.title')
+                    ->label('Hilfegesuch')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('author_name')

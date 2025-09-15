@@ -23,7 +23,7 @@
             <div class="flex justify-between items-center h-14 sm:h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="{{ route('activities.index') }}" class="flex items-center">
+                    <a href="{{ route('bulletin.index') }}" class="flex items-center">
                         <svg class="h-8 sm:h-10 w-auto" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
                             <text x="10" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="300" fill="#4a90a4" letter-spacing="2px">rudolf</text>
                             <text x="10" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#4a90a4" letter-spacing="1px">steinerschule</text>
@@ -37,9 +37,9 @@
 
                 <!-- Desktop Navigation -->
                 <nav class="hidden sm:flex items-center space-x-3">
-                    <a href="{{ route('activities.index') }}"
-                       class="px-3 py-1.5 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
-                        Aktivitäten
+                    <a href="{{ route('bulletin.index') }}"
+                       class="px-3 py-1.5 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                        Pinnwand
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="px-3 py-1.5 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
@@ -99,9 +99,9 @@
                  @click.away="mobileMenuOpen = false"
                  class="sm:hidden border-t border-gray-200">
                 <nav class="py-2">
-                    <a href="{{ route('activities.index') }}"
-                       class="block px-3 py-2 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
-                        Aktivitäten
+                    <a href="{{ route('bulletin.index') }}"
+                       class="block px-3 py-2 text-sm {{ request()->routeIs('bulletin.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
+                        Pinnwand
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">

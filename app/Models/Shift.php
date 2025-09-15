@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Shift extends Model
 {
     protected $fillable = [
-        'activity_id',
+        'bulletin_post_id',
         'role',
         'time',
         'needed',
         'filled',
     ];
 
-    public function activity()
+    public function bulletinPost()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(BulletinPost::class);
     }
 
     public function volunteers()

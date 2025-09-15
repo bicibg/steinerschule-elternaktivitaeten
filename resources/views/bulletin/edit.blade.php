@@ -1,28 +1,28 @@
 @extends('layouts.app')
 
-@section('title', 'Aktivität bearbeiten')
+@section('title', 'Hilfegesuch bearbeiten')
 
 @section('content')
     <div class="mb-6">
-        <a href="{{ route('activities.show', $activity->slug) }}" class="inline-flex items-center text-steiner-blue hover:text-steiner-dark">
+        <a href="{{ route('bulletin.show', $bulletinPost->slug) }}" class="inline-flex items-center text-steiner-blue hover:text-steiner-dark">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            Zurück zur Aktivität
+            Zurück zum Hilfegesuch
         </a>
     </div>
 
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Aktivität bearbeiten</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Hilfegesuch bearbeiten</h1>
 
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
             <p class="text-sm text-yellow-800">
-                <strong>Hinweis:</strong> Sie bearbeiten diese Aktivität über einen speziellen Link.
+                <strong>Hinweis:</strong> Sie bearbeiten dieses Hilfegesuch über einen speziellen Link.
                 Bewahren Sie diesen Link sicher auf, um später weitere Änderungen vornehmen zu können.
             </p>
         </div>
 
-        <form action="{{ route('activities.update', $activity->slug) }}?token={{ request('token') }}" method="POST">
+        <form action="{{ route('bulletin.update', $bulletinPost->slug) }}?token={{ request('token') }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -31,7 +31,7 @@
                     <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Titel *</label>
                     <input type="text" id="title" name="title" required
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('title', $activity->title) }}"
+                           value="{{ old('title', $bulletinPost->title) }}"
                            maxlength="255">
                 </div>
 
@@ -39,35 +39,35 @@
                     <label for="start_at" class="block text-sm font-medium text-gray-700 mb-1">Startdatum und -zeit</label>
                     <input type="datetime-local" id="start_at" name="start_at"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('start_at', $activity->start_at?->format('Y-m-d\TH:i')) }}">
+                           value="{{ old('start_at', $bulletinPost->start_at?->format('Y-m-d\TH:i')) }}">
                 </div>
 
                 <div>
                     <label for="end_at" class="block text-sm font-medium text-gray-700 mb-1">Enddatum und -zeit</label>
                     <input type="datetime-local" id="end_at" name="end_at"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('end_at', $activity->end_at?->format('Y-m-d\TH:i')) }}">
+                           value="{{ old('end_at', $bulletinPost->end_at?->format('Y-m-d\TH:i')) }}">
                 </div>
 
                 <div class="md:col-span-2">
                     <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Ort *</label>
                     <input type="text" id="location" name="location" required
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('location', $activity->location) }}"
+                           value="{{ old('location', $bulletinPost->location) }}"
                            maxlength="255">
                 </div>
 
                 <div class="md:col-span-2">
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Beschreibung *</label>
                     <textarea id="description" name="description" rows="5" required
-                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('description', $activity->description) }}</textarea>
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('description', $bulletinPost->description) }}</textarea>
                 </div>
 
                 <div>
                     <label for="organizer_name" class="block text-sm font-medium text-gray-700 mb-1">Organisator Name *</label>
                     <input type="text" id="organizer_name" name="organizer_name" required
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('organizer_name', $activity->organizer_name) }}"
+                           value="{{ old('organizer_name', $bulletinPost->organizer_name) }}"
                            maxlength="255">
                 </div>
 
@@ -75,7 +75,7 @@
                     <label for="organizer_phone" class="block text-sm font-medium text-gray-700 mb-1">Telefonnummer</label>
                     <input type="tel" id="organizer_phone" name="organizer_phone"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('organizer_phone', $activity->organizer_phone) }}"
+                           value="{{ old('organizer_phone', $bulletinPost->organizer_phone) }}"
                            maxlength="50">
                 </div>
 
@@ -83,17 +83,17 @@
                     <label for="organizer_email" class="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse</label>
                     <input type="email" id="organizer_email" name="organizer_email"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('organizer_email', $activity->organizer_email) }}"
+                           value="{{ old('organizer_email', $bulletinPost->organizer_email) }}"
                            maxlength="255">
                 </div>
 
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status *</label>
                     <select id="status" name="status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="published" {{ old('status', $activity->status) === 'published' ? 'selected' : '' }}>
+                        <option value="published" {{ old('status', $bulletinPost->status) === 'published' ? 'selected' : '' }}>
                             Veröffentlicht
                         </option>
-                        <option value="archived" {{ old('status', $activity->status) === 'archived' ? 'selected' : '' }}>
+                        <option value="archived" {{ old('status', $bulletinPost->status) === 'archived' ? 'selected' : '' }}>
                             Archiviert
                         </option>
                     </select>
@@ -105,13 +105,13 @@
                         <div class="flex items-center space-x-6">
                             <label class="flex items-center">
                                 <input type="checkbox" name="has_forum" value="1"
-                                       {{ old('has_forum', $activity->has_forum) ? 'checked' : '' }}
+                                       {{ old('has_forum', $bulletinPost->has_forum) ? 'checked' : '' }}
                                        class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
                                 <span class="ml-2 text-sm text-gray-700">Diskussionsforum</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" name="has_shifts" value="1"
-                                       {{ old('has_shifts', $activity->has_shifts) ? 'checked' : '' }}
+                                       {{ old('has_shifts', $bulletinPost->has_shifts) ? 'checked' : '' }}
                                        class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
                                 <span class="ml-2 text-sm text-gray-700">Schichtplanung</span>
                             </label>
@@ -124,19 +124,19 @@
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
                     Änderungen speichern
                 </button>
-                <a href="{{ route('activities.show', $activity->slug) }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200 inline-block">
+                <a href="{{ route('bulletin.show', $bulletinPost->slug) }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200 inline-block">
                     Abbrechen
                 </a>
             </div>
         </form>
     </div>
 
-    @if($activity->allPosts->count() > 0)
+    @if($bulletinPost->allPosts->count() > 0)
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Moderation</h2>
 
             <div class="space-y-4">
-                @foreach($activity->allPosts as $post)
+                @foreach($bulletinPost->allPosts as $post)
                     <div class="border border-gray-200 rounded-lg p-4 {{ $post->is_hidden ? 'bg-red-50' : '' }}">
                         <div class="flex justify-between items-start mb-2">
                             <div>
