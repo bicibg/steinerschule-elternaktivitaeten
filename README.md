@@ -8,11 +8,24 @@ This platform enables parents and organizers to coordinate volunteer activities,
 
 ## Features
 
-### Activity Management
-- Create and manage volunteer activities across various categories (Events, Production, Organization, Sales, Maintenance)
+### Three Main Sections
+
+#### Pinnwand (Bulletin Board)
+- Activities seeking volunteer help with shift management
 - Priority labeling system for urgent or important activities
 - Date-based filtering and archiving
 - Secure organizer editing via magic links (no login required for organizers)
+
+#### Elternaktivitäten (Parent Activities)
+- Comprehensive directory of all parent groups and committees
+- Contact information for group leaders
+- Meeting schedules and locations
+- Discussion forums for each activity group
+
+#### Dual Calendar System
+- **Activity Calendar**: Shows all volunteer opportunities and shifts
+- **School Calendar**: Displays school events, holidays, and conferences
+- Context-aware navigation between related events
 
 ### Volunteer Coordination
 - Shift-based signup system with capacity management
@@ -26,11 +39,11 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - Nested comments and replies
 - Content moderation tools for administrators
 
-### Calendar System
-- Dual calendar views: Activity calendar and School events calendar
-- Event categorization with color coding
-- Date range filtering
-- Integration with school-wide events (festivals, holidays, meetings)
+### Enhanced Navigation
+- Context-aware back buttons (returns to origin page)
+- Clickable calendar events with detailed views
+- Mobile-friendly interface for all features
+- Category-based filtering across all sections
 
 ### Administration
 - Comprehensive admin panel for content management
@@ -117,10 +130,13 @@ php artisan serve    # Laravel server
 4. Monitor discussions and volunteer registrations
 
 ### For Volunteers
-1. Browse available activities on the homepage
+1. Browse three main sections:
+   - **Pinnwand**: Activities needing help
+   - **Elternaktivitäten**: All parent groups and committees
+   - **Kalender**: Upcoming events and opportunities
 2. Sign up for shifts without creating an account
 3. Participate in activity discussions
-4. View calendar for upcoming events
+4. View detailed information for any event or activity
 
 ### For Administrators
 1. Access the admin panel at `/admin`

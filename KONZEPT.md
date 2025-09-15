@@ -8,11 +8,11 @@ Die Steinerschule Langnau sucht eine Lösung zur effizienten Organisation von El
 
 ### Was wir bieten
 Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
-- Aktivitätenverwaltung (Anlässe, Produktion, Verkauf, Haus/Umgebung)
-- Schichtplanung mit Freiwilligenanmeldung
-- Diskussionsforum für jede Aktivität
-- Schulkalender-Integration
-- Öffentliche Ansicht aller Aktivitäten und Kalender
+- **Pinnwand:** Aktivitäten die Unterstützung suchen mit Schichtplanung
+- **Elternaktivitäten:** Übersicht aller Arbeitsgruppen und Gremien
+- **Kalender:** Zwei integrierte Kalenderansichten (Aktivitäten & Schulevents)
+- **Diskussionsforen:** Austausch bei jeder Aktivität und Arbeitsgruppe
+- **Öffentliche Ansicht:** Kein Login für Besucher erforderlich
 
 ### Kernvorteile gegenüber SignupNow
 
@@ -38,8 +38,9 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 3. Für Schichten anmelden und mitdiskutieren
 
 ### Für die Schulverwaltung
-- Zentrale Plattform für Aktivitäten, die Unterstützung suchen
-- Separater Informationsbereich für alle Elternaktivitäten
+- **Pinnwand:** Zentrale Plattform für Aktivitäten, die Unterstützung suchen
+- **Elternaktivitäten:** Separater Informationsbereich für alle Arbeitsgruppen
+- **Schulkalender:** Integration von Schulevents mit Details
 - Einfache Moderation bei Bedarf
 
 ## Praktische Beispiele
@@ -55,8 +56,9 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 - Kontaktliste automatisch erstellt
 
 **Schulanlässe:**
-- Kalenderintegration zeigt alle Events
+- Zwei Kalender: Aktivitäten & Schulevents (Ferien, Feste, etc.)
 - Prioritäten (Dringend/Wichtig) sofort sichtbar
+- Klickbare Events mit Detailansichten
 - Archivierung erledigter Aktivitäten
 
 ## Investition & Nachhaltigkeit
