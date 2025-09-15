@@ -70,6 +70,7 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 - Funktionsfähige Version bereits erstellt
 - Keine Entwicklungskosten für die Schule
 - Weitere Anpassungen nach Feedback möglich
+- Code kann bei Bedarf an andere Interessierte übergeben werden
 
 ### Laufende Kosten
 - **Domain:** ca. CHF 20/Monat
