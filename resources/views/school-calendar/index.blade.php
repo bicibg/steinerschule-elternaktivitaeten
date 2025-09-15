@@ -25,19 +25,6 @@
             </a>
         </div>
 
-        <!-- Admin Actions -->
-        @if(auth()->check() && auth()->user()->is_super_admin)
-            <div class="px-4 py-2 border-b bg-gray-50">
-                <a href="{{ route('school-calendar.create') }}"
-                   class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-steiner-blue hover:bg-steiner-dark transition-colors">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Neue Veranstaltung
-                </a>
-            </div>
-        @endif
-
         <!-- Calendar Grid -->
         <div class="p-4">
             <!-- Weekday Headers -->
@@ -104,26 +91,14 @@
                                     @endphp
 
                                     <div class="mb-0.5">
-                                        @if(auth()->check() && auth()->user()->is_super_admin)
-                                            <a href="{{ route('school-calendar.edit', $event) }}"
-                                               class="block text-xs px-0.5 {{ $roundedClass }} {{ $colorClass }} text-white hover:opacity-75 transition-opacity truncate"
-                                               title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
-                                                @if(!$isSpanning || $eventData['is_start'])
-                                                    {{ $event->title }}
-                                                @else
-                                                    &nbsp;
-                                                @endif
-                                            </a>
-                                        @else
-                                            <div class="block text-xs px-0.5 {{ $roundedClass }} {{ $colorClass }} text-white truncate"
-                                                 title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
-                                                @if(!$isSpanning || $eventData['is_start'])
-                                                    {{ $event->title }}
-                                                @else
-                                                    &nbsp;
-                                                @endif
-                                            </div>
-                                        @endif
+                                        <div class="block text-xs px-0.5 {{ $roundedClass }} {{ $colorClass }} text-white truncate"
+                                             title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
+                                            @if(!$isSpanning || $eventData['is_start'])
+                                                {{ $event->title }}
+                                            @else
+                                                &nbsp;
+                                            @endif
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -159,48 +134,21 @@
                     <div class="flex items-start space-x-3 pb-3 border-b border-gray-100 last:border-0">
                         <div class="w-3 h-3 rounded-full {{ $colorClass }} mt-1 flex-shrink-0"></div>
                         <div class="flex-1">
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <h4 class="font-medium text-gray-900">{{ $event->title }}</h4>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        {{ $event->start_date->format('d.m.Y') }}
-                                        @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
-                                            - {{ $event->end_date->format('d.m.Y') }}
-                                        @elseif(!$event->all_day)
-                                            , {{ $event->start_date->format('H:i') }} Uhr
-                                        @endif
-                                    </p>
-                                    @if($event->location)
-                                        <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
-                                    @endif
-                                    @if($event->description)
-                                        <p class="text-sm text-gray-600 mt-2">{{ $event->description }}</p>
-                                    @endif
-                                </div>
-
-                                @if(auth()->check() && auth()->user()->is_super_admin)
-                                    <div class="flex items-center space-x-2 ml-4">
-                                        <a href="{{ route('school-calendar.edit', $event) }}"
-                                           class="text-gray-400 hover:text-gray-600 transition-colors">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </a>
-                                        <form action="{{ route('school-calendar.destroy', $event) }}" method="POST" class="inline"
-                                              onsubmit="return confirm('Möchten Sie diese Veranstaltung wirklich löschen?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-gray-400 hover:text-red-600 transition-colors">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </div>
+                            <h4 class="font-medium text-gray-900">{{ $event->title }}</h4>
+                            <p class="text-sm text-gray-600 mt-1">
+                                {{ $event->start_date->format('d.m.Y') }}
+                                @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
+                                    - {{ $event->end_date->format('d.m.Y') }}
+                                @elseif(!$event->all_day)
+                                    , {{ $event->start_date->format('H:i') }} Uhr
                                 @endif
-                            </div>
+                            </p>
+                            @if($event->location)
+                                <p class="text-sm text-gray-500">📍 {{ $event->location }}</p>
+                            @endif
+                            @if($event->description)
+                                <p class="text-sm text-gray-600 mt-2">{{ $event->description }}</p>
+                            @endif
                         </div>
                     </div>
                 @endforeach
