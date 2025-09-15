@@ -3,66 +3,114 @@
 @section('title', 'Schulkalender')
 
 @section('content')
-    <x-calendar-layout :date="$date" route-name="school-calendar.index" title="Schulkalender">
-        @php
-            $startOfMonth = $date->copy()->startOfMonth();
-            $endOfMonth = $date->copy()->endOfMonth();
-            $startDate = $startOfMonth->copy()->startOfWeek();
-            $endDate = $endOfMonth->copy()->endOfWeek();
-            $currentDate = $startDate->copy();
-        @endphp
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schulkalender</h1>
 
-        @while($currentDate <= $endDate)
-            @php
-                $isCurrentMonth = $currentDate->month === $date->month;
-                $isToday = $currentDate->isToday();
-                $dateKey = $currentDate->format('Y-m-d');
-                $dayEvents = $eventsByDate->get($dateKey, collect());
-            @endphp
+    <!-- Calendar Container -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <!-- Month Navigation -->
+        <div class="flex items-center justify-between p-4 border-b border-gray-200">
+            <a href="{{ route('school-calendar.index', ['month' => $date->copy()->subMonth()->month, 'year' => $date->copy()->subMonth()->year]) }}"
+               class="p-2 hover:bg-gray-100 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </a>
 
-            <x-calendar-day :date="$currentDate" :is-current-month="$isCurrentMonth" :is-today="$isToday">
-                @foreach($dayEvents as $eventData)
-                    @php
-                        $event = $eventData['event'];
-                        $isSpanning = $event->end_date && !$event->start_date->isSameDay($event->end_date);
-                        $roundedClass = '';
-                        if ($isSpanning) {
-                            if ($eventData['is_start'] && $eventData['is_end']) {
-                                $roundedClass = 'rounded';
-                            } elseif ($eventData['is_start']) {
-                                $roundedClass = 'rounded-l';
-                            } elseif ($eventData['is_end']) {
-                                $roundedClass = 'rounded-r';
-                            }
-                        } else {
-                            $roundedClass = 'rounded';
-                        }
+            <h2 class="text-xl font-semibold text-gray-800">
+                {{ $date->locale('de')->monthName }} {{ $date->year }}
+            </h2>
 
-                        $colorClass = match($event->event_type) {
-                            'festival' => 'bg-red-500',
-                            'meeting' => 'bg-blue-500',
-                            'performance' => 'bg-purple-500',
-                            'holiday' => 'bg-gray-500',
-                            'sports' => 'bg-green-500',
-                            'excursion' => 'bg-yellow-500',
-                            default => 'bg-steiner-blue'
-                        };
-                    @endphp
+            <a href="{{ route('school-calendar.index', ['month' => $date->copy()->addMonth()->month, 'year' => $date->copy()->addMonth()->year]) }}"
+               class="p-2 hover:bg-gray-100 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
 
-                    <div class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $colorClass }} text-white hover:opacity-75 transition-opacity truncate"
-                         title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
-                        @if(!$isSpanning || $eventData['is_start'])
-                            {{ $event->title }}
-                        @else
-                            &nbsp;
-                        @endif
+        <!-- Calendar Grid -->
+        <div class="p-4">
+            <!-- Weekday Headers -->
+            <div class="grid grid-cols-7 gap-px bg-gray-200 mb-px">
+                @foreach(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as $day)
+                    <div class="bg-gray-50 py-1 px-2 text-center text-sm font-medium text-gray-700">
+                        {{ $day }}
                     </div>
                 @endforeach
-            </x-calendar-day>
+            </div>
 
-            @php $currentDate->addDay(); @endphp
-        @endwhile
-    </x-calendar-layout>
+            <!-- Calendar Days -->
+            <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
+                @php
+                    $startOfMonth = $date->copy()->startOfMonth();
+                    $endOfMonth = $date->copy()->endOfMonth();
+                    $startDate = $startOfMonth->copy()->startOfWeek();
+                    $endDate = $endOfMonth->copy()->endOfWeek();
+                    $currentDate = $startDate->copy();
+                @endphp
+
+                @while($currentDate <= $endDate)
+                    @php
+                        $isCurrentMonth = $currentDate->month === $date->month;
+                        $isToday = $currentDate->isToday();
+                        $dateKey = $currentDate->format('Y-m-d');
+                        $dayEvents = $eventsByDate->get($dateKey, collect());
+                    @endphp
+
+                    <div class="bg-white h-[120px] {{ !$isCurrentMonth ? 'bg-gray-50' : '' }} {{ $isToday ? 'bg-blue-50' : '' }} relative overflow-hidden">
+                        <div class="h-full flex flex-col">
+                            <div class="font-medium text-sm px-1 pt-0.5 {{ $isToday ? 'text-blue-600' : '' }} {{ !$isCurrentMonth ? 'text-gray-400' : 'text-gray-700' }}">
+                                {{ $currentDate->day }}
+                            </div>
+
+                            <div class="flex-1 overflow-hidden">
+                                @foreach($dayEvents as $eventData)
+                                    @php
+                                        $event = $eventData['event'];
+                                        $isSpanning = $event->end_date && !$event->start_date->isSameDay($event->end_date);
+                                        $roundedClass = '';
+                                        if ($isSpanning) {
+                                            if ($eventData['is_start'] && $eventData['is_end']) {
+                                                $roundedClass = 'rounded';
+                                            } elseif ($eventData['is_start']) {
+                                                $roundedClass = 'rounded-l';
+                                            } elseif ($eventData['is_end']) {
+                                                $roundedClass = 'rounded-r';
+                                            }
+                                        } else {
+                                            $roundedClass = 'rounded';
+                                        }
+
+                                        // Generate color based on event type
+                                        $colorClass = match($event->event_type) {
+                                            'festival' => 'bg-red-500',
+                                            'meeting' => 'bg-blue-500',
+                                            'performance' => 'bg-purple-500',
+                                            'holiday' => 'bg-gray-500',
+                                            'sports' => 'bg-green-500',
+                                            'excursion' => 'bg-yellow-500',
+                                            default => 'bg-steiner-blue'
+                                        };
+                                    @endphp
+
+                                    <div class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $colorClass }} text-white hover:opacity-75 transition-opacity truncate"
+                                         title="{{ $event->title }}{{ $event->location ? ' - ' . $event->location : '' }}">
+                                        @if(!$isSpanning || $eventData['is_start'])
+                                            {{ $event->title }}
+                                        @else
+                                            &nbsp;
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    @php $currentDate->addDay(); @endphp
+                @endwhile
+            </div>
+        </div>
+    </div>
 
     <!-- Events List for the Month -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
