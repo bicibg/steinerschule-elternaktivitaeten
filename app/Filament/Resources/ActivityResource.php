@@ -17,10 +17,10 @@ class ActivityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationLabel = 'Elternaktivitäten';
-    protected static ?string $navigationGroup = 'Super Admin';
+    protected static ?string $navigationGroup = 'Aktivitäten';
     protected static ?string $modelLabel = 'Aktivität';
     protected static ?string $pluralModelLabel = 'Aktivitäten';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -173,21 +173,21 @@ class ActivityResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->is_super_admin ?? false;
+        return auth()->user()?->is_admin ?? false;
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->is_super_admin ?? false;
+        return auth()->user()?->is_admin ?? false;
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()?->is_super_admin ?? false;
+        return auth()->user()?->is_admin ?? false;
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()?->is_super_admin ?? false;
+        return auth()->user()?->is_admin ?? false;
     }
 }

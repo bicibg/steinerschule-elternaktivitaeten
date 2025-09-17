@@ -25,7 +25,7 @@ class SchoolEventResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Schulveranstaltungen';
 
-    protected static ?string $navigationGroup = 'Schulverwaltung';
+    protected static ?string $navigationGroup = 'Super Admin';
 
     protected static ?int $navigationSort = 1;
 
