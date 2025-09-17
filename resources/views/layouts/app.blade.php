@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="robots" content="noindex, nofollow">
     <title>@yield('title', 'Elternaktivitäten') - Steinerschule Langnau</title>
 
     <!-- Favicons -->
@@ -32,7 +31,7 @@
                             <text x="170" y="20" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 170 20)">ittigen</text>
                             <text x="180" y="25" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 180 25)">langnau</text>
                         </svg>
-                        <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-xs sm:text-lg">Elternaktivitäten</span>
+                        <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-sm sm:text-lg hidden sm:inline">Elternaktivitäten</span>
                     </a>
                 </div>
 
@@ -48,7 +47,7 @@
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
-                        Schichtkalender
+                        Kalender
                     </a>
                     <a href="{{ route('school-calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
@@ -59,8 +58,8 @@
                 <!-- Desktop User Menu -->
                 <div class="hidden lg:flex items-center" x-data="{ userMenuOpen: false }">
                     @if(!Auth::check())
-                        <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-lighter hover:border-steiner-dark transition-colors">Anmelden</a>
-                        <a href="{{ route('register') }}" class="ml-2 px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-lighter hover:border-steiner-dark transition-colors">Registrieren</a>
+                        <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Anmelden</a>
+                        <a href="{{ route('register') }}" class="ml-2 px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Registrieren</a>
                     @else
                         <div class="relative">
                             <button @click="userMenuOpen = !userMenuOpen"
@@ -155,7 +154,7 @@
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
-                        Schichtkalender
+                        Kalender
                     </a>
                     <a href="{{ route('school-calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
@@ -326,40 +325,15 @@
                 </div>
             @endif
 
-            @if($errors->any())
-                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                    <ul class="list-disc list-inside">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             @yield('content')
         </div>
     </main>
 
-    <footer class="bg-steiner-dark text-white mt-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col items-center space-y-4">
-                <nav class="flex flex-wrap justify-center gap-6">
-                    <a href="{{ route('legal.privacy') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
-                        Datenschutz
-                    </a>
-                    <span class="text-gray-600">|</span>
-                    <a href="{{ route('legal.impressum') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
-                        Impressum
-                    </a>
-                    <span class="text-gray-600">|</span>
-                    <a href="{{ route('legal.contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
-                        Kontakt
-                    </a>
-                </nav>
-                <p class="text-center text-gray-400 text-sm">
-                    © {{ date('Y') }} Buğra Ergin. Entwickelt für die Elterngemeinschaft.
-                </p>
-            </div>
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p class="text-center text-gray-500 text-sm">
+                © {{ date('Y') }} Steinerschule Langnau. Alle Rechte vorbehalten.
+            </p>
         </div>
     </footer>
 </body>

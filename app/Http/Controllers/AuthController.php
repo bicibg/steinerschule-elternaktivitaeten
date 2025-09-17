@@ -6,9 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -24,23 +21,10 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Rate limiting - 5 attempts per minute
-        $throttleKey = Str::lower($request->input('email')).'|'.$request->ip();
-
-        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            $seconds = RateLimiter::availableIn($throttleKey);
-            return back()->withErrors([
-                'email' => 'Zu viele Anmeldeversuche. Bitte versuchen Sie es in '.$seconds.' Sekunden erneut.',
-            ])->onlyInput('email');
-        }
-
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            RateLimiter::clear($throttleKey);
             return redirect()->intended('/pinnwand');
         }
-
-        RateLimiter::hit($throttleKey, 60); // 60 seconds decay
 
         return back()->withErrors([
             'email' => 'Die angegebenen Anmeldedaten sind ungültig.',
@@ -57,9 +41,15 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Password::min(8)
-                // Just minimum 8 characters, no complex requirements
-            ],
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'name.required' => 'Bitte geben Sie Ihren Namen ein.',
+            'email.required' => 'Bitte geben Sie Ihre E-Mail-Adresse ein.',
+            'email.email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
+            'email.unique' => 'Diese E-Mail-Adresse ist bereits registriert.',
+            'password.required' => 'Bitte geben Sie ein Passwort ein.',
+            'password.min' => 'Das Passwort muss mindestens 8 Zeichen lang sein.',
+            'password.confirmed' => 'Die Passwörter stimmen nicht überein.',
         ]);
 
         $user = User::create([
