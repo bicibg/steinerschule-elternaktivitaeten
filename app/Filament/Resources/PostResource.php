@@ -91,7 +91,7 @@ class PostResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn () => auth()->user()?->is_super_admin ?? false),
+                    ->visible(fn () => auth()->user()?->is_admin ?? false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -118,6 +118,6 @@ class PostResource extends Resource
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()?->is_super_admin ?? false;
+        return auth()->user()?->is_admin ?? false;
     }
 }
