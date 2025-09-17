@@ -64,33 +64,33 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 **Kommunikation:**
 - Benachrichtigungssystem für wichtige Mitteilungen an alle Nutzer
 
-## Datenschutz & DSGVO-Compliance
+## Datenschutz & Sicherheit
 
-### Datenschutz als Priorität
-Die Plattform wurde von Anfang an mit höchsten Datenschutzstandards entwickelt:
+### Datenschutz ist wichtig
+Die Plattform wurde mit Fokus auf Datenschutz entwickelt:
 
-**Datenminimierung:**
-- Nur essenzielle Daten werden erhoben (Name, E-Mail)
-- Telefonnummer ist optional und nur für dringende Mitteilungen
-- Keine Tracking-Cookies oder Analysetools
-- Helfernamen nur für angemeldete Nutzer sichtbar
+**Minimale Datenerfassung:**
+- Nur Name und E-Mail-Adresse sind erforderlich
+- Telefonnummer ist freiwillig
+- Keine Werbe-Tracker oder Analyse-Tools
+- Helfernamen sind geschützt (nur für angemeldete Nutzer sichtbar)
 
 **Technische Sicherheit:**
-- Verschlüsselte Passwörter (bcrypt)
-- HTTPS für alle Verbindungen
-- Sicherheitsheader gegen XSS und Clickjacking
-- Anmeldeschutz mit Rate-Limiting
+- Passwörter werden verschlüsselt gespeichert
+- Sichere HTTPS-Verbindung
+- Schutz vor automatisierten Anmeldeversuchen
+- Regelmässige Sicherheitsupdates
 
-**DSGVO-Rechte garantiert:**
-- Recht auf Auskunft über gespeicherte Daten
-- Recht auf Berichtigung und Löschung
-- Zwei-Stufen-Löschsystem (Deaktivierung/Anonymisierung)
-- Vollständige Datenportabilität
+**Ihre Rechte:**
+- Auskunft über gespeicherte Daten jederzeit möglich
+- Daten können korrigiert werden
+- Löschung auf Anfrage (Recht auf Vergessenwerden)
+- Keine Weitergabe an Dritte
 
 **Server & Hosting:**
 - Server-Standort: Amsterdam (EU)
-- Einhaltung europäischer Datenschutzstandards
-- Kein Zugriff durch Drittländer
+- Einhaltung Schweizer und europäischer Datenschutzgesetze
+- Professionelles Hosting mit täglichen Backups
 
 ## Investition & Nachhaltigkeit
 
