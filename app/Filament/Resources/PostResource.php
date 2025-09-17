@@ -88,6 +88,7 @@ class PostResource extends Resource
                 Tables\Filters\TrashedFilter::make()
                     ->label('Gelöschte Einträge'),
             ])
+            ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->withoutTrashed())
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
