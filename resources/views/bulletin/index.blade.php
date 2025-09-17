@@ -6,15 +6,15 @@
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-800 mb-2">Pinnwand <span class="text-lg font-normal text-gray-600">– Helfergesuche</span></h1>
         <p class="text-gray-600">
-            Hier finden Sie <strong>aktuelle Helfergesuche</strong> von den Organisatoren der verschiedenen Elternaktivitäten.
-            Wenn eine Arbeitsgruppe oder Aktivität Unterstützung braucht, wird hier ein Aufruf veröffentlicht.
+            Hier finden Sie <strong>aktuelle Aufrufe und besondere Helfergesuche</strong> von den Elternaktivitäten.
+            Wenn eine Gruppe dringend Unterstützung braucht oder zu besonderen Anlässen Hilfe sucht, wird hier ein Aufruf veröffentlicht.
         </p>
     </div>
 
     <x-info-box type="help">
-        <strong>Möchten Sie helfen?</strong> Die Organisatoren der <a href="{{ route('activities.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Elternaktivitäten</a> suchen hier nach Unterstützung für ihre Veranstaltungen und Projekte.
+        <strong>Dringende Hilfe gesucht!</strong> Hier posten die <a href="{{ route('activities.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Elternaktivitäten</a> wenn sie besondere Unterstützung brauchen.
         <br>
-        <span class="text-xs">Schauen Sie sich die Aufrufe an und melden Sie sich direkt bei den Organisatoren.</span>
+        <span class="text-xs">Für alle regelmässigen Termine siehe <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a></span>
     </x-info-box>
 
     <!-- Category Filter -->

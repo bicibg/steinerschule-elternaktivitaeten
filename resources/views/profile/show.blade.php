@@ -28,7 +28,7 @@
                 </div>
                 @if(auth()->check() && auth()->id() === $user->id)
                     <a href="{{ route('profile.edit') }}"
-                       class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">
+                       class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-lighter hover:border-steiner-dark hover:text-steiner-dark transition-colors">
                         Profil bearbeiten
                     </a>
                 @endif

@@ -53,6 +53,11 @@ class SchoolCalendarController extends Controller
             }
         }
 
+        // If it's an AJAX request, return only the calendar content
+        if ($request->ajax()) {
+            return view('school-calendar.partials.content', compact('date', 'eventsByDate', 'events', 'month', 'year'));
+        }
+
         return view('school-calendar.index', compact('date', 'eventsByDate', 'events', 'month', 'year'));
     }
 

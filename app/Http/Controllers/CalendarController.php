@@ -191,6 +191,11 @@ class CalendarController extends Controller
             ->sortBy('date')
             ->take(10);
 
+        // If it's an AJAX request, return only the calendar content
+        if ($request->ajax()) {
+            return view('calendar.partials.content', compact('itemsByDate', 'upcomingItems', 'date', 'currentMonth', 'currentYear', 'activities', 'productionActivities'));
+        }
+
         return view('calendar.index', compact('itemsByDate', 'upcomingItems', 'date', 'currentMonth', 'currentYear', 'activities', 'productionActivities'));
     }
 

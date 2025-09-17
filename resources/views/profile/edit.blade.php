@@ -3,7 +3,7 @@
 @section('title', 'Profil bearbeiten')
 
 @section('content')
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-3xl mx-auto">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Profil bearbeiten</h1>
 
         @if(session('success'))
@@ -27,34 +27,46 @@
                     :value="old('name', $user->name)"
                     required />
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse</label>
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">E-Mail-Adresse</label>
                     <input type="email" value="{{ $user->email }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm bg-gray-50 text-gray-600 cursor-not-allowed"
                            disabled>
-                    <p class="mt-1 text-xs text-gray-500">E-Mail-Adresse kann nicht geändert werden</p>
+                    <p class="mt-2 text-xs text-gray-500">E-Mail-Adresse kann nicht geändert werden</p>
                 </div>
 
-                <x-form.input
-                    label="Telefonnummer"
-                    name="phone"
-                    type="tel"
-                    :value="old('phone', $user->phone)"
-                    placeholder="+41 79 123 45 67" />
+                <div class="mb-5">
+                    <x-form.input
+                        label="Telefonnummer (optional)"
+                        name="phone"
+                        type="tel"
+                        :value="old('phone', $user->phone)"
+                        placeholder="+41 79 123 45 67" />
+                    <p class="-mt-3 text-xs text-gray-500">Ihre Telefonnummer wird nur für wichtige Mitteilungen verwendet</p>
+                </div>
 
-                <div>
+                <div class="mb-5" x-data="{
+                    remarksText: '{{ old('remarks', $user->remarks) ?? '' }}',
+                    get charCount() { return this.remarksText.length; }
+                }">
                     <x-form.textarea
                         label="Bemerkungen"
                         name="remarks"
                         :value="old('remarks', $user->remarks)"
                         rows="3"
+                        maxlength="200"
+                        x-model="remarksText"
                         placeholder="Optionale Informationen über Sie (z.B. Verfügbarkeit, besondere Fähigkeiten, etc.)" />
-                    <p class="mt-1 text-xs text-gray-500">Max. 500 Zeichen</p>
+                    <p class="-mt-3 text-xs text-gray-500">
+                        <span x-text="charCount"></span>/200 Zeichen
+                    </p>
                 </div>
 
-                <x-button type="submit" variant="primary">
-                    Änderungen speichern
-                </x-button>
+                <div class="flex justify-end">
+                    <x-button type="submit" variant="primary">
+                        Änderungen speichern
+                    </x-button>
+                </div>
             </form>
         </x-card>
 
@@ -84,9 +96,11 @@
                     type="password"
                     required />
 
-                <x-button type="submit" variant="primary">
-                    Passwort ändern
-                </x-button>
+                <div class="flex justify-end">
+                    <x-button type="submit" variant="primary">
+                        Passwort ändern
+                    </x-button>
+                </div>
             </form>
         </x-card>
     </div>

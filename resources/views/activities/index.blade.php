@@ -7,14 +7,14 @@
         <h1 class="text-2xl font-bold text-gray-800 mb-2">Elternaktivitäten</h1>
         <p class="text-gray-600">
             Hier finden Sie <strong>alle Arbeitsgruppen und Aktivitäten</strong>, die von Eltern für die Schule organisiert werden.
-            Jede Gruppe hat einen festen Verantwortlichen und trifft sich regelmässig.
+            Jede Gruppe freut sich über neue Mitglieder und Unterstützer.
         </p>
     </div>
 
     <x-info-box type="info">
-        <strong>Übersicht aller Elternaktivitäten</strong> – Dies ist die komplette Liste der Arbeitsgruppen an unserer Schule.
+        <strong>Neue Helfer immer willkommen!</strong> Alle Arbeitsgruppen freuen sich über Verstärkung. Kontaktieren Sie einfach die Verantwortlichen.
         <br>
-        <span class="text-xs">Wenn diese Gruppen Hilfe benötigen, finden Sie deren Aufrufe auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
+        <span class="text-xs">Alle Termine im <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a> | Dringende Gesuche auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
     </x-info-box>
 
     <!-- Category Filter -->

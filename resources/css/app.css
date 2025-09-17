@@ -9,6 +9,38 @@
     --color-steiner-dark: rgb(41, 89, 117);       /* #295975 - Darker variant for hover states */
     --color-steiner-light: rgb(165, 195, 212);    /* #a5c3d4 - Light powder blue from palette */
     --color-steiner-lighter: rgb(220, 232, 239);  /* Very light blue for backgrounds */
+
+    /* Category Colors - Intentionally distinct for visual differentiation */
+    --color-category-event: rgb(59, 130, 246);      /* Blue for events */
+    --color-category-house: rgb(34, 197, 94);       /* Green for house/environment */
+    --color-category-production: rgb(234, 179, 8);  /* Yellow for production */
+    --color-category-organization: rgb(168, 85, 247); /* Purple for organization */
+    --color-category-sales: rgb(236, 72, 153);      /* Pink for sales */
+    --color-category-pedagogy: rgb(99, 102, 241);   /* Indigo for pedagogy */
+    --color-category-communication: rgb(20, 184, 166); /* Teal for communication */
+
+    /* Status Colors */
+    --color-success: rgb(34, 197, 94);
+    --color-warning: rgb(234, 179, 8);
+    --color-error: rgb(239, 68, 68);
+    --color-info: rgb(59, 130, 246);
+
+    /* Spacing Scale - Most commonly used values */
+    --spacing-xs: 0.25rem;  /* 4px */
+    --spacing-sm: 0.5rem;   /* 8px */
+    --spacing-md: 1rem;     /* 16px */
+    --spacing-lg: 1.5rem;   /* 24px */
+    --spacing-xl: 2rem;     /* 32px */
+    --spacing-2xl: 3rem;    /* 48px */
+
+    /* Font Sizes - Following Tailwind's scale */
+    --font-size-xs: 0.75rem;   /* 12px */
+    --font-size-sm: 0.875rem;  /* 14px */
+    --font-size-base: 1rem;    /* 16px */
+    --font-size-lg: 1.125rem;  /* 18px */
+    --font-size-xl: 1.25rem;   /* 20px */
+    --font-size-2xl: 1.5rem;   /* 24px */
+    --font-size-3xl: 1.875rem; /* 30px */
 }
 
 /* Primary Brand Colors */

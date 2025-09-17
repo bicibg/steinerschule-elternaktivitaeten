@@ -8,24 +8,34 @@ This platform enables parents and organizers to coordinate volunteer activities,
 
 ## Features
 
-### Three Main Sections
+### Four Main Sections
 
 #### Pinnwand (Bulletin Board)
-- Activities seeking volunteer help with shift management
-- Priority labeling system for urgent or important activities
-- Date-based filtering and archiving
-- Secure organizer editing via magic links (no login required for organizers)
+- Urgent help requests from parent activity organizers
+- Priority labeling system (Dringend, Wichtig, Last Minute)
+- Category-based filtering with distinct colors
+- Date-based display with automatic status indicators
+- Secure organizer editing via magic links (no login required)
 
 #### Elternaktivitäten (Parent Activities)
-- Comprehensive directory of all parent groups and committees
+- Complete directory of all parent groups and committees
+- Seven distinct categories with visual color coding
 - Contact information for group leaders
 - Meeting schedules and locations
-- Discussion forums for each activity group
+- Integrated discussion forums for each activity
 
-#### Dual Calendar System
-- **Activity Calendar**: Shows all volunteer opportunities and shifts
-- **School Calendar**: Displays school events, holidays, and conferences
-- Context-aware navigation between related events
+#### Schichtkalender (Shift Calendar)
+- Shows ALL shifts and activity dates from parent groups
+- Month view with color-coded activities
+- Mobile swipe navigation for easy browsing
+- AJAX-powered smooth month transitions
+- Detailed list view below calendar grid
+
+#### Schulkalender (School Calendar)
+- Official school events, holidays, and conferences
+- Event type categorization (Festival, Meeting, Performance, etc.)
+- Mobile-friendly with swipe gestures
+- Seamless navigation without page reloads
 
 ### Volunteer Coordination
 - Shift-based signup system with capacity management
@@ -73,11 +83,19 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - **Backend**: Laravel 12 (PHP 8.2+)
 - **Database**: SQLite
 - **Frontend**: Blade templates with Alpine.js
-- **Styling**: Tailwind CSS 4
+- **Styling**: Tailwind CSS 4 with custom Steiner School theme
 - **Admin Panel**: Filament 3 (German localized)
 - **Build Tool**: Vite
 - **Authentication**: Laravel Breeze
 - **Scheduler**: Laravel Task Scheduling for automated jobs
+
+### Design System
+- **Theme Colors**: Steiner School blue palette (rgb(57, 123, 161))
+- **Components**: Reusable Blade components (cards, buttons, forms, alerts)
+- **Typography**: Consistent sizing with text-sm as base
+- **Spacing**: Standardized using Tailwind's 4px grid
+- **Category Colors**: Seven distinct colors for visual differentiation
+- **Swiss German**: Using 'ss' instead of 'ß' throughout
 
 ## Requirements
 

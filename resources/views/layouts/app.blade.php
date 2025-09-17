@@ -47,7 +47,7 @@
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
-                        Kalender
+                        Schichtkalender
                     </a>
                     <a href="{{ route('school-calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
@@ -58,8 +58,8 @@
                 <!-- Desktop User Menu -->
                 <div class="hidden lg:flex items-center" x-data="{ userMenuOpen: false }">
                     @if(!Auth::check())
-                        <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Anmelden</a>
-                        <a href="{{ route('register') }}" class="ml-2 px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-blue hover:text-white transition-colors">Registrieren</a>
+                        <a href="{{ route('login') }}" class="px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-lighter hover:border-steiner-dark transition-colors">Anmelden</a>
+                        <a href="{{ route('register') }}" class="ml-2 px-3 py-1.5 text-sm border border-steiner-blue text-steiner-blue rounded hover:bg-steiner-lighter hover:border-steiner-dark transition-colors">Registrieren</a>
                     @else
                         <div class="relative">
                             <button @click="userMenuOpen = !userMenuOpen"
@@ -154,7 +154,7 @@
                     </a>
                     <a href="{{ route('calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
-                        Kalender
+                        Schichtkalender
                     </a>
                     <a href="{{ route('school-calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
