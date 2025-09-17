@@ -41,6 +41,11 @@
         </div>
 
         {{-- Statistics --}}
+        @php
+            $activeActivities = \App\Models\Activity::where('is_active', true)->count();
+            $activePosts = \App\Models\Post::whereNull('deleted_at')->count();
+            $activeComments = \App\Models\Comment::whereNull('deleted_at')->count();
+        @endphp
         <x-filament::section>
             <x-slot name="heading">
                 Aktuelle Statistiken
@@ -48,26 +53,26 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-warning-50 rounded-lg p-4">
                     <div class="text-2xl font-bold text-warning-700">
-                        {{ \App\Models\Activity::where('is_active', true)->count() }}
+                        {{ $activeActivities }}
                     </div>
                     <div class="text-sm text-warning-600">
-                        Aktive Aktivitäten werden deaktiviert
+                        Aktive {{ $activeActivities === 1 ? 'Aktivität wird' : 'Aktivitäten werden' }} deaktiviert
                     </div>
                 </div>
                 <div class="bg-warning-50 rounded-lg p-4">
                     <div class="text-2xl font-bold text-warning-700">
-                        {{ \App\Models\Post::whereNull('deleted_at')->count() }}
+                        {{ $activePosts }}
                     </div>
                     <div class="text-sm text-warning-600">
-                        Forumbeiträge werden archiviert
+                        {{ $activePosts === 1 ? 'Forumbeitrag wird' : 'Forumbeiträge werden' }} archiviert
                     </div>
                 </div>
                 <div class="bg-warning-50 rounded-lg p-4">
                     <div class="text-2xl font-bold text-warning-700">
-                        {{ \App\Models\Comment::whereNull('deleted_at')->count() }}
+                        {{ $activeComments }}
                     </div>
                     <div class="text-sm text-warning-600">
-                        Kommentare werden archiviert
+                        {{ $activeComments === 1 ? 'Kommentar wird' : 'Kommentare werden' }} archiviert
                     </div>
                 </div>
             </div>
