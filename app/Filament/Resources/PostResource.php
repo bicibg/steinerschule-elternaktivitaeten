@@ -79,17 +79,6 @@ class PostResource extends Resource
                     ->label('Nachricht')
                     ->limit(50)
                     ->searchable(),
-                Tables\Columns\TextColumn::make('deletion_reason')
-                    ->label('Löschgrund')
-                    ->formatStateUsing(fn (?string $state): string => match($state) {
-                        'year_archived' => 'Jahresarchivierung',
-                        'spam' => 'Spam',
-                        'inappropriate' => 'Unangemessen',
-                        'user_requested' => 'Auf Anfrage',
-                        'duplicate' => 'Duplikat',
-                        default => '-'
-                    })
-                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')
