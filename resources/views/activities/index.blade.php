@@ -106,7 +106,11 @@
                             @endif
                         </div>
 
-                        <p class="text-gray-700 mb-4 flex-grow line-clamp-3">{{ Str::limit($activity->description, 200) }}</p>
+                        @if($activity->description)
+                            <p class="text-gray-700 mb-4 flex-grow line-clamp-3">{{ Str::limit($activity->description, 200) }}</p>
+                        @else
+                            <p class="text-gray-500 italic mb-4 flex-grow">Keine Beschreibung vorhanden</p>
+                        @endif
 
                         <div class="space-y-2 text-sm text-gray-600">
                             <div class="flex items-center">

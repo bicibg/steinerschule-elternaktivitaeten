@@ -61,9 +61,15 @@
             @endif
 
             <!-- Description -->
-            <div class="prose max-w-none mb-6">
-                <p class="text-gray-700 whitespace-pre-wrap">{{ $activity->description }}</p>
-            </div>
+            @if($activity->description)
+                <div class="prose max-w-none mb-6">
+                    <p class="text-gray-700 whitespace-pre-wrap">{{ $activity->description }}</p>
+                </div>
+            @else
+                <div class="mb-6">
+                    <p class="text-gray-500 italic">Keine Beschreibung vorhanden</p>
+                </div>
+            @endif
 
             <!-- Contact Information -->
             <x-contact-info

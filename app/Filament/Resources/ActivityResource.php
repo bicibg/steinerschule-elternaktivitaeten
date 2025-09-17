@@ -41,9 +41,9 @@ class ActivityResource extends Resource
                             ),
                         Forms\Components\Textarea::make('description')
                             ->label('Beschreibung')
-                            ->required()
                             ->rows(8)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->helperText('Optional - Falls keine Beschreibung vorhanden'),
                         Forms\Components\Select::make('category')
                             ->label('Kategorie')
                             ->options(Activity::getCategories())
