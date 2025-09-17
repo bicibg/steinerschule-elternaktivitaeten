@@ -75,7 +75,7 @@ class YearReset extends Page
                             ->label('Neues Schuljahr')
                             ->required()
                             ->placeholder('2024/2025')
-                            ->helperText('Geben Sie das neue Schuljahr ein, das beginnt'),
+                            ->helperText('Geben Sie das neue Schuljahr ein (z.B. 2024/2025)'),
 
                         Forms\Components\Textarea::make('notes')
                             ->label('Notizen (optional)')
