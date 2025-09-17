@@ -10,8 +10,9 @@
 ### 1. Pinnwand (Public View)
 - [ ] Show activities needing help
 - [ ] Click activity → show shifts
-- [ ] Sign up WITHOUT login (just name + email)
-- [ ] Show forum/discussion section
+- [ ] View organizer contact info WITHOUT login
+- [ ] Sign up for shifts requires registration
+- [ ] Forum/discussion requires login
 
 ### 2. Elternaktivitäten
 - [ ] Show all working groups
@@ -39,7 +40,8 @@
 - [ ] Touch-friendly buttons
 
 ## Key Selling Points
-- No login required for helping
+- No login required to VIEW activities and contact info
+- Registration only needed for signing up to help
 - Everything in one place
 - Minimal running costs
 - By parents for parents
