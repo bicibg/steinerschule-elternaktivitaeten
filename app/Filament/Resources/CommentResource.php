@@ -35,20 +35,13 @@ class CommentResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn ($record) => \Str::limit($record->body, 50))
                     ->required()
                     ->searchable(),
-                Forms\Components\Select::make('user_id')
+                Forms\Components\Placeholder::make('user.name')
                     ->label('Benutzer')
-                    ->relationship('user', 'name')
-                    ->required()
-                    ->searchable()
-                    ->disabled()
-                    ->dehydrated(false),
-                Forms\Components\Textarea::make('body')
+                    ->content(fn (?\App\Models\Comment $record): string => $record?->user?->name ?? '-'),
+                Forms\Components\Placeholder::make('body')
                     ->label('Antwort')
-                    ->required()
-                    ->columnSpanFull()
-                    ->maxLength(800)
-                    ->disabled()
-                    ->dehydrated(false),
+                    ->content(fn (?\App\Models\Comment $record): string => $record?->body ?? '-')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('ip_hash')
                     ->label('IP-Hash')
                     ->disabled()

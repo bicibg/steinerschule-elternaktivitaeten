@@ -33,20 +33,13 @@ class PostResource extends Resource
                     ->relationship('bulletinPost', 'title')
                     ->required()
                     ->searchable(),
-                Forms\Components\Select::make('user_id')
+                Forms\Components\Placeholder::make('user.name')
                     ->label('Benutzer')
-                    ->relationship('user', 'name')
-                    ->required()
-                    ->searchable()
-                    ->disabled()
-                    ->dehydrated(false),
-                Forms\Components\Textarea::make('body')
+                    ->content(fn (?\App\Models\Post $record): string => $record?->user?->name ?? '-'),
+                Forms\Components\Placeholder::make('body')
                     ->label('Nachricht')
-                    ->required()
-                    ->columnSpanFull()
-                    ->maxLength(2000)
-                    ->disabled()
-                    ->dehydrated(false),
+                    ->content(fn (?\App\Models\Post $record): string => $record?->body ?? '-')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('ip_hash')
                     ->label('IP-Hash')
                     ->disabled()
