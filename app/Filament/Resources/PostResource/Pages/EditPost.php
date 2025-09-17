@@ -14,6 +14,10 @@ class EditPost extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\RestoreAction::make()
+                ->visible(fn ($record) => $record->trashed() && auth()->user()?->is_admin),
+            Actions\ForceDeleteAction::make()
+                ->visible(fn ($record) => $record->trashed() && auth()->user()?->is_super_admin),
             Actions\DeleteAction::make()
                 ->requiresConfirmation()
                 ->modalHeading('Forumbeitrag löschen')
@@ -34,7 +38,7 @@ class EditPost extends EditRecord
                     $record->deletion_reason = $data['deletion_reason'];
                     $record->save();
                 })
-                ->visible(fn () => auth()->user()?->is_admin ?? false),
+                ->visible(fn ($record) => !$record->trashed() && auth()->user()?->is_admin),
         ];
     }
 }
