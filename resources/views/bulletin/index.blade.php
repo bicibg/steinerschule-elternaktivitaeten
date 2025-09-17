@@ -3,7 +3,19 @@
 @section('title', 'Pinnwand')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-4">Pinnwand</h1>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Pinnwand</h1>
+        <p class="text-gray-600">
+            Hier finden Sie <strong>Aufrufe zur Mithilfe</strong> und <strong>Unterstützungsgesuche</strong> für einzelne Veranstaltungen und Projekte.
+            Eltern können hier Helfer für ihre Initiativen suchen.
+        </p>
+    </div>
+
+    <x-info-box type="help">
+        <strong>Suchen Sie Hilfe für ein Event?</strong> Hier können Eltern Unterstützung für einmalige Veranstaltungen, Projekte oder besondere Anlässe anfragen.
+        <br>
+        <span class="text-xs">Für regelmässige Aktivitäten siehe <a href="{{ route('activities.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Elternaktivitäten</a></span>
+    </x-info-box>
 
     <!-- Category Filter -->
     <div class="mb-6 flex flex-wrap gap-2">
