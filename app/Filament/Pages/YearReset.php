@@ -73,7 +73,7 @@ class YearReset extends Page
                             ->content(function () {
                                 return view('filament.components.year-reset-effects', [
                                     'activitiesCount' => Activity::where('is_active', true)->count(),
-                                    'bulletinPostsCount' => BulletinPost::where('is_active', true)->count(),
+                                    'bulletinPostsCount' => BulletinPost::where('status', 'published')->count(),
                                     'announcementsCount' => Announcement::where('is_active', true)->where('is_priority', false)->count(),
                                     'postsCount' => Post::whereNull('deleted_at')->count(),
                                     'commentsCount' => Comment::whereNull('deleted_at')->count(),
@@ -191,7 +191,7 @@ class YearReset extends Page
         try {
             // Count items before changes
             $activitiesCount = Activity::where('is_active', true)->count();
-            $bulletinPostsCount = BulletinPost::where('is_active', true)->count();
+            $bulletinPostsCount = BulletinPost::where('status', 'published')->count();
             $announcementsCount = Announcement::where('is_active', true)->where('is_priority', false)->count();
             $postsCount = Post::whereNull('deleted_at')->count();
             $commentsCount = Comment::whereNull('deleted_at')->count();
@@ -199,8 +199,8 @@ class YearReset extends Page
             // 1. Deactivate all activities
             Activity::where('is_active', true)->update(['is_active' => false]);
 
-            // 2. Deactivate all bulletin posts
-            BulletinPost::where('is_active', true)->update(['is_active' => false]);
+            // 2. Archive all bulletin posts
+            BulletinPost::where('status', 'published')->update(['status' => 'archived']);
 
             // 3. Deactivate non-priority announcements
             Announcement::where('is_active', true)

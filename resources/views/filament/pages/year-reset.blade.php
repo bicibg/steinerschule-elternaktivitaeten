@@ -45,7 +45,7 @@
         {{-- Statistics --}}
         @php
             $activeActivities = \App\Models\Activity::where('is_active', true)->count();
-            $activeBulletinPosts = \App\Models\BulletinPost::where('is_active', true)->count();
+            $activeBulletinPosts = \App\Models\BulletinPost::where('status', 'published')->count();
             $activeAnnouncements = \App\Models\Announcement::where('is_active', true)->where('is_priority', false)->count();
             $activePosts = \App\Models\Post::whereNull('deleted_at')->count();
             $activeComments = \App\Models\Comment::whereNull('deleted_at')->count();

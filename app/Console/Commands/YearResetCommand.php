@@ -29,7 +29,7 @@ class YearResetCommand extends Command
 
         // Show current statistics
         $activitiesCount = Activity::where('is_active', true)->count();
-        $bulletinPostsCount = BulletinPost::where('is_active', true)->count();
+        $bulletinPostsCount = BulletinPost::where('status', 'published')->count();
         $announcementsCount = Announcement::where('is_active', true)->where('is_priority', false)->count();
         $postsCount = Post::whereNull('deleted_at')->count();
         $commentsCount = Comment::whereNull('deleted_at')->count();
@@ -38,7 +38,7 @@ class YearResetCommand extends Command
         $this->line('');
         $this->info('Diese Funktion wird folgende Aktionen durchführen:');
         $this->line("- {$activitiesCount} aktive Aktivitäten deaktivieren");
-        $this->line("- {$bulletinPostsCount} aktive Pinnwand-Einträge deaktivieren");
+        $this->line("- {$bulletinPostsCount} aktive Pinnwand-Einträge archivieren");
         $this->line("- {$announcementsCount} normale Ankündigungen deaktivieren (prioritäre bleiben aktiv)");
         $this->line("- {$postsCount} Forumbeiträge archivieren");
         $this->line("- {$commentsCount} Kommentare archivieren");
@@ -78,9 +78,9 @@ class YearResetCommand extends Command
             Activity::where('is_active', true)->update(['is_active' => false]);
             $this->info("✓ {$activitiesCount} Aktivitäten deaktiviert");
 
-            // 2. Deactivate all bulletin posts
-            BulletinPost::where('is_active', true)->update(['is_active' => false]);
-            $this->info("✓ {$bulletinPostsCount} Pinnwand-Einträge deaktiviert");
+            // 2. Archive all bulletin posts
+            BulletinPost::where('status', 'published')->update(['status' => 'archived']);
+            $this->info("✓ {$bulletinPostsCount} Pinnwand-Einträge archiviert");
 
             // 3. Deactivate non-priority announcements
             Announcement::where('is_active', true)
@@ -130,7 +130,7 @@ class YearResetCommand extends Command
                 ['Aktion', 'Anzahl'],
                 [
                     ['Aktivitäten deaktiviert', $activitiesCount],
-                    ['Pinnwand-Einträge deaktiviert', $bulletinPostsCount],
+                    ['Pinnwand-Einträge archiviert', $bulletinPostsCount],
                     ['Ankündigungen deaktiviert', $announcementsCount],
                     ['Forumbeiträge archiviert', $postsCount],
                     ['Kommentare archiviert', $commentsCount],

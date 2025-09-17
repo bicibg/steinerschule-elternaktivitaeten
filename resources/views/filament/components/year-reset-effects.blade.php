@@ -1,7 +1,7 @@
 <div class="space-y-2">
     <ul class="list-disc list-inside text-sm space-y-1">
         <li><strong>{{ $activitiesCount }}</strong> aktive Aktivitäten werden deaktiviert</li>
-        <li><strong>{{ $bulletinPostsCount }}</strong> aktive Pinnwand-Einträge werden deaktiviert</li>
+        <li><strong>{{ $bulletinPostsCount }}</strong> aktive Pinnwand-Einträge werden archiviert</li>
         <li><strong>{{ $announcementsCount }}</strong> normale Ankündigungen werden deaktiviert</li>
         <li><strong>{{ $postsCount }}</strong> Forumbeiträge werden archiviert</li>
         <li><strong>{{ $commentsCount }}</strong> Kommentare werden archiviert</li>
