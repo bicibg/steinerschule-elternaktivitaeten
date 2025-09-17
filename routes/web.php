@@ -55,6 +55,8 @@ Route::get('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'sh
 
 Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
 Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
+Route::delete('/comments/{comment}', [PostController::class, 'destroyComment'])->name('comments.destroy')->middleware('auth');
 
 Route::post('/shifts/{shift}/signup', [ShiftController::class, 'signup'])->name('shifts.signup')->middleware('auth');
 Route::delete('/shifts/{shift}/withdraw', [ShiftController::class, 'withdraw'])->name('shifts.withdraw')->middleware('auth');

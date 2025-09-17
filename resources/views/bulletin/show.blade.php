@@ -186,7 +186,19 @@
                                             {{ $post->user->name }}
                                         </a>
                                     </h4>
-                                    <span class="text-sm text-gray-500">{{ $post->created_at->format('d.m.Y H:i') }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm text-gray-500">{{ $post->created_at->format('d.m.Y H:i') }}</span>
+                                        @if(auth()->check() && (auth()->id() === $post->user_id || auth()->user()->is_admin))
+                                            <form method="POST" action="{{ route('posts.destroy', $post) }}" class="inline"
+                                                  onsubmit="return confirm('Möchten Sie diesen Beitrag wirklich löschen?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                                                    Löschen
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="text-gray-700 mb-3">
                                     {!! nl2br(e($post->body)) !!}
@@ -210,7 +222,19 @@
                                                             {{ $comment->user->name }}
                                                         </a>
                                                     </h5>
-                                                    <span class="text-xs text-gray-500">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-xs text-gray-500">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
+                                                        @if(auth()->check() && (auth()->id() === $comment->user_id || auth()->user()->is_admin))
+                                                            <form method="POST" action="{{ route('comments.destroy', $comment) }}" class="inline"
+                                                                  onsubmit="return confirm('Möchten Sie diesen Kommentar wirklich löschen?');">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="text-red-600 hover:text-red-800 text-xs">
+                                                                    Löschen
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                                 <div class="text-gray-600 text-sm">
                                                     {!! nl2br(e($comment->body)) !!}

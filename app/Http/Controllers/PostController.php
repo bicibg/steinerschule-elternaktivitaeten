@@ -33,6 +33,7 @@ class PostController extends Controller
         ]);
 
         $post = $helpRequest->posts()->create([
+            'user_id' => auth()->id(),
             'author_name' => auth()->user()->name,
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
@@ -65,6 +66,7 @@ class PostController extends Controller
         ]);
 
         $comment = $post->comments()->create([
+            'user_id' => auth()->id(),
             'author_name' => auth()->user()->name,
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
@@ -74,5 +76,33 @@ class PostController extends Controller
 
         return redirect()->route('help-requests.show', $post->helpRequest->slug)
             ->with('success', 'Ihr Kommentar wurde erfolgreich veröffentlicht.');
+    }
+
+    public function destroy(Post $post)
+    {
+        // Check if user owns the post or is admin
+        if (auth()->id() !== $post->user_id && !auth()->user()->is_admin) {
+            abort(403, 'Nicht autorisiert');
+        }
+
+        $slug = $post->bulletinPost->slug;
+        $post->delete();
+
+        return redirect()->route('bulletin.show', $slug)
+            ->with('success', 'Beitrag wurde gelöscht.');
+    }
+
+    public function destroyComment(Comment $comment)
+    {
+        // Check if user owns the comment or is admin
+        if (auth()->id() !== $comment->user_id && !auth()->user()->is_admin) {
+            abort(403, 'Nicht autorisiert');
+        }
+
+        $slug = $comment->post->bulletinPost->slug;
+        $comment->delete();
+
+        return redirect()->route('bulletin.show', $slug)
+            ->with('success', 'Kommentar wurde gelöscht.');
     }
 }
