@@ -8,23 +8,52 @@
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Impressum</h1>
 
         <div class="prose prose-sm max-w-none text-gray-600">
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Betreiber der Webseite</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Verantwortlich für diese Plattform</h2>
             <p class="mb-4">
+                Diese Plattform wurde ehrenamtlich für die Elterngemeinschaft der<br>
+                Rudolf Steinerschule Bern in Langnau entwickelt.
+            </p>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p class="text-sm text-blue-900">
+                    <strong>Hinweis:</strong> Dies ist keine offizielle Webseite der Rudolf Steinerschule Bern,
+                    sondern eine unabhängige Initiative von Eltern für Eltern zur Koordination der Elternaktivitäten.
+                </p>
+            </div>
+
+            <p class="mb-4">
+                <strong>Technische Entwicklung & Betreuung:</strong><br>
+                Buğra Ergin (Ehrenamtlicher Entwickler)<br>
+                E-Mail: <a href="mailto:bugraergin@gmail.com" class="text-steiner-blue hover:text-steiner-dark underline">bugraergin@gmail.com</a>
+            </p>
+
+            <p class="mb-4">
+                <strong>Schulkontakt:</strong><br>
                 Rudolf Steinerschule Bern in Langnau<br>
                 Schlossstrasse 6<br>
                 3550 Langnau im Emmental<br>
-                Schweiz
-            </p>
-            <p class="mb-4">
-                <strong>Telefon:</strong> +41 (0)34 402 12 80<br>
-                <strong>E-Mail:</strong> info@steinerschule-bern.ch<br>
-                <strong>Website:</strong> <a href="https://www.steinerschule-bern.ch" target="_blank" class="text-steiner-blue hover:text-steiner-dark underline">www.steinerschule-bern.ch</a>
+                Telefon: +41 (0)34 402 12 80<br>
+                Website: <a href="https://www.steinerschule-bern.ch" target="_blank" class="text-steiner-blue hover:text-steiner-dark underline">www.steinerschule-bern.ch</a>
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Zweck der Plattform</h2>
             <p class="mb-4">
                 Diese Plattform dient ausschliesslich der internen Koordination von Elternaktivitäten an der Rudolf Steinerschule Bern in Langnau.
-                Sie ist nicht für die Öffentlichkeit bestimmt und wird von Freiwilligen betreut.
+                Sie ist nicht für die Öffentlichkeit bestimmt und wird ehrenamtlich betreut.
+            </p>
+
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Keine kommerzielle Nutzung</h2>
+            <p class="mb-4">
+                Diese Webseite wurde vollständig ehrenamtlich und unentgeltlich entwickelt. Es werden:
+            </p>
+            <ul class="list-disc pl-6 mb-4">
+                <li>Keine Gebühren erhoben</li>
+                <li>Keine Werbung geschaltet</li>
+                <li>Keine Daten verkauft oder kommerziell genutzt</li>
+                <li>Keine Tracking- oder Analyse-Tools eingesetzt</li>
+            </ul>
+            <p class="mb-4">
+                Die Plattform dient ausschliesslich dem gemeinnützigen Zweck der Förderung der Schulgemeinschaft.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Haftungsausschluss</h2>

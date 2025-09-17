@@ -8,11 +8,19 @@
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Datenschutzerklärung</h1>
 
         <div class="prose prose-sm max-w-none text-gray-600">
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">1. Datenerhebung</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">1. Grundsätze</h2>
             <p class="mb-4">
-                Diese Webseite ist ausschliesslich für die interne Nutzung durch Eltern und Mitarbeitende der Rudolf Steinerschule Bern in Langnau bestimmt.
+                Diese Plattform wurde ehrenamtlich für die Elterngemeinschaft der Rudolf Steinerschule Bern in Langnau entwickelt.
+                Es handelt sich um eine nicht-kommerzielle Initiative von Eltern für Eltern.
                 Wir erheben nur die minimal notwendigen Daten zur Koordination der Elternaktivitäten.
             </p>
+
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <p class="text-sm text-green-900">
+                    <strong>Wichtig:</strong> Wir verkaufen keine Daten, schalten keine Werbung und verwenden keine Tracking-Tools.
+                    Diese Plattform dient ausschliesslich der Schulgemeinschaft.
+                </p>
+            </div>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">2. Welche Daten werden erhoben?</h2>
             <ul class="list-disc pl-6 mb-4">

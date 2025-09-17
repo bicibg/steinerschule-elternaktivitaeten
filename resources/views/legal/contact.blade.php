@@ -23,7 +23,8 @@
                 <p class="mb-4">
                     <strong>Ansprechperson:</strong><br>
                     Buğra Ergin<br>
-                    (Ehrenamtlicher technischer Betreuer)
+                    Elternteil & Ehrenamtlicher Entwickler<br>
+                    <span class="text-sm text-gray-500">Diese Plattform wurde unentgeltlich für die Schulgemeinschaft entwickelt</span>
                 </p>
             </div>
 
@@ -41,7 +42,17 @@
                 senden Sie diese gerne an die oben genannte E-Mail-Adresse.
             </p>
 
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 mb-6">
+                <p class="text-sm text-blue-900">
+                    <strong>Über diese Plattform:</strong><br>
+                    • Vollständig ehrenamtlich entwickelt<br>
+                    • Keine kommerziellen Interessen<br>
+                    • Keine Kosten für Nutzer<br>
+                    • Eine Initiative von Eltern für Eltern
+                </p>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p class="text-sm text-yellow-800">
                     <strong>Hinweis:</strong> Diese Plattform wird ehrenamtlich betreut.
                     Bitte haben Sie Verständnis, dass Antworten auf Support-Anfragen etwas Zeit in Anspruch nehmen können.
