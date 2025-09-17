@@ -37,12 +37,16 @@ class PostResource extends Resource
                     ->label('Benutzer')
                     ->relationship('user', 'name')
                     ->required()
-                    ->searchable(),
+                    ->searchable()
+                    ->disabled()
+                    ->dehydrated(false),
                 Forms\Components\Textarea::make('body')
                     ->label('Nachricht')
                     ->required()
                     ->columnSpanFull()
-                    ->maxLength(2000),
+                    ->maxLength(2000)
+                    ->disabled()
+                    ->dehydrated(false),
                 Forms\Components\TextInput::make('ip_hash')
                     ->label('IP-Hash')
                     ->disabled()

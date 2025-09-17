@@ -39,12 +39,16 @@ class CommentResource extends Resource
                     ->label('Benutzer')
                     ->relationship('user', 'name')
                     ->required()
-                    ->searchable(),
+                    ->searchable()
+                    ->disabled()
+                    ->dehydrated(false),
                 Forms\Components\Textarea::make('body')
                     ->label('Antwort')
                     ->required()
                     ->columnSpanFull()
-                    ->maxLength(800),
+                    ->maxLength(800)
+                    ->disabled()
+                    ->dehydrated(false),
                 Forms\Components\TextInput::make('ip_hash')
                     ->label('IP-Hash')
                     ->disabled()
