@@ -21,9 +21,9 @@ class ImportResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
-    protected static ?string $navigationLabel = 'Importe';
+    protected static ?string $navigationLabel = '🔒 Importe';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static ?string $navigationGroup = 'Administration';
 
     protected static ?string $modelLabel = 'Import';
 

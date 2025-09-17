@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Hash;
 class YearReset extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
-    protected static ?string $navigationLabel = 'Neues Schuljahr';
-    protected static ?string $navigationGroup = 'Super Admin';
+    protected static ?string $navigationLabel = '🔒 Neues Schuljahr';
+    protected static ?string $navigationGroup = 'Administration';
     protected static ?int $navigationSort = 100;
     protected static string $view = 'filament.pages.year-reset';
 

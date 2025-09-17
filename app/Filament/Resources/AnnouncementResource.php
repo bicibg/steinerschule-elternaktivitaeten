@@ -19,9 +19,9 @@ class AnnouncementResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bell-alert';
 
-    protected static ?string $navigationLabel = 'Ankündigungen';
+    protected static ?string $navigationLabel = '🔒 Ankündigungen';
 
-    protected static ?string $navigationGroup = 'Super Admin';
+    protected static ?string $navigationGroup = 'Administration';
 
     protected static ?string $modelLabel = 'Ankündigung';
 

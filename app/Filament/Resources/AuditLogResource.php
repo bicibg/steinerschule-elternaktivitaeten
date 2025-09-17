@@ -16,8 +16,8 @@ class AuditLogResource extends Resource
     protected static ?string $model = AuditLog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
-    protected static ?string $navigationLabel = 'Audit-Protokoll';
-    protected static ?string $navigationGroup = 'System';
+    protected static ?string $navigationLabel = '🔒 Audit-Protokoll';
+    protected static ?string $navigationGroup = 'Administration';
     protected static ?string $modelLabel = 'Audit-Eintrag';
     protected static ?string $pluralModelLabel = 'Audit-Protokoll';
     protected static ?int $navigationSort = 52;
@@ -39,7 +39,7 @@ class AuditLogResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->is_admin ?? false;
+        return auth()->user()?->is_super_admin ?? false;
     }
 
     public static function form(Form $form): Form

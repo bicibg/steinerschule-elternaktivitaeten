@@ -22,13 +22,13 @@ class ExportResource extends Resource
 
     protected static ?string $navigationLabel = 'Exporte';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static ?string $navigationGroup = 'Administration';
 
     protected static ?string $modelLabel = 'Export';
 
     protected static ?string $pluralModelLabel = 'Exporte';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 45;
 
     public static function canViewAny(): bool
     {

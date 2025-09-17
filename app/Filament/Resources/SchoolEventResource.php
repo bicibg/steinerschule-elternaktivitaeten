@@ -19,13 +19,13 @@ class SchoolEventResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static ?string $navigationLabel = 'Schulkalender';
+    protected static ?string $navigationLabel = '🔒 Schulkalender';
 
     protected static ?string $modelLabel = 'Schulveranstaltung';
 
     protected static ?string $pluralModelLabel = 'Schulveranstaltungen';
 
-    protected static ?string $navigationGroup = 'Super Admin';
+    protected static ?string $navigationGroup = 'Administration';
 
     protected static ?int $navigationSort = 1;
 
