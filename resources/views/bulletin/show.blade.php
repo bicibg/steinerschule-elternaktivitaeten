@@ -25,7 +25,7 @@
         </div>
 
         <!-- Main Content Card -->
-        <x-card class="mb-6" :class="$bulletinPost->label ? 'border-' . $bulletinPost->label_color . '-400 border-2' : ''">
+        <x-card class="mb-6">
             <!-- Title and Badges -->
             <div class="mb-4">
                 <div class="flex items-start justify-between">
@@ -283,7 +283,7 @@
                     shifts: {{ json_encode($bulletinPost->shifts->map(function($shift) {
                         return [
                             'id' => $shift->id,
-                            'date' => $shift->date->format('d.m.Y'),
+                            'date' => $shift->date ? $shift->date->format('d.m.Y') : null,
                             'start' => $shift->start_time,
                             'end' => $shift->end_time,
                             'title' => $shift->title,
@@ -350,7 +350,11 @@
                                 <div>
                                     <h3 class="font-semibold text-gray-800" x-text="shift.title"></h3>
                                     <div class="text-sm text-gray-600 mt-1">
-                                        <span x-text="shift.date"></span>,
+                                        <template x-if="shift.date">
+                                            <span>
+                                                <span x-text="shift.date"></span>,
+                                            </span>
+                                        </template>
                                         <span x-text="shift.start"></span> - <span x-text="shift.end"></span>
                                     </div>
                                 </div>

@@ -56,9 +56,9 @@
             <div class="mt-4 pt-4 border-t border-gray-200">
                 <form action="{{ route('demo.login') }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
+                    <x-button type="submit" variant="success" block>
                         Mit Demo-Konto anmelden
-                    </button>
+                    </x-button>
                 </form>
             </div>
         </x-card>

@@ -71,7 +71,7 @@
     @else
         <div class="space-y-4">
             @foreach($bulletinPosts as $bulletinPost)
-                <a href="{{ route('bulletin.show', $bulletinPost->slug) }}" class="block bg-white rounded-lg shadow-sm border {{ $bulletinPost->label ? 'border-' . $bulletinPost->label_color . '-400 border-2' : 'border-gray-200' }} p-6 hover:shadow-md transition-shadow duration-200">
+                <a href="{{ route('bulletin.show', $bulletinPost->slug) }}" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-2">
