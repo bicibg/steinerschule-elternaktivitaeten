@@ -87,6 +87,8 @@ class YearReset extends Page
                             ->required()
                             ->placeholder('Tippen Sie: NEUES SCHULJAHR STARTEN')
                             ->helperText('Geben Sie exakt "NEUES SCHULJAHR STARTEN" ein')
+                            ->autocomplete('off')
+                            ->extraInputAttributes(['autocomplete' => 'off', 'data-lpignore' => 'true'])
                             ->dehydrateStateUsing(fn ($state) => $state)
                             ->rule(fn () => function ($attribute, $value, $fail) {
                                 if ($value !== 'NEUES SCHULJAHR STARTEN') {
