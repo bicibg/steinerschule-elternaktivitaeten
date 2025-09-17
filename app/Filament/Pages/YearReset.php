@@ -23,6 +23,8 @@ class YearReset extends Page
     protected static ?int $navigationSort = 100;
     protected static string $view = 'filament.pages.year-reset';
 
+    public ?array $data = [];
+
     public ?string $yearResetConfirmPhrase = '';
     public ?string $password = '';
     public ?string $schoolYear = '';
@@ -46,6 +48,13 @@ class YearReset extends Page
         $currentYear = now()->year;
         $nextYear = $currentYear + 1;
         $this->schoolYear = "{$currentYear}/{$nextYear}";
+
+        $this->form->fill([
+            'schoolYear' => $this->schoolYear,
+            'notes' => '',
+            'yearResetConfirmPhrase' => '',
+            'password' => '',
+        ]);
     }
 
     public function form(Form $form): Form
@@ -87,11 +96,16 @@ class YearReset extends Page
                             ->required()
                             ->placeholder('Tippen Sie: NEUES SCHULJAHR STARTEN')
                             ->helperText('Geben Sie exakt "NEUES SCHULJAHR STARTEN" ein')
-                            ->autocomplete('off')
+                            ->autocomplete(false)
                             ->extraInputAttributes([
-                                'autocomplete' => 'new-password',
+                                'autocomplete' => 'one-time-code',
+                                'autocorrect' => 'off',
+                                'autocapitalize' => 'off',
+                                'spellcheck' => 'false',
                                 'data-lpignore' => 'true',
-                                'data-form-type' => 'other'
+                                'data-form-type' => 'other',
+                                'readonly' => 'readonly',
+                                'onfocus' => "this.removeAttribute('readonly')",
                             ])
                             ->dehydrateStateUsing(fn ($state) => $state)
                             ->rule(fn () => function ($attribute, $value, $fail) {
@@ -140,7 +154,7 @@ class YearReset extends Page
     public function performReset(): void
     {
         // Validate form
-        $this->form->getState();
+        $data = $this->form->getState();
 
         // Check if recently reset
         if (AuditLog::wasActionPerformedRecently('year_reset', 30)) {
@@ -153,7 +167,7 @@ class YearReset extends Page
         }
 
         // Final confirmation check
-        if ($this->yearResetConfirmPhrase !== 'NEUES SCHULJAHR STARTEN') {
+        if ($data['yearResetConfirmPhrase'] !== 'NEUES SCHULJAHR STARTEN') {
             Notification::make()
                 ->title('Ungültige Bestätigung')
                 ->body('Der Bestätigungstext ist nicht korrekt.')
@@ -163,7 +177,7 @@ class YearReset extends Page
         }
 
         // Check password
-        if (!Hash::check($this->password, auth()->user()->password)) {
+        if (!Hash::check($data['password'], auth()->user()->password)) {
             Notification::make()
                 ->title('Ungültiges Passwort')
                 ->body('Das eingegebene Passwort ist nicht korrekt.')
@@ -210,24 +224,26 @@ class YearReset extends Page
                 'year_reset',
                 'Neues Schuljahr vorbereitet',
                 [
-                    'school_year' => $this->schoolYear,
+                    'school_year' => $data['schoolYear'],
                     'activities_deactivated' => $activitiesCount,
                     'bulletin_posts_deactivated' => $bulletinPostsCount,
                     'announcements_deactivated' => $announcementsCount,
                     'posts_archived' => $postsCount,
                     'comments_archived' => $commentsCount,
-                    'notes' => $this->notes,
+                    'notes' => $data['notes'] ?? null,
                 ],
-                "Neues Schuljahr {$this->schoolYear} vorbereitet: {$activitiesCount} Aktivitäten, {$bulletinPostsCount} Pinnwand-Einträge und {$announcementsCount} Ankündigungen deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.",
+                "Neues Schuljahr {$data['schoolYear']} vorbereitet: {$activitiesCount} Aktivitäten, {$bulletinPostsCount} Pinnwand-Einträge und {$announcementsCount} Ankündigungen deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.",
                 'critical'
             );
 
             DB::commit();
 
             // Clear form
-            $this->yearResetConfirmPhrase = '';
-            $this->password = '';
-            $this->notes = '';
+            $this->form->fill([
+                'yearResetConfirmPhrase' => '',
+                'password' => '',
+                'notes' => '',
+            ]);
 
             Notification::make()
                 ->title('System erfolgreich vorbereitet')
