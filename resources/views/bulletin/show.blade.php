@@ -289,6 +289,13 @@
             <div x-show="{{ $bulletinPost->has_forum ? "activeTab === 'shifts'" : 'true' }}" {{ $bulletinPost->has_forum ? 'x-cloak' : '' }}>
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Schichten</h2>
 
+                @guest
+                <x-alert type="warning" class="mb-6">
+                    <a href="{{ route('login') }}" class="text-steiner-blue hover:text-steiner-dark underline">Melden Sie sich an</a>,
+                    um sich für Schichten anzumelden.
+                </x-alert>
+                @endguest
+
                 <div class="space-y-4" x-data="{
                     shifts: {{ json_encode($bulletinPost->shifts->map(function($shift) {
                         return [
@@ -297,14 +304,14 @@
                             'time' => $shift->time,
                             'needed' => $shift->needed,
                             'filled' => $shift->filled,
-                            'volunteers' => $shift->volunteers->map(function($volunteer) {
+                            'volunteers' => auth()->check() ? $shift->volunteers->map(function($volunteer) {
                                 return [
                                     'id' => $volunteer->id,
                                     'user_id' => $volunteer->user_id,
                                     'name' => $volunteer->user ? $volunteer->user->name : $volunteer->name,
                                     'profile_url' => $volunteer->user_id ? route('profile.show', $volunteer->user_id) : null
                                 ];
-                            })->values(),
+                            })->values() : [],
                             'isSignedUp' => auth()->check() ? $shift->volunteers->where('user_id', auth()->id())->count() > 0 : false
                         ];
                     })->values()) }},
@@ -378,6 +385,7 @@
                                 </div>
                             </div>
 
+                            @auth
                             <template x-if="shift.volunteers.length > 0">
                                 <div class="mb-3">
                                     <p class="text-sm font-medium text-gray-700 mb-2">Angemeldete Helfer:</p>
@@ -395,13 +403,23 @@
                                     </div>
                                 </div>
                             </template>
+                            @endauth
 
+                            @auth
                             <!-- Show offline registration count if there are more filled than online volunteers -->
                             <template x-if="shift.filled > shift.volunteers.length">
                                 <div class="text-sm text-gray-500" :class="shift.volunteers.length > 0 ? 'mt-2' : ''">
                                     <span x-text="shift.filled - shift.volunteers.length"></span> Person(en) bereits angemeldet (offline)
                                 </div>
                             </template>
+                            @else
+                            <!-- For non-logged users, just show total count -->
+                            <template x-if="shift.filled > 0">
+                                <div class="text-sm text-gray-500">
+                                    <span x-text="shift.filled"></span> Person(en) bereits angemeldet
+                                </div>
+                            </template>
+                            @endauth
                         </x-card>
                     </template>
                 </div>

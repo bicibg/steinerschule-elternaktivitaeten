@@ -78,6 +78,17 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - German localization for admin interface
 - Notification management for super admins only
 
+### Security & Data Protection
+- **Rate limiting**: Maximum 5 login attempts per minute
+- **Security headers**: XSS, CSRF, clickjacking protection
+- **Password policy**: Minimum 8 characters (simplified for ease of use)
+- **GDPR compliance**: Full data deletion and anonymization support
+- **Privacy-first**: No tracking, analytics, or third-party cookies
+- **Search engine blocking**: robots.txt and meta tags prevent indexing
+- **Protected user data**: Volunteer names hidden from non-authenticated users
+- **Session security**: Automatic regeneration on login
+- **HTTPS ready**: Strict-Transport-Security for production
+
 ## Technology Stack
 
 - **Backend**: Laravel 12 (PHP 8.2+)
