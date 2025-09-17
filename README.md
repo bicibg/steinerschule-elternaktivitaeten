@@ -204,12 +204,24 @@ php artisan optimize
 4. Configure web server (Apache/Nginx)
 5. Set up SSL certificate for secure access
 
-## Security
+## Security & Data Protection
 
+### Security Features
 - CSRF protection on all forms
 - Token-based editing for non-authenticated organizers
 - IP tracking for moderation purposes
 - Regular security updates via Composer
+- Search engine blocking (noindex, nofollow)
+
+### GDPR Compliance & Data Protection
+- **Right to be Forgotten**: Two-tier user deletion system
+  - Soft deletion (deactivation): Reversible account suspension
+  - GDPR anonymization: Permanent anonymization of personal data
+- **Audit Trail**: Complete logging of all deletion actions
+- **Data Minimization**: Only essential user data collected
+- **Privacy by Design**: No tracking cookies or analytics
+- **Transparent Data Use**: Clear privacy policy and data handling
+- **User Control**: Users can view and edit their personal data
 
 ## Support
 

@@ -71,8 +71,12 @@
   - Neue Benachrichtigung erstellen
   - Priorität setzen für wichtige Mitteilungen
   - Zeichen-Limit demonstrieren (200 Zeichen)
-- **Benutzer verwalten:**
+- **Benutzer & Datenschutz:**
   - Übersicht aller registrierten Helfer
+  - **DSGVO-Funktionen demonstrieren:**
+    - Benutzer deaktivieren (reversibel)
+    - Benutzer anonymisieren (permanent, DSGVO Art. 17)
+    - Audit-Log zeigt alle Aktionen
   - Kontaktdaten exportierbar
 
 ### 7. Mobile-Ansicht (2 Min)
@@ -103,6 +107,8 @@
 - "Moderne, sichere Technologie (Laravel)"
 - "Läuft auf jedem Smartphone und Computer"
 - "Backups und Sicherheit gewährleistet"
+- "DSGVO-konform mit Recht auf Vergessenwerden"
+- "Keine Tracking-Cookies oder Analytics"
 
 ### Bei Anpassungswünschen:
 - "System ist flexibel erweiterbar"
@@ -118,7 +124,11 @@ A: Nein! Für Schichtanmeldungen reicht Name und Email. Nur wer diskutieren möc
 A: Organisatoren können ihre eigenen Aktivitäten verwalten. Die Schulverwaltung hat Zugriff auf alles.
 
 **F: Was passiert mit den Daten?**
-A: Alle Daten bleiben bei uns. Kein Verkauf, keine Weitergabe. DSGVO-konform.
+A: Alle Daten bleiben bei uns. Kein Verkauf, keine Weitergabe. Vollständig DSGVO-konform mit:
+- Recht auf Vergessenwerden (Anonymisierung möglich)
+- Datenminimierung (nur notwendige Daten)
+- Transparente Datenschutzerklärung
+- Keine Suchmaschinen-Indexierung
 
 **F: Können wir das Design anpassen?**
 A: Ja, Farben und Logo können an Schuldesign angepasst werden.

@@ -109,6 +109,33 @@ Für maximale Wirksamkeit benötigt die Plattform:
 - **Integration auf Schulwebseite:** Idealerweise direkter Link auf www.steinerschule-bern.ch
 - **Erwähnung bei Elternabenden** und Schulveranstaltungen
 
+## Datenschutz & DSGVO-Compliance
+
+### Datenschutz als Priorität
+Die Plattform wurde von Anfang an mit höchsten Datenschutzstandards entwickelt:
+
+**Datenminimierung:**
+- Nur essenzielle Daten werden erhoben (Name, E-Mail)
+- Telefonnummer ist optional und nur für dringende Mitteilungen
+- Keine Tracking-Cookies oder Analysetools
+
+**Recht auf Vergessenwerden (DSGVO Art. 17):**
+- **Zwei-Stufen-System** für Benutzerlöschung:
+  - *Deaktivierung:* Temporäre Sperrung, reversibel
+  - *Anonymisierung:* Permanente DSGVO-konforme Datenlöschung
+- **Audit-Trail:** Vollständige Protokollierung aller Löschvorgänge
+- **Selbstbestimmung:** Nutzer können ihre Daten jederzeit einsehen und bearbeiten
+
+**Transparenz:**
+- Klare Datenschutzerklärung
+- Keine Weitergabe an Dritte
+- Lokale Datenspeicherung in der Schweiz
+
+**Privacy by Design:**
+- Keine Suchmaschinen-Indexierung (noindex, nofollow)
+- Sichere Token-basierte Bearbeitung ohne Login
+- CSRF-Schutz auf allen Formularen
+
 ## Zeitplan
 
 **Aktueller Stand:**
