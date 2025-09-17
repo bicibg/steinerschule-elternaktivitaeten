@@ -29,18 +29,32 @@ class CommentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('post_id')
+                Forms\Components\Select::make('post_id')
+                    ->label('Forumbeitrag')
+                    ->relationship('post', 'body')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => \Str::limit($record->body, 50))
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('author_name')
-                    ->required(),
+                    ->searchable(),
+                Forms\Components\Select::make('user_id')
+                    ->label('Benutzer')
+                    ->relationship('user', 'name')
+                    ->required()
+                    ->searchable(),
                 Forms\Components\Textarea::make('body')
+                    ->label('Antwort')
                     ->required()
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('ip_hash'),
+                    ->columnSpanFull()
+                    ->maxLength(800),
+                Forms\Components\TextInput::make('ip_hash')
+                    ->label('IP-Hash')
+                    ->disabled()
+                    ->dehydrated(false),
                 Forms\Components\Toggle::make('is_hidden')
-                    ->required(),
-                Forms\Components\TextInput::make('hidden_reason'),
+                    ->label('Versteckt')
+                    ->default(false),
+                Forms\Components\TextInput::make('hidden_reason')
+                    ->label('Grund für Verstecken')
+                    ->visible(fn (callable $get) => $get('is_hidden')),
             ]);
     }
 
@@ -48,31 +62,42 @@ class CommentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('post_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('post.body')
+                    ->label('Forumbeitrag')
+                    ->limit(30)
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('author_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ip_hash')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Autor')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('body')
+                    ->label('Antwort')
+                    ->limit(50)
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_hidden')
+                    ->label('Versteckt')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('hidden_reason')
-                    ->searchable(),
+                    ->label('Versteckungsgrund')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Erstellt am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('is_hidden')
+                    ->label('Versteckt')
+                    ->placeholder('Alle')
+                    ->trueLabel('Nur versteckte')
+                    ->falseLabel('Nur sichtbare'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => auth()->user()?->is_super_admin ?? false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -28,25 +28,31 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('help_request_id')
-                    ->label('Hilfegesuch')
-                    ->relationship('helpRequest', 'title')
+                Forms\Components\Select::make('bulletin_post_id')
+                    ->label('Pinnwand-Eintrag')
+                    ->relationship('bulletinPost', 'title')
                     ->required()
                     ->searchable(),
-                Forms\Components\TextInput::make('author_name')
-                    ->label('Autor')
-                    ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->label('Benutzer')
+                    ->relationship('user', 'name')
+                    ->required()
+                    ->searchable(),
                 Forms\Components\Textarea::make('body')
                     ->label('Nachricht')
                     ->required()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->maxLength(2000),
                 Forms\Components\TextInput::make('ip_hash')
-                    ->label('IP-Hash'),
+                    ->label('IP-Hash')
+                    ->disabled()
+                    ->dehydrated(false),
                 Forms\Components\Toggle::make('is_hidden')
                     ->label('Versteckt')
-                    ->required(),
+                    ->default(false),
                 Forms\Components\TextInput::make('hidden_reason')
-                    ->label('Grund für Verstecken'),
+                    ->label('Grund für Verstecken')
+                    ->visible(fn (callable $get) => $get('is_hidden')),
             ]);
     }
 
@@ -54,13 +60,15 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('helpRequest.title')
-                    ->label('Hilfegesuch')
+                Tables\Columns\TextColumn::make('bulletinPost.title')
+                    ->label('Pinnwand-Eintrag')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(30),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Autor')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('author_name')
-                    ->label('Autor')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('body')
                     ->label('Nachricht')
                     ->limit(50)
@@ -74,10 +82,16 @@ class PostResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('is_hidden')
+                    ->label('Versteckt')
+                    ->placeholder('Alle')
+                    ->trueLabel('Nur versteckte')
+                    ->falseLabel('Nur sichtbare'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => auth()->user()?->is_super_admin ?? false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
