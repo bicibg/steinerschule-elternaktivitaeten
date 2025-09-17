@@ -49,23 +49,25 @@
     </div>
 
     @if($bulletinPosts->isEmpty())
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center py-12">
-            <p class="text-gray-500">
-                @if($selectedCategory !== 'all' && isset($categories[$selectedCategory]))
-                    Keine Einträge in der Kategorie "{{ $categories[$selectedCategory] }}" gefunden.
-                @else
-                    Zurzeit sind keine Einträge vorhanden.
+        <x-card>
+            <div class="text-center py-8">
+                <p class="text-gray-500">
+                    @if($selectedCategory !== 'all' && isset($categories[$selectedCategory]))
+                        Keine Einträge in der Kategorie "{{ $categories[$selectedCategory] }}" gefunden.
+                    @else
+                        Zurzeit sind keine Einträge vorhanden.
+                    @endif
+                </p>
+                @if($selectedCategory !== 'all')
+                    <a href="{{ route('bulletin.index') }}" class="mt-4 inline-flex items-center text-steiner-blue hover:text-steiner-dark">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7 7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Alle Einträge anzeigen
+                    </a>
                 @endif
-            </p>
-            @if($selectedCategory !== 'all')
-                <a href="{{ route('bulletin.index') }}" class="mt-4 inline-flex items-center text-steiner-blue hover:text-steiner-dark">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7 7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    Alle Einträge anzeigen
-                </a>
-            @endif
-        </div>
+            </div>
+        </x-card>
     @else
         <div class="space-y-4">
             @foreach($bulletinPosts as $bulletinPost)

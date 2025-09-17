@@ -54,28 +54,30 @@
     </div>
 
     @if($activities->isEmpty())
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center py-12">
-            <p class="text-gray-500">
-                @if($selectedCategory !== 'all' && isset($categories[$selectedCategory]))
-                    Keine Aktivitäten in der Kategorie "{{ $categories[$selectedCategory] }}" gefunden.
-                @else
-                    Zurzeit sind keine Aktivitäten vorhanden.
+        <x-card>
+            <div class="text-center py-8">
+                <p class="text-gray-500">
+                    @if($selectedCategory !== 'all' && isset($categories[$selectedCategory]))
+                        Keine Aktivitäten in der Kategorie "{{ $categories[$selectedCategory] }}" gefunden.
+                    @else
+                        Zurzeit sind keine Aktivitäten vorhanden.
+                    @endif
+                </p>
+                @if($selectedCategory !== 'all')
+                    <a href="{{ route('activities.index') }}" class="mt-4 inline-flex items-center text-steiner-blue hover:text-steiner-dark">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Alle Aktivitäten anzeigen
+                    </a>
                 @endif
-            </p>
-            @if($selectedCategory !== 'all')
-                <a href="{{ route('activities.index') }}" class="mt-4 inline-flex items-center text-steiner-blue hover:text-steiner-dark">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    Alle Aktivitäten anzeigen
-                </a>
-            @endif
-        </div>
+            </div>
+        </x-card>
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @foreach($activities as $activity)
-                <a href="{{ route('activities.show', $activity->slug) }}"
-                   class="block bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                <x-card hover="true" class="h-full">
+                    <a href="{{ route('activities.show', $activity->slug) }}" class="block h-full">
                     <div class="flex flex-col h-full">
                         <div class="flex items-start justify-between mb-3">
                             <h2 class="text-xl font-semibold text-gray-800">{{ $activity->title }}</h2>
@@ -131,7 +133,8 @@
                             </div>
                         @endif
                     </div>
-                </a>
+                    </a>
+                </x-card>
             @endforeach
         </div>
     @endif

@@ -4,50 +4,77 @@
 @source '../js/**/*.js';
 
 @theme {
-    --color-steiner-blue: #4a90a4;
-    --color-steiner-dark: #2c5aa0;
+    /* Steiner School Brand Colors */
+    --color-steiner-blue: rgb(57, 123, 161);      /* #397ba1 - Main brand blue */
+    --color-steiner-dark: rgb(41, 89, 117);       /* #295975 - Darker variant for hover states */
+    --color-steiner-light: rgb(165, 195, 212);    /* #a5c3d4 - Light powder blue from palette */
+    --color-steiner-lighter: rgb(220, 232, 239);  /* Very light blue for backgrounds */
 }
 
+/* Primary Brand Colors */
 .text-steiner-blue {
-    color: #4a90a4;
+    color: rgb(57, 123, 161);
 }
 
 .text-steiner-dark {
-    color: #2c5aa0;
+    color: rgb(41, 89, 117);
+}
+
+.text-steiner-light {
+    color: rgb(165, 195, 212);
 }
 
 .bg-steiner-blue {
-    background-color: #4a90a4;
+    background-color: rgb(57, 123, 161);
 }
 
 .bg-steiner-dark {
-    background-color: #2c5aa0;
+    background-color: rgb(41, 89, 117);
+}
+
+.bg-steiner-light {
+    background-color: rgb(165, 195, 212);
+}
+
+.bg-steiner-lighter {
+    background-color: rgb(220, 232, 239);
 }
 
 .border-steiner-blue {
-    border-color: #4a90a4;
+    border-color: rgb(57, 123, 161);
 }
 
 .border-steiner-dark {
-    border-color: #2c5aa0;
+    border-color: rgb(41, 89, 117);
 }
 
+.border-steiner-light {
+    border-color: rgb(165, 195, 212);
+}
+
+/* Hover States */
 .hover\:text-steiner-blue:hover {
-    color: #4a90a4;
+    color: rgb(57, 123, 161);
 }
 
 .hover\:text-steiner-dark:hover {
-    color: #2c5aa0;
+    color: rgb(41, 89, 117);
 }
 
 .hover\:bg-steiner-blue:hover {
-    background-color: #4a90a4;
+    background-color: rgb(57, 123, 161);
 }
 
 .hover\:bg-steiner-dark:hover {
-    background-color: #2c5aa0;
+    background-color: rgb(41, 89, 117);
 }
 
+/* Focus States */
 .focus\:ring-steiner-blue:focus {
-    --tw-ring-color: #4a90a4;
+    --tw-ring-color: rgb(57, 123, 161);
 }
+
+.focus\:border-steiner-blue:focus {
+    border-color: rgb(57, 123, 161);
+}
+
