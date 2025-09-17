@@ -43,7 +43,9 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('3rem')
             ->favicon(asset('favicon.ico'))
             ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications()
             ->navigationGroups([
+                'Super Admin',
                 'Aktivitäten',
                 'Kommunikation',
                 'Benutzerverwaltung',

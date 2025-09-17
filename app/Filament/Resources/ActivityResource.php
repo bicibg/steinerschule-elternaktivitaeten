@@ -17,10 +17,10 @@ class ActivityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationLabel = 'Elternaktivitäten';
-    protected static ?string $navigationGroup = 'Aktivitäten';
+    protected static ?string $navigationGroup = 'Super Admin';
     protected static ?string $modelLabel = 'Aktivität';
     protected static ?string $pluralModelLabel = 'Aktivitäten';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

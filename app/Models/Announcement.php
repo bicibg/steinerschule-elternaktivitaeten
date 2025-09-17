@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Notification extends Model
+class Announcement extends Model
 {
     protected $fillable = [
         'title',
@@ -33,7 +33,7 @@ class Notification extends Model
 
     public function dismissals(): HasMany
     {
-        return $this->hasMany(NotificationDismissal::class);
+        return $this->hasMany(AnnouncementDismissal::class);
     }
 
     public function isDismissedBy($userId): bool

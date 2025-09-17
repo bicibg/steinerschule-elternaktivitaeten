@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
+        Schema::table('announcements', function (Blueprint $table) {
             $table->boolean('is_priority')->default(false)->after('is_active');
             $table->index(['is_priority', 'is_active', 'created_at']);
         });
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
+        Schema::table('announcements', function (Blueprint $table) {
             $table->dropColumn('is_priority');
         });
     }

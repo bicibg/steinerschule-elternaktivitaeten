@@ -5,9 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Notification;
+use App\Models\Announcement;
 
-class NotificationSeeder extends Seeder
+class AnnouncementSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -26,7 +26,7 @@ class NotificationSeeder extends Seeder
         }
 
         // Create welcome notification if it doesn't exist
-        Notification::firstOrCreate(
+        Announcement::firstOrCreate(
             ['title' => 'Willkommen!'],
             [
                 'message' => 'Herzlich willkommen auf der Plattform der Rudolf Steiner Schule Bern. Hier finden Sie alle wichtigen Informationen zu Elternaktivitäten, Veranstaltungen und können sich für Helferschichten anmelden.',

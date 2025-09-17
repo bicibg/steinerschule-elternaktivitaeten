@@ -8,17 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('notification_dismissals', function (Blueprint $table) {
+        Schema::create('announcement_dismissals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('notification_id')->constrained()->onDelete('cascade');
+            $table->foreignId('announcement_id')->constrained('announcements')->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamp('dismissed_at');
-            $table->unique(['notification_id', 'user_id']);
+            $table->unique(['announcement_id', 'user_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('notification_dismissals');
+        Schema::dropIfExists('announcement_dismissals');
     }
 };

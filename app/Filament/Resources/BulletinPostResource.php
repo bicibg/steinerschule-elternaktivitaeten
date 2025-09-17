@@ -20,7 +20,7 @@ class BulletinPostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationLabel = 'Pinnwand';
-    protected static ?string $navigationGroup = 'Pinnwand';
+    protected static ?string $navigationGroup = 'Aktivitäten';
     protected static ?string $modelLabel = 'Eintrag';
     protected static ?string $pluralModelLabel = 'Einträge';
     protected static ?int $navigationSort = 1;

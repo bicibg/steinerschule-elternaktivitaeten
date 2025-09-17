@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NotificationResource\Pages;
-use App\Models\Notification;
+use App\Filament\Resources\AnnouncementResource\Pages;
+use App\Models\Announcement;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -13,19 +13,19 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class NotificationResource extends Resource
+class AnnouncementResource extends Resource
 {
-    protected static ?string $model = Notification::class;
+    protected static ?string $model = Announcement::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-bell-alert';
 
-    protected static ?string $navigationLabel = 'Benachrichtigungen';
+    protected static ?string $navigationLabel = 'Ankündigungen';
 
-    protected static ?string $navigationGroup = 'Kommunikation';
+    protected static ?string $navigationGroup = 'Super Admin';
 
-    protected static ?string $modelLabel = 'Benachrichtigung';
+    protected static ?string $modelLabel = 'Ankündigung';
 
-    protected static ?string $pluralModelLabel = 'Benachrichtigungen';
+    protected static ?string $pluralModelLabel = 'Ankündigungen';
 
     protected static ?int $navigationSort = 30;
 
@@ -223,9 +223,9 @@ class NotificationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNotifications::route('/'),
-            'create' => Pages\CreateNotification::route('/create'),
-            'edit' => Pages\EditNotification::route('/{record}/edit'),
+            'index' => Pages\ListAnnouncements::route('/'),
+            'create' => Pages\CreateAnnouncement::route('/create'),
+            'edit' => Pages\EditAnnouncement::route('/{record}/edit'),
         ];
     }
 }

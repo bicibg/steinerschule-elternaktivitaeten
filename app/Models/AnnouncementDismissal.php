@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class NotificationDismissal extends Model
+class AnnouncementDismissal extends Model
 {
     public $timestamps = false;
 
     protected $fillable = [
-        'notification_id',
+        'announcement_id',
         'user_id',
         'dismissed_at',
     ];
@@ -19,9 +19,9 @@ class NotificationDismissal extends Model
         'dismissed_at' => 'datetime',
     ];
 
-    public function notification(): BelongsTo
+    public function announcement(): BelongsTo
     {
-        return $this->belongsTo(Notification::class);
+        return $this->belongsTo(Announcement::class);
     }
 
     public function user(): BelongsTo
