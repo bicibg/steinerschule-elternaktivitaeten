@@ -31,7 +31,7 @@ class CommentResource extends Resource
             ->schema([
                 Forms\Components\Placeholder::make('post.body')
                     ->label('Forumbeitrag')
-                    ->content(fn (?\App\Models\Comment $record): string => $record?->post ? \Str::limit($record->post->body, 50) : '-'),
+                    ->content(fn (?\App\Models\Comment $record): string => $record ? \Str::limit($record->post()->withTrashed()->first()?->body ?? '-', 50) : '-'),
                 Forms\Components\Placeholder::make('user.name')
                     ->label('Benutzer')
                     ->content(fn (?\App\Models\Comment $record): string => $record?->user?->name ?? '-'),
@@ -68,7 +68,8 @@ class CommentResource extends Resource
                     ->label('Forumbeitrag')
                     ->limit(30)
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->getStateUsing(fn ($record) => $record->post()->withTrashed()->first()?->body ?? '-'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Autor')
                     ->searchable()
