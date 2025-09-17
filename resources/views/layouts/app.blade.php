@@ -32,7 +32,7 @@
                             <text x="170" y="20" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 170 20)">ittigen</text>
                             <text x="180" y="25" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 180 25)">langnau</text>
                         </svg>
-                        <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-sm sm:text-lg hidden sm:inline">Elternaktivitäten</span>
+                        <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-xs sm:text-lg">Elternaktivitäten</span>
                     </a>
                 </div>
 
