@@ -8,17 +8,16 @@
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Datenschutzerklärung</h1>
 
         <div class="prose prose-sm max-w-none text-gray-600">
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">1. Grundsätze</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">1. Worum geht es hier?</h2>
             <p class="mb-4">
-                Diese Plattform wurde ehrenamtlich für die Elterngemeinschaft der Rudolf Steinerschule Bern in Langnau entwickelt.
-                Es handelt sich um eine nicht-kommerzielle Initiative von Eltern für Eltern.
-                Wir erheben nur die minimal notwendigen Daten zur Koordination der Elternaktivitäten.
+                Als Elternteil an der Rudolf Steinerschule Bern in Langnau habe ich diese Plattform in meiner Freizeit entwickelt,
+                um uns allen die Koordination der Elternaktivitäten zu erleichtern.
             </p>
 
             <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
                 <p class="text-sm text-green-900">
-                    <strong>Wichtig:</strong> Wir verkaufen keine Daten, schalten keine Werbung und verwenden keine Tracking-Tools.
-                    Diese Plattform dient ausschliesslich der Schulgemeinschaft.
+                    <strong>Kurz gesagt:</strong> Dies ist ein privates Projekt von einem Elternteil für die Schulgemeinschaft.
+                    Ihre Daten bleiben hier und werden nur für die Koordination der Aktivitäten verwendet - mehr nicht.
                 </p>
             </div>
 
@@ -41,10 +40,11 @@
                 <li>Kontaktaufnahme bei dringenden Anliegen</li>
             </ul>
 
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">4. Datenweitergabe</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">4. Was passiert mit Ihren Daten?</h2>
             <p class="mb-4">
-                Ihre persönlichen Daten werden nicht an Dritte weitergegeben. Die Daten sind nur für registrierte Nutzer der Plattform sichtbar.
-                Ausnahme: Kontaktdaten von Aktivitäts-Organisatoren sind öffentlich einsehbar zur Ermöglichung der Kontaktaufnahme.
+                Ganz einfach: Sie bleiben hier auf dieser Plattform für die Organisation unserer Aktivitäten.
+                Ich habe weder das Interesse noch die Absicht, irgendetwas damit anzufangen - es geht nur darum,
+                dass wir uns als Eltern besser organisieren können.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">5. Datenspeicherung</h2>
@@ -66,8 +66,8 @@
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">7. Cookies</h2>
             <p class="mb-4">
-                Diese Webseite verwendet nur technisch notwendige Cookies für die Anmeldung und Session-Verwaltung.
-                Es werden keine Tracking- oder Analyse-Cookies verwendet.
+                Die Webseite verwendet nur die technisch notwendigen Cookies, damit Sie eingeloggt bleiben.
+                Keine Tracking-Cookies, keine Werbung, nichts Kompliziertes - nur das Nötigste für die Funktion.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">8. Kontakt</h2>

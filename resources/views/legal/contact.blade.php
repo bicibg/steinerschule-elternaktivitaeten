@@ -44,18 +44,17 @@
 
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 mb-6">
                 <p class="text-sm text-blue-900">
-                    <strong>Über diese Plattform:</strong><br>
-                    • Vollständig ehrenamtlich entwickelt<br>
-                    • Keine kommerziellen Interessen<br>
-                    • Keine Kosten für Nutzer<br>
-                    • Eine Initiative von Eltern für Eltern
+                    <strong>Ein paar Worte zu dieser Plattform:</strong><br>
+                    Ich habe diese Seite in meiner Freizeit gebaut, weil ich glaube, dass wir als Eltern
+                    eine einfache Möglichkeit brauchen, uns zu organisieren. Es kostet Sie nichts,
+                    und ich verdiene auch nichts daran - es ist mein Beitrag zur Schulgemeinschaft.
                 </p>
             </div>
 
             <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p class="text-sm text-yellow-800">
-                    <strong>Hinweis:</strong> Diese Plattform wird ehrenamtlich betreut.
-                    Bitte haben Sie Verständnis, dass Antworten auf Support-Anfragen etwas Zeit in Anspruch nehmen können.
+                    <strong>Bitte bedenken Sie:</strong> Ich betreue diese Seite neben Beruf und Familie.
+                    Ich antworte so schnell wie möglich, aber manchmal kann es ein paar Tage dauern.
                 </p>
             </div>
 

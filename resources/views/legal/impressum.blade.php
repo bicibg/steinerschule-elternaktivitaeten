@@ -42,24 +42,24 @@
                 Sie ist nicht für die Öffentlichkeit bestimmt und wird ehrenamtlich betreut.
             </p>
 
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Keine kommerzielle Nutzung</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Was diese Plattform NICHT ist</h2>
             <p class="mb-4">
-                Diese Webseite wurde vollständig ehrenamtlich und unentgeltlich entwickelt. Es werden:
+                Nur um das klarzustellen - ich mache das in meiner Freizeit als Elternteil:
             </p>
             <ul class="list-disc pl-6 mb-4">
-                <li>Keine Gebühren erhoben</li>
-                <li>Keine Werbung geschaltet</li>
-                <li>Keine Daten verkauft oder kommerziell genutzt</li>
-                <li>Keine Tracking- oder Analyse-Tools eingesetzt</li>
+                <li>Dies ist kein Geschäft - alles ist kostenlos</li>
+                <li>Ich verdiene nichts daran</li>
+                <li>Es gibt keine Werbung</li>
+                <li>Ihre Daten interessieren mich nur für die Organisation der Aktivitäten</li>
             </ul>
             <p class="mb-4">
-                Die Plattform dient ausschliesslich dem gemeinnützigen Zweck der Förderung der Schulgemeinschaft.
+                Es ist einfach ein Werkzeug von Eltern für Eltern, damit wir uns besser organisieren können.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Haftungsausschluss</h2>
             <p class="mb-4">
-                Diese Plattform wird ehrenamtlich von Eltern der Schule betrieben. Wir übernehmen keine Garantie für die ständige Verfügbarkeit
-                oder Fehlerfreiheit der Webseite. Die Nutzung erfolgt auf eigene Verantwortung.
+                Ich mache das in meiner Freizeit und gebe mein Bestes, aber ich kann nicht garantieren,
+                dass immer alles perfekt funktioniert. Die Nutzung erfolgt auf eigene Verantwortung.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Inhalte und Urheberrecht</h2>
