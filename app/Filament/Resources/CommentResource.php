@@ -96,6 +96,7 @@ class CommentResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                         ->label('Löschen')
+                        ->requiresConfirmation()
                         ->modalHeading('Ausgewählte Antworten löschen')
                         ->modalDescription('Bitte wählen Sie einen Grund für die Löschung.')
                         ->form([
