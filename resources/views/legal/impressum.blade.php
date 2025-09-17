@@ -11,12 +11,12 @@
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Verantwortlich für diese Plattform</h2>
             <p class="mb-4">
                 Diese Plattform wurde ehrenamtlich für die Elterngemeinschaft der<br>
-                Rudolf Steinerschule Bern in Langnau entwickelt.
+                Rudolf Steinerschule Langnau entwickelt.
             </p>
 
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <p class="text-sm text-blue-900">
-                    <strong>Hinweis:</strong> Dies ist keine offizielle Webseite der Rudolf Steinerschule Bern,
+                    <strong>Hinweis:</strong> Dies ist keine offizielle Webseite der Rudolf Steinerschule Langnau,
                     sondern eine unabhängige Initiative von Eltern für Eltern zur Koordination der Elternaktivitäten.
                 </p>
             </div>
@@ -24,12 +24,13 @@
             <p class="mb-4">
                 <strong>Technische Entwicklung & Betreuung:</strong><br>
                 Buğra Ergin (Ehrenamtlicher Entwickler)<br>
-                E-Mail: <a href="mailto:bugraergin@gmail.com" class="text-steiner-blue hover:text-steiner-dark underline">bugraergin@gmail.com</a>
+                E-Mail: <a href="mailto:bugraergin@gmail.com" class="text-steiner-blue hover:text-steiner-dark underline">bugraergin@gmail.com</a><br>
+                Telefon: <a href="tel:+41796929136" class="text-steiner-blue hover:text-steiner-dark underline">079 692 91 36</a>
             </p>
 
             <p class="mb-4">
                 <strong>Schulkontakt:</strong><br>
-                Rudolf Steinerschule Bern in Langnau<br>
+                Rudolf Steinerschule Langnau<br>
                 Schlossstrasse 6<br>
                 3550 Langnau im Emmental<br>
                 Telefon: +41 (0)34 402 12 80<br>
@@ -38,7 +39,7 @@
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Zweck der Plattform</h2>
             <p class="mb-4">
-                Diese Plattform dient ausschliesslich der internen Koordination von Elternaktivitäten an der Rudolf Steinerschule Bern in Langnau.
+                Diese Plattform dient ausschliesslich der internen Koordination von Elternaktivitäten an der Rudolf Steinerschule Langnau.
                 Sie ist nicht für die Öffentlichkeit bestimmt und wird ehrenamtlich betreut.
             </p>
 

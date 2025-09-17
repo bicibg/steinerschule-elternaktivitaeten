@@ -10,7 +10,7 @@
         <div class="prose prose-sm max-w-none text-gray-600">
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">1. Worum geht es hier?</h2>
             <p class="mb-4">
-                Als Elternteil an der Rudolf Steinerschule Bern in Langnau habe ich diese Plattform in meiner Freizeit entwickelt,
+                Als Elternteil an der Rudolf Steinerschule Langnau habe ich diese Plattform in meiner Freizeit entwickelt,
                 um uns allen die Koordination der Elternaktivitäten zu erleichtern.
             </p>
 
@@ -49,8 +49,14 @@
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">5. Datenspeicherung</h2>
             <p class="mb-4">
-                Ihre Daten werden lokal auf einem Server in der Schweiz gespeichert und nur solange aufbewahrt, wie sie für den Betrieb der Plattform notwendig sind.
-                Bei Löschung Ihres Kontos werden Ihre persönlichen Daten anonymisiert.
+                Ihre Daten werden auf einem Server bei DigitalOcean in Amsterdam gespeichert und nur solange aufbewahrt,
+                wie sie für den Betrieb der Plattform notwendig sind.
+            </p>
+            <p class="mb-4">
+                <strong>Wichtig zum "Recht auf Vergessenwerden":</strong><br>
+                Wenn Sie möchten, dass Ihre Daten vollständig anonymisiert werden (DSGVO Art. 17),
+                kontaktieren Sie mich bitte direkt. Eine einfache Kontolöschung deaktiviert nur den Zugang,
+                aber für eine vollständige Anonymisierung muss ich das manuell machen.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">6. Ihre Rechte</h2>
@@ -64,10 +70,10 @@
                 <li>Der Datenverarbeitung zu widersprechen</li>
             </ul>
 
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">7. Cookies</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">7. Sessions & Cookies</h2>
             <p class="mb-4">
-                Die Webseite verwendet nur die technisch notwendigen Cookies, damit Sie eingeloggt bleiben.
-                Keine Tracking-Cookies, keine Werbung, nichts Kompliziertes - nur das Nötigste für die Funktion.
+                Die Webseite verwendet nur Session-Cookies (technisch notwendig), damit Sie eingeloggt bleiben können.
+                Das ist alles - keine Tracking, keine Werbung, keine Analyse.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">8. Kontakt</h2>

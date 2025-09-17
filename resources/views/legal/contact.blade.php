@@ -17,7 +17,8 @@
 
                 <p class="mb-4">
                     <strong>Technischer Support:</strong><br>
-                    E-Mail: <a href="mailto:bugraergin@gmail.com" class="text-steiner-blue hover:text-steiner-dark underline">bugraergin@gmail.com</a>
+                    E-Mail: <a href="mailto:bugraergin@gmail.com" class="text-steiner-blue hover:text-steiner-dark underline">bugraergin@gmail.com</a><br>
+                    Telefon: <a href="tel:+41796929136" class="text-steiner-blue hover:text-steiner-dark underline">079 692 91 36</a>
                 </p>
 
                 <p class="mb-4">
@@ -61,7 +62,7 @@
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Allgemeine Schulanfragen</h2>
             <p class="mb-4">
                 Für allgemeine Anfragen zur Schule, die nicht die technische Plattform betreffen, wenden Sie sich bitte direkt an:<br><br>
-                <strong>Rudolf Steinerschule Bern in Langnau</strong><br>
+                <strong>Rudolf Steinerschule Langnau</strong><br>
                 Telefon: +41 (0)34 402 12 80<br>
                 E-Mail: <a href="mailto:info@steinerschule-bern.ch" class="text-steiner-blue hover:text-steiner-dark underline">info@steinerschule-bern.ch</a>
             </p>
