@@ -386,9 +386,10 @@
                                 </div>
                             </template>
 
-                            <template x-if="shift.volunteers.length === 0 && shift.filled > 0">
-                                <div class="text-sm text-gray-500">
-                                    <span x-text="shift.filled"></span> Person(en) bereits angemeldet (offline)
+                            <!-- Show offline registration count if there are more filled than online volunteers -->
+                            <template x-if="shift.filled > shift.volunteers.length">
+                                <div class="text-sm text-gray-500" :class="shift.volunteers.length > 0 ? 'mt-2' : ''">
+                                    <span x-text="shift.filled - shift.volunteers.length"></span> Person(en) bereits angemeldet (offline)
                                 </div>
                             </template>
                         </x-card>
