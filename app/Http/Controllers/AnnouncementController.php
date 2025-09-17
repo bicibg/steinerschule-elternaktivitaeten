@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
-use App\Models\NotificationDismissal;
+use App\Models\Announcement;
+use App\Models\AnnouncementDismissal;
 use Illuminate\Http\Request;
 
-class NotificationController extends Controller
+class AnnouncementController extends Controller
 {
-    public function dismiss(Request $request, Notification $notification)
+    public function dismiss(Request $request, Announcement $notification)
     {
         if (!auth()->check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        NotificationDismissal::firstOrCreate([
+        AnnouncementDismissal::firstOrCreate([
             'notification_id' => $notification->id,
             'user_id' => auth()->id(),
         ], [

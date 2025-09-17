@@ -57,15 +57,15 @@ class BulletinPostResource extends Resource
                             ->label('Ort')
                             ->helperText('Optional - leer lassen für allgemeine Aktivitäten'),
                     ]),
-                Forms\Components\Section::make('Organisator')
+                Forms\Components\Section::make('Kontakt')
                     ->schema([
-                        Forms\Components\TextInput::make('organizer_name')
+                        Forms\Components\TextInput::make('contact_name')
                             ->label('Name')
                             ->required(),
-                        Forms\Components\TextInput::make('organizer_phone')
+                        Forms\Components\TextInput::make('contact_phone')
                             ->label('Telefon')
                             ->tel(),
-                        Forms\Components\TextInput::make('organizer_email')
+                        Forms\Components\TextInput::make('contact_email')
                             ->label('E-Mail')
                             ->email(),
                     ]),
@@ -86,9 +86,9 @@ class BulletinPostResource extends Resource
                             ->placeholder('Keine Kategorie')
                             ->helperText('Wählen Sie eine Kategorie für diese Aktivität'),
                         Forms\Components\Select::make('label')
-                            ->label('Kennzeichnung')
+                            ->label('Markierung')
                             ->options(\App\Models\BulletinPost::getAvailableLabels())
-                            ->placeholder('Keine Kennzeichnung')
+                            ->placeholder('Keine Markierung')
                             ->helperText('Nur für Super-Admins sichtbar')
                             ->visible(fn () => auth()->user()?->is_super_admin),
                         Forms\Components\Toggle::make('has_forum')
@@ -110,17 +110,20 @@ class BulletinPostResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->limit(40),
-                Tables\Columns\TextColumn::make('organizer_name')
-                    ->label('Organisator')
-                    ->formatStateUsing(fn ($state) =>
-                        implode('<br>', array_filter(explode(' ', $state, 2)))
-                    )
-                    ->html()
+                Tables\Columns\TextColumn::make('contact_name')
+                    ->label('Kontakt')
+                    ->limit(30)
+                    ->tooltip(fn ($state) => $state)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('category')
                     ->label('Kategorie')
-                    ->formatStateUsing(fn ($state) => \App\Models\BulletinPost::getAvailableCategories()[$state] ?? '-')
+                    ->formatStateUsing(fn ($state) =>
+                        $state === 'haus_umgebung_taskforces'
+                            ? 'Haus, Umgebung<br>und Taskforces'
+                            : (\App\Models\BulletinPost::getAvailableCategories()[$state] ?? '-')
+                    )
+                    ->html()
                     ->colors([
                         'primary' => 'anlass',
                         'success' => 'haus_umgebung_taskforces',
@@ -158,7 +161,7 @@ class BulletinPostResource extends Resource
                         default => $state,
                     }),
                 Tables\Columns\BadgeColumn::make('label')
-                    ->label('Kennzeichnung')
+                    ->label('Tag')
                     ->colors([
                         'danger' => 'urgent',
                         'warning' => 'important',

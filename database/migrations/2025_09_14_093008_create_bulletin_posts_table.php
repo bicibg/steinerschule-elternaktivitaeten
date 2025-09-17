@@ -15,9 +15,9 @@ return new class extends Migration
             $table->datetime('start_at');
             $table->datetime('end_at')->nullable();
             $table->string('location');
-            $table->string('organizer_name');
-            $table->string('organizer_phone')->nullable();
-            $table->string('organizer_email')->nullable();
+            $table->string('contact_name');
+            $table->string('contact_phone')->nullable();
+            $table->string('contact_email')->nullable();
             $table->string('slug')->unique();
             $table->enum('status', ['published', 'archived'])->default('published');
             $table->string('edit_token', 64)->unique();

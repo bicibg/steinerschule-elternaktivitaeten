@@ -229,7 +229,7 @@
     @auth
         @php
             // Get all active notifications
-            $allActiveNotifications = \App\Models\Notification::active()->get();
+            $allActiveNotifications = \App\Models\Announcement::active()->get();
 
             // Separate priority and regular notifications
             $priorityNotifications = $allActiveNotifications->where('is_priority', true)

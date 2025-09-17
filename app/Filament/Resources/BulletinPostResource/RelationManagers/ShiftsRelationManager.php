@@ -163,14 +163,27 @@ class ShiftsRelationManager extends RelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('time')
                     ->label('Zeit'),
-                Tables\Columns\TextColumn::make('filled')
-                    ->label('Besetzt')
-                    ->getStateUsing(fn ($record) => $record->filled . ' / ' . $record->needed)
+                Tables\Columns\TextColumn::make('needed')
+                    ->label('Benötigt')
                     ->badge()
-                    ->color(fn ($record) => $record->filled >= $record->needed ? 'success' : ($record->filled > 0 ? 'warning' : 'danger')),
+                    ->color('gray'),
+                Tables\Columns\TextColumn::make('filled')
+                    ->label('Offline-Zusagen')
+                    ->badge()
+                    ->color(fn ($record) => $record->filled > 0 ? 'warning' : 'gray'),
                 Tables\Columns\TextColumn::make('volunteers_count')
-                    ->label('Freiwillige')
-                    ->counts('volunteers'),
+                    ->label('Online-Anmeldungen')
+                    ->counts('volunteers')
+                    ->badge()
+                    ->color(fn ($record) => $record->volunteers_count > 0 ? 'info' : 'gray'),
+                Tables\Columns\TextColumn::make('total_filled')
+                    ->label('Total')
+                    ->getStateUsing(fn ($record) => $record->filled + $record->volunteers_count)
+                    ->badge()
+                    ->color(fn ($record) =>
+                        ($record->filled + $record->volunteers_count) >= $record->needed ? 'success' :
+                        (($record->filled + $record->volunteers_count) > 0 ? 'warning' : 'danger')
+                    ),
             ])
             ->filters([
                 //

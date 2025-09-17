@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Notification;
+use App\Models\Announcement;
 use App\Models\BulletinPost;
 
 class UpdateExpiredItems extends Command
@@ -28,7 +28,7 @@ class UpdateExpiredItems extends Command
     public function handle()
     {
         // Update expired notifications
-        $expiredNotifications = Notification::where('is_active', true)
+        $expiredNotifications = Announcement::where('is_active', true)
             ->whereNotNull('expires_at')
             ->where('expires_at', '<', now())
             ->update(['is_active' => false]);

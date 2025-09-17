@@ -153,7 +153,7 @@
 
                             <div class="mt-3 flex items-center justify-between">
                                 <span class="text-sm text-gray-500">
-                                    von <span class="font-medium">{{ $bulletinPost->organizer_name }}</span>
+                                    von <span class="font-medium">{{ $bulletinPost->contact_name }}</span>
                                 </span>
                                 <div class="flex items-center gap-3">
                                     @if($bulletinPost->has_forum && $bulletinPost->posts->count() > 0)

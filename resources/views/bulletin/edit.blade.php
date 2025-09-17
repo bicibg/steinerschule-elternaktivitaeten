@@ -64,26 +64,26 @@
                 </div>
 
                 <div>
-                    <label for="organizer_name" class="block text-sm font-medium text-gray-700 mb-1">Organisator Name *</label>
-                    <input type="text" id="organizer_name" name="organizer_name" required
+                    <label for="contact_name" class="block text-sm font-medium text-gray-700 mb-1">Organisator Name *</label>
+                    <input type="text" id="contact_name" name="contact_name" required
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('organizer_name', $bulletinPost->organizer_name) }}"
+                           value="{{ old('contact_name', $bulletinPost->contact_name) }}"
                            maxlength="255">
                 </div>
 
                 <div>
-                    <label for="organizer_phone" class="block text-sm font-medium text-gray-700 mb-1">Telefonnummer</label>
-                    <input type="tel" id="organizer_phone" name="organizer_phone"
+                    <label for="contact_phone" class="block text-sm font-medium text-gray-700 mb-1">Telefonnummer</label>
+                    <input type="tel" id="contact_phone" name="contact_phone"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('organizer_phone', $bulletinPost->organizer_phone) }}"
+                           value="{{ old('contact_phone', $bulletinPost->contact_phone) }}"
                            maxlength="50">
                 </div>
 
                 <div>
-                    <label for="organizer_email" class="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse</label>
-                    <input type="email" id="organizer_email" name="organizer_email"
+                    <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse</label>
+                    <input type="email" id="contact_email" name="contact_email"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           value="{{ old('organizer_email', $bulletinPost->organizer_email) }}"
+                           value="{{ old('contact_email', $bulletinPost->contact_email) }}"
                            maxlength="255">
                 </div>
 

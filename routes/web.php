@@ -76,7 +76,7 @@ Route::prefix('api')->group(function () {
     Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store');
     Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storeActivityPost'])->name('api.activity-posts.store');
     Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeActivityComment'])->name('api.activity-comments.store');
-    Route::post('/notifications/{notification}/dismiss', [\App\Http\Controllers\NotificationController::class, 'dismiss'])->name('api.notifications.dismiss')->middleware('auth');
+    Route::post('/notifications/{notification}/dismiss', [\App\Http\Controllers\AnnouncementController::class, 'dismiss'])->name('api.notifications.dismiss')->middleware('auth');
 });
 
 Route::middleware(['verify.edit.token'])->group(function () {

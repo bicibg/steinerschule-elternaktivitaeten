@@ -98,9 +98,9 @@
 
             <!-- Contact Information -->
             <x-contact-info
-                :name="$bulletinPost->organizer_name"
-                :email="$bulletinPost->organizer_email"
-                :phone="$bulletinPost->organizer_phone" />
+                :name="$bulletinPost->contact_name"
+                :email="$bulletinPost->contact_email"
+                :phone="$bulletinPost->contact_phone" />
         </x-card>
 
         <!-- Forum and Shifts Section -->

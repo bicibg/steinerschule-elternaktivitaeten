@@ -90,10 +90,8 @@ class ActivityResource extends Resource
                     ->limit(40),
                 Tables\Columns\TextColumn::make('contact_name')
                     ->label('Kontakt')
-                    ->formatStateUsing(fn ($state) =>
-                        implode('<br>', array_filter(explode(' ', $state, 2)))
-                    )
-                    ->html()
+                    ->limit(30)
+                    ->tooltip(fn ($state) => $state)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('category')
@@ -108,9 +106,6 @@ class ActivityResource extends Resource
                         'secondary' => 'paedagogik',
                         'gray' => 'kommunikation',
                     ]),
-                Tables\Columns\TextColumn::make('meeting_time')
-                    ->label('Treffen')
-                    ->placeholder('Keine Angabe'),
                 Tables\Columns\IconColumn::make('has_forum')
                     ->label('Forum')
                     ->boolean()
