@@ -291,7 +291,7 @@
                                 return [
                                     'id' => $volunteer->id,
                                     'user_id' => $volunteer->user_id,
-                                    'name' => $volunteer->user->name ?? 'Unbekannt',
+                                    'name' => $volunteer->user ? $volunteer->user->name : $volunteer->name,
                                     'profile_url' => $volunteer->user_id ? route('profile.show', $volunteer->user_id) : null
                                 ];
                             })->values(),
@@ -320,17 +320,21 @@
 
                             if (data.success) {
                                 // Update local state
-                                shift.isSignedUp = data.isSignedUp;
                                 shift.filled = data.filled;
 
-                                // Update volunteers list
-                                if (data.isSignedUp) {
+                                // Update volunteers list and isSignedUp based on action
+                                if (!shift.isSignedUp) {
+                                    // User is signing up
+                                    shift.isSignedUp = true;
                                     shift.volunteers.push({
-                                        user_id: {{ auth()->id() ?? 'null' }},
-                                        name: '{{ auth()->user()->name ?? '' }}',
+                                        id: data.volunteer.id,
+                                        user_id: data.volunteer.user_id,
+                                        name: data.volunteer.name,
                                         profile_url: '{{ auth()->check() ? route('profile.show', auth()->id()) : '' }}'
                                     });
                                 } else {
+                                    // User is withdrawing
+                                    shift.isSignedUp = false;
                                     shift.volunteers = shift.volunteers.filter(v => v.user_id !== {{ auth()->id() ?? 'null' }});
                                 }
                             } else {

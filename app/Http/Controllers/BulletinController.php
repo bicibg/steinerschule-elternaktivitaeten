@@ -48,9 +48,12 @@ class BulletinController extends Controller
     {
         $bulletinPost = BulletinPost::where('slug', $slug)
             ->published()
-            ->with(['posts' => function ($query) {
-                $query->with('comments');
-            }])
+            ->with([
+                'posts' => function ($query) {
+                    $query->with('comments');
+                },
+                'shifts.volunteers.user'
+            ])
             ->firstOrFail();
 
         return view('bulletin.show', compact('bulletinPost'));
