@@ -28,11 +28,9 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('bulletin_post_id')
+                Forms\Components\Placeholder::make('bulletinPost.title')
                     ->label('Pinnwand-Eintrag')
-                    ->relationship('bulletinPost', 'title')
-                    ->required()
-                    ->searchable(),
+                    ->content(fn (?\App\Models\Post $record): string => $record?->bulletinPost?->title ?? '-'),
                 Forms\Components\Placeholder::make('user.name')
                     ->label('Benutzer')
                     ->content(fn (?\App\Models\Post $record): string => $record?->user?->name ?? '-'),
@@ -40,10 +38,9 @@ class PostResource extends Resource
                     ->label('Nachricht')
                     ->content(fn (?\App\Models\Post $record): string => $record?->body ?? '-')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('ip_hash')
+                Forms\Components\Placeholder::make('ip_hash')
                     ->label('IP-Hash')
-                    ->disabled()
-                    ->dehydrated(false),
+                    ->content(fn (?\App\Models\Post $record): string => $record?->ip_hash ?? '-'),
                 Forms\Components\Select::make('deletion_reason')
                     ->label('Löschgrund')
                     ->options([
@@ -92,7 +89,32 @@ class PostResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
+                    ->label('Löschen')
+                    ->modalHeading('Beitrag löschen')
+                    ->modalDescription('Bitte wählen Sie einen Grund für die Löschung.')
+                    ->form([
+                        Forms\Components\Select::make('deletion_reason')
+                            ->label('Löschgrund')
+                            ->options([
+                                'year_archived' => 'Jahresarchivierung',
+                                'spam' => 'Spam',
+                                'inappropriate' => 'Unangemessen',
+                                'user_requested' => 'Auf Anfrage des Benutzers',
+                                'duplicate' => 'Duplikat',
+                            ])
+                            ->required(),
+                    ])
+                    ->before(function (\App\Models\Post $record, array $data): void {
+                        $record->deletion_reason = $data['deletion_reason'];
+                        $record->save();
+                    })
                     ->visible(fn () => auth()->user()?->is_admin ?? false),
+                Tables\Actions\RestoreAction::make()
+                    ->label('Wiederherstellen')
+                    ->visible(fn () => auth()->user()?->is_admin ?? false),
+                Tables\Actions\ForceDeleteAction::make()
+                    ->label('Endgültig löschen')
+                    ->visible(fn () => auth()->user()?->is_super_admin ?? false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

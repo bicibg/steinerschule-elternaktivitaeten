@@ -29,12 +29,9 @@ class CommentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('post_id')
+                Forms\Components\Placeholder::make('post.body')
                     ->label('Forumbeitrag')
-                    ->relationship('post', 'body')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => \Str::limit($record->body, 50))
-                    ->required()
-                    ->searchable(),
+                    ->content(fn (?\App\Models\Comment $record): string => $record?->post ? \Str::limit($record->post->body, 50) : '-'),
                 Forms\Components\Placeholder::make('user.name')
                     ->label('Benutzer')
                     ->content(fn (?\App\Models\Comment $record): string => $record?->user?->name ?? '-'),
@@ -42,10 +39,9 @@ class CommentResource extends Resource
                     ->label('Antwort')
                     ->content(fn (?\App\Models\Comment $record): string => $record?->body ?? '-')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('ip_hash')
+                Forms\Components\Placeholder::make('ip_hash')
                     ->label('IP-Hash')
-                    ->disabled()
-                    ->dehydrated(false),
+                    ->content(fn (?\App\Models\Comment $record): string => $record?->ip_hash ?? '-'),
                 Forms\Components\Select::make('deletion_reason')
                     ->label('Löschgrund')
                     ->options([
@@ -94,7 +90,32 @@ class CommentResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
+                    ->label('Löschen')
+                    ->modalHeading('Antwort löschen')
+                    ->modalDescription('Bitte wählen Sie einen Grund für die Löschung.')
+                    ->form([
+                        Forms\Components\Select::make('deletion_reason')
+                            ->label('Löschgrund')
+                            ->options([
+                                'year_archived' => 'Jahresarchivierung',
+                                'spam' => 'Spam',
+                                'inappropriate' => 'Unangemessen',
+                                'user_requested' => 'Auf Anfrage des Benutzers',
+                                'duplicate' => 'Duplikat',
+                            ])
+                            ->required(),
+                    ])
+                    ->before(function (\App\Models\Comment $record, array $data): void {
+                        $record->deletion_reason = $data['deletion_reason'];
+                        $record->save();
+                    })
                     ->visible(fn () => auth()->user()?->is_admin ?? false),
+                Tables\Actions\RestoreAction::make()
+                    ->label('Wiederherstellen')
+                    ->visible(fn () => auth()->user()?->is_admin ?? false),
+                Tables\Actions\ForceDeleteAction::make()
+                    ->label('Endgültig löschen')
+                    ->visible(fn () => auth()->user()?->is_super_admin ?? false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
