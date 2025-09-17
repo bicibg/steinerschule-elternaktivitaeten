@@ -90,37 +90,38 @@ class PostResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                    ->label('Löschen')
-                    ->modalHeading('Beitrag löschen')
-                    ->modalDescription('Bitte wählen Sie einen Grund für die Löschung.')
-                    ->form([
-                        Forms\Components\Select::make('deletion_reason')
-                            ->label('Löschgrund')
-                            ->options([
-                                'year_archived' => 'Jahresarchivierung',
-                                'spam' => 'Spam',
-                                'inappropriate' => 'Unangemessen',
-                                'user_requested' => 'Auf Anfrage des Benutzers',
-                                'duplicate' => 'Duplikat',
-                            ])
-                            ->required(),
-                    ])
-                    ->before(function (\App\Models\Post $record, array $data): void {
-                        $record->deletion_reason = $data['deletion_reason'];
-                        $record->save();
-                    })
-                    ->visible(fn () => auth()->user()?->is_admin ?? false),
-                Tables\Actions\RestoreAction::make()
-                    ->label('Wiederherstellen')
-                    ->visible(fn () => auth()->user()?->is_admin ?? false),
-                Tables\Actions\ForceDeleteAction::make()
-                    ->label('Endgültig löschen')
-                    ->visible(fn () => auth()->user()?->is_super_admin ?? false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Löschen')
+                        ->modalHeading('Ausgewählte Beiträge löschen')
+                        ->modalDescription('Bitte wählen Sie einen Grund für die Löschung.')
+                        ->form([
+                            Forms\Components\Select::make('deletion_reason')
+                                ->label('Löschgrund')
+                                ->options([
+                                    'year_archived' => 'Jahresarchivierung',
+                                    'spam' => 'Spam',
+                                    'inappropriate' => 'Unangemessen',
+                                    'user_requested' => 'Auf Anfrage des Benutzers',
+                                    'duplicate' => 'Duplikat',
+                                ])
+                                ->required(),
+                        ])
+                        ->before(function (\Illuminate\Support\Collection $records, array $data): void {
+                            $records->each(function ($record) use ($data) {
+                                $record->deletion_reason = $data['deletion_reason'];
+                                $record->save();
+                            });
+                        })
+                        ->visible(fn () => auth()->user()?->is_admin ?? false),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->label('Wiederherstellen')
+                        ->visible(fn () => auth()->user()?->is_admin ?? false),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->label('Endgültig löschen')
+                        ->visible(fn () => auth()->user()?->is_super_admin ?? false),
                 ]),
             ]);
     }
