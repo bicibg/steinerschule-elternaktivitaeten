@@ -23,7 +23,7 @@ class YearReset extends Page
     protected static ?int $navigationSort = 100;
     protected static string $view = 'filament.pages.year-reset';
 
-    public ?string $confirmationText = '';
+    public ?string $yearResetConfirmPhrase = '';
     public ?string $password = '';
     public ?string $schoolYear = '';
     public ?string $notes = '';
@@ -82,13 +82,17 @@ class YearReset extends Page
                             ->placeholder('Zusätzliche Informationen zum Reset...')
                             ->rows(3),
 
-                        Forms\Components\TextInput::make('confirmationText')
+                        Forms\Components\TextInput::make('yearResetConfirmPhrase')
                             ->label('Bestätigung')
                             ->required()
                             ->placeholder('Tippen Sie: NEUES SCHULJAHR STARTEN')
                             ->helperText('Geben Sie exakt "NEUES SCHULJAHR STARTEN" ein')
                             ->autocomplete('off')
-                            ->extraInputAttributes(['autocomplete' => 'off', 'data-lpignore' => 'true'])
+                            ->extraInputAttributes([
+                                'autocomplete' => 'new-password',
+                                'data-lpignore' => 'true',
+                                'data-form-type' => 'other'
+                            ])
                             ->dehydrateStateUsing(fn ($state) => $state)
                             ->rule(fn () => function ($attribute, $value, $fail) {
                                 if ($value !== 'NEUES SCHULJAHR STARTEN') {
@@ -149,7 +153,7 @@ class YearReset extends Page
         }
 
         // Final confirmation check
-        if ($this->confirmationText !== 'NEUES SCHULJAHR STARTEN') {
+        if ($this->yearResetConfirmPhrase !== 'NEUES SCHULJAHR STARTEN') {
             Notification::make()
                 ->title('Ungültige Bestätigung')
                 ->body('Der Bestätigungstext ist nicht korrekt.')
@@ -221,7 +225,7 @@ class YearReset extends Page
             DB::commit();
 
             // Clear form
-            $this->confirmationText = '';
+            $this->yearResetConfirmPhrase = '';
             $this->password = '';
             $this->notes = '';
 
