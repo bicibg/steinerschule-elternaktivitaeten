@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 class YearReset extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
-    protected static ?string $navigationLabel = 'Schuljahr zurücksetzen';
+    protected static ?string $navigationLabel = 'Neues Schuljahr vorbereiten';
     protected static ?string $navigationGroup = 'Super Admin';
     protected static ?int $navigationSort = 100;
     protected static string $view = 'filament.pages.year-reset';
@@ -26,7 +26,7 @@ class YearReset extends Page
     public ?string $schoolYear = '';
     public ?string $notes = '';
 
-    protected static ?string $title = 'Schuljahr zurücksetzen';
+    protected static ?string $title = 'Neues Schuljahr vorbereiten';
 
     public static function canAccess(): bool
     {
@@ -54,7 +54,7 @@ class YearReset extends Page
                     ->description('Diese Aktion kann nicht rückgängig gemacht werden!')
                     ->schema([
                         Forms\Components\Placeholder::make('warning')
-                            ->content('Diese Funktion setzt das System für ein neues Schuljahr zurück.')
+                            ->content('Diese Funktion bereitet das System für den Start des neuen Schuljahres vor.')
                             ->extraAttributes(['class' => 'text-danger-600 font-bold']),
 
                         Forms\Components\Placeholder::make('effects')
@@ -68,10 +68,10 @@ class YearReset extends Page
                             }),
 
                         Forms\Components\TextInput::make('schoolYear')
-                            ->label('Schuljahr')
+                            ->label('Neues Schuljahr')
                             ->required()
                             ->placeholder('2024/2025')
-                            ->helperText('Geben Sie das Schuljahr ein, das beendet wird'),
+                            ->helperText('Geben Sie das neue Schuljahr ein, das beginnt'),
 
                         Forms\Components\Textarea::make('notes')
                             ->label('Notizen (optional)')
@@ -81,12 +81,12 @@ class YearReset extends Page
                         Forms\Components\TextInput::make('confirmationText')
                             ->label('Bestätigung')
                             ->required()
-                            ->placeholder('Tippen Sie: SCHULJAHR ZURÜCKSETZEN')
-                            ->helperText('Geben Sie exakt "SCHULJAHR ZURÜCKSETZEN" ein')
+                            ->placeholder('Tippen Sie: NEUES SCHULJAHR STARTEN')
+                            ->helperText('Geben Sie exakt "NEUES SCHULJAHR STARTEN" ein')
                             ->dehydrateStateUsing(fn ($state) => $state)
                             ->rule(fn () => function ($attribute, $value, $fail) {
-                                if ($value !== 'SCHULJAHR ZURÜCKSETZEN') {
-                                    $fail('Der Bestätigungstext muss exakt "SCHULJAHR ZURÜCKSETZEN" lauten.');
+                                if ($value !== 'NEUES SCHULJAHR STARTEN') {
+                                    $fail('Der Bestätigungstext muss exakt "NEUES SCHULJAHR STARTEN" lauten.');
                                 }
                             }),
 
@@ -133,15 +133,15 @@ class YearReset extends Page
         // Check if recently reset
         if (AuditLog::wasActionPerformedRecently('year_reset', 30)) {
             Notification::make()
-                ->title('Reset nicht möglich')
-                ->body('Das System wurde in den letzten 30 Tagen bereits zurückgesetzt.')
+                ->title('Vorbereitung nicht möglich')
+                ->body('Das neue Schuljahr wurde in den letzten 30 Tagen bereits vorbereitet.')
                 ->danger()
                 ->send();
             return;
         }
 
         // Final confirmation check
-        if ($this->confirmationText !== 'SCHULJAHR ZURÜCKSETZEN') {
+        if ($this->confirmationText !== 'NEUES SCHULJAHR STARTEN') {
             Notification::make()
                 ->title('Ungültige Bestätigung')
                 ->body('Der Bestätigungstext ist nicht korrekt.')
@@ -186,7 +186,7 @@ class YearReset extends Page
             // 4. Create audit log entry
             AuditLog::log(
                 'year_reset',
-                'Schuljahr zurückgesetzt',
+                'Neues Schuljahr vorbereitet',
                 [
                     'school_year' => $this->schoolYear,
                     'activities_deactivated' => $activitiesCount,
@@ -194,7 +194,7 @@ class YearReset extends Page
                     'comments_archived' => $commentsCount,
                     'notes' => $this->notes,
                 ],
-                "Schuljahr {$this->schoolYear} zurückgesetzt: {$activitiesCount} Aktivitäten deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.",
+                "Neues Schuljahr {$this->schoolYear} vorbereitet: {$activitiesCount} Aktivitäten deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.",
                 'critical'
             );
 
@@ -206,8 +206,8 @@ class YearReset extends Page
             $this->notes = '';
 
             Notification::make()
-                ->title('Schuljahr erfolgreich zurückgesetzt')
-                ->body("Das System wurde für das neue Schuljahr vorbereitet. {$activitiesCount} Aktivitäten deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.")
+                ->title('System erfolgreich vorbereitet')
+                ->body("Das System ist bereit für das neue Schuljahr. {$activitiesCount} Aktivitäten deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.")
                 ->success()
                 ->persistent()
                 ->send();
@@ -219,7 +219,7 @@ class YearReset extends Page
             DB::rollBack();
 
             Notification::make()
-                ->title('Fehler beim Zurücksetzen')
+                ->title('Fehler bei der Vorbereitung')
                 ->body('Es ist ein Fehler aufgetreten: ' . $e->getMessage())
                 ->danger()
                 ->send();

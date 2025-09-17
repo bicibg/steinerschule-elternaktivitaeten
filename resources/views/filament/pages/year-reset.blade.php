@@ -4,7 +4,7 @@
         @if($lastReset = $this->getLastResetInfo())
             <x-filament::section>
                 <x-slot name="heading">
-                    Letztes Zurücksetzen
+                    Letzte Schuljahresvorbereitung
                 </x-slot>
                 <div class="text-sm space-y-2">
                     <p><strong>Datum:</strong> {{ $lastReset['date'] }} (vor {{ $lastReset['daysAgo'] }} Tagen)</p>
@@ -33,7 +33,7 @@
                         ⚠️ KRITISCHE SYSTEMFUNKTION
                     </h3>
                     <p class="text-danger-700 mt-2">
-                        Diese Funktion setzt das gesamte System für ein neues Schuljahr zurück.
+                        Diese Funktion bereitet das System für den Start eines neuen Schuljahres vor.
                         Diese Aktion kann <strong>NICHT</strong> rückgängig gemacht werden!
                     </p>
                 </div>
@@ -84,7 +84,7 @@
                         color="gray"
                         disabled
                     >
-                        Zurücksetzen nicht möglich (wurde kürzlich durchgeführt)
+                        Vorbereitung nicht möglich (wurde kürzlich durchgeführt)
                     </x-filament::button>
                 @else
                     <x-filament::button
@@ -92,13 +92,13 @@
                         color="danger"
                         size="xl"
                         wire:loading.attr="disabled"
-                        wire:confirm="LETZTE WARNUNG: Sind Sie absolut sicher, dass Sie das Schuljahr zurücksetzen möchten? Diese Aktion kann NICHT rückgängig gemacht werden!"
+                        wire:confirm="LETZTE WARNUNG: Sind Sie absolut sicher, dass Sie das System für das neue Schuljahr vorbereiten möchten? Diese Aktion kann NICHT rückgängig gemacht werden!"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
-                        Schuljahr jetzt zurücksetzen
+                        Neues Schuljahr jetzt vorbereiten
                     </x-filament::button>
                 @endif
             </div>
