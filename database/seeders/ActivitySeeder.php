@@ -22,7 +22,7 @@ class ActivitySeeder extends Seeder
 
         Activity::create([
             'title' => 'Sponsorenlauf',
-            'description' => 'Jährlicher Sponsorenlauf zur Unterstützung von Schulprojekten. Die Kinder laufen Runden und sammeln Sponsorengelder.',
+            'description' => null,  // Testing null description
             'category' => 'anlass',
             'contact_name' => 'Julia Eisenhut, Matthias Rytz',
             'contact_email' => 'sponsorenlauf@steinerschule-langnau.ch',
@@ -83,7 +83,7 @@ class ActivitySeeder extends Seeder
         // HAUS, UMGEBUNG UND TASKFORCES
         Activity::create([
             'title' => 'Putzorganisation',
-            'description' => 'Koordination und Organisation der Reinigung der Schulräume. Putzpläne erstellen und Putzmittel verwalten.',
+            'description' => null,  // Testing null description
             'category' => 'haus_umgebung_taskforces',
             'contact_name' => 'Susann Glättli, Hans Baumgartner',
             'contact_email' => 'putz@steinerschule-langnau.ch',
@@ -154,7 +154,7 @@ class ActivitySeeder extends Seeder
 
         Activity::create([
             'title' => 'Kerzenziehen',
-            'description' => 'Organisation des jährlichen Kerzenziehens. Herstellung von Bienenwachskerzen für den Verkauf.',
+            'description' => null,  // Testing null description
             'category' => 'produktion',
             'contact_name' => 'Rene Winkler',
             'contact_email' => 'kerzen@steinerschule-langnau.ch',
@@ -245,7 +245,7 @@ class ActivitySeeder extends Seeder
 
         Activity::create([
             'title' => 'Elternrat',
-            'description' => 'Koordination der Elternaktivitäten und Bindeglied zwischen Eltern und Schule.',
+            'description' => null,  // Testing null description
             'category' => 'organisation',
             'contact_name' => 'Tatjana Baumgartner, Maria Mani',
             'contact_email' => 'elternrat@steinerschule-langnau.ch',
