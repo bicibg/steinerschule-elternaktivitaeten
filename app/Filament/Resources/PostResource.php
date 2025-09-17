@@ -67,7 +67,8 @@ class PostResource extends Resource
                     ->label('Pinnwand-Eintrag')
                     ->searchable()
                     ->sortable()
-                    ->limit(30),
+                    ->limit(30)
+                    ->tooltip(fn ($state) => strlen($state) > 30 ? $state : null),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Autor')
                     ->searchable()
@@ -75,7 +76,8 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('body')
                     ->label('Nachricht')
                     ->limit(50)
-                    ->searchable(),
+                    ->searchable()
+                    ->tooltip(fn ($state) => strlen($state) > 50 ? $state : null),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')

@@ -69,7 +69,8 @@ class CommentResource extends Resource
                     ->limit(30)
                     ->searchable()
                     ->sortable()
-                    ->getStateUsing(fn ($record) => $record->post()->withTrashed()->first()?->body ?? '-'),
+                    ->getStateUsing(fn ($record) => $record->post()->withTrashed()->first()?->body ?? '-')
+                    ->tooltip(fn ($record) => $record->post()->withTrashed()->first()?->body),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Autor')
                     ->searchable()
@@ -77,7 +78,8 @@ class CommentResource extends Resource
                 Tables\Columns\TextColumn::make('body')
                     ->label('Antwort')
                     ->limit(50)
-                    ->searchable(),
+                    ->searchable()
+                    ->tooltip(fn ($state) => strlen($state) > 50 ? $state : null),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')
