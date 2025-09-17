@@ -15,8 +15,6 @@ class ActivityExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id')
-                ->label('ID'),
             ExportColumn::make('title')
                 ->label('Titel'),
             ExportColumn::make('description')
