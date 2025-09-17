@@ -283,11 +283,8 @@
                     shifts: {{ json_encode($bulletinPost->shifts->map(function($shift) {
                         return [
                             'id' => $shift->id,
-                            'date' => $shift->date ? $shift->date->format('d.m.Y') : null,
-                            'start' => $shift->start_time,
-                            'end' => $shift->end_time,
-                            'title' => $shift->title,
-                            'description' => $shift->description,
+                            'role' => $shift->role,
+                            'time' => $shift->time,
                             'needed' => $shift->needed,
                             'filled' => $shift->filled,
                             'volunteers' => $shift->volunteers->map(function($volunteer) {
@@ -310,8 +307,9 @@
                         }
 
                         try {
-                            const response = await fetch(`/api/shifts/${shiftId}/toggle`, {
-                                method: 'POST',
+                            const endpoint = shift.isSignedUp ? `/api/shifts/${shiftId}/withdraw` : `/api/shifts/${shiftId}/signup`;
+                            const response = await fetch(endpoint, {
+                                method: shift.isSignedUp ? 'DELETE' : 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
@@ -348,15 +346,8 @@
                         <x-card compact="true">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
-                                    <h3 class="font-semibold text-gray-800" x-text="shift.title"></h3>
-                                    <div class="text-sm text-gray-600 mt-1">
-                                        <template x-if="shift.date">
-                                            <span>
-                                                <span x-text="shift.date"></span>,
-                                            </span>
-                                        </template>
-                                        <span x-text="shift.start"></span> - <span x-text="shift.end"></span>
-                                    </div>
+                                    <h3 class="font-semibold text-gray-800" x-text="shift.role"></h3>
+                                    <div class="text-sm text-gray-600 mt-1" x-text="shift.time"></div>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-sm" :class="shift.filled >= shift.needed ? 'text-green-600 font-medium' : 'text-orange-600 font-medium'">
@@ -372,8 +363,6 @@
                                     @endauth
                                 </div>
                             </div>
-
-                            <p class="text-gray-700 text-sm mb-3" x-text="shift.description"></p>
 
                             <template x-if="shift.volunteers.length > 0">
                                 <div class="mb-3">
