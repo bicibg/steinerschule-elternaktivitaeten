@@ -19,43 +19,36 @@ class SchoolEventExporter extends Exporter
                 ->label('Titel'),
             ExportColumn::make('description')
                 ->label('Beschreibung'),
-            ExportColumn::make('date')
-                ->label('Datum'),
+            ExportColumn::make('start_date')
+                ->label('Startdatum')
+                ->formatStateUsing(fn ($state) => $state?->format('d.m.Y')),
+            ExportColumn::make('end_date')
+                ->label('Enddatum')
+                ->formatStateUsing(fn ($state) => $state?->format('d.m.Y')),
             ExportColumn::make('event_time')
-                ->label('Zeit'),
+                ->label('Uhrzeit'),
             ExportColumn::make('location')
                 ->label('Ort'),
             ExportColumn::make('event_type')
-                ->label('Typ')
-                ->formatStateUsing(fn (string $state): string => match ($state) {
-                    'holiday' => 'Ferien',
-                    'event' => 'Anlass',
-                    'meeting' => 'Sitzung',
-                    'performance' => 'Aufführung',
-                    'other' => 'Andere',
-                    default => $state,
-                }),
+                ->label('Veranstaltungstyp')
+                ->formatStateUsing(fn ($state) => SchoolEvent::getEventTypes()[$state] ?? $state),
+            ExportColumn::make('all_day')
+                ->label('Ganztägig')
+                ->formatStateUsing(fn ($state) => $state ? 'Ja' : 'Nein'),
             ExportColumn::make('is_recurring')
                 ->label('Wiederkehrend')
-                ->formatStateUsing(fn (bool $state): string => $state ? 'Ja' : 'Nein'),
+                ->formatStateUsing(fn ($state) => $state ? 'Ja' : 'Nein'),
             ExportColumn::make('recurrence_pattern')
                 ->label('Wiederholungsmuster'),
-            ExportColumn::make('target_audience')
-                ->label('Zielgruppe'),
-            ExportColumn::make('registration_required')
-                ->label('Anmeldung erforderlich')
-                ->formatStateUsing(fn (bool $state): string => $state ? 'Ja' : 'Nein'),
-            ExportColumn::make('registration_link')
-                ->label('Anmeldelink'),
         ];
     }
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Der Export der Schulkalender-Einträge wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Eintrag')->plural($export->successful_rows) . ' exportiert.';
+        $body = 'Der Export der Schulveranstaltungen wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Zeile')->plural($export->successful_rows) . ' exportiert.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Eintrag')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht exportiert werden.';
         }
 
         return $body;

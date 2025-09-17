@@ -18,54 +18,76 @@ class UserImporter extends Importer
             ImportColumn::make('name')
                 ->label('Name')
                 ->requiredMapping()
+                ->rules(['required', 'max:255'])
                 ->example('Max Mustermann'),
             ImportColumn::make('email')
                 ->label('E-Mail')
                 ->requiredMapping()
-                ->rules(['email', 'unique:users,email'])
+                ->rules(['required', 'email', 'max:255'])
                 ->example('max.mustermann@example.com'),
             ImportColumn::make('phone')
                 ->label('Telefon')
+                ->rules(['nullable', 'max:50'])
                 ->example('079 123 45 67'),
             ImportColumn::make('password')
                 ->label('Passwort')
-                ->example('geheim123')
-                ->default('12345678'),
+                ->rules(['nullable', 'min:8'])
+                ->example('12345678')
+                ->helperText('Wird automatisch generiert, falls leer gelassen'),
             ImportColumn::make('is_admin')
-                ->label('Admin')
+                ->label('Administrator')
                 ->boolean()
-                ->example('Nein')
-                ->default(false),
+                ->example('Nein'),
             ImportColumn::make('is_super_admin')
-                ->label('Super Admin')
+                ->label('Super Administrator')
                 ->boolean()
-                ->example('Nein')
-                ->default(false),
+                ->example('Nein'),
         ];
     }
 
     public function resolveRecord(): ?User
     {
-        $user = User::firstOrNew([
+        // Find existing user by email (including soft deleted)
+        $user = User::withTrashed()->firstOrNew([
             'email' => $this->data['email'],
         ]);
-
-        // Hash password if it's a new user or password is provided
-        if (!$user->exists || !empty($this->data['password'])) {
-            $this->data['password'] = Hash::make($this->data['password'] ?? '12345678');
-        } else {
-            unset($this->data['password']);
-        }
 
         return $user;
     }
 
+    protected function beforeSave(): void
+    {
+        // Set default values
+        if (!isset($this->data['is_admin'])) {
+            $this->data['is_admin'] = false;
+        }
+
+        if (!isset($this->data['is_super_admin'])) {
+            $this->data['is_super_admin'] = false;
+        }
+
+        // Generate or hash password
+        if (empty($this->data['password'])) {
+            $this->data['password'] = '12345678'; // Default password
+        }
+
+        // Hash the password if it's not already hashed (for new users or password updates)
+        if (!$this->record->exists || !empty($this->data['password'])) {
+            $this->data['password'] = Hash::make($this->data['password']);
+        }
+
+        // If the user was soft deleted, restore them
+        if ($this->record->trashed()) {
+            $this->record->restore();
+        }
+    }
+
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Der Import der Benutzer wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Benutzer')->plural($import->successful_rows) . ' importiert.';
+        $body = 'Der Import der Benutzer wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Zeile')->plural($import->successful_rows) . ' importiert.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Benutzer')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht importiert werden.';
         }
 
         return $body;

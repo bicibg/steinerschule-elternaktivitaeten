@@ -22,7 +22,7 @@ class ExportResource extends Resource
 
     protected static ?string $navigationLabel = 'Exporte';
 
-    protected static ?string $navigationGroup = 'Aktivitäten';
+    protected static ?string $navigationGroup = 'System';
 
     protected static ?string $modelLabel = 'Export';
 

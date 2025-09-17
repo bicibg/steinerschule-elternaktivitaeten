@@ -23,7 +23,7 @@ class ImportResource extends Resource
 
     protected static ?string $navigationLabel = 'Importe';
 
-    protected static ?string $navigationGroup = 'Super Admin';
+    protected static ?string $navigationGroup = 'System';
 
     protected static ?string $modelLabel = 'Import';
 

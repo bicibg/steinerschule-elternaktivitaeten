@@ -15,21 +15,18 @@ class UserExporter extends Exporter
     public static function getColumns(): array
     {
         return [
+            ExportColumn::make('id')
+                ->label('ID'),
             ExportColumn::make('name')
                 ->label('Name'),
             ExportColumn::make('email')
                 ->label('E-Mail'),
-            ExportColumn::make('phone')
-                ->label('Telefon'),
             ExportColumn::make('is_admin')
-                ->label('Admin')
-                ->formatStateUsing(fn (bool $state): string => $state ? 'Ja' : 'Nein'),
+                ->label('Administrator')
+                ->formatStateUsing(fn ($state) => $state ? 'Ja' : 'Nein'),
             ExportColumn::make('is_super_admin')
-                ->label('Super Admin')
-                ->formatStateUsing(fn (bool $state): string => $state ? 'Ja' : 'Nein'),
-            ExportColumn::make('email_verified_at')
-                ->label('E-Mail verifiziert am')
-                ->formatStateUsing(fn ($state) => $state?->format('d.m.Y H:i')),
+                ->label('Super Administrator')
+                ->formatStateUsing(fn ($state) => $state ? 'Ja' : 'Nein'),
             ExportColumn::make('created_at')
                 ->label('Erstellt am')
                 ->formatStateUsing(fn ($state) => $state?->format('d.m.Y H:i')),
@@ -38,15 +35,15 @@ class UserExporter extends Exporter
 
     public static function modifyQuery(Builder $query): Builder
     {
-        return $query->whereNull('deleted_at');
+        return $query->whereNull('deleted_at')->whereNull('anonymized_at');
     }
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Der Export der Benutzer wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Benutzer')->plural($export->successful_rows) . ' exportiert.';
+        $body = 'Der Export der Benutzer wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Zeile')->plural($export->successful_rows) . ' exportiert.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Benutzer')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht exportiert werden.';
         }
 
         return $body;

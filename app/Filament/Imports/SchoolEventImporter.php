@@ -17,58 +17,84 @@ class SchoolEventImporter extends Importer
             ImportColumn::make('title')
                 ->label('Titel')
                 ->requiredMapping()
+                ->rules(['required', 'max:255'])
                 ->example('Sommerfest 2025'),
             ImportColumn::make('description')
                 ->label('Beschreibung')
+                ->rules(['nullable'])
                 ->example('Grosses Sommerfest mit Spielen und Verpflegung'),
-            ImportColumn::make('date')
-                ->label('Datum')
+            ImportColumn::make('start_date')
+                ->label('Startdatum')
                 ->requiredMapping()
+                ->rules(['required', 'date'])
+                ->example('2025-06-15'),
+            ImportColumn::make('end_date')
+                ->label('Enddatum')
+                ->rules(['nullable', 'date', 'after_or_equal:start_date'])
                 ->example('2025-06-15'),
             ImportColumn::make('event_time')
-                ->label('Zeit')
-                ->example('14:00'),
+                ->label('Uhrzeit')
+                ->rules(['nullable', 'max:255'])
+                ->example('14:00 Uhr'),
             ImportColumn::make('location')
                 ->label('Ort')
+                ->rules(['nullable', 'max:255'])
                 ->example('Schulgelände'),
             ImportColumn::make('event_type')
-                ->label('Typ')
-                ->example('event')
-                ->default('event'),
+                ->label('Veranstaltungstyp')
+                ->rules(['in:festival,meeting,performance,holiday,sports,excursion,other'])
+                ->example('festival')
+                ->castStateUsing(function (string $state): string {
+                    // Try to match the German event type names to the keys
+                    $types = array_flip(SchoolEvent::getEventTypes());
+                    return $types[trim($state)] ?? trim($state);
+                }),
+            ImportColumn::make('all_day')
+                ->label('Ganztägig')
+                ->boolean()
+                ->example('Ja'),
             ImportColumn::make('is_recurring')
                 ->label('Wiederkehrend')
                 ->boolean()
                 ->example('Nein'),
             ImportColumn::make('recurrence_pattern')
                 ->label('Wiederholungsmuster')
+                ->rules(['nullable', 'max:255'])
                 ->example('Wöchentlich'),
-            ImportColumn::make('target_audience')
-                ->label('Zielgruppe')
-                ->example('Alle Klassen'),
-            ImportColumn::make('registration_required')
-                ->label('Anmeldung erforderlich')
-                ->boolean()
-                ->example('Ja'),
-            ImportColumn::make('registration_link')
-                ->label('Anmeldelink')
-                ->example('https://example.com/anmeldung'),
         ];
     }
 
     public function resolveRecord(): ?SchoolEvent
     {
+        // Update existing records by matching title and start_date
         return SchoolEvent::firstOrNew([
             'title' => $this->data['title'],
-            'date' => $this->data['date'],
+            'start_date' => $this->data['start_date'],
         ]);
+    }
+
+    protected function beforeSave(): void
+    {
+        // Set default values
+        if (!isset($this->data['event_type'])) {
+            $this->data['event_type'] = 'other';
+        }
+
+        if (!isset($this->data['all_day'])) {
+            $this->data['all_day'] = true;
+        }
+
+        if (!isset($this->data['is_recurring'])) {
+            $this->data['is_recurring'] = false;
+        }
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Der Import der Schulkalender-Einträge wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Eintrag')->plural($import->successful_rows) . ' importiert.';
+        $body = 'Der Import der Schulveranstaltungen wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Zeile')->plural($import->successful_rows) . ' importiert.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Eintrag')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht importiert werden.';
         }
 
         return $body;

@@ -189,14 +189,11 @@
                                     <div class="flex items-center gap-2">
                                         <span class="text-sm text-gray-500">{{ $post->created_at->format('d.m.Y H:i') }}</span>
                                         @if(auth()->check() && (auth()->id() === $post->user_id || auth()->user()->is_admin))
-                                            <form method="POST" action="{{ route('posts.destroy', $post) }}" class="inline"
-                                                  onsubmit="return confirm('Möchten Sie diesen Beitrag wirklich löschen?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
-                                                    Löschen
-                                                </button>
-                                            </form>
+                                            <button type="button"
+                                                    @click="$dispatch('open-delete-modal-post-{{ $post->id }}')"
+                                                    class="text-red-600 hover:text-red-800 text-sm">
+                                                Löschen
+                                            </button>
                                         @endif
                                     </div>
                                 </div>
@@ -225,14 +222,11 @@
                                                     <div class="flex items-center gap-2">
                                                         <span class="text-xs text-gray-500">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
                                                         @if(auth()->check() && (auth()->id() === $comment->user_id || auth()->user()->is_admin))
-                                                            <form method="POST" action="{{ route('comments.destroy', $comment) }}" class="inline"
-                                                                  onsubmit="return confirm('Möchten Sie diesen Kommentar wirklich löschen?');">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="text-red-600 hover:text-red-800 text-xs">
-                                                                    Löschen
-                                                                </button>
-                                                            </form>
+                                                            <button type="button"
+                                                                    @click="$dispatch('open-delete-modal-comment-{{ $comment->id }}')"
+                                                                    class="text-red-600 hover:text-red-800 text-xs">
+                                                                Löschen
+                                                            </button>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -240,6 +234,14 @@
                                                     {!! nl2br(e($comment->body)) !!}
                                                 </div>
                                             </div>
+
+                                            {{-- Delete Modal for Comment --}}
+                                            @if(auth()->check() && (auth()->id() === $comment->user_id || auth()->user()->is_admin))
+                                                <x-delete-modal id="comment-{{ $comment->id }}"
+                                                               action="{{ route('comments.destroy', $comment) }}"
+                                                               title="Kommentar löschen"
+                                                               message="Möchten Sie diesen Kommentar wirklich löschen?" />
+                                            @endif
                                         @endforeach
                                     </div>
                                 @endif
@@ -292,6 +294,14 @@
                                 </div>
                                 @endauth
                             </x-card>
+
+                            {{-- Delete Modal for Post --}}
+                            @if(auth()->check() && (auth()->id() === $post->user_id || auth()->user()->is_admin))
+                                <x-delete-modal id="post-{{ $post->id }}"
+                                               action="{{ route('posts.destroy', $post) }}"
+                                               title="Beitrag löschen"
+                                               message="Möchten Sie diesen Beitrag wirklich löschen? Alle zugehörigen Kommentare werden ebenfalls gelöscht." />
+                            @endif
                         @endforeach
                     </div>
                 @else
