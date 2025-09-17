@@ -95,10 +95,10 @@
 
         <!-- Forum and Shifts Section -->
         @if($bulletinPost->has_forum || $bulletinPost->has_shifts)
-        <x-card>
+        <x-card x-data="{ activeTab: 'forum' }">
             @if($bulletinPost->has_forum && $bulletinPost->has_shifts)
             <!-- Tab Navigation -->
-            <div class="flex border-b border-gray-200 -mx-6 -mt-6 mb-6" x-data="{ activeTab: 'forum' }">
+            <div class="flex border-b border-gray-200 -mx-6 -mt-6 mb-6">
                 <button @click="activeTab = 'forum'"
                         :class="activeTab === 'forum' ? 'border-b-2 border-steiner-blue text-steiner-blue' : 'text-gray-600 hover:text-gray-800'"
                         class="px-6 py-3 font-medium focus:outline-none transition-colors">

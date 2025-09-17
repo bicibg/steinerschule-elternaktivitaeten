@@ -83,7 +83,21 @@
     @else
         <div class="space-y-4">
             @foreach($bulletinPosts as $bulletinPost)
-                <a href="{{ route('bulletin.show', $bulletinPost->slug) }}" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                @php
+                    $borderClass = 'border-gray-200';
+                    $borderWidth = 'border';
+                    if ($bulletinPost->label) {
+                        $borderWidth = 'border-l-4 border';
+                        $borderClass = match($bulletinPost->label) {
+                            'urgent' => 'border-l-red-500 border-gray-200',
+                            'important' => 'border-l-yellow-500 border-gray-200',
+                            'featured' => 'border-l-blue-500 border-gray-200',
+                            'last_minute' => 'border-l-orange-500 border-gray-200',
+                            default => 'border-gray-200'
+                        };
+                    }
+                @endphp
+                <a href="{{ route('bulletin.show', $bulletinPost->slug) }}" class="block bg-white rounded-lg shadow-sm {{ $borderWidth }} {{ $borderClass }} p-6 hover:shadow-md transition-shadow duration-200">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-2">

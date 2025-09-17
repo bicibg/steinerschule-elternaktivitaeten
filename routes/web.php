@@ -6,6 +6,7 @@ use App\Http\Controllers\ModerationController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\SchoolCalendarController;
+use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -85,3 +86,8 @@ Route::middleware(['verify.edit.token'])->group(function () {
     Route::post('/moderation/posts/{post}/hide', [ModerationController::class, 'togglePost'])->name('moderation.post.toggle');
     Route::post('/moderation/comments/{comment}/hide', [ModerationController::class, 'toggleComment'])->name('moderation.comment.toggle');
 });
+
+// Legal pages
+Route::get('/datenschutz', [LegalController::class, 'privacy'])->name('legal.privacy');
+Route::get('/impressum', [LegalController::class, 'impressum'])->name('legal.impressum');
+Route::get('/kontakt', [LegalController::class, 'contact'])->name('legal.contact');

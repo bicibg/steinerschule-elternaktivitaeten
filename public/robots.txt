@@ -1,2 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /
+
+# This site is for internal use only
+# All content is blocked from search engines
