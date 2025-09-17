@@ -22,7 +22,7 @@ class BulletinPostImporter extends Importer
             ImportColumn::make('description')
                 ->label('Beschreibung')
                 ->requiredMapping()
-                ->example('Großer Weihnachtsbazar mit vielen Ständen'),
+                ->example('Grosser Weihnachtsbazar mit vielen Ständen'),
             ImportColumn::make('start_at')
                 ->label('Beginnt am')
                 ->example('2025-12-15 10:00:00'),
@@ -31,7 +31,7 @@ class BulletinPostImporter extends Importer
                 ->example('2025-12-15 18:00:00'),
             ImportColumn::make('location')
                 ->label('Ort')
-                ->example('Große Halle'),
+                ->example('Grosse Halle'),
             ImportColumn::make('contact_name')
                 ->label('Kontakt Name')
                 ->requiredMapping()

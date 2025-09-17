@@ -13,7 +13,7 @@ return [
     'before_or_equal' => ':attribute muss ein Datum vor dem :date oder gleich dem :date sein.',
     'between' => [
         'numeric' => ':attribute muss zwischen :min & :max liegen.',
-        'file' => ':attribute muss zwischen :min & :max Kilobyte groß sein.',
+        'file' => ':attribute muss zwischen :min & :max Kilobyte gross sein.',
         'string' => ':attribute muss zwischen :min & :max Zeichen lang sein.',
         'array' => ':attribute muss zwischen :min & :max Elemente haben.',
     ],
@@ -32,14 +32,14 @@ return [
     'file' => ':attribute muss eine Datei sein.',
     'filled' => ':attribute muss ausgefüllt werden.',
     'gt' => [
-        'numeric' => ':attribute muss größer als :value sein.',
-        'file' => ':attribute muss größer als :value Kilobyte sein.',
+        'numeric' => ':attribute muss grösser als :value sein.',
+        'file' => ':attribute muss grösser als :value Kilobyte sein.',
         'string' => ':attribute muss länger als :value Zeichen sein.',
         'array' => ':attribute muss mehr als :value Elemente haben.',
     ],
     'gte' => [
-        'numeric' => ':attribute muss größer oder gleich :value sein.',
-        'file' => ':attribute muss größer oder gleich :value Kilobyte sein.',
+        'numeric' => ':attribute muss grösser oder gleich :value sein.',
+        'file' => ':attribute muss grösser oder gleich :value Kilobyte sein.',
         'string' => ':attribute muss mindestens :value Zeichen lang sein.',
         'array' => ':attribute muss mindestens :value Elemente haben.',
     ],
@@ -65,7 +65,7 @@ return [
     ],
     'max' => [
         'numeric' => ':attribute darf maximal :max sein.',
-        'file' => ':attribute darf maximal :max Kilobyte groß sein.',
+        'file' => ':attribute darf maximal :max Kilobyte gross sein.',
         'string' => ':attribute darf maximal :max Zeichen haben.',
         'array' => ':attribute darf maximal :max Elemente haben.',
     ],
@@ -73,7 +73,7 @@ return [
     'mimetypes' => ':attribute muss den Dateityp :values haben.',
     'min' => [
         'numeric' => ':attribute muss mindestens :min sein.',
-        'file' => ':attribute muss mindestens :min Kilobyte groß sein.',
+        'file' => ':attribute muss mindestens :min Kilobyte gross sein.',
         'string' => ':attribute muss mindestens :min Zeichen lang sein.',
         'array' => ':attribute muss mindestens :min Elemente haben.',
     ],
@@ -85,7 +85,7 @@ return [
     'regex' => ':attribute Format ist ungültig.',
     'required' => ':attribute muss ausgefüllt werden.',
     'required_if' => ':attribute muss ausgefüllt werden, wenn :other den Wert :value hat.',
-    'required_unless' => ':attribute muss ausgefüllt werden, außer :other hat den Wert :values.',
+    'required_unless' => ':attribute muss ausgefüllt werden, ausser :other hat den Wert :values.',
     'required_with' => ':attribute muss ausgefüllt werden, wenn :values vorhanden ist.',
     'required_with_all' => ':attribute muss ausgefüllt werden, wenn :values vorhanden sind.',
     'required_without' => ':attribute muss ausgefüllt werden, wenn :values nicht vorhanden ist.',
@@ -93,7 +93,7 @@ return [
     'same' => ':attribute und :other müssen übereinstimmen.',
     'size' => [
         'numeric' => ':attribute muss gleich :size sein.',
-        'file' => ':attribute muss :size Kilobyte groß sein.',
+        'file' => ':attribute muss :size Kilobyte gross sein.',
         'string' => ':attribute muss :size Zeichen lang sein.',
         'array' => ':attribute muss genau :size Elemente haben.',
     ],

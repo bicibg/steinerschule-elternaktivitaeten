@@ -116,7 +116,7 @@ class AnnouncementResource extends Resource
                 Forms\Components\Section::make('Zeitraum')
                     ->description(fn (Get $get) =>
                         $get('is_priority')
-                            ? 'Optional: Prioritäts-Benachrichtigungen laufen standardmäßig nie ab'
+                            ? 'Optional: Prioritäts-Benachrichtigungen laufen standardmässig nie ab'
                             : 'Normale Benachrichtigungen laufen automatisch nach 14 Tagen ab (anpassbar)'
                     )
                     ->schema([

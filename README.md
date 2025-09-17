@@ -106,7 +106,7 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - **Typography**: Consistent sizing with text-sm as base
 - **Spacing**: Standardized using Tailwind's 4px grid
 - **Category Colors**: Seven distinct colors for visual differentiation
-- **Swiss German**: Using 'ss' instead of 'ß' throughout
+- **Swiss German**: Using 'ss' instead of 'ss' throughout
 
 ## Requirements
 
