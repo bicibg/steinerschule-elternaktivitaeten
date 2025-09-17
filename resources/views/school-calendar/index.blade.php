@@ -6,27 +6,9 @@
     <h1 class="text-2xl font-bold text-gray-800 mb-6">Schulkalender</h1>
 
     <!-- Calendar Container -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <x-card noPadding="true">
         <!-- Month Navigation -->
-        <div class="flex items-center justify-between p-4 border-b border-gray-200">
-            <a href="{{ route('school-calendar.index', ['month' => $date->copy()->subMonth()->month, 'year' => $date->copy()->subMonth()->year]) }}"
-               class="p-2 hover:bg-gray-100 rounded-lg transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </a>
-
-            <h2 class="text-xl font-semibold text-gray-800">
-                {{ $date->locale('de')->monthName }} {{ $date->year }}
-            </h2>
-
-            <a href="{{ route('school-calendar.index', ['month' => $date->copy()->addMonth()->month, 'year' => $date->copy()->addMonth()->year]) }}"
-               class="p-2 hover:bg-gray-100 rounded-lg transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </a>
-        </div>
+        <x-calendar.navigation :date="$date" route="school-calendar.index" />
 
         <!-- Calendar Grid -->
         <div class="p-4">
@@ -96,7 +78,7 @@
                 @endwhile
             </div>
         </div>
-    </div>
+    </x-card>
 
     <!-- Month's Activities List -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
