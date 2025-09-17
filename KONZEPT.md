@@ -41,6 +41,10 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 - **Pinnwand:** Zentrale Plattform für Aktivitäten, die Unterstützung suchen
 - **Elternaktivitäten:** Separater Informationsbereich für alle Arbeitsgruppen
 - **Schulkalender:** Integration von Schulevents mit Details
+- **Datenexport:** Helferübersichten als CSV oder Excel herunterladen
+- **Datenimport:** Mehrere Aktivitäten gleichzeitig importieren
+- **Neues Schuljahr:** Ein-Klick-Vorbereitung für neues Schuljahr (deaktiviert vergangene Aktivitäten und archiviert Forenbeiträge)
+- **Audit-Protokoll:** Nachvollziehbarkeit wichtiger Systemänderungen
 - Einfache Moderation bei Bedarf
 
 ## Praktische Beispiele

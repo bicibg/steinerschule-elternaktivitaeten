@@ -76,7 +76,11 @@ This platform enables parents and organizers to coordinate volunteer activities,
 - Content moderation capabilities
 - Activity and volunteer reporting
 - German localization for admin interface
-- Notification management for super admins only
+- Announcement management for super admins only
+- Export functionality for volunteer data (CSV/XLSX)
+- Import functionality for bulk data management
+- Audit logging for critical system actions
+- New school year preparation tools
 
 ### Security & Data Protection
 - **Rate limiting**: Maximum 5 login attempts per minute
