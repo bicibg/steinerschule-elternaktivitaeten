@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use App\Models\UserDeletionLog;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Filament\Notifications\Notification;
 
 class UserResource extends Resource
 {
@@ -66,7 +69,16 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Name')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(function ($state, User $record) {
+                        if ($record->isAnonymized()) {
+                            return $state . ' (Anonymisiert)';
+                        }
+                        if ($record->trashed()) {
+                            return $state . ' (Deaktiviert)';
+                        }
+                        return $state;
+                    }),
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-Mail')
                     ->searchable(),
@@ -81,20 +93,94 @@ class UserResource extends Resource
                     ->trueIcon('heroicon-o-shield-check')
                     ->falseIcon('heroicon-o-x-circle')
                     ->visible(fn () => auth()->user()->is_super_admin),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('Deaktiviert am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('anonymized_at')
+                    ->label('Anonymisiert am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Deaktivierte Benutzer'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn (User $record) => !$record->isAnonymized()),
+
+                // Soft Delete (Deactivation) Action
+                Action::make('deactivate')
+                    ->label('Deaktivieren')
+                    ->icon('heroicon-o-no-symbol')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Benutzer deaktivieren')
+                    ->modalDescription('Sind Sie sicher, dass Sie diesen Benutzer deaktivieren möchten? Der Benutzer kann sich nicht mehr anmelden, aber alle Daten bleiben erhalten.')
+                    ->modalSubmitActionLabel('Ja, deaktivieren')
+                    ->visible(fn (User $record) => !$record->trashed() && !$record->isAnonymized() && $record->id !== auth()->id())
+                    ->action(function (User $record) {
+                        $record->deleted_by = auth()->id();
+                        $record->save();
+                        $record->delete();
+
+                        UserDeletionLog::logAction($record, 'deactivated');
+
+                        Notification::make()
+                            ->title('Benutzer deaktiviert')
+                            ->success()
+                            ->send();
+                    }),
+
+                // Restore Action
+                Tables\Actions\RestoreAction::make()
+                    ->label('Wiederherstellen')
+                    ->requiresConfirmation()
+                    ->modalHeading('Benutzer wiederherstellen')
+                    ->modalDescription('Möchten Sie diesen Benutzer wiederherstellen? Der Benutzer kann sich wieder anmelden.')
+                    ->modalSubmitActionLabel('Ja, wiederherstellen')
+                    ->after(function (User $record) {
+                        UserDeletionLog::logAction($record, 'reactivated');
+                    }),
+
+                // GDPR Anonymization Action
+                Action::make('anonymize')
+                    ->label('Anonymisieren (DSGVO)')
+                    ->icon('heroicon-o-shield-exclamation')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Benutzer anonymisieren (DSGVO)')
+                    ->modalDescription('WARNUNG: Diese Aktion kann nicht rückgängig gemacht werden! Alle persönlichen Daten werden dauerhaft anonymisiert.')
+                    ->modalSubmitActionLabel('Unwiderruflich anonymisieren')
+                    ->visible(fn (User $record) => !$record->isAnonymized() && $record->id !== auth()->id())
+                    ->action(function (User $record) {
+                        UserDeletionLog::logAction($record, 'anonymized');
+
+                        $record->anonymize(auth()->id());
+
+                        Notification::make()
+                            ->title('Benutzer anonymisiert')
+                            ->body('Die persönlichen Daten wurden gemäss DSGVO dauerhaft anonymisiert.')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Deaktivieren')
+                        ->modalHeading('Ausgewählte Benutzer deaktivieren')
+                        ->modalDescription('Die ausgewählten Benutzer werden deaktiviert und können sich nicht mehr anmelden.'),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->label('Wiederherstellen'),
                 ]),
             ]);
     }
@@ -104,6 +190,14 @@ class UserResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 
     public static function getPages(): array

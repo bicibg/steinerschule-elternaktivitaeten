@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
@@ -13,7 +14,7 @@ use Filament\Panel;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +50,8 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
+            'deleted_at' => 'datetime',
+            'anonymized_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'is_super_admin' => 'boolean',
@@ -59,5 +62,27 @@ class User extends Authenticatable implements FilamentUser
     {
         // Super admins always have access, or regular admins
         return (bool) $this->is_super_admin || (bool) $this->is_admin;
+    }
+
+    /**
+     * Anonymize the user's personal data (GDPR compliance)
+     */
+    public function anonymize(int $adminId = null): void
+    {
+        $this->name = 'Anonymer Benutzer ' . $this->id;
+        $this->email = 'deleted-' . $this->id . '@anonymous.local';
+        $this->phone = null;
+        $this->remarks = null;
+        $this->anonymized_at = now();
+        $this->anonymized_by = $adminId;
+        $this->save();
+    }
+
+    /**
+     * Check if user is anonymized
+     */
+    public function isAnonymized(): bool
+    {
+        return !is_null($this->anonymized_at);
     }
 }
