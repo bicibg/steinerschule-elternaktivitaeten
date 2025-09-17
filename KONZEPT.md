@@ -65,7 +65,7 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 - Benachrichtigungssystem für wichtige Mitteilungen an alle Nutzer
 
 **Mögliche Erweiterung - Kocheinsatzplan (auf Anfrage):**
-- Integration von Kocheinsatzplänen mit Kohlenhydrat-Angaben
+- Integration von Kocheinsatzplänen
 - Selbstständige Eintragung der Eltern für Kochdienste
 - Mittagstisch-Anmeldungen mit Allergie-Informationen
 - Mengenangaben und weitere Unterlagen zentral verfügbar
@@ -93,8 +93,7 @@ Die Plattform wurde mit Fokus auf Datenschutz entwickelt:
 - Auskunft über gespeicherte Daten jederzeit möglich
 - Daten können korrigiert werden
 - Löschung auf Anfrage (Recht auf Vergessenwerden)
-- **Keine Weitergabe an Dritte** - Ihre Daten bleiben in der Schulgemeinschaft
-- Vollständige Kontrolle über eigene Daten
+- **Keine Weitergabe an Dritte**
 
 **Server & Hosting:**
 - Server-Standort: Amsterdam (EU)
