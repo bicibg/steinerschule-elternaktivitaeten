@@ -11,8 +11,10 @@
                     <p><strong>Durchgeführt von:</strong> {{ $lastReset['user'] }}</p>
                     <p><strong>Schuljahr:</strong> {{ $lastReset['schoolYear'] }}</p>
                     <p class="text-xs text-gray-600">
-                        {{ $lastReset['activities'] }} Aktivitäten deaktiviert,
-                        {{ $lastReset['posts'] }} Beiträge archiviert,
+                        {{ $lastReset['activities'] }} Aktivitäten,
+                        {{ $lastReset['bulletinPosts'] ?? 0 }} Pinnwand-Einträge,
+                        {{ $lastReset['announcements'] ?? 0 }} Ankündigungen deaktiviert,
+                        {{ $lastReset['posts'] }} Beiträge und
                         {{ $lastReset['comments'] }} Kommentare archiviert
                     </p>
                 </div>
@@ -43,6 +45,8 @@
         {{-- Statistics --}}
         @php
             $activeActivities = \App\Models\Activity::where('is_active', true)->count();
+            $activeBulletinPosts = \App\Models\BulletinPost::where('is_active', true)->count();
+            $activeAnnouncements = \App\Models\Announcement::where('is_active', true)->where('is_priority', false)->count();
             $activePosts = \App\Models\Post::whereNull('deleted_at')->count();
             $activeComments = \App\Models\Comment::whereNull('deleted_at')->count();
         @endphp
@@ -50,13 +54,29 @@
             <x-slot name="heading">
                 Aktuelle Statistiken
             </x-slot>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="bg-warning-50 rounded-lg p-4">
                     <div class="text-2xl font-bold text-warning-700">
                         {{ $activeActivities }}
                     </div>
                     <div class="text-sm text-warning-600">
-                        Aktive {{ $activeActivities === 1 ? 'Aktivität wird' : 'Aktivitäten werden' }} deaktiviert
+                        {{ $activeActivities === 1 ? 'Aktivität' : 'Aktivitäten' }}
+                    </div>
+                </div>
+                <div class="bg-warning-50 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-warning-700">
+                        {{ $activeBulletinPosts }}
+                    </div>
+                    <div class="text-sm text-warning-600">
+                        Pinnwand-{{ $activeBulletinPosts === 1 ? 'Eintrag' : 'Einträge' }}
+                    </div>
+                </div>
+                <div class="bg-warning-50 rounded-lg p-4">
+                    <div class="text-2xl font-bold text-warning-700">
+                        {{ $activeAnnouncements }}
+                    </div>
+                    <div class="text-sm text-warning-600">
+                        {{ $activeAnnouncements === 1 ? 'Ankündigung' : 'Ankündigungen' }}
                     </div>
                 </div>
                 <div class="bg-warning-50 rounded-lg p-4">
@@ -64,7 +84,7 @@
                         {{ $activePosts }}
                     </div>
                     <div class="text-sm text-warning-600">
-                        {{ $activePosts === 1 ? 'Forumbeitrag wird' : 'Forumbeiträge werden' }} archiviert
+                        {{ $activePosts === 1 ? 'Forumbeitrag' : 'Forumbeiträge' }}
                     </div>
                 </div>
                 <div class="bg-warning-50 rounded-lg p-4">
@@ -72,7 +92,7 @@
                         {{ $activeComments }}
                     </div>
                     <div class="text-sm text-warning-600">
-                        {{ $activeComments === 1 ? 'Kommentar wird' : 'Kommentare werden' }} archiviert
+                        {{ $activeComments === 1 ? 'Kommentar' : 'Kommentare' }}
                     </div>
                 </div>
             </div>

@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\Activity;
+use App\Models\Announcement;
 use App\Models\AuditLog;
+use App\Models\BulletinPost;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Console\Command;
@@ -27,6 +29,8 @@ class YearResetCommand extends Command
 
         // Show current statistics
         $activitiesCount = Activity::where('is_active', true)->count();
+        $bulletinPostsCount = BulletinPost::where('is_active', true)->count();
+        $announcementsCount = Announcement::where('is_active', true)->where('is_priority', false)->count();
         $postsCount = Post::whereNull('deleted_at')->count();
         $commentsCount = Comment::whereNull('deleted_at')->count();
 
@@ -34,6 +38,8 @@ class YearResetCommand extends Command
         $this->line('');
         $this->info('Diese Funktion wird folgende Aktionen durchführen:');
         $this->line("- {$activitiesCount} aktive Aktivitäten deaktivieren");
+        $this->line("- {$bulletinPostsCount} aktive Pinnwand-Einträge deaktivieren");
+        $this->line("- {$announcementsCount} normale Ankündigungen deaktivieren (prioritäre bleiben aktiv)");
         $this->line("- {$postsCount} Forumbeiträge archivieren");
         $this->line("- {$commentsCount} Kommentare archivieren");
         $this->line('');
@@ -72,21 +78,31 @@ class YearResetCommand extends Command
             Activity::where('is_active', true)->update(['is_active' => false]);
             $this->info("✓ {$activitiesCount} Aktivitäten deaktiviert");
 
-            // 2. Archive all posts
+            // 2. Deactivate all bulletin posts
+            BulletinPost::where('is_active', true)->update(['is_active' => false]);
+            $this->info("✓ {$bulletinPostsCount} Pinnwand-Einträge deaktiviert");
+
+            // 3. Deactivate non-priority announcements
+            Announcement::where('is_active', true)
+                ->where('is_priority', false)
+                ->update(['is_active' => false]);
+            $this->info("✓ {$announcementsCount} Ankündigungen deaktiviert");
+
+            // 4. Archive all posts
             Post::whereNull('deleted_at')->update([
                 'deletion_reason' => 'year_archived',
                 'deleted_at' => now(),
             ]);
             $this->info("✓ {$postsCount} Forumbeiträge archiviert");
 
-            // 3. Archive all comments
+            // 5. Archive all comments
             Comment::whereNull('deleted_at')->update([
                 'deletion_reason' => 'year_archived',
                 'deleted_at' => now(),
             ]);
             $this->info("✓ {$commentsCount} Kommentare archiviert");
 
-            // 4. Create audit log
+            // 6. Create audit log
             AuditLog::create([
                 'action_type' => 'year_reset',
                 'action_name' => 'Schuljahr zurückgesetzt (Konsole)',
@@ -96,6 +112,8 @@ class YearResetCommand extends Command
                 'metadata' => [
                     'school_year' => $schoolYear,
                     'activities_deactivated' => $activitiesCount,
+                    'bulletin_posts_deactivated' => $bulletinPostsCount,
+                    'announcements_deactivated' => $announcementsCount,
                     'posts_archived' => $postsCount,
                     'comments_archived' => $commentsCount,
                     'via' => 'console',
@@ -112,6 +130,8 @@ class YearResetCommand extends Command
                 ['Aktion', 'Anzahl'],
                 [
                     ['Aktivitäten deaktiviert', $activitiesCount],
+                    ['Pinnwand-Einträge deaktiviert', $bulletinPostsCount],
+                    ['Ankündigungen deaktiviert', $announcementsCount],
                     ['Forumbeiträge archiviert', $postsCount],
                     ['Kommentare archiviert', $commentsCount],
                 ]

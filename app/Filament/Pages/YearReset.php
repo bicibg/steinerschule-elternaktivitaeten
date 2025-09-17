@@ -3,6 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Models\Activity;
+use App\Models\Announcement;
+use App\Models\BulletinPost;
 use App\Models\Post;
 use App\Models\Comment;
 use App\Models\AuditLog;
@@ -62,8 +64,10 @@ class YearReset extends Page
                             ->content(function () {
                                 return view('filament.components.year-reset-effects', [
                                     'activitiesCount' => Activity::where('is_active', true)->count(),
-                                    'postsCount' => Post::count(),
-                                    'commentsCount' => Comment::count(),
+                                    'bulletinPostsCount' => BulletinPost::where('is_active', true)->count(),
+                                    'announcementsCount' => Announcement::where('is_active', true)->where('is_priority', false)->count(),
+                                    'postsCount' => Post::whereNull('deleted_at')->count(),
+                                    'commentsCount' => Comment::whereNull('deleted_at')->count(),
                                 ]);
                             }),
 
@@ -120,6 +124,8 @@ class YearReset extends Page
             'schoolYear' => $lastReset->metadata['school_year'] ?? 'N/A',
             'daysAgo' => $lastReset->created_at->diffInDays(now()),
             'activities' => $lastReset->metadata['activities_deactivated'] ?? 0,
+            'bulletinPosts' => $lastReset->metadata['bulletin_posts_deactivated'] ?? 0,
+            'announcements' => $lastReset->metadata['announcements_deactivated'] ?? 0,
             'posts' => $lastReset->metadata['posts_archived'] ?? 0,
             'comments' => $lastReset->metadata['comments_archived'] ?? 0,
         ];
@@ -165,36 +171,48 @@ class YearReset extends Page
         try {
             // Count items before changes
             $activitiesCount = Activity::where('is_active', true)->count();
+            $bulletinPostsCount = BulletinPost::where('is_active', true)->count();
+            $announcementsCount = Announcement::where('is_active', true)->where('is_priority', false)->count();
             $postsCount = Post::whereNull('deleted_at')->count();
             $commentsCount = Comment::whereNull('deleted_at')->count();
 
             // 1. Deactivate all activities
             Activity::where('is_active', true)->update(['is_active' => false]);
 
-            // 2. Archive all posts
+            // 2. Deactivate all bulletin posts
+            BulletinPost::where('is_active', true)->update(['is_active' => false]);
+
+            // 3. Deactivate non-priority announcements
+            Announcement::where('is_active', true)
+                ->where('is_priority', false)
+                ->update(['is_active' => false]);
+
+            // 4. Archive all posts
             Post::whereNull('deleted_at')->update([
                 'deletion_reason' => 'year_archived',
                 'deleted_at' => now(),
             ]);
 
-            // 3. Archive all comments
+            // 5. Archive all comments
             Comment::whereNull('deleted_at')->update([
                 'deletion_reason' => 'year_archived',
                 'deleted_at' => now(),
             ]);
 
-            // 4. Create audit log entry
+            // 6. Create audit log entry
             AuditLog::log(
                 'year_reset',
                 'Neues Schuljahr vorbereitet',
                 [
                     'school_year' => $this->schoolYear,
                     'activities_deactivated' => $activitiesCount,
+                    'bulletin_posts_deactivated' => $bulletinPostsCount,
+                    'announcements_deactivated' => $announcementsCount,
                     'posts_archived' => $postsCount,
                     'comments_archived' => $commentsCount,
                     'notes' => $this->notes,
                 ],
-                "Neues Schuljahr {$this->schoolYear} vorbereitet: {$activitiesCount} Aktivitäten deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.",
+                "Neues Schuljahr {$this->schoolYear} vorbereitet: {$activitiesCount} Aktivitäten, {$bulletinPostsCount} Pinnwand-Einträge und {$announcementsCount} Ankündigungen deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.",
                 'critical'
             );
 
@@ -207,7 +225,7 @@ class YearReset extends Page
 
             Notification::make()
                 ->title('System erfolgreich vorbereitet')
-                ->body("Das System ist bereit für das neue Schuljahr. {$activitiesCount} Aktivitäten deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.")
+                ->body("Das System ist bereit für das neue Schuljahr. {$activitiesCount} Aktivitäten, {$bulletinPostsCount} Pinnwand-Einträge und {$announcementsCount} Ankündigungen deaktiviert, {$postsCount} Beiträge und {$commentsCount} Kommentare archiviert.")
                 ->success()
                 ->persistent()
                 ->send();
