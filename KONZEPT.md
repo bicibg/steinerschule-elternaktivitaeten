@@ -64,16 +64,24 @@ Eine speziell für die Steinerschule Langnau entwickelte Plattform für:
 **Kommunikation:**
 - Benachrichtigungssystem für wichtige Mitteilungen an alle Nutzer
 
+**Mögliche Erweiterung - Kocheinsatzplan (auf Anfrage):**
+- Integration von Kocheinsatzplänen mit Kohlenhydrat-Angaben
+- Selbstständige Eintragung der Eltern für Kochdienste
+- Mittagstisch-Anmeldungen mit Allergie-Informationen
+- Mengenangaben und weitere Unterlagen zentral verfügbar
+- Diese Funktion kann nach Bedarf entwickelt werden
+
 ## Datenschutz & Sicherheit
 
 ### Datenschutz ist wichtig
 Die Plattform wurde mit Fokus auf Datenschutz entwickelt:
 
 **Minimale Datenerfassung:**
-- Nur Name und E-Mail-Adresse sind erforderlich
-- Telefonnummer ist freiwillig
+- Nur Name und E-Mail-Adresse sind erforderlich für die Anmeldung
+- Telefonnummer ist freiwillig (für dringende Mitteilungen)
 - Keine Werbe-Tracker oder Analyse-Tools
-- Helfernamen sind geschützt (nur für angemeldete Nutzer sichtbar)
+- **Wichtig:** Namen, Telefonnummern und Kommentare sind geschützt und nur für angemeldete Eltern sichtbar
+- Bei sensiblen Daten (z.B. Allergien) besonders geschützter Bereich
 
 **Technische Sicherheit:**
 - Passwörter werden verschlüsselt gespeichert
@@ -85,7 +93,8 @@ Die Plattform wurde mit Fokus auf Datenschutz entwickelt:
 - Auskunft über gespeicherte Daten jederzeit möglich
 - Daten können korrigiert werden
 - Löschung auf Anfrage (Recht auf Vergessenwerden)
-- Keine Weitergabe an Dritte
+- **Keine Weitergabe an Dritte** - Ihre Daten bleiben in der Schulgemeinschaft
+- Vollständige Kontrolle über eigene Daten
 
 **Server & Hosting:**
 - Server-Standort: Amsterdam (EU)
