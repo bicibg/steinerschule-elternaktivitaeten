@@ -3,20 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'post_id',
         'user_id',
         'body',
         'ip_hash',
-        'is_hidden',
-        'hidden_reason',
+        'deletion_reason',
     ];
 
     protected $casts = [
-        'is_hidden' => 'boolean',
+        'deleted_at' => 'datetime',
     ];
 
     public function post()
@@ -24,10 +25,6 @@ class Comment extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function scopeVisible($query)
-    {
-        return $query->where('is_hidden', false);
-    }
 
     public function user()
     {

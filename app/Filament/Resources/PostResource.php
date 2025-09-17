@@ -44,12 +44,21 @@ class PostResource extends Resource
                     ->label('IP-Hash')
                     ->disabled()
                     ->dehydrated(false),
-                Forms\Components\Toggle::make('is_hidden')
-                    ->label('Versteckt')
-                    ->default(false),
-                Forms\Components\TextInput::make('hidden_reason')
-                    ->label('Grund für Verstecken')
-                    ->visible(fn (callable $get) => $get('is_hidden')),
+                Forms\Components\Select::make('deletion_reason')
+                    ->label('Löschgrund')
+                    ->options([
+                        'year_archived' => 'Jahresarchivierung',
+                        'spam' => 'Spam',
+                        'inappropriate' => 'Unangemessen',
+                        'user_requested' => 'Auf Anfrage des Benutzers',
+                        'duplicate' => 'Duplikat',
+                    ])
+                    ->nullable()
+                    ->visible(fn (?\App\Models\Post $record) => $record?->deleted_at !== null),
+                Forms\Components\Placeholder::make('deleted_at')
+                    ->label('Gelöscht am')
+                    ->content(fn (?\App\Models\Post $record): string => $record?->deleted_at?->format('d.m.Y H:i') ?? '-')
+                    ->visible(fn (?\App\Models\Post $record) => $record?->deleted_at !== null),
             ]);
     }
 
@@ -70,20 +79,25 @@ class PostResource extends Resource
                     ->label('Nachricht')
                     ->limit(50)
                     ->searchable(),
-                Tables\Columns\IconColumn::make('is_hidden')
-                    ->label('Versteckt')
-                    ->boolean(),
+                Tables\Columns\TextColumn::make('deletion_reason')
+                    ->label('Löschgrund')
+                    ->formatStateUsing(fn (?string $state): string => match($state) {
+                        'year_archived' => 'Jahresarchivierung',
+                        'spam' => 'Spam',
+                        'inappropriate' => 'Unangemessen',
+                        'user_requested' => 'Auf Anfrage',
+                        'duplicate' => 'Duplikat',
+                        default => '-'
+                    })
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_hidden')
-                    ->label('Versteckt')
-                    ->placeholder('Alle')
-                    ->trueLabel('Nur versteckte')
-                    ->falseLabel('Nur sichtbare'),
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Gelöschte Einträge'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

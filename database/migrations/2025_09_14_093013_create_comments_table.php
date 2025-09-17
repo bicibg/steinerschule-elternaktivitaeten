@@ -14,12 +14,18 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('body');
             $table->string('ip_hash', 64)->nullable();
-            $table->boolean('is_hidden')->default(false);
-            $table->string('hidden_reason')->nullable();
+            $table->enum('deletion_reason', [
+                'year_archived',
+                'spam',
+                'inappropriate',
+                'user_requested',
+                'duplicate'
+            ])->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index('post_id');
-            $table->index('is_hidden');
+            $table->index('deleted_at');
             $table->index('created_at');
         });
     }

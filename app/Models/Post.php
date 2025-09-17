@@ -3,20 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'bulletin_post_id',
         'user_id',
         'body',
         'ip_hash',
-        'is_hidden',
-        'hidden_reason',
+        'deletion_reason',
     ];
 
     protected $casts = [
-        'is_hidden' => 'boolean',
+        'deleted_at' => 'datetime',
     ];
 
     public function bulletinPost()
@@ -26,7 +27,7 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->where('is_hidden', false)->orderBy('created_at', 'asc');
+        return $this->hasMany(Comment::class)->orderBy('created_at', 'asc');
     }
 
     public function allComments()
@@ -34,10 +35,6 @@ class Post extends Model
         return $this->hasMany(Comment::class)->orderBy('created_at', 'asc');
     }
 
-    public function scopeVisible($query)
-    {
-        return $query->where('is_hidden', false);
-    }
 
     public function user()
     {
