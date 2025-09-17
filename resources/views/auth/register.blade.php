@@ -3,7 +3,7 @@
 @section('title', 'Registrieren')
 
 @section('content')
-    <div class="max-w-md mx-auto">
+    <div class="max-w-3xl mx-auto">
         <x-card>
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Registrieren</h2>
 
@@ -45,6 +45,13 @@
                     Registrieren
                 </x-button>
             </form>
+
+            <div class="mt-4 text-xs text-gray-600 text-center">
+                Mit der Registrierung akzeptieren Sie unsere
+                <a href="{{ route('legal.privacy') }}" class="text-steiner-blue hover:text-steiner-dark underline">Datenschutzerklärung</a>
+                und das
+                <a href="{{ route('legal.impressum') }}" class="text-steiner-blue hover:text-steiner-dark underline">Impressum</a>.
+            </div>
 
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">

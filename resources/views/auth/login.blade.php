@@ -3,7 +3,7 @@
 @section('title', 'Anmelden')
 
 @section('content')
-    <div class="max-w-md mx-auto">
+    <div class="max-w-3xl mx-auto">
         <x-card>
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Anmelden</h2>
 

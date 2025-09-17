@@ -43,6 +43,23 @@
                 Sie ist nicht für die Öffentlichkeit bestimmt und wird ehrenamtlich betreut.
             </p>
 
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Technische Details</h2>
+            <p class="mb-4">
+                Dies ist eine <strong>massgeschneiderte Eigenentwicklung</strong> - keine kommerzielle Software oder Standard-CMS wie WordPress oder Joomla.
+                Ich habe die Plattform speziell für unsere Bedürfnisse programmiert.
+            </p>
+            <ul class="list-disc pl-6 mb-4">
+                <li><strong>Technologie:</strong> Laravel Framework (PHP), Alpine.js, Tailwind CSS</li>
+                <li><strong>Hosting:</strong> DigitalOcean Server in Amsterdam (Niederlande)</li>
+                <li><strong>Datenbank:</strong> MySQL</li>
+                <li><strong>Entwicklung:</strong> Komplett selbst programmiert, kein Baukastensystem</li>
+                <li><strong>Quellcode:</strong> Kann bei Bedarf an die Schule oder Nachfolger übergeben werden</li>
+            </ul>
+            <p class="mb-4">
+                Die Wahl dieser Technologien gewährleistet Stabilität, Sicherheit und einfache Wartbarkeit -
+                auch für eventuelle zukünftige Entwickler.
+            </p>
+
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Was diese Plattform NICHT ist</h2>
             <p class="mb-4">
                 Nur um das klarzustellen - ich mache das in meiner Freizeit als Elternteil:
@@ -59,8 +76,8 @@
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Haftungsausschluss</h2>
             <p class="mb-4">
-                Ich mache das in meiner Freizeit und gebe mein Bestes, aber ich kann nicht garantieren,
-                dass immer alles perfekt funktioniert. Die Nutzung erfolgt auf eigene Verantwortung.
+                Da dies ein ehrenamtliches Projekt ist, kann ich nicht garantieren, dass immer alles perfekt funktioniert.
+                Die Nutzung erfolgt auf eigene Verantwortung.
             </p>
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Inhalte und Urheberrecht</h2>

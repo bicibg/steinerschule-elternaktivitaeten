@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="flex items-center justify-center min-h-[60vh]">
-        <div class="w-full max-w-md">
+        <div class="w-full max-w-3xl">
             <x-card>
                 <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Neues Passwort setzen</h2>
 
