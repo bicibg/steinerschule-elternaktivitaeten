@@ -4,17 +4,17 @@
 
 @section('content')
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Pinnwand</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Pinnwand <span class="text-lg font-normal text-gray-600">– Helfergesuche</span></h1>
         <p class="text-gray-600">
-            Hier finden Sie <strong>Aufrufe zur Mithilfe</strong> und <strong>Unterstützungsgesuche</strong> für einzelne Veranstaltungen und Projekte.
-            Eltern können hier Helfer für ihre Initiativen suchen.
+            Hier finden Sie <strong>aktuelle Helfergesuche</strong> von den Organisatoren der verschiedenen Elternaktivitäten.
+            Wenn eine Arbeitsgruppe oder Aktivität Unterstützung braucht, wird hier ein Aufruf veröffentlicht.
         </p>
     </div>
 
     <x-info-box type="help">
-        <strong>Suchen Sie Hilfe für ein Event?</strong> Hier können Eltern Unterstützung für einmalige Veranstaltungen, Projekte oder besondere Anlässe anfragen.
+        <strong>Möchten Sie helfen?</strong> Die Organisatoren der <a href="{{ route('activities.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Elternaktivitäten</a> suchen hier nach Unterstützung für ihre Veranstaltungen und Projekte.
         <br>
-        <span class="text-xs">Für regelmässige Aktivitäten siehe <a href="{{ route('activities.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Elternaktivitäten</a></span>
+        <span class="text-xs">Schauen Sie sich die Aufrufe an und melden Sie sich direkt bei den Organisatoren.</span>
     </x-info-box>
 
     <!-- Category Filter -->

@@ -6,15 +6,15 @@
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-800 mb-2">Elternaktivitäten</h1>
         <p class="text-gray-600">
-            Hier finden Sie <strong>dauerhafte Arbeitsgruppen und regelmässige Aktivitäten</strong>, die von Eltern organisiert werden.
-            Diese Gruppen treffen sich kontinuierlich und freuen sich über neue Mitglieder.
+            Hier finden Sie <strong>alle Arbeitsgruppen und Aktivitäten</strong>, die von Eltern für die Schule organisiert werden.
+            Jede Gruppe hat einen festen Verantwortlichen und trifft sich regelmässig.
         </p>
     </div>
 
     <x-info-box type="info">
-        <strong>Möchten Sie sich engagieren?</strong> Diese Arbeitsgruppen und Aktivitäten finden regelmässig statt und suchen Mitglieder für langfristige Mitarbeit.
+        <strong>Übersicht aller Elternaktivitäten</strong> – Dies ist die komplette Liste der Arbeitsgruppen an unserer Schule.
         <br>
-        <span class="text-xs">Für einmalige Helfergesuche siehe <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
+        <span class="text-xs">Wenn diese Gruppen Hilfe benötigen, finden Sie deren Aufrufe auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
     </x-info-box>
 
     <!-- Category Filter -->

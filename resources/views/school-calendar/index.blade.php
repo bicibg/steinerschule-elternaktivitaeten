@@ -3,7 +3,19 @@
 @section('title', 'Schulkalender')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schulkalender</h1>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Schulkalender</h1>
+        <p class="text-gray-600">
+            Hier finden Sie alle <strong>offiziellen Schultermine und Veranstaltungen</strong> der Steinerschule.
+            Ferien, Feste, Aufführungen und wichtige Termine im Überblick.
+        </p>
+    </div>
+
+    <x-info-box type="info">
+        <strong>Offizielle Schultermine</strong> – Dieser Kalender zeigt Veranstaltungen, die von der Schule organisiert werden.
+        <br>
+        <span class="text-xs">Für Helfereinsätze siehe <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a></span>
+    </x-info-box>
 
     <!-- Calendar Container -->
     <x-card noPadding="true">

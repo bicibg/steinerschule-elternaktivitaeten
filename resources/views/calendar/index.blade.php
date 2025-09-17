@@ -3,7 +3,19 @@
 @section('title', 'Schichtkalender')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Schichtkalender</h1>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Schichtkalender</h1>
+        <p class="text-gray-600">
+            Hier sehen Sie alle <strong>Schichten und Helfereinsätze</strong> aus den aktuellen Pinnwand-Aufrufen.
+            Klicken Sie auf einen Eintrag, um sich anzumelden.
+        </p>
+    </div>
+
+    <x-info-box type="help">
+        <strong>Helfer gesucht!</strong> Dieser Kalender zeigt alle Termine, für die Helfer benötigt werden.
+        <br>
+        <span class="text-xs">Die Details zu den Aufrufen finden Sie auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
+    </x-info-box>
 
     @php
         // Collect all unique items for legend
