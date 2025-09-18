@@ -30,20 +30,34 @@
                 <div class="flex items-start justify-between">
                     <h1 class="text-3xl font-bold text-gray-800">{{ $schoolEvent->title }}</h1>
                     @if($schoolEvent->event_type)
-                        <span class="ml-2 inline-flex items-center px-3 py-1 rounded text-sm font-medium
-                            {{ $schoolEvent->event_type === 'ferien' || $schoolEvent->event_type === 'holiday' ? 'bg-green-100 text-green-800' : '' }}
-                            {{ $schoolEvent->event_type === 'feiertag' ? 'bg-red-100 text-red-800' : '' }}
-                            {{ $schoolEvent->event_type === 'veranstaltung' ? 'bg-blue-100 text-blue-800' : '' }}
-                            {{ $schoolEvent->event_type === 'konferenz' ? 'bg-purple-100 text-purple-800' : '' }}
-                            {{ $schoolEvent->event_type === 'andere' ? 'bg-gray-100 text-gray-800' : '' }}">
+                        @php
+                            $colorClass = match($schoolEvent->event_type) {
+                                'holiday', 'ferien' => 'bg-green-100 text-green-800',
+                                'festival' => 'bg-yellow-100 text-yellow-800',
+                                'meeting', 'konferenz' => 'bg-purple-100 text-purple-800',
+                                'performance' => 'bg-pink-100 text-pink-800',
+                                'sports' => 'bg-orange-100 text-orange-800',
+                                'excursion' => 'bg-teal-100 text-teal-800',
+                                'feiertag' => 'bg-red-100 text-red-800',
+                                'veranstaltung' => 'bg-blue-100 text-blue-800',
+                                'andere' => 'bg-gray-100 text-gray-800',
+                                default => 'bg-gray-100 text-gray-800'
+                            };
+                        @endphp
+                        <span class="ml-2 inline-flex items-center px-3 py-1 rounded text-sm font-medium {{ $colorClass }}">
                             @php
                                 $typeLabel = match($schoolEvent->event_type) {
                                     'holiday', 'ferien' => 'Ferien',
+                                    'festival' => 'Fest',
+                                    'meeting' => 'Treffen',
+                                    'performance' => 'Aufführung',
+                                    'sports' => 'Sport',
+                                    'excursion' => 'Ausflug',
                                     'feiertag' => 'Feiertag',
                                     'veranstaltung' => 'Veranstaltung',
                                     'konferenz' => 'Konferenz',
                                     'andere' => 'Andere',
-                                    default => ucfirst($schoolEvent->event_type)
+                                    default => 'Veranstaltung'
                                 };
                             @endphp
                             {{ $typeLabel }}

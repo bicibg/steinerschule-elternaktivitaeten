@@ -37,6 +37,8 @@
                 <x-button type="submit" variant="primary" block>
                     Anmelden
                 </x-button>
+
+                <x-spam-protection-notice />
             </form>
 
             <div class="mt-4 text-center">

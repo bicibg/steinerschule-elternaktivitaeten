@@ -49,6 +49,8 @@
                 <button type="submit" class="w-full px-4 py-2 bg-steiner-blue text-white rounded-md hover:bg-steiner-dark transition-colors duration-200">
                     Registrieren
                 </button>
+
+                <x-spam-protection-notice />
             </form>
 
             <div class="mt-6 text-center">
