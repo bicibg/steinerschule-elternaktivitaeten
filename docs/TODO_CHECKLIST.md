@@ -1,0 +1,139 @@
+# TODO Checklist - Sanity Check Fixes
+
+**IMPORTANT**: Mark items as completed by changing `[ ]` to `[x]` when done. Update PROGRESS_LOG.md before committing any changes.
+
+## 🚨 Critical (Security) - Do First!
+
+### Rate Limiting
+- [ ] Add throttle middleware to login route
+  - **File**: `routes/web.php:22`
+  - **Fix**: Add `->middleware('throttle:5,1')` to login POST route
+  - **Time**: 2 minutes
+  - **Test**: Try 6 rapid login attempts, should get 429 error on 6th
+
+## ⚠️ High Priority - Do This Week
+
+### Testing Infrastructure
+- [ ] Create authentication test suite
+  - **File**: `tests/Feature/AuthenticationTest.php`
+  - **Tests needed**: login, register, logout, password reset
+  - **Time**: 2 hours
+
+- [ ] Create shift management tests
+  - **File**: `tests/Feature/ShiftManagementTest.php`
+  - **Tests needed**: signup, withdraw, capacity limits
+  - **Time**: 1 hour
+
+- [ ] Create bulletin CRUD tests
+  - **File**: `tests/Feature/BulletinTest.php`
+  - **Tests needed**: create, edit with token, archive
+  - **Time**: 1.5 hours
+
+## 📝 Medium Priority - Improve Code Quality
+
+### Form Request Classes
+- [ ] Create UpdateBulletinRequest
+  - **File**: `app/Http/Requests/UpdateBulletinRequest.php`
+  - **Move validation from**: `BulletinController::update()`
+  - **Time**: 15 minutes
+
+- [ ] Create RegisterUserRequest
+  - **File**: `app/Http/Requests/RegisterUserRequest.php`
+  - **Move validation from**: `AuthController::register()`
+  - **Time**: 15 minutes
+
+- [ ] Create StoreShiftRequest
+  - **File**: `app/Http/Requests/StoreShiftRequest.php`
+  - **Move validation from**: `ShiftController::signup()`
+  - **Time**: 15 minutes
+
+### Service Layer
+- [ ] Extract CalendarController logic to CalendarService
+  - **Create**: `app/Services/CalendarService.php`
+  - **Move**: Date calculations and calendar item processing
+  - **Time**: 2 hours
+
+- [ ] Create ShiftService for shift management logic
+  - **Create**: `app/Services/ShiftService.php`
+  - **Move**: Signup/withdrawal business logic
+  - **Time**: 1 hour
+
+### Remove Inline Styles
+- [ ] Fix calendar/index.blade.php inline styles
+  - **Replace**: `style="min-height: 60px"` → `class="min-h-[60px]"`
+  - **Time**: 10 minutes
+
+- [ ] Fix calendar/partials/content.blade.php inline styles
+  - **Time**: 15 minutes
+
+- [ ] Fix school-calendar views inline styles
+  - **Time**: 15 minutes
+
+- [ ] Remove debug.blade.php or fix its styles
+  - **Time**: 5 minutes
+
+## 🔧 Low Priority - Nice to Have
+
+### Documentation
+- [ ] Fix README.md line 160 typo
+  - **Change**: "composer run dev" → "npm run dev"
+  - **Time**: 1 minute
+
+- [ ] Document edit token API endpoints
+  - **File**: `docs/API.md`
+  - **Time**: 30 minutes
+
+- [ ] Add PHPDoc comments to complex methods
+  - **Focus on**: CalendarController, shift calculations
+  - **Time**: 1 hour
+
+### Code Organization
+- [ ] Create repository classes for complex queries
+  - **Start with**: `app/Repositories/BulletinRepository.php`
+  - **Time**: 2 hours
+
+- [ ] Standardize controller methods to RESTful patterns
+  - **Review**: All controllers for consistency
+  - **Time**: 2 hours
+
+## 📊 Progress Tracking
+
+### Completed Items Summary
+- **Critical**: 0/1
+- **High**: 0/3
+- **Medium**: 0/8
+- **Low**: 0/5
+- **Total**: 0/17
+
+### Time Estimates
+- **Total estimated time**: ~15 hours
+- **Quick wins (< 30 min)**: 7 items
+- **Half-day tasks**: 5 items
+- **Full-day tasks**: 5 items
+
+## Notes for Implementation
+
+1. **Always test after changes** - Run `php artisan test` after implementing tests
+2. **Check rate limiting** - Use browser dev tools to verify 429 responses
+3. **Preserve German UI** - Keep all user-facing text in German
+4. **Update progress log** - Document what you did in PROGRESS_LOG.md before commits
+5. **One task at a time** - Complete and test each item before moving to next
+
+## Quick Command Reference
+
+```bash
+# Run tests
+php artisan test
+
+# Create Form Request
+php artisan make:request UpdateBulletinRequest
+
+# Create Service
+php artisan make:service CalendarService  # Note: might need manual creation
+
+# Create Test
+php artisan make:test AuthenticationTest
+
+# Check routes
+php artisan route:list | grep login
+```
