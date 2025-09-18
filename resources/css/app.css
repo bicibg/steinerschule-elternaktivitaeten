@@ -85,6 +85,10 @@
 }
 
 /* Hover States */
+.hover\:text-white:hover {
+    color: rgb(255, 255, 255);
+}
+
 .hover\:text-steiner-blue:hover {
     color: rgb(57, 123, 161);
 }
@@ -99,6 +103,14 @@
 
 .hover\:bg-steiner-dark:hover {
     background-color: rgb(41, 89, 117);
+}
+
+.hover\:bg-steiner-light:hover {
+    background-color: rgb(165, 195, 212);
+}
+
+.hover\:bg-steiner-lighter:hover {
+    background-color: rgb(220, 232, 239);
 }
 
 /* Focus States */
