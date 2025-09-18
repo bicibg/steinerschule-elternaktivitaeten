@@ -300,7 +300,7 @@
                     const button = event.currentTarget;
                     const notificationElement = button.closest('[x-data]');
 
-                    fetch(`/api/notifications/${notificationId}/dismiss`, {
+                    fetch(`/api/announcements/${notificationId}/dismiss`, {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
