@@ -31,6 +31,49 @@
 
 ---
 
+## 2025-09-18 (Day 2)
+
+### Tasks Completed
+- [x] Document edit token API endpoints
+  - Files created: docs/API.md
+  - Comprehensive documentation of GET/PUT endpoints, security, and future improvements
+
+- [x] Add PHPDoc comments to complex methods
+  - Files modified: app/Services/CalendarService.php, app/Services/ShiftService.php
+  - Added detailed PHPDoc with parameter types, return types, and descriptions
+  - Documented complex date calculations and business logic
+
+- [x] Create repository classes for complex queries
+  - Files created: app/Repositories/BulletinPostRepository.php, app/Repositories/ShiftRepository.php
+  - Extracted complex queries from controllers to repository layer
+  - Updated BulletinController to use dependency injection
+
+- [x] Standardize controller methods to RESTful patterns
+  - Files created: app/Http/Controllers/Api/ShiftVolunteerController.php, BulletinPostForumController.php, ForumCommentController.php
+  - Refactored API routes to follow RESTful nested resource patterns
+  - Maintained backward compatibility with legacy routes
+
+### Decisions Made
+- Use repository pattern for data access layer separation
+- Maintain backward compatibility during RESTful migration
+- Keep legacy ApiController temporarily to avoid breaking existing frontend
+
+### Issues Resolved
+- Fixed button hover text color visibility issue
+- Removed debug page as no longer needed
+- Added Laravel Honeypot for privacy-friendly spam protection
+
+### Next Steps
+- All TODO checklist items completed (19/19) ✅
+- Consider migrating frontend to use new RESTful endpoints
+- Remove legacy ApiController once frontend is updated
+
+### Commit Summary
+- Commit message: Complete remaining TODO tasks - repositories and RESTful refactoring
+- Files changed: 10+ files created/modified
+
+---
+
 ## 2025-01-18 (Day 1)
 
 ### Tasks Completed

@@ -10,9 +10,18 @@ use Illuminate\Support\Facades\DB;
 class ShiftService
 {
     /**
-     * Sign up a user for a shift
+     * Sign up a user for a shift.
      *
-     * @throws \Exception if shift is full or user already signed up
+     * Performs a transactional signup to prevent race conditions when multiple
+     * users attempt to sign up simultaneously. Validates capacity and duplicate
+     * signups before creating the volunteer record.
+     *
+     * @param Shift $shift Target shift to sign up for
+     * @param User  $user  User attempting to sign up
+     *
+     * @return ShiftVolunteer Created volunteer record
+     *
+     * @throws \Exception When shift is at capacity or user already signed up
      */
     public function signupForShift(Shift $shift, User $user): ShiftVolunteer
     {
@@ -38,9 +47,17 @@ class ShiftService
     }
 
     /**
-     * Withdraw a user from a shift
+     * Withdraw a user from a shift.
      *
-     * @throws \Exception if user is not signed up
+     * Removes the user's volunteer signup from the specified shift.
+     * Validates that the user is actually signed up before attempting deletion.
+     *
+     * @param Shift $shift Shift to withdraw from
+     * @param User  $user  User requesting withdrawal
+     *
+     * @return bool True if withdrawal successful
+     *
+     * @throws \Exception When user is not signed up for the shift
      */
     public function withdrawFromShift(Shift $shift, User $user): bool
     {
@@ -56,7 +73,15 @@ class ShiftService
     }
 
     /**
-     * Check if a shift is full
+     * Check if a shift has reached capacity.
+     *
+     * Combines both online volunteers (registered through platform) and
+     * offline volunteers (manually tracked) to determine if the shift
+     * has reached its needed capacity.
+     *
+     * @param Shift $shift Shift to check capacity for
+     *
+     * @return bool True if shift is at or over capacity
      */
     public function isShiftFull(Shift $shift): bool
     {
@@ -67,7 +92,15 @@ class ShiftService
     }
 
     /**
-     * Check if a user is already signed up for a shift
+     * Check if a user is already signed up for a shift.
+     *
+     * Queries the shift_volunteers table to determine if a signup
+     * record exists for the given user and shift combination.
+     *
+     * @param Shift $shift Shift to check
+     * @param User  $user  User to check for existing signup
+     *
+     * @return bool True if user has already signed up
      */
     public function isUserSignedUp(Shift $shift, User $user): bool
     {
@@ -77,7 +110,14 @@ class ShiftService
     }
 
     /**
-     * Get available spots for a shift
+     * Calculate remaining available volunteer spots.
+     *
+     * Returns the number of additional volunteers needed, accounting for
+     * both online and offline registrations. Never returns negative values.
+     *
+     * @param Shift $shift Shift to calculate availability for
+     *
+     * @return int Number of available spots (0 if full or overfilled)
      */
     public function getAvailableSpots(Shift $shift): int
     {
@@ -88,7 +128,14 @@ class ShiftService
     }
 
     /**
-     * Get all volunteers for a shift
+     * Get all volunteers signed up for a shift.
+     *
+     * Retrieves volunteer records with eager loaded user relationships
+     * for efficient display in volunteer lists.
+     *
+     * @param Shift $shift Shift to get volunteers for
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, ShiftVolunteer>
      */
     public function getShiftVolunteers(Shift $shift)
     {
@@ -96,7 +143,14 @@ class ShiftService
     }
 
     /**
-     * Get all shifts a user is signed up for
+     * Get all shifts a user has volunteered for.
+     *
+     * Retrieves all shift records where the user has an active volunteer
+     * signup, including the parent bulletin post for context.
+     *
+     * @param User $user User to get shift signups for
+     *
+     * @return \Illuminate\Support\Collection<int, Shift> Collection of shifts
      */
     public function getUserShifts(User $user)
     {
@@ -107,7 +161,15 @@ class ShiftService
     }
 
     /**
-     * Check if a user can sign up for a shift
+     * Determine if a user is eligible to sign up for a shift.
+     *
+     * Performs validation checks and returns both the eligibility status
+     * and a human-readable reason if signup is not allowed.
+     *
+     * @param Shift $shift Shift to check signup eligibility for
+     * @param User  $user  User requesting signup
+     *
+     * @return array{can_signup: bool, reason: string|null} Signup eligibility and reason
      */
     public function canUserSignup(Shift $shift, User $user): array
     {
@@ -129,7 +191,23 @@ class ShiftService
     }
 
     /**
-     * Get shift statistics
+     * Generate comprehensive statistics for a shift.
+     *
+     * Calculates various metrics including online/offline volunteer counts,
+     * fill percentage, and availability status. Useful for dashboards and
+     * reporting features.
+     *
+     * @param Shift $shift Shift to generate statistics for
+     *
+     * @return array{
+     *     online_volunteers: int,
+     *     offline_volunteers: int,
+     *     total_filled: int,
+     *     needed: int,
+     *     available_spots: int,
+     *     is_full: bool,
+     *     fill_percentage: int
+     * } Comprehensive shift statistics
      */
     public function getShiftStatistics(Shift $shift): array
     {

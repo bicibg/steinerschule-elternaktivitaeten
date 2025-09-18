@@ -9,7 +9,24 @@ use Illuminate\Support\Collection;
 class CalendarService
 {
     /**
-     * Get calendar items for a specific month and year
+     * Get calendar items for a specific month and year.
+     *
+     * Processes all activities and shifts for the given month, organizing them
+     * into calendar items grouped by date. Handles different activity types:
+     * shifts, production, meetings, and flexible help.
+     *
+     * @param int $month Month number (1-12)
+     * @param int $year  Year (e.g., 2024)
+     *
+     * @return array{
+     *     itemsByDate: Collection,
+     *     upcomingItems: Collection,
+     *     date: Carbon,
+     *     currentMonth: int,
+     *     currentYear: int,
+     *     activities: Collection,
+     *     productionActivities: Collection
+     * }
      */
     public function getCalendarItems(int $month, int $year): array
     {
@@ -52,7 +69,17 @@ class CalendarService
     }
 
     /**
-     * Get activities that should appear in calendar for given month
+     * Get activities that should appear in calendar for given month.
+     *
+     * Fetches all published activities that:
+     * - Have show_in_calendar enabled
+     * - Overlap with the given month period
+     * - Includes eager loading of shifts and volunteers
+     *
+     * @param Carbon $startOfMonth First day of month at 00:00:00
+     * @param Carbon $endOfMonth   Last day of month at 23:59:59
+     *
+     * @return Collection<int, BulletinPost> Activities with loaded relationships
      */
     private function getActivitiesForMonth(Carbon $startOfMonth, Carbon $endOfMonth): Collection
     {
@@ -73,7 +100,16 @@ class CalendarService
     }
 
     /**
-     * Process shift-based activities
+     * Process shift-based activities into calendar items.
+     *
+     * Converts each shift of shift-based activities into individual calendar items.
+     * Parses German date format from shift time strings.
+     *
+     * @param Collection $activities Collection of BulletinPost models
+     * @param int        $year       Target year
+     * @param int        $month      Target month (1-12)
+     *
+     * @return Collection<int, array> Calendar items for shifts
      */
     private function processShiftActivities(Collection $activities, int $year, int $month): Collection
     {
@@ -190,7 +226,16 @@ class CalendarService
     }
 
     /**
-     * Calculate display range for spanning activities within current month
+     * Calculate display range for spanning activities within current month.
+     *
+     * Determines the visible date range for activities that span multiple days,
+     * clipping to month boundaries when necessary.
+     *
+     * @param BulletinPost $activity     Activity with start_at and end_at dates
+     * @param Carbon       $startOfMonth First day of display month
+     * @param Carbon       $endOfMonth   Last day of display month
+     *
+     * @return array{displayStart: Carbon, displayEnd: Carbon}|null Range or null if no overlap
      */
     private function calculateDisplayRange($activity, Carbon $startOfMonth, Carbon $endOfMonth): ?array
     {
@@ -289,7 +334,14 @@ class CalendarService
     }
 
     /**
-     * Parse German date format from shift time string
+     * Parse German date format from shift time string.
+     *
+     * Extracts date from German formatted shift times.
+     * Example input: "Samstag, 09.11.2024, 09:00 - 11:00 Uhr"
+     *
+     * @param string $timeString Shift time string in German format
+     *
+     * @return Carbon|null Parsed date or null if parsing fails
      */
     private function parseShiftDate($timeString): ?Carbon
     {
@@ -324,7 +376,16 @@ class CalendarService
     }
 
     /**
-     * Get consistent color for an activity
+     * Get consistent color for an activity.
+     *
+     * Generates a deterministic color based on activity ID and title.
+     * Uses CRC32 hash for better distribution across color palette.
+     * Same activity always gets same color.
+     *
+     * @param BulletinPost $activity  Activity model
+     * @param string|null  $shiftRole Optional shift role (currently unused)
+     *
+     * @return string Tailwind CSS color class (e.g., 'bg-blue-500')
      */
     private function getItemColor($activity, $shiftRole = null): string
     {
