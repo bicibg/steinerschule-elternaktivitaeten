@@ -329,11 +329,26 @@
         </div>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 mt-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <p class="text-center text-gray-500 text-sm">
-                © {{ date('Y') }} Steinerschule Langnau. Alle Rechte vorbehalten.
-            </p>
+    <footer class="bg-steiner-dark text-white mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col items-center space-y-4">
+                <nav class="flex flex-wrap justify-center gap-6">
+                    <a href="{{ route('legal.privacy') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                        Datenschutz
+                    </a>
+                    <span class="text-gray-600">|</span>
+                    <a href="{{ route('legal.impressum') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                        Impressum
+                    </a>
+                    <span class="text-gray-600">|</span>
+                    <a href="{{ route('legal.contact') }}" class="text-sm text-gray-300 hover:text-white transition-colors">
+                        Kontakt
+                    </a>
+                </nav>
+                <p class="text-center text-gray-400 text-sm">
+                    © {{ date('Y') }} Buğra Ergin. Entwickelt für die Elterngemeinschaft.
+                </p>
+            </div>
         </div>
     </footer>
 </body>
