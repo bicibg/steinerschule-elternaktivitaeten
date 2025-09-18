@@ -29,7 +29,7 @@ class AnnouncementSeeder extends Seeder
         Announcement::firstOrCreate(
             ['title' => 'Willkommen!'],
             [
-                'message' => 'Herzlich willkommen auf der Plattform der Elternaktivitäten der Rudolf Steiner Schule Langnau. Hier finden Sie alle wichtigen Informationen zu Elternaktivitäten, Veranstaltungen und können sich für Helferschichten anmelden.',
+                'message' => 'Willkommen auf der Elternaktivitäten-Plattform der Rudolf Steiner Schule Langnau. Hier erhalten Sie alle wichtigen Informationen zu Elternaktivitäten und Veranstaltungen und haben die Möglichkeit, sich für Helferschichten anzumelden.',
                 'type' => 'info',
                 'is_active' => true,
                 'is_priority' => true,
