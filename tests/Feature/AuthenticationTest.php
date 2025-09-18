@@ -19,6 +19,24 @@ class AuthenticationTest extends TestCase
         $response->assertSee('Anmelden');
     }
 
+    public function test_authenticated_users_cannot_access_login_page(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/login');
+
+        $response->assertRedirect('/');
+    }
+
+    public function test_authenticated_users_cannot_access_register_page(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/register');
+
+        $response->assertRedirect('/');
+    }
+
     public function test_users_can_authenticate_using_login_screen(): void
     {
         $user = User::factory()->create([

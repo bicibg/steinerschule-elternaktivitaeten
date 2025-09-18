@@ -81,6 +81,15 @@
 - [ ] Remove debug.blade.php or fix its styles
   - **Time**: 5 minutes
 
+## 🐛 Bug Fixes - User Reported
+
+### Authentication Flow
+- [x] Fix auth page redirects for authenticated users
+  - **File**: `routes/web.php`
+  - **Fix**: Add `middleware('guest')` to auth routes
+  - **Time**: 10 minutes
+  - **Issue**: Authenticated users could access login/register pages
+
 ## 🔧 Low Priority - Nice to Have
 
 ### Documentation
@@ -111,8 +120,9 @@
 - **Critical**: 1/1 ✅
 - **High**: 3/4 ✅ (includes new captcha task)
 - **Medium**: 6/8 ✅
+- **Bug Fixes**: 1/1 ✅
 - **Low**: 1/5 ✅
-- **Total**: 11/18
+- **Total**: 12/19
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours
