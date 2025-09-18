@@ -201,6 +201,31 @@
 
 ---
 
+## 2025-01-18 (Day 2 - Continued)
+
+### Tasks Completed
+- [x] Created bulletin CRUD tests
+  - Files created: tests/Feature/BulletinTest.php
+  - 14 comprehensive tests covering all bulletin functionality
+  - Tests: index, filtering, show, edit with token, update, validation, archiving
+
+### Decisions Made
+- Checkboxes in forms send 'on' when checked, not boolean values
+- Test both positive and negative cases for token-based editing
+- Verify relationships are eager loaded in show views
+
+### Blockers/Issues
+- Checkbox boolean conversion needed adjustment in test
+
+### Next Steps
+- Fix auth page redirects for authenticated users
+
+### Commit Summary
+- Commit message: "Create bulletin CRUD tests with 14 passing tests"
+- Files changed: 2 files (BulletinTest.php, TODO updates)
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)

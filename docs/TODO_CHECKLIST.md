@@ -32,7 +32,7 @@
   - **Tests needed**: signup, withdraw, capacity limits
   - **Time**: 1 hour
 
-- [ ] Create bulletin CRUD tests
+- [x] Create bulletin CRUD tests
   - **File**: `tests/Feature/BulletinTest.php`
   - **Tests needed**: create, edit with token, archive
   - **Time**: 1.5 hours
@@ -109,10 +109,10 @@
 
 ### Completed Items Summary
 - **Critical**: 1/1 ✅
-- **High**: 2/4 ✅ (includes new captcha task)
+- **High**: 3/4 ✅ (includes new captcha task)
 - **Medium**: 6/8 ✅
 - **Low**: 1/5 ✅
-- **Total**: 10/18
+- **Total**: 11/18
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours
