@@ -50,10 +50,11 @@
   - **Move validation from**: `AuthController::register()`
   - **Time**: 15 minutes
 
-- [ ] Create StoreShiftRequest
-  - **File**: `app/Http/Requests/StoreShiftRequest.php`
-  - **Move validation from**: `ShiftController::signup()`
+- [x] Create StorePostRequest (replaced StoreShiftRequest)
+  - **File**: `app/Http/Requests/StorePostRequest.php`
+  - **Move validation from**: `PostController::store()`
   - **Time**: 15 minutes
+  - **Note**: ShiftController doesn't need Form Request (no validation)
 
 ### Service Layer
 - [ ] Extract CalendarController logic to CalendarService
@@ -108,10 +109,10 @@
 
 ### Completed Items Summary
 - **Critical**: 1/1 ✅
-- **High**: 0/4 (includes new captcha task)
-- **Medium**: 5/8 ✅
+- **High**: 1/4 ✅ (includes new captcha task)
+- **Medium**: 6/8 ✅
 - **Low**: 1/5 ✅
-- **Total**: 7/18
+- **Total**: 9/18
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours
