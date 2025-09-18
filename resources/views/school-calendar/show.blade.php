@@ -31,12 +31,22 @@
                     <h1 class="text-3xl font-bold text-gray-800">{{ $schoolEvent->title }}</h1>
                     @if($schoolEvent->event_type)
                         <span class="ml-2 inline-flex items-center px-3 py-1 rounded text-sm font-medium
-                            {{ $schoolEvent->event_type === 'ferien' ? 'bg-green-100 text-green-800' : '' }}
+                            {{ $schoolEvent->event_type === 'ferien' || $schoolEvent->event_type === 'holiday' ? 'bg-green-100 text-green-800' : '' }}
                             {{ $schoolEvent->event_type === 'feiertag' ? 'bg-red-100 text-red-800' : '' }}
                             {{ $schoolEvent->event_type === 'veranstaltung' ? 'bg-blue-100 text-blue-800' : '' }}
                             {{ $schoolEvent->event_type === 'konferenz' ? 'bg-purple-100 text-purple-800' : '' }}
                             {{ $schoolEvent->event_type === 'andere' ? 'bg-gray-100 text-gray-800' : '' }}">
-                            {{ ucfirst($schoolEvent->event_type) }}
+                            @php
+                                $typeLabel = match($schoolEvent->event_type) {
+                                    'holiday', 'ferien' => 'Ferien',
+                                    'feiertag' => 'Feiertag',
+                                    'veranstaltung' => 'Veranstaltung',
+                                    'konferenz' => 'Konferenz',
+                                    'andere' => 'Andere',
+                                    default => ucfirst($schoolEvent->event_type)
+                                };
+                            @endphp
+                            {{ $typeLabel }}
                         </span>
                     @endif
                 </div>
