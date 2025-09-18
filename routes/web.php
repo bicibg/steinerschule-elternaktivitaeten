@@ -19,7 +19,7 @@ Route::get('/debug', function () {
 
 // Authentication routes
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware('throttle:5,1');
 Route::get('/register', [\App\Http\Controllers\AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login');

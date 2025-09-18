@@ -80,7 +80,7 @@ npm run dev
 Activities have magic edit links: `/aktivitaeten/{slug}/edit?token={edit_token}`
 
 ### Recent Security Implementations (Sept 2025)
-- Rate limiting on login (5 attempts/minute) **⚠️ NOT YET IMPLEMENTED - See docs/TODO_CHECKLIST.md**
+- Rate limiting on login (5 attempts/minute) ✅ **Implemented 2025-01-18**
 - Security headers (but allow localhost for dev)
 - Simplified passwords (just 8 chars - parents get scared of complex rules)
 - Privacy: volunteer names hidden from non-authenticated users
