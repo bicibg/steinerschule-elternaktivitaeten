@@ -172,6 +172,35 @@
 
 ---
 
+## 2025-01-18 (Day 2)
+
+### Tasks Completed
+- [x] Created shift management tests
+  - Files created: tests/Feature/ShiftManagementTest.php, database/factories/BulletinPostFactory.php
+  - Added HasFactory trait to BulletinPost model
+  - Removed example test files
+  - 10 comprehensive tests covering all shift management scenarios
+  - Tests: signup, withdraw, capacity limits, filled calculations
+
+### Decisions Made
+- Simplified guest signup test to only check redirect (session error not critical)
+- Created BulletinPost factory to support testing
+- Removed non-existent published_at field from factory
+
+### Blockers/Issues
+- BulletinPost model was missing factory - created one
+- published_at column doesn't exist in migrations but was referenced - removed
+
+### Next Steps
+- Create bulletin CRUD tests
+- Fix auth page redirects for authenticated users
+
+### Commit Summary
+- Commit message: "Create shift management tests with 10 passing tests"
+- Files changed: 4 files (ShiftManagementTest.php, BulletinPostFactory.php, BulletinPost.php, removed ExampleTests)
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)

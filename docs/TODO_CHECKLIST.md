@@ -27,7 +27,7 @@
   - **Tests needed**: login, register, logout, password reset
   - **Time**: 2 hours
 
-- [ ] Create shift management tests
+- [x] Create shift management tests
   - **File**: `tests/Feature/ShiftManagementTest.php`
   - **Tests needed**: signup, withdraw, capacity limits
   - **Time**: 1 hour
@@ -109,10 +109,10 @@
 
 ### Completed Items Summary
 - **Critical**: 1/1 ✅
-- **High**: 1/4 ✅ (includes new captcha task)
+- **High**: 2/4 ✅ (includes new captcha task)
 - **Medium**: 6/8 ✅
 - **Low**: 1/5 ✅
-- **Total**: 9/18
+- **Total**: 10/18
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours
