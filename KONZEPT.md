@@ -172,6 +172,24 @@ Für maximale Wirksamkeit benötigt die Plattform:
 ✓ **Nachhaltig** - durch Eltern-Community getragen
 ✓ **Datenschutzkonform** - DSGVO-konform und transparent
 
+## Technische Highlights (September 2025)
+
+### Sicherheit & Datenschutz
+- **Spam-Schutz ohne Tracking**: Unsichtbarer Honeypot-Schutz auf Login/Registrierung
+- **Transparenz**: Nutzer sehen "Dieses Formular ist durch unsichtbaren Spam-Schutz gesichert"
+- **Keine Cookies/Tracker**: Vollständig datenschutzfreundlich
+
+### SEO & Benutzerfreundlichkeit
+- **Sprechende URLs**: Alle Seiten nutzen SEO-freundliche Slugs (z.B. /schulkalender/herbstferien-abc123)
+- **Deutsche UI**: Vollständig lokalisiert, alle Labels und Meldungen auf Deutsch
+- **Mobile-first**: Responsive Design für alle Geräte
+
+### Moderne Architektur
+- **Repository Pattern**: Saubere Trennung von Datenzugriff und Geschäftslogik
+- **Service Layer**: Komplexe Logik in wiederverwendbare Services ausgelagert
+- **RESTful API**: Standardisierte JSON API für Frontend-Interaktionen
+- **PHPDoc**: Vollständige Code-Dokumentation für Wartbarkeit
+
 ## Webseite
 
 **elternaktivitäten.ch**

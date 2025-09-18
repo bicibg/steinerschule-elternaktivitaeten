@@ -53,15 +53,34 @@
   - Refactored API routes to follow RESTful nested resource patterns
   - Maintained backward compatibility with legacy routes
 
+- [x] Add slug support to SchoolEvent model
+  - Created migration: add_slug_to_school_events_table
+  - URLs now use slugs: /schulkalender/herbstferien-abc123 instead of /schulkalender/1
+  - Auto-generates slugs with 6-character random suffix to prevent yearly conflicts
+
+- [x] Fix school calendar event type translations
+  - Translated all English event types to German (holiday→Ferien, festival→Fest, meeting→Treffen, performance→Aufführung)
+  - Added color coding for each event type
+  - Fixed display in show.blade.php to handle both English and German types
+
+- [x] Add spam protection transparency
+  - Created spam-protection-notice component
+  - Added privacy notice to login and register forms
+  - Users now see: "Dieses Formular ist durch unsichtbaren Spam-Schutz gesichert"
+
 ### Decisions Made
 - Use repository pattern for data access layer separation
 - Maintain backward compatibility during RESTful migration
 - Keep legacy ApiController temporarily to avoid breaking existing frontend
+- Use random suffix for school event slugs (like other models) to handle recurring annual events
+- Add transparency about spam protection to build user trust
 
 ### Issues Resolved
 - Fixed button hover text color visibility issue
 - Removed debug page as no longer needed
 - Added Laravel Honeypot for privacy-friendly spam protection
+- Fixed "Holiday" showing in English instead of "Ferien"
+- School calendar events now use SEO-friendly slugs
 
 ### Next Steps
 - All TODO checklist items completed (19/19) ✅
@@ -69,8 +88,12 @@
 - Remove legacy ApiController once frontend is updated
 
 ### Commit Summary
-- Commit message: Complete remaining TODO tasks - repositories and RESTful refactoring
-- Files changed: 10+ files created/modified
+- Commits made: 4
+  1. Complete documentation and RESTful refactoring
+  2. Fix school calendar event type translation and add slug support
+  3. Add random suffix to school event slugs for uniqueness
+  4. Add German translations for all event types and spam protection notice
+- Total files changed: 15+ files created/modified
 
 ---
 
