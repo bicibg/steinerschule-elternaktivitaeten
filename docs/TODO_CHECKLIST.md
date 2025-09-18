@@ -13,6 +13,14 @@
 
 ## ⚠️ High Priority - Do This Week
 
+### Security Enhancement
+- [ ] Add invisible captcha to all forms
+  - **Options**: Google reCAPTCHA v3, hCaptcha, or Laravel Honeypot
+  - **Priority**: Medium-High (prevents bot spam, but rate limiting covers brute force)
+  - **Forms to protect**: login, register, shift signup, forum posts
+  - **Time**: 2-3 hours
+  - **Note**: Consider privacy-friendly option (parents are privacy-conscious)
+
 ### Testing Infrastructure
 - [ ] Create authentication test suite
   - **File**: `tests/Feature/AuthenticationTest.php`
@@ -32,7 +40,7 @@
 ## 📝 Medium Priority - Improve Code Quality
 
 ### Form Request Classes
-- [ ] Create UpdateBulletinRequest
+- [x] Create UpdateBulletinRequest
   - **File**: `app/Http/Requests/UpdateBulletinRequest.php`
   - **Move validation from**: `BulletinController::update()`
   - **Time**: 15 minutes
@@ -59,14 +67,14 @@
   - **Time**: 1 hour
 
 ### Remove Inline Styles
-- [ ] Fix calendar/index.blade.php inline styles
+- [x] Fix calendar/index.blade.php inline styles
   - **Replace**: `style="min-height: 60px"` → `class="min-h-[60px]"`
   - **Time**: 10 minutes
 
-- [ ] Fix calendar/partials/content.blade.php inline styles
+- [x] Fix calendar/partials/content.blade.php inline styles
   - **Time**: 15 minutes
 
-- [ ] Fix school-calendar views inline styles
+- [x] Fix school-calendar views inline styles
   - **Time**: 15 minutes
 
 - [ ] Remove debug.blade.php or fix its styles
@@ -75,7 +83,7 @@
 ## 🔧 Low Priority - Nice to Have
 
 ### Documentation
-- [ ] Fix README.md line 160 typo
+- [x] Fix README.md line 160 typo
   - **Change**: "composer run dev" → "npm run dev"
   - **Time**: 1 minute
 
@@ -100,10 +108,10 @@
 
 ### Completed Items Summary
 - **Critical**: 1/1 ✅
-- **High**: 0/3
-- **Medium**: 0/8
-- **Low**: 0/5
-- **Total**: 1/17
+- **High**: 0/4 (includes new captcha task)
+- **Medium**: 5/8 ✅
+- **Low**: 1/5 ✅
+- **Total**: 7/18
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours

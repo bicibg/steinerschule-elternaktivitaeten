@@ -129,6 +129,25 @@ docs/
 - **Production**: MySQL on DigitalOcean
 - This is intentional - both configs are correct
 
+### Development Rules & Learnings
+
+#### Commit Strategy
+- **COMMIT AFTER EACH TODO ITEM**: When completing a checklist item, commit immediately
+- Update PROGRESS_LOG.md before committing
+- Clear, simple commit messages (no emojis, no attribution)
+
+#### Project Status & Decisions
+- **This is a NEW PROJECT** - not yet live, no need for backward compatibility
+- **Eager Loading**: Always eager load relationships to avoid N+1 queries
+  - Example: `->with(['shifts.volunteers'])` for calendar views
+- **Shift Calculations**: Use `filled` attribute (combines offline_filled + online volunteers)
+- **AJAX Issues**: Calendar navigation needs proper eager loading for shift counts
+
+#### Known Issues Fixed
+- Calendar AJAX navigation wasn't loading volunteer counts (fixed by eager loading)
+- Shift model now uses `relationLoaded()` to avoid N+1 queries
+- Views standardized to use `$shift->filled` instead of mixed approaches
+
 ### What NOT to do:
 - Don't add complex features - parents need SIMPLE
 - Don't use technical language - they get scared

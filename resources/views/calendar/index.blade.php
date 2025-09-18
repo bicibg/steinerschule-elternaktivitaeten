@@ -189,7 +189,7 @@
             </div>
 
             <!-- Calendar Days -->
-            <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
+            <div class="grid grid-cols-7 gap-px bg-gray-200 auto-rows-calendar">
                 <!-- Calendar Days -->
                 @php
                     $startOfMonth = $date->copy()->startOfMonth();

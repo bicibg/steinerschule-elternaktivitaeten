@@ -157,7 +157,7 @@ npm run build
 
 Start the development environment with all necessary services:
 ```bash
-composer run dev
+npm run dev
 ```
 
 This will concurrently run:

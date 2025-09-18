@@ -99,6 +99,44 @@
 
 ---
 
+## 2025-01-18 (Day 1 - Session 3)
+
+### Tasks Completed
+- [x] Fixed calendar AJAX navigation shift volunteer count bug
+  - Files modified: CalendarController.php, Shift.php, calendar views
+  - Issue: AJAX requests weren't eager loading volunteers relationship
+  - Solution: Added `->with(['shifts.volunteers'])` and optimized Shift model accessors
+  - Simplified to use single `filled` attribute throughout
+
+- [x] Cleaned up Shift model calculations
+  - Removed redundant `total_filled` attribute
+  - Standardized on `filled` as main attribute
+  - Added `relationLoaded()` checks to prevent N+1 queries
+
+### Quick Wins Completed
+- [x] Fixed README.md typo (composer run dev → npm run dev)
+- [x] Created first Form Request (UpdateBulletinRequest)
+- [x] Removed inline styles from calendar views (added Tailwind class)
+
+### Decisions Made
+- No backward compatibility needed (new project)
+- Standardize on `filled` attribute for shift calculations
+- Always eager load relationships in controllers
+- Commit after each TODO checklist item completion
+
+### Blockers/Issues
+- None
+
+### Next Steps
+- Start creating test suites (AuthenticationTest)
+- Continue with Form Request classes
+- Consider implementing invisible captcha
+
+### Commit Summary
+- Will commit bug fixes and improvements separately going forward
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)

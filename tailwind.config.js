@@ -20,6 +20,9 @@ export default {
         'steiner-blue': '#4a90a4',
         'steiner-dark': '#2c5aa0',
       },
+      gridAutoRows: {
+        'calendar': 'minmax(120px, 1fr)',
+      },
     },
   },
   plugins: [],

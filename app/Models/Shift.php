@@ -25,11 +25,14 @@ class Shift extends Model
     }
 
     /**
-     * Get the total number of filled positions (offline + online)
+     * Get the number of filled positions (offline + online)
      */
-    public function getTotalFilledAttribute(): int
+    public function getFilledAttribute(): int
     {
-        $onlineCount = $this->volunteers()->count();
+        // Use loaded relationship if available to avoid N+1 queries
+        $onlineCount = $this->relationLoaded('volunteers')
+            ? $this->volunteers->count()
+            : $this->volunteers()->count();
         return $this->offline_filled + $onlineCount;
     }
 
@@ -38,7 +41,10 @@ class Shift extends Model
      */
     public function getOnlineFilledAttribute(): int
     {
-        return $this->volunteers()->count();
+        // Use loaded relationship if available to avoid N+1 queries
+        return $this->relationLoaded('volunteers')
+            ? $this->volunteers->count()
+            : $this->volunteers()->count();
     }
 
     /**
@@ -49,7 +55,7 @@ class Shift extends Model
         if (!$this->needed) {
             return false; // If no limit, never full
         }
-        return $this->total_filled >= $this->needed;
+        return $this->filled >= $this->needed;
     }
 
     /**
@@ -60,7 +66,7 @@ class Shift extends Model
         if (!$this->needed) {
             return PHP_INT_MAX; // Unlimited if no needed value
         }
-        $remaining = $this->needed - $this->total_filled;
+        $remaining = $this->needed - $this->filled;
         return max(0, $remaining);
     }
 
@@ -70,8 +76,8 @@ class Shift extends Model
     public function getCapacityDisplayAttribute(): string
     {
         if (!$this->needed) {
-            return $this->total_filled . ' angemeldet';
+            return $this->filled . ' angemeldet';
         }
-        return $this->total_filled . '/' . $this->needed;
+        return $this->filled . '/' . $this->needed;
     }
 }

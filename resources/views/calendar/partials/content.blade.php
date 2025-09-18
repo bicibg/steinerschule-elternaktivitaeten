@@ -51,7 +51,7 @@
         </div>
 
         <!-- Calendar Days -->
-        <div class="grid grid-cols-7 gap-px bg-gray-200" style="grid-auto-rows: minmax(120px, 1fr);">
+        <div class="grid grid-cols-7 gap-px bg-gray-200 auto-rows-calendar">
             <!-- Calendar Days -->
             @php
                 $startOfMonth = $date->copy()->startOfMonth();
@@ -240,7 +240,7 @@
                                                 @endif
                                                 @if(isset($item['shift']->needed))
                                                     <span class="text-xs">
-                                                        ({{ $item['shift']->filled }}/{{ $item['shift']->needed }} Helfer)
+                                                        ({{ $item['shift']->filled }}/{{ $item['shift']->needed ?? '∞' }} Helfer)
                                                     </span>
                                                 @elseif(isset($item['shift']->flexible_capacity) && $item['shift']->flexible_capacity)
                                                     <span class="text-xs text-green-600">Flexible Teilnahme</span>

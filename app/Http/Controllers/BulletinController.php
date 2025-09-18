@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BulletinPost;
+use App\Http\Requests\UpdateBulletinRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -66,28 +67,15 @@ class BulletinController extends Controller
         return view('bulletin.edit', compact('bulletinPost'));
     }
 
-    public function update($slug, Request $request)
+    public function update($slug, UpdateBulletinRequest $request)
     {
         $bulletinPost = BulletinPost::where('slug', $slug)->firstOrFail();
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'start_at' => 'nullable|date',
-            'end_at' => 'nullable|date|after_or_equal:start_at',
-            'location' => 'required|string|max:255',
-            'contact_name' => 'required|string|max:255',
-            'contact_phone' => 'nullable|string|max:50',
-            'contact_email' => 'nullable|email|max:255',
-            'status' => 'required|in:published,archived',
-        ]);
+        $validated = $request->validated();
 
         if ($validated['title'] !== $bulletinPost->title) {
             $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
         }
-
-        $validated['has_forum'] = $request->has('has_forum');
-        $validated['has_shifts'] = $request->has('has_shifts');
 
         $bulletinPost->update($validated);
 

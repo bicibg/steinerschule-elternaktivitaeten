@@ -32,7 +32,7 @@ class CalendarController extends Controller
                       });
                 });
             })
-            ->with('shifts')
+            ->with(['shifts.volunteers'])
             ->get();
 
         // Collect all calendar items (shifts AND activities)
