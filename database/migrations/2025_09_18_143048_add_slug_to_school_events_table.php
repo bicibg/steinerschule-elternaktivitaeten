@@ -17,18 +17,9 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable()->after('title');
         });
 
-        // Generate slugs for existing events
+        // Generate slugs for existing events with random suffix
         SchoolEvent::whereNull('slug')->get()->each(function ($event) {
-            $baseSlug = Str::slug($event->title);
-            $slug = $baseSlug;
-            $counter = 1;
-
-            while (SchoolEvent::where('slug', $slug)->where('id', '!=', $event->id)->exists()) {
-                $slug = $baseSlug . '-' . $counter;
-                $counter++;
-            }
-
-            $event->slug = $slug;
+            $event->slug = Str::slug($event->title) . '-' . Str::random(6);
             $event->save();
         });
 
@@ -43,6 +34,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('school_events', function (Blueprint $table) {
+            $table->dropIndex(['slug']); // Drop the unique index first
+        });
+
         Schema::table('school_events', function (Blueprint $table) {
             $table->dropColumn('slug');
         });

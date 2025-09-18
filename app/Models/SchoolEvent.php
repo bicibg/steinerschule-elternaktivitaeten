@@ -66,31 +66,15 @@ class SchoolEvent extends Model
     {
         static::creating(function ($event) {
             if (empty($event->slug)) {
-                $baseSlug = Str::slug($event->title);
-                $slug = $baseSlug;
-                $counter = 1;
-
-                while (static::where('slug', $slug)->exists()) {
-                    $slug = $baseSlug . '-' . $counter;
-                    $counter++;
-                }
-
-                $event->slug = $slug;
+                // Generate slug with random suffix like other models
+                $event->slug = Str::slug($event->title) . '-' . Str::random(6);
             }
         });
 
         static::updating(function ($event) {
             if ($event->isDirty('title') && !$event->isDirty('slug')) {
-                $baseSlug = Str::slug($event->title);
-                $slug = $baseSlug;
-                $counter = 1;
-
-                while (static::where('slug', $slug)->where('id', '!=', $event->id)->exists()) {
-                    $slug = $baseSlug . '-' . $counter;
-                    $counter++;
-                }
-
-                $event->slug = $slug;
+                // Generate new slug with random suffix when title changes
+                $event->slug = Str::slug($event->title) . '-' . Str::random(6);
             }
         });
     }
