@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Requests\RegisterUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -36,21 +37,9 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ], [
-            'name.required' => 'Bitte geben Sie Ihren Namen ein.',
-            'email.required' => 'Bitte geben Sie Ihre E-Mail-Adresse ein.',
-            'email.email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
-            'email.unique' => 'Diese E-Mail-Adresse ist bereits registriert.',
-            'password.required' => 'Bitte geben Sie ein Passwort ein.',
-            'password.min' => 'Das Passwort muss mindestens 8 Zeichen lang sein.',
-            'password.confirmed' => 'Die Passwörter stimmen nicht überein.',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
             'name' => $validated['name'],

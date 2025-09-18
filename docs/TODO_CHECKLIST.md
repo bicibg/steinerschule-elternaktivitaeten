@@ -45,7 +45,7 @@
   - **Move validation from**: `BulletinController::update()`
   - **Time**: 15 minutes
 
-- [ ] Create RegisterUserRequest
+- [x] Create RegisterUserRequest
   - **File**: `app/Http/Requests/RegisterUserRequest.php`
   - **Move validation from**: `AuthController::register()`
   - **Time**: 15 minutes
