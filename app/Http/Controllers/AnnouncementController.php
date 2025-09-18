@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
 {
-    public function dismiss(Request $request, Announcement $notification)
+    public function dismiss(Request $request, Announcement $announcement)
     {
         if (!auth()->check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         AnnouncementDismissal::firstOrCreate([
-            'notification_id' => $notification->id,
+            'announcement_id' => $announcement->id,
             'user_id' => auth()->id(),
         ], [
             'dismissed_at' => now(),
