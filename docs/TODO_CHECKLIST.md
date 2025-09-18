@@ -78,7 +78,7 @@
 - [x] Fix school-calendar views inline styles
   - **Time**: 15 minutes
 
-- [ ] Remove debug.blade.php or fix its styles
+- [x] Remove debug.blade.php or fix its styles
   - **Time**: 5 minutes
 
 ## 🐛 Bug Fixes - User Reported

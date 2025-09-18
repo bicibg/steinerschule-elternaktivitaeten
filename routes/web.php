@@ -13,9 +13,6 @@ Route::get('/', function () {
     return redirect('/pinnwand');
 });
 
-Route::get('/debug', function () {
-    return view('debug');
-});
 
 // Authentication routes
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login')->middleware('guest');
