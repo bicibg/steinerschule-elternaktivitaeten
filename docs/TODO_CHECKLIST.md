@@ -14,7 +14,7 @@
 ## ⚠️ High Priority - Do This Week
 
 ### Security Enhancement
-- [ ] Add invisible captcha to all forms
+- [x] Add invisible captcha to all forms
   - **Options**: Google reCAPTCHA v3, hCaptcha, or Laravel Honeypot
   - **Priority**: Medium-High (prevents bot spam, but rate limiting covers brute force)
   - **Forms to protect**: login, register, shift signup, forum posts
@@ -57,12 +57,12 @@
   - **Note**: ShiftController doesn't need Form Request (no validation)
 
 ### Service Layer
-- [ ] Extract CalendarController logic to CalendarService
+- [x] Extract CalendarController logic to CalendarService
   - **Create**: `app/Services/CalendarService.php`
   - **Move**: Date calculations and calendar item processing
   - **Time**: 2 hours
 
-- [ ] Create ShiftService for shift management logic
+- [x] Create ShiftService for shift management logic
   - **Create**: `app/Services/ShiftService.php`
   - **Move**: Signup/withdrawal business logic
   - **Time**: 1 hour
@@ -118,11 +118,11 @@
 
 ### Completed Items Summary
 - **Critical**: 1/1 ✅
-- **High**: 3/4 ✅ (includes new captcha task)
-- **Medium**: 6/8 ✅
+- **High**: 4/4 ✅
+- **Medium**: 8/8 ✅
 - **Bug Fixes**: 1/1 ✅
 - **Low**: 1/5 ✅
-- **Total**: 12/19
+- **Total**: 15/19
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours

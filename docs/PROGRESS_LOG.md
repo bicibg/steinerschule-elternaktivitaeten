@@ -277,6 +277,47 @@
 
 ---
 
+## 2025-01-18 (Day 3 - Major Refactoring)
+
+### Tasks Completed
+- [x] Extracted CalendarController logic to CalendarService
+  - Created app/Services/CalendarService.php
+  - Simplified controller from 250+ lines to 30 lines
+  - Better separation of concerns
+
+- [x] Created ShiftService for shift management
+  - Created app/Services/ShiftService.php
+  - Extracted business logic from controller
+  - Added transaction safety for signups
+
+- [x] Added invisible honeypot spam protection
+  - Installed spatie/laravel-honeypot
+  - Added to login and register forms
+  - Privacy-friendly (no external tracking)
+  - Configured middleware alias
+
+- [x] Fixed button hover state bug
+  - Added explicit hover:text-white to maintain visibility
+  - Rebuilt assets
+
+### Decisions Made
+- Used Laravel Honeypot instead of Google reCAPTCHA for privacy
+- Created Services directory for business logic extraction
+- Honeypot is completely invisible to users
+
+### Blockers/Issues
+- Button hover state was losing text color - fixed
+
+### Next Steps
+- Remaining low priority items
+- Consider adding more test coverage for new services
+
+### Commit Summary
+- Commit message: "Add service layer, honeypot protection, and fix button hover"
+- Files changed: Multiple (services, views, routes, config)
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)
