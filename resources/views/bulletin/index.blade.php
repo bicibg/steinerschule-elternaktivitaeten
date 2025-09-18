@@ -167,7 +167,9 @@
                                     @if($bulletinPost->has_shifts && $bulletinPost->shifts->count() > 0)
                                         @php
                                             $totalNeeded = $bulletinPost->shifts->sum('needed');
-                                            $totalFilled = $bulletinPost->shifts->sum('filled');
+                                            $totalFilled = $bulletinPost->shifts->sum(function($shift) {
+                                                return $shift->total_filled;
+                                            });
                                         @endphp
                                         <div class="flex items-center text-sm {{ $totalFilled >= $totalNeeded ? 'text-green-600' : 'text-orange-600' }}">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,24 +183,36 @@
                         </div>
 
                         @php
-                            $referenceDate = $bulletinPost->start_at ?? $bulletinPost->end_at;
+                            $now = now();
+                            $isToday = false;
+                            $isFuture = false;
+                            $isOngoing = false;
+
+                            if ($bulletinPost->end_at) {
+                                $isToday = $bulletinPost->end_at->isToday() || ($bulletinPost->start_at && $bulletinPost->start_at->isToday());
+                                $isFuture = $bulletinPost->start_at ? $bulletinPost->start_at->isFuture() : $bulletinPost->end_at->isFuture();
+                                // Check if we're between start and end dates
+                                $isOngoing = $bulletinPost->start_at && $now->between($bulletinPost->start_at, $bulletinPost->end_at) && !$isToday;
+                            } elseif ($bulletinPost->start_at) {
+                                // Only start date exists
+                                $isToday = $bulletinPost->start_at->isToday();
+                                $isFuture = $bulletinPost->start_at->isFuture();
+                            }
                         @endphp
-                        @if($referenceDate)
+                        @if($bulletinPost->start_at || $bulletinPost->end_at)
                             <div class="flex-shrink-0">
                                 <span class="inline-block px-3 py-1 text-sm font-medium rounded-full
-                                    @if($referenceDate->isFuture())
+                                    @if($isFuture)
                                         bg-blue-100 text-blue-800
-                                    @elseif($referenceDate->isToday())
+                                    @elseif($isOngoing || $isToday)
                                         bg-green-100 text-green-800
-                                    @else
-                                        bg-gray-100 text-gray-800
                                     @endif">
-                                    @if($referenceDate->isFuture())
+                                    @if($isFuture)
                                         Bevorstehend
-                                    @elseif($referenceDate->isToday())
+                                    @elseif($isOngoing)
+                                        Laufend
+                                    @elseif($isToday)
                                         Heute
-                                    @else
-                                        Vergangen
                                     @endif
                                 </span>
                             </div>

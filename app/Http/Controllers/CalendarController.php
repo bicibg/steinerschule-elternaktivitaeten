@@ -183,8 +183,7 @@ class CalendarController extends Controller
         $upcomingItems = $calendarItems
             ->filter(function($item) {
                 if ($item['type'] === 'shift' && isset($item['shift'])) {
-                    return $item['date']->isFuture() &&
-                           (!$item['shift']->needed || $item['shift']->filled < $item['shift']->needed);
+                    return $item['date']->isFuture() && !$item['shift']->is_full;
                 }
                 return $item['date']->isFuture();
             })

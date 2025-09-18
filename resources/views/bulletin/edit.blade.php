@@ -137,19 +137,19 @@
 
             <div class="space-y-4">
                 @foreach($bulletinPost->allPosts as $post)
-                    <div class="border border-gray-200 rounded-lg p-4 {{ $post->is_hidden ? 'bg-red-50' : '' }}">
+                    <div class="border border-gray-200 rounded-lg p-4 {{ $post->trashed() ? 'bg-red-50' : '' }}">
                         <div class="flex justify-between items-start mb-2">
                             <div>
                                 <h4 class="font-semibold text-gray-800">{{ $post->author_name }}</h4>
                                 <span class="text-sm text-gray-500">{{ $post->created_at->format('d.m.Y H:i') }}</span>
-                                @if($post->is_hidden)
+                                @if($post->trashed())
                                     <span class="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Versteckt</span>
                                 @endif
                             </div>
                             <form action="{{ route('moderation.post.toggle', $post) }}?token={{ request('token') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="px-2 py-1 text-xs rounded {{ $post->is_hidden ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-red-500 text-white hover:bg-red-600' }} transition-colors duration-200">
-                                    {{ $post->is_hidden ? 'Anzeigen' : 'Verstecken' }}
+                                <button type="submit" class="px-2 py-1 text-xs rounded {{ $post->trashed() ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-red-500 text-white hover:bg-red-600' }} transition-colors duration-200">
+                                    {{ $post->trashed() ? 'Anzeigen' : 'Verstecken' }}
                                 </button>
                             </form>
                         </div>
@@ -160,19 +160,19 @@
                         @if($post->allComments->count() > 0)
                             <div class="mt-4 ml-6 space-y-2">
                                 @foreach($post->allComments as $comment)
-                                    <div class="bg-gray-50 rounded-lg p-3 {{ $comment->is_hidden ? 'bg-red-50' : '' }}">
+                                    <div class="bg-gray-50 rounded-lg p-3 {{ $comment->trashed() ? 'bg-red-50' : '' }}">
                                         <div class="flex justify-between items-start">
                                             <div>
                                                 <h5 class="font-medium text-gray-700 text-sm">{{ $comment->author_name }}</h5>
                                                 <span class="text-xs text-gray-500">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
-                                                @if($comment->is_hidden)
+                                                @if($comment->trashed())
                                                     <span class="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Versteckt</span>
                                                 @endif
                                             </div>
                                             <form action="{{ route('moderation.comment.toggle', $comment) }}?token={{ request('token') }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="px-2 py-1 text-xs rounded {{ $comment->is_hidden ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-red-500 text-white hover:bg-red-600' }} transition-colors duration-200">
-                                                    {{ $comment->is_hidden ? 'Anzeigen' : 'Verstecken' }}
+                                                <button type="submit" class="px-2 py-1 text-xs rounded {{ $comment->trashed() ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-red-500 text-white hover:bg-red-600' }} transition-colors duration-200">
+                                                    {{ $comment->trashed() ? 'Anzeigen' : 'Verstecken' }}
                                                 </button>
                                             </form>
                                         </div>

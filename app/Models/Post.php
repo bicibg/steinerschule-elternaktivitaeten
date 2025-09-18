@@ -32,12 +32,17 @@ class Post extends Model
 
     public function allComments()
     {
-        return $this->hasMany(Comment::class)->orderBy('created_at', 'asc');
+        return $this->hasMany(Comment::class)->withTrashed()->orderBy('created_at', 'asc');
     }
 
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getAuthorNameAttribute()
+    {
+        return $this->user ? $this->user->name : 'Anonym';
     }
 }

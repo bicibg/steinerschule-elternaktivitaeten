@@ -85,8 +85,8 @@ Route::middleware(['verify.edit.token'])->group(function () {
     Route::get('/pinnwand/{slug}/edit', [BulletinController::class, 'edit'])->name('bulletin.edit');
     Route::put('/pinnwand/{slug}', [BulletinController::class, 'update'])->name('bulletin.update');
 
-    Route::post('/moderation/posts/{post}/hide', [ModerationController::class, 'togglePost'])->name('moderation.post.toggle');
-    Route::post('/moderation/comments/{comment}/hide', [ModerationController::class, 'toggleComment'])->name('moderation.comment.toggle');
+    Route::post('/moderation/posts/{post}/hide', [ModerationController::class, 'togglePost'])->name('moderation.post.toggle')->withTrashed();
+    Route::post('/moderation/comments/{comment}/hide', [ModerationController::class, 'toggleComment'])->name('moderation.comment.toggle')->withTrashed();
 });
 
 // Legal pages

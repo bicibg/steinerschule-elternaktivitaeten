@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('role');
             $table->string('time');
             $table->integer('needed')->default(1);
-            $table->integer('filled')->default(0);
+            $table->integer('offline_filled')->default(0);
             $table->timestamps();
 
             $table->index('bulletin_post_id');

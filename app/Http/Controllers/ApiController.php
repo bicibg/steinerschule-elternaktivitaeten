@@ -18,7 +18,11 @@ class ApiController extends Controller
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
-        if ($shift->filled >= $shift->needed) {
+        // Check if total (offline + online) registrations have reached capacity
+        $onlineCount = $shift->volunteers()->count();
+        $totalRegistered = $shift->offline_filled + $onlineCount;
+
+        if ($totalRegistered >= $shift->needed) {
             return response()->json(['error' => 'Schicht ist bereits voll besetzt'], 400);
         }
 
@@ -37,8 +41,6 @@ class ApiController extends Controller
             'email' => auth()->user()->email,
         ]);
 
-        $shift->increment('filled');
-
         return response()->json([
             'success' => true,
             'volunteer' => [
@@ -46,7 +48,8 @@ class ApiController extends Controller
                 'name' => $volunteer->name,
                 'user_id' => $volunteer->user_id,
             ],
-            'filled' => $shift->filled,
+            'offline_filled' => $shift->offline_filled,
+            'online_count' => $shift->volunteers()->count(),
             'needed' => $shift->needed,
         ]);
     }
@@ -66,11 +69,12 @@ class ApiController extends Controller
         }
 
         $volunteer->delete();
-        $shift->decrement('filled');
+        // Don't decrement filled - it represents offline registrations only
 
         return response()->json([
             'success' => true,
-            'filled' => $shift->fresh()->filled,
+            'offline_filled' => $shift->offline_filled,
+            'online_count' => $shift->volunteers()->count(),
             'needed' => $shift->needed,
         ]);
     }

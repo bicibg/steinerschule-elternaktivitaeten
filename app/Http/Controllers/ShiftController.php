@@ -14,7 +14,11 @@ class ShiftController extends Controller
             return redirect()->route('login')->with('error', 'Bitte melden Sie sich an, um sich für Schichten anzumelden.');
         }
 
-        if ($shift->filled >= $shift->needed) {
+        // Check if total (offline + online) registrations have reached capacity
+        $onlineCount = $shift->volunteers()->count();
+        $totalRegistered = $shift->offline_filled + $onlineCount;
+
+        if ($totalRegistered >= $shift->needed) {
             return back()->with('error', 'Diese Schicht ist bereits voll besetzt.');
         }
 
@@ -32,8 +36,6 @@ class ShiftController extends Controller
             'name' => auth()->user()->name,
             'email' => auth()->user()->email,
         ]);
-
-        $shift->increment('filled');
 
         return back()->with('success', 'Sie haben sich erfolgreich für die Schicht angemeldet.');
     }
@@ -53,7 +55,7 @@ class ShiftController extends Controller
         }
 
         $volunteer->delete();
-        $shift->decrement('filled');
+        // Don't decrement filled - it represents offline registrations only
 
         return back()->with('success', 'Sie haben sich erfolgreich von der Schicht abgemeldet.');
     }

@@ -10,7 +10,7 @@ class BulletinController extends Controller
 {
     public function index(Request $request)
     {
-        $query = BulletinPost::published();
+        $query = BulletinPost::active();
 
         // Filter by category if provided
         if ($request->has('category') && $request->category !== 'all') {

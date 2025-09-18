@@ -49,10 +49,12 @@ class BulletinPostResource extends Resource
                             ->columnSpanFull(),
                         Forms\Components\DateTimePicker::make('start_at')
                             ->label('Beginnt am')
-                            ->displayFormat('d.m.Y H:i'),
+                            ->displayFormat('d.m.Y H:i')
+                            ->native(false),
                         Forms\Components\DateTimePicker::make('end_at')
                             ->label('Endet am')
-                            ->displayFormat('d.m.Y H:i'),
+                            ->displayFormat('d.m.Y H:i')
+                            ->native(false),
                         Forms\Components\TextInput::make('location')
                             ->label('Ort')
                             ->helperText('Optional - leer lassen für allgemeine Aktivitäten'),
@@ -97,6 +99,10 @@ class BulletinPostResource extends Resource
                             ->label('Schichtplanung aktivieren')
                             ->reactive()
                             ->helperText('Schichten können nach dem Speichern im Tab "Schichten" verwaltet werden'),
+                        Forms\Components\Toggle::make('show_in_calendar')
+                            ->label('Im Kalender anzeigen')
+                            ->default(true)
+                            ->helperText('Soll dieser Eintrag im öffentlichen Kalender erscheinen?'),
                     ]),
             ]);
     }

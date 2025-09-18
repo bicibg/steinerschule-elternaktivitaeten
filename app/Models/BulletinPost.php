@@ -54,12 +54,33 @@ class BulletinPost extends Model
 
     public function allPosts()
     {
-        return $this->hasMany(Post::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(Post::class)->withTrashed()->orderBy('created_at', 'desc');
     }
 
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'published')
+            ->where(function($q) {
+                $q->where(function($sub) {
+                    // If we have an end date, it must be in the future or today
+                    $sub->whereNotNull('end_at')
+                        ->where('end_at', '>=', now()->startOfDay());
+                })->orWhere(function($sub) {
+                    // If we only have a start date, it must be today or in the future
+                    $sub->whereNull('end_at')
+                        ->whereNotNull('start_at')
+                        ->where('start_at', '>=', now()->startOfDay());
+                })->orWhere(function($sub) {
+                    // If no dates at all, always show
+                    $sub->whereNull('end_at')
+                        ->whereNull('start_at');
+                });
+            });
     }
 
     public function scopeUpcoming($query)

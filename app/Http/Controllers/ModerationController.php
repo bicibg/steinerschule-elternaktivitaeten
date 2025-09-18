@@ -10,29 +10,31 @@ class ModerationController extends Controller
 {
     public function togglePost(Post $post, Request $request)
     {
-        $post->update([
-            'is_hidden' => !$post->is_hidden,
-            'hidden_reason' => $post->is_hidden ? null : $request->input('reason', 'Vom Moderator versteckt'),
-        ]);
+        if ($post->trashed()) {
+            $post->restore();
+            $post->update(['deletion_reason' => null]);
+            $message = 'Beitrag wurde wieder sichtbar gemacht.';
+        } else {
+            $post->update(['deletion_reason' => 'inappropriate']);
+            $post->delete();
+            $message = 'Beitrag wurde versteckt.';
+        }
 
-        return back()->with('success',
-            $post->is_hidden
-                ? 'Beitrag wurde versteckt.'
-                : 'Beitrag wurde wieder sichtbar gemacht.'
-        );
+        return back()->with('success', $message);
     }
 
     public function toggleComment(Comment $comment, Request $request)
     {
-        $comment->update([
-            'is_hidden' => !$comment->is_hidden,
-            'hidden_reason' => $comment->is_hidden ? null : $request->input('reason', 'Vom Moderator versteckt'),
-        ]);
+        if ($comment->trashed()) {
+            $comment->restore();
+            $comment->update(['deletion_reason' => null]);
+            $message = 'Kommentar wurde wieder sichtbar gemacht.';
+        } else {
+            $comment->update(['deletion_reason' => 'inappropriate']);
+            $comment->delete();
+            $message = 'Kommentar wurde versteckt.';
+        }
 
-        return back()->with('success',
-            $comment->is_hidden
-                ? 'Kommentar wurde versteckt.'
-                : 'Kommentar wurde wieder sichtbar gemacht.'
-        );
+        return back()->with('success', $message);
     }
 }

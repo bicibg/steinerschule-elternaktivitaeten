@@ -232,7 +232,7 @@
                                     @endphp
                                     <a href="{{ route('bulletin.show', $item['activity']->slug) }}"
                                        class="block text-xs px-0.5 mb-px {{ $roundedClass }} {{ $item['color'] }} text-white hover:opacity-75 transition-opacity truncate"
-                                       title="{{ $item['activity']->title }}{{ isset($item['shift']) ? ': ' . $item['title'] . ' (' . $item['shift']->filled . '/' . ($item['shift']->needed ?? '∞') . ' Helfer)' : '' }}{{ isset($item['date_range']) ? ' (' . $item['date_range'] . ')' : '' }}">
+                                       title="{{ $item['activity']->title }}{{ isset($item['shift']) ? ': ' . $item['title'] . ' (' . $item['shift']->capacity_display . ' Helfer)' : '' }}{{ isset($item['date_range']) ? ' (' . $item['date_range'] . ')' : '' }}">
                                         @if($item['type'] === 'shift')
                                             {{ $item['title'] }}
                                         @elseif($isSpanning)
@@ -378,7 +378,7 @@
                                                     @endif
                                                     @if(isset($item['shift']->needed))
                                                         <span class="text-xs">
-                                                            ({{ $item['shift']->filled }}/{{ $item['shift']->needed }} Helfer)
+                                                            ({{ $item['shift']->capacity_display }} Helfer)
                                                         </span>
                                                     @elseif(isset($item['shift']->flexible_capacity) && $item['shift']->flexible_capacity)
                                                         <span class="text-xs text-green-600">Flexible Teilnahme</span>

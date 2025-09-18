@@ -30,6 +30,7 @@ class ShiftsRelationManager extends RelationManager
                     ->label('Datum')
                     ->required()
                     ->displayFormat('d.m.Y')
+                    ->native(false)
                     ->reactive()
                     ->afterStateHydrated(function ($state, $record, Forms\Set $set) {
                         if ($record && $record->time) {
