@@ -40,13 +40,18 @@
                     <h3 class="text-sm font-medium text-gray-500 mb-2">Kontaktinformationen</h3>
                     <div class="space-y-2">
                         @if($user->email && (auth()->check() && (auth()->user()->is_admin || auth()->id() === $user->id)))
-                            <div class="flex items-center text-sm">
+                            <div class="flex items-center text-sm" x-data="{ revealed: false }">
                                 <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
-                                <a href="mailto:{{ $user->email }}" class="text-steiner-blue hover:text-steiner-dark">
-                                    {{ $user->email }}
-                                </a>
+                                <div>
+                                    <button @click="revealed = true" x-show="!revealed" class="text-steiner-blue hover:text-steiner-dark underline text-sm">
+                                        E-Mail anzeigen
+                                    </button>
+                                    <a x-show="revealed" x-cloak href="mailto:{{ $user->email }}" class="text-steiner-blue hover:text-steiner-dark">
+                                        {{ $user->email }}
+                                    </a>
+                                </div>
                             </div>
                         @endif
                         @if($user->phone && (auth()->check() && (auth()->user()->is_admin || auth()->id() === $user->id)))
