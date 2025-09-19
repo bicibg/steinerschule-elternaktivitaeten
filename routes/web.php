@@ -7,6 +7,7 @@ use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\SchoolCalendarController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\LunchScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +34,11 @@ Route::get('/pinnwand', [BulletinController::class, 'index'])->name('bulletin.in
 Route::get('/pinnwand/{slug}', [BulletinController::class, 'show'])->name('bulletin.show');
 
 Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');
+
+// Lunch Schedule routes
+Route::get('/kuechendienst', [LunchScheduleController::class, 'index'])->name('lunch.schedule');
+Route::post('/kuechendienst/{shift}/signup', [LunchScheduleController::class, 'signup'])->name('lunch.signup')->middleware('auth');
+Route::delete('/kuechendienst/{shift}/cancel', [LunchScheduleController::class, 'cancel'])->name('lunch.cancel')->middleware('auth');
 
 // Activity routes
 Route::get('/elternaktivitaeten', [App\Http\Controllers\ActivityController::class, 'index'])->name('activities.index');
@@ -90,6 +96,11 @@ Route::prefix('api')->group(function () {
 
     // Announcements
     Route::post('/announcements/{announcement}/dismiss', [\App\Http\Controllers\AnnouncementController::class, 'dismiss'])->name('api.announcements.dismiss')->middleware('auth');
+
+    // Lunch Schedule API
+    Route::get('/lunch-schedule', [\App\Http\Controllers\Api\LunchScheduleController::class, 'index'])->name('api.lunch.index');
+    Route::post('/lunch-schedule/{shift}/signup', [\App\Http\Controllers\Api\LunchScheduleController::class, 'signup'])->name('api.lunch.signup')->middleware('auth');
+    Route::delete('/lunch-schedule/{shift}/cancel', [\App\Http\Controllers\Api\LunchScheduleController::class, 'cancel'])->name('api.lunch.cancel')->middleware('auth');
 
     // Legacy routes - maintain backward compatibility temporarily
     Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup');

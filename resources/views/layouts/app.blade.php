@@ -53,6 +53,10 @@
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Schulkalender
                     </a>
+                    <a href="{{ route('lunch.schedule') }}"
+                       class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('lunch.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
+                        Küchendienst
+                    </a>
                 </nav>
 
                 <!-- Desktop User Menu -->
@@ -159,6 +163,10 @@
                     <a href="{{ route('school-calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Schulkalender
+                    </a>
+                    <a href="{{ route('lunch.schedule') }}"
+                       class="block px-3 py-2 text-sm {{ request()->routeIs('lunch.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
+                        Kocheinsatzplan
                     </a>
                 </nav>
 

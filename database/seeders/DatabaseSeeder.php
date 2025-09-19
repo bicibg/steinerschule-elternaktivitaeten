@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             BulletinPostSeeder::class,
             SchoolEventSeeder::class,
             AnnouncementSeeder::class, // Run after users are created
+            LunchShiftSeeder::class,
         ]);
     }
 }
