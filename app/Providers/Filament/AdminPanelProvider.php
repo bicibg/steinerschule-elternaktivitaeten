@@ -21,6 +21,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\User;
 use App\Filament\Resources\ActivityResource;
+use Filament\Navigation\MenuItem;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -67,6 +68,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Zur Webseite')
+                    ->url('/')
+                    ->icon('heroicon-o-arrow-left')
+                    ->sort(100),
             ])
             ->renderHook(
                 PanelsRenderHook::HEAD_END,

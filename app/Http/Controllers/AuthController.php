@@ -67,6 +67,23 @@ class AuthController extends Controller
         return redirect('/pinnwand')->with('success', 'Als Demo-Benutzer angemeldet.');
     }
 
+    public function loginDemoAdmin()
+    {
+        $demoAdmin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Demo Admin',
+                'password' => Hash::make('admin123456'),
+                'is_admin' => true,
+                'is_super_admin' => true,
+            ]
+        );
+
+        Auth::login($demoAdmin);
+
+        return redirect('/pinnwand')->with('success', 'Als Demo-Admin angemeldet. Sie können jetzt zum Admin-Bereich wechseln.');
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();
