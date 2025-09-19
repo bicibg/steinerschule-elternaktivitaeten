@@ -49,18 +49,25 @@
                                 </a>
                             </div>
                         @endif
-                        @if($user->phone)
-                            <div class="flex items-center text-sm">
+                        @if($user->phone && (auth()->check() && (auth()->user()->is_admin || auth()->id() === $user->id)))
+                            <div class="flex items-center text-sm" x-data="{ revealed: false }">
                                 <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                 </svg>
-                                <a href="tel:{{ $user->phone }}" class="text-steiner-blue hover:text-steiner-dark">
-                                    {{ $user->phone }}
-                                </a>
+                                <div>
+                                    <button @click="revealed = true" x-show="!revealed" class="text-steiner-blue hover:text-steiner-dark underline text-sm">
+                                        Telefon anzeigen
+                                    </button>
+                                    <a x-show="revealed" x-cloak href="tel:{{ $user->phone }}" class="text-steiner-blue hover:text-steiner-dark">
+                                        {{ $user->phone }}
+                                    </a>
+                                </div>
                             </div>
                         @endif
-                        @if(!$user->phone && (!auth()->check() || auth()->id() !== $user->id))
-                            <p class="text-sm text-gray-500">Keine öffentlichen Kontaktinformationen verfügbar</p>
+                        @if(!auth()->check() || (!auth()->user()->is_admin && auth()->id() !== $user->id))
+                            @if(!$user->email && !$user->phone)
+                                <p class="text-sm text-gray-500">Keine öffentlichen Kontaktinformationen verfügbar</p>
+                            @endif
                         @endif
                     </div>
                 </div>
