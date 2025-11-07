@@ -131,7 +131,7 @@
     <x-info-box type="help">
         <strong>Mitmachen erwünscht!</strong> Dieser Kalender zeigt alle Termine der Elternaktivitäten. Die meisten Gruppen freuen sich über neue Unterstützer.
         <br>
-        <span class="text-xs">Dringende Helfergesuche finden Sie auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
+        <span class="text-xs">Dringende Gesuche für Helfer*innen finden Sie auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
     </x-info-box>
 
     @php

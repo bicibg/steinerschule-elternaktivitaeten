@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Pinnwand <span class="text-lg font-normal text-gray-600">– Helfergesuche</span></h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Pinnwand <span class="text-lg font-normal text-gray-600">– Helfer*innen gesucht</span></h1>
         <p class="text-gray-600">
-            Hier finden Sie <strong>aktuelle Aufrufe und besondere Helfergesuche</strong> von den Elternaktivitäten.
+            Hier finden Sie <strong>aktuelle Aufrufe und besondere Gesuche für Helfer*innen</strong> von den Elternaktivitäten.
             Wenn eine Gruppe dringend Unterstützung braucht oder zu besonderen Anlässen Hilfe sucht, wird hier ein Aufruf veröffentlicht.
         </p>
     </div>
