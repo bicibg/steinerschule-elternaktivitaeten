@@ -128,7 +128,7 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p>Bei Fragen wenden Sie sich bitte an die Schulverwaltung</p>
+            <p>Für weitere Informationen zur Plattform oder bei Interesse am Projekt kontaktieren Sie mich gerne: <a href="mailto:bugraergin@gmail.com" style="color: #4a90a4; text-decoration: underline;">bugraergin@gmail.com</a></p>
         </div>
     </div>
 </body>
