@@ -40,7 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->darkMode(false)
             ->brandName('Steinerschule Langnau - Verwaltung')
-            ->brandLogo(asset('images/logo.svg'))
+            ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('3rem')
             ->favicon(asset('favicon.ico'))
             ->sidebarCollapsibleOnDesktop()

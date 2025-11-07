@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>503 - Wartungsarbeiten</title>
+    <meta name="robots" content="noindex, nofollow">
+    <title>Bald verfügbar - Steinerschule Langnau</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +13,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f9fafb;
-            color: #374151;
+            background: linear-gradient(135deg, #e8f3f6 0%, #ffffff 50%, #e8f3f6 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,101 +21,114 @@
             padding: 20px;
         }
         .container {
+            max-width: 600px;
+            width: 100%;
             text-align: center;
-            max-width: 500px;
         }
-        .icon {
-            width: 96px;
-            height: 96px;
-            margin: 0 auto 32px;
-            color: #9ca3af;
+        .logo {
+            height: 64px;
+            margin-bottom: 32px;
+        }
+        @media (min-width: 640px) {
+            .logo {
+                height: 80px;
+            }
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 32px;
+        }
+        @media (min-width: 640px) {
+            .card {
+                padding: 48px;
+            }
         }
         h1 {
-            font-size: 48px;
+            font-size: 32px;
             font-weight: 700;
-            color: #1f2937;
+            color: #4a90a4;
             margin-bottom: 16px;
         }
-        h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #4b5563;
-            margin-bottom: 16px;
+        @media (min-width: 640px) {
+            h1 {
+                font-size: 40px;
+            }
         }
-        p {
-            color: #6b7280;
-            margin-bottom: 32px;
-            line-height: 1.5;
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 48px;
+            }
         }
-        .buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn-primary {
+        .divider {
+            height: 4px;
+            width: 96px;
             background-color: #4a90a4;
-            color: white;
+            margin: 0 auto 24px;
         }
-        .btn-primary:hover {
-            background-color: #3a7a94;
-        }
-        .btn-secondary {
-            background-color: #e5e7eb;
+        .subtitle {
+            font-size: 18px;
             color: #374151;
+            margin-bottom: 32px;
         }
-        .btn-secondary:hover {
-            background-color: #d1d5db;
+        @media (min-width: 640px) {
+            .subtitle {
+                font-size: 20px;
+            }
         }
-        .btn svg {
-            width: 16px;
-            height: 16px;
-            margin-right: 8px;
+        .info-box {
+            background-color: #e8f3f6;
+            border-left: 4px solid #4a90a4;
+            border-radius: 0 8px 8px 0;
+            padding: 24px;
+        }
+        .info-title {
+            font-weight: 600;
+            color: #2c5aa0;
+            margin-bottom: 8px;
+        }
+        .info-text {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .footer {
+            margin-top: 32px;
+            font-size: 14px;
+            color: #9ca3af;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
+        <!-- Logo -->
+        <div style="display: flex; justify-content: center;">
+            <img src="/images/logo.png" alt="Steinerschule Bern Ittigen Langnau" class="logo">
+        </div>
 
-        <h1>503</h1>
-        <h2>Wartungsarbeiten</h2>
+        <!-- Main Content -->
+        <div class="card">
+            <h1>Bald verfügbar</h1>
 
-        <p>Die Seite wird gerade gewartet. Bitte versuchen Sie es in wenigen Minuten erneut.</p>
+            <div class="divider"></div>
 
-        <div class="buttons">
-            <button onclick="location.reload()" class="btn btn-primary">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-                Seite neu laden
-            </button>
+            <p class="subtitle">
+                Die Plattform für Elternaktivitäten wird derzeit vorbereitet.
+            </p>
 
-            <button onclick="history.back()" class="btn btn-secondary">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                Zurück
-            </button>
+            <div class="info-box">
+                <p class="info-title">
+                    Elternaktivitäten – Standort Langnau
+                </p>
+                <p class="info-text">
+                    Koordination von Freiwilligeneinsätzen, Anlässen und Schulgemeinschaft
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Bei Fragen wenden Sie sich bitte an die Schulverwaltung</p>
         </div>
     </div>
 </body>

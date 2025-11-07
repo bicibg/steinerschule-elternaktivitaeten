@@ -22,16 +22,13 @@
         <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-14 sm:h-16">
                 <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ route('bulletin.index') }}" class="flex items-center">
-                        <svg class="h-8 sm:h-10 w-auto" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-                            <text x="10" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="300" fill="#4a90a4" letter-spacing="2px">rudolf</text>
-                            <text x="10" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#4a90a4" letter-spacing="1px">steinerschule</text>
-                            <text x="160" y="20" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 160 20)">bern</text>
-                            <text x="170" y="20" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 170 20)">ittigen</text>
-                            <text x="180" y="25" font-family="Arial, sans-serif" font-size="8" fill="#4a90a4" transform="rotate(-90 180 25)">langnau</text>
-                        </svg>
-                        <span class="ml-2 sm:ml-3 text-steiner-blue font-semibold text-xs sm:text-lg">Elternaktivitäten</span>
+                <div class="flex items-center" style="height: 100%;">
+                    <a href="{{ route('bulletin.index') }}" class="flex flex-row items-center gap-2 sm:gap-3" style="height: 100%;">
+                        <img src="{{ asset('images/logo.png') }}" alt="Steinerschule Bern Ittigen Langnau" class="w-auto" style="height: 100%;">
+                        <div class="flex flex-col">
+                            <div class="text-steiner-blue font-semibold text-sm sm:text-lg leading-tight">Elternaktivitäten</div>
+                            <div class="text-steiner-dark text-xs sm:text-sm leading-tight">Standort Langnau</div>
+                        </div>
                     </a>
                 </div>
 

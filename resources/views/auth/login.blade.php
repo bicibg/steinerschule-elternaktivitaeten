@@ -56,6 +56,7 @@
                 </p>
             </div>
 
+            @if(app()->environment('local'))
             <div class="mt-4 pt-4 border-t border-gray-200">
                 <div class="space-y-3">
                     <form action="{{ route('demo.login') }}" method="POST">
@@ -77,6 +78,7 @@
                     Demo-Konten werden automatisch zurückgesetzt. Keine echten Daten werden gespeichert.
                 </p>
             </div>
+            @endif
         </x-card>
     </div>
 @endsection
