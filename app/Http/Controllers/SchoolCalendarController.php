@@ -68,18 +68,14 @@ class SchoolCalendarController extends Controller
 
     public function create()
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
-            abort(403);
-        }
+        $this->authorizeSuperAdmin();
 
         return view('school-calendar.create');
     }
 
     public function store(Request $request)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
-            abort(403);
-        }
+        $this->authorizeSuperAdmin();
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -99,18 +95,14 @@ class SchoolCalendarController extends Controller
 
     public function edit(SchoolEvent $schoolEvent)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
-            abort(403);
-        }
+        $this->authorizeSuperAdmin();
 
         return view('school-calendar.edit', compact('schoolEvent'));
     }
 
     public function update(Request $request, SchoolEvent $schoolEvent)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
-            abort(403);
-        }
+        $this->authorizeSuperAdmin();
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -130,13 +122,18 @@ class SchoolCalendarController extends Controller
 
     public function destroy(SchoolEvent $schoolEvent)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
-            abort(403);
-        }
+        $this->authorizeSuperAdmin();
 
         $schoolEvent->delete();
 
         return redirect()->route('school-calendar.index')
                         ->with('success', 'Veranstaltung wurde erfolgreich gelöscht.');
+    }
+
+    private function authorizeSuperAdmin(): void
+    {
+        if (!auth()->user() || !auth()->user()->is_super_admin) {
+            abort(403);
+        }
     }
 }

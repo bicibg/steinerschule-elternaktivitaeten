@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
 use Filament\Notifications\Notification;
 
@@ -162,9 +163,10 @@ class UserResource extends Resource
                     ->modalSubmitActionLabel('Unwiderruflich anonymisieren')
                     ->visible(fn (User $record) => !$record->isAnonymized() && $record->id !== auth()->id())
                     ->action(function (User $record) {
-                        UserDeletionLog::logAction($record, 'anonymized');
-
-                        $record->anonymize(auth()->id());
+                        DB::transaction(function () use ($record) {
+                            UserDeletionLog::logAction($record, 'anonymized');
+                            $record->anonymize(auth()->id());
+                        });
 
                         Notification::make()
                             ->title('Benutzer anonymisiert')

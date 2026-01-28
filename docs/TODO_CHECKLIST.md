@@ -114,15 +114,42 @@
   - **Review**: All controllers for consistency
   - **Time**: 2 hours
 
-## 📊 Progress Tracking
+## Needs Clarification (Jan 2026 Code Quality Review)
+
+These items were identified during a thorough code review but need owner input before fixing.
+
+### #3 - API Routes: Anonymous Posting Policy
+- **Status**: Owner needs to clarify
+- **Issue**: The new API controllers (`BulletinPostForumController`, `ForumCommentController`) allow unauthenticated users to create forum posts and comments (with `user_id => null` and name "Anonym"). The legacy `ApiController` endpoints require auth. It's unclear whether anonymous forum posting is intentional.
+- **Files**: `routes/web.php:80,84`, `Api/BulletinPostForumController.php:41`, `Api/ForumCommentController.php:35`
+- **Action needed**: Decide if anonymous forum posts are intended behavior. If yes, document it. If no, add `auth` middleware to those routes.
+
+### #9 - Duplicate API Controllers
+- **Status**: Owner needs to clarify which set the frontend uses
+- **Issue**: Two parallel sets of API endpoints exist for the same operations:
+  - **Legacy**: `ApiController` handles shift signup, post creation, comment creation (uses `body` field, inline logic)
+  - **New**: `ShiftVolunteerController`, `BulletinPostForumController`, `ForumCommentController` (uses `content`/`name` fields, `ShiftService`)
+  - Both route sets are active simultaneously in `web.php`
+- **Files**: `ApiController.php` vs `Api/ShiftVolunteerController.php`, `Api/BulletinPostForumController.php`, `Api/ForumCommentController.php`
+- **Action needed**: Identify which endpoints the frontend actually uses. Remove the unused set and delete dead code.
+
+### #11 - Post Model Field Mismatch (Likely Bug)
+- **Status**: Owner needs to verify - this looks like a bug
+- **Issue**: The `Post` model `$fillable` has `['bulletin_post_id', 'user_id', 'body', 'ip_hash', 'deletion_reason']`. The `posts` migration defines `body` (text column). However, `BulletinPostForumController::store()` creates posts with `name` and `content` fields - **neither exists in the database or in `$fillable`**. Laravel's mass assignment protection silently drops them. The legacy `ApiController::storePost()` correctly uses `body`.
+  - This means forum posts created through the new API controller have **NULL content** - `body` is never set and `content` doesn't exist in the table.
+- **Files**: `app/Models/Post.php:11-17`, `database/migrations/2025_09_14_093012_create_posts_table.php:15`, `Api/BulletinPostForumController.php:39-44`
+- **Action needed**: If `content`/`name` columns were intended, add a migration. If `body` is correct, fix `BulletinPostForumController` to use `body` instead of `content`, and derive author from user relationship instead of `name`.
+- **Note**: Same issue likely exists in `ForumCommentController::store()` - uses `name`/`content` which may not match the `comments` table schema either.
+
+## Progress Tracking
 
 ### Completed Items Summary
-- **Critical**: 1/1 ✅
-- **High**: 4/4 ✅
-- **Medium**: 8/8 ✅
-- **Bug Fixes**: 1/1 ✅
-- **Low**: 5/5 ✅
-- **Total**: 19/19 ✅ ALL COMPLETE!
+- **Critical**: 1/1
+- **High**: 4/4
+- **Medium**: 8/8
+- **Bug Fixes**: 1/1
+- **Low**: 5/5
+- **Total**: 19/19 ALL COMPLETE!
 
 ### Time Estimates
 - **Total estimated time**: ~15 hours

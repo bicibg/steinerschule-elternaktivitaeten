@@ -360,17 +360,29 @@ class CalendarService
         $dates = collect();
         $pattern = strtolower($activity->recurring_pattern);
 
-        // Parse patterns like "jeden Donnerstag", "every Thursday", "wöchentlich"
-        if (str_contains($pattern, 'donnerstag') || str_contains($pattern, 'thursday')) {
-            $current = $startOfMonth->copy()->next('Thursday');
-            while ($current <= $endOfMonth) {
-                if ($activity->start_at <= $current && (!$activity->end_at || $activity->end_at >= $current)) {
-                    $dates->push($current->copy());
+        // Map German and English weekday names to Carbon day names
+        $weekdayMap = [
+            'montag' => 'Monday', 'monday' => 'Monday',
+            'dienstag' => 'Tuesday', 'tuesday' => 'Tuesday',
+            'mittwoch' => 'Wednesday', 'wednesday' => 'Wednesday',
+            'donnerstag' => 'Thursday', 'thursday' => 'Thursday',
+            'freitag' => 'Friday', 'friday' => 'Friday',
+            'samstag' => 'Saturday', 'saturday' => 'Saturday',
+            'sonntag' => 'Sunday', 'sunday' => 'Sunday',
+        ];
+
+        foreach ($weekdayMap as $keyword => $carbonDay) {
+            if (str_contains($pattern, $keyword)) {
+                $current = $startOfMonth->copy()->next($carbonDay);
+                while ($current <= $endOfMonth) {
+                    if ($activity->start_at <= $current && (!$activity->end_at || $activity->end_at >= $current)) {
+                        $dates->push($current->copy());
+                    }
+                    $current->addWeek();
                 }
-                $current->addWeek();
+                break;
             }
         }
-        // Add more pattern parsing as needed
 
         return $dates;
     }

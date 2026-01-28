@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 
 class StorePostRequest extends FormRequest
 {
@@ -66,17 +68,15 @@ class StorePostRequest extends FormRequest
     protected function failedAuthorization()
     {
         if (!auth()->check()) {
-            redirect()->route('login')
-                ->with('error', 'Bitte melden Sie sich an, um einen Beitrag zu verfassen.')
-                ->send();
-            exit;
+            throw new AuthorizationException(
+                'Bitte melden Sie sich an, um einen Beitrag zu verfassen.'
+            );
         }
 
         if (RateLimiter::tooManyAttempts('post-' . $this->ip(), 1)) {
-            redirect()->back()
-                ->withErrors(['rate_limit' => 'Bitte warten Sie 30 Sekunden vor dem nächsten Beitrag.'])
-                ->send();
-            exit;
+            throw ValidationException::withMessages([
+                'rate_limit' => 'Bitte warten Sie 30 Sekunden vor dem nächsten Beitrag.',
+            ]);
         }
     }
 }

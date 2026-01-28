@@ -384,6 +384,54 @@
 
 ---
 
+## 2026-01-28 (Code Quality Review)
+
+### Tasks Completed (Round 2)
+- [x] Fix #7: Standardized auth patterns - added `auth` middleware to API routes that require login
+  - Files modified: routes/web.php
+  - No logic/rights changes, just consistent middleware enforcement
+- [x] Fix #12: Cleaned up redundant super admin checks in SchoolCalendarController
+  - Files modified: app/Http/Controllers/SchoolCalendarController.php
+  - Extracted repeated check into private `authorizeSuperAdmin()` method
+- [x] Fix #13: Expanded recurring dates parser to handle all weekdays
+  - Files modified: app/Services/CalendarService.php
+  - Now supports all German/English weekday names (Montag-Sonntag, Monday-Sunday)
+- [x] Fix #16: Removed redundant password hashing in AuthController
+  - Files modified: app/Http/Controllers/AuthController.php
+  - User model `hashed` cast handles hashing automatically
+- [x] Fix #17: Replaced `exit` with proper exceptions in StorePostRequest
+  - Files modified: app/Http/Requests/StorePostRequest.php
+  - Now throws AuthorizationException/ValidationException instead of exit
+- [x] Fix #18: Wrapped anonymize action in DB transaction
+  - Files modified: app/Filament/Resources/UserResource.php
+  - Deletion log + anonymization now atomic
+
+### Tasks Completed (Round 1 - earlier today)
+- [x] Fix #5: Added rate limiting (throttle) to all API write endpoints
+- [x] Fix #6: Added pessimistic locking (lockForUpdate) to shift signup
+- [x] Fix #8: Tightened CSP - strict in production, relaxed for dev
+- [x] Fix #10: Fixed N+1 queries in PostController destroy methods
+- [x] Fix #14: Replaced raw SQL subquery in BulletinPostRepository
+- [x] Fix #19: Added max:10000 validation to bulletin description
+- [x] Fix #20: Defaulted session secure cookie to true in production
+
+### Items Documented for Owner Clarification
+- #3: Anonymous posting policy on new API forum endpoints
+- #9: Duplicate ApiController vs new dedicated API controllers
+- #11: Post model field mismatch (BulletinPostForumController uses content/name but DB has body)
+
+### Items Intentionally Left As-Is (Owner Decision)
+- #1: is_admin/is_super_admin in User $fillable - needed for admin panel
+- #2: Demo login endpoints - needed for pre-launch demos
+- #4: Moderation via edit token - intentional for community self-moderation
+- #15: No email verification - intentional for simplicity at launch
+
+### Commit Summary
+- Commit 1: Fix security and code quality issues (fixes #5, #6, #8, #10, #14, #19, #20)
+- Commit 2: Fix code quality, auth patterns, and document remaining items (fixes #7, #12, #13, #16, #17, #18)
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)

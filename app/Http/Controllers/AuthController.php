@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Http\Requests\RegisterUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -44,7 +43,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $validated['password'],
         ]);
 
         Auth::login($user);
@@ -58,7 +57,7 @@ class AuthController extends Controller
             ['email' => 'demo@example.com'],
             [
                 'name' => 'Demo User',
-                'password' => Hash::make('demo123456'),
+                'password' => 'demo123456',
             ]
         );
 
@@ -73,7 +72,7 @@ class AuthController extends Controller
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Demo Admin',
-                'password' => Hash::make('admin123456'),
+                'password' => 'admin123456',
                 'is_admin' => true,
                 'is_super_admin' => true,
             ]
