@@ -26,6 +26,9 @@ class ShiftService
     public function signupForShift(Shift $shift, User $user): ShiftVolunteer
     {
         return DB::transaction(function () use ($shift, $user) {
+            // Lock the shift row to prevent concurrent signups exceeding capacity
+            $shift = Shift::lockForUpdate()->find($shift->id);
+
             // Check if shift has capacity
             if ($this->isShiftFull($shift)) {
                 throw new \Exception('Diese Schicht ist bereits voll besetzt.');

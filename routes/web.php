@@ -71,31 +71,31 @@ Route::middleware(['auth'])->group(function () {
 // API routes for Alpine.js
 Route::prefix('api')->group(function () {
     // Shift volunteer management - RESTful nested resource
-    Route::post('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'store'])->name('api.shifts.volunteers.store');
-    Route::delete('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'destroy'])->name('api.shifts.volunteers.destroy');
+    Route::post('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'store'])->name('api.shifts.volunteers.store')->middleware('throttle:10,1');
+    Route::delete('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'destroy'])->name('api.shifts.volunteers.destroy')->middleware('throttle:10,1');
     Route::get('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'index'])->name('api.shifts.volunteers.index');
 
     // Bulletin post forum - RESTful nested resource
     Route::get('/bulletin-posts/{slug}/forum', [\App\Http\Controllers\Api\BulletinPostForumController::class, 'index'])->name('api.bulletin.forum.index');
-    Route::post('/bulletin-posts/{slug}/forum', [\App\Http\Controllers\Api\BulletinPostForumController::class, 'store'])->name('api.bulletin.forum.store');
+    Route::post('/bulletin-posts/{slug}/forum', [\App\Http\Controllers\Api\BulletinPostForumController::class, 'store'])->name('api.bulletin.forum.store')->middleware('throttle:5,1');
 
     // Forum comments - RESTful nested resource
     Route::get('/forum-posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'index'])->name('api.forum.comments.index');
-    Route::post('/forum-posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'store'])->name('api.forum.comments.store');
-    Route::delete('/comments/{comment}', [\App\Http\Controllers\Api\ForumCommentController::class, 'destroy'])->name('api.comments.destroy');
+    Route::post('/forum-posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'store'])->name('api.forum.comments.store')->middleware('throttle:5,1');
+    Route::delete('/comments/{comment}', [\App\Http\Controllers\Api\ForumCommentController::class, 'destroy'])->name('api.comments.destroy')->middleware('throttle:10,1');
 
     // Activity posts - Keep existing for now (to be refactored later)
-    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storeActivityPost'])->name('api.activity-posts.store');
-    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeActivityComment'])->name('api.activity-comments.store');
+    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storeActivityPost'])->name('api.activity-posts.store')->middleware('throttle:5,1');
+    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeActivityComment'])->name('api.activity-comments.store')->middleware('throttle:5,1');
 
     // Announcements
     Route::post('/announcements/{announcement}/dismiss', [\App\Http\Controllers\AnnouncementController::class, 'dismiss'])->name('api.announcements.dismiss')->middleware('auth');
 
     // Legacy routes - maintain backward compatibility temporarily
-    Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup');
-    Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\ApiController::class, 'shiftWithdraw'])->name('api.shifts.withdraw');
-    Route::post('/pinnwand/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store');
-    Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store');
+    Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup')->middleware('throttle:10,1');
+    Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\ApiController::class, 'shiftWithdraw'])->name('api.shifts.withdraw')->middleware('throttle:10,1');
+    Route::post('/pinnwand/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store')->middleware('throttle:5,1');
+    Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store')->middleware('throttle:5,1');
 });
 
 Route::middleware(['verify.edit.token'])->group(function () {

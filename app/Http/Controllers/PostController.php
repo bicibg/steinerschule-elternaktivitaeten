@@ -70,6 +70,7 @@ class PostController extends Controller
             abort(403, 'Nicht autorisiert');
         }
 
+        $post->load('bulletinPost');
         $slug = $post->bulletinPost->slug;
         $post->delete();
 
@@ -84,6 +85,7 @@ class PostController extends Controller
             abort(403, 'Nicht autorisiert');
         }
 
+        $comment->load('post.bulletinPost');
         $slug = $comment->post->bulletinPost->slug;
         $comment->delete();
 

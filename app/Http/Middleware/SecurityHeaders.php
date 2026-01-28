@@ -32,14 +32,25 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
         // Content Security Policy - prevent XSS and data injection
-        // Allow localhost for development (Vite)
-        $csp = "default-src 'self' http://localhost:* http://127.0.0.1:*; " .
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*; " .
-               "style-src 'self' 'unsafe-inline' http://localhost:* http://127.0.0.1:*; " .
-               "img-src 'self' data: https: http://localhost:* http://127.0.0.1:*; " .
-               "font-src 'self' data: http://localhost:* http://127.0.0.1:*; " .
-               "connect-src 'self' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*; " .
-               "frame-ancestors 'self';";
+        if (app()->environment('production')) {
+            // Strict CSP for production — no localhost, no unsafe-eval
+            $csp = "default-src 'self'; " .
+                   "script-src 'self' 'unsafe-inline'; " .
+                   "style-src 'self' 'unsafe-inline'; " .
+                   "img-src 'self' data: https:; " .
+                   "font-src 'self' data:; " .
+                   "connect-src 'self'; " .
+                   "frame-ancestors 'self';";
+        } else {
+            // Relaxed CSP for development (Vite HMR needs localhost + eval)
+            $csp = "default-src 'self' http://localhost:* http://127.0.0.1:*; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*; " .
+                   "style-src 'self' 'unsafe-inline' http://localhost:* http://127.0.0.1:*; " .
+                   "img-src 'self' data: https: http://localhost:* http://127.0.0.1:*; " .
+                   "font-src 'self' data: http://localhost:* http://127.0.0.1:*; " .
+                   "connect-src 'self' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*; " .
+                   "frame-ancestors 'self';";
+        }
 
         $response->headers->set('Content-Security-Policy', $csp);
 

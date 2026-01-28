@@ -24,7 +24,7 @@ class UpdateBulletinRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|max:10000',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
             'location' => 'required|string|max:255',
@@ -48,6 +48,7 @@ class UpdateBulletinRequest extends FormRequest
             'title.required' => 'Der Titel ist erforderlich.',
             'title.max' => 'Der Titel darf maximal 255 Zeichen lang sein.',
             'description.required' => 'Die Beschreibung ist erforderlich.',
+            'description.max' => 'Die Beschreibung darf maximal 10000 Zeichen lang sein.',
             'start_at.date' => 'Das Startdatum muss ein gültiges Datum sein.',
             'end_at.date' => 'Das Enddatum muss ein gültiges Datum sein.',
             'end_at.after_or_equal' => 'Das Enddatum muss nach oder am Startdatum liegen.',

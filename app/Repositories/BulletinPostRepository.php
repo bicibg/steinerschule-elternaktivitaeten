@@ -139,14 +139,17 @@ class BulletinPostRepository
     public function getUpcomingNeedingHelp(int $limit = 5): Collection
     {
         return BulletinPost::published()
-            ->whereHas('shifts', function ($query) {
-                $query->whereRaw('(offline_filled + (SELECT COUNT(*) FROM shift_volunteers WHERE shift_id = shifts.id)) < needed');
-            })
+            ->with('shifts.volunteers')
             ->where('start_at', '>', now())
             ->orderBy('start_at')
             ->limit($limit)
-            ->with('shifts.volunteers')
-            ->get();
+            ->get()
+            ->filter(function ($post) {
+                return $post->shifts->contains(function ($shift) {
+                    return $shift->filled < $shift->needed;
+                });
+            })
+            ->values();
     }
 
     /**
