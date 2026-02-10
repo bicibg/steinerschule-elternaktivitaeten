@@ -393,6 +393,10 @@
   - Added indexes on school_events(start_date, event_type), bulletin_posts(end_at, category), announcements(starts_at, expires_at)
   - Includes proper down() method for rollback
 
+- [x] Fix Post model N+1 risk in getAuthorNameAttribute (4.6/M13)
+  - Files modified: app/Models/Post.php
+  - Added relationLoaded() guard like Shift model to prevent lazy loading
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)

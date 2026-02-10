@@ -43,6 +43,10 @@ class Post extends Model
 
     public function getAuthorNameAttribute()
     {
-        return $this->user ? $this->user->name : 'Anonym';
+        if ($this->relationLoaded('user')) {
+            return $this->user ? $this->user->name : 'Anonym';
+        }
+
+        return $this->user_id ? ($this->user?->name ?? 'Anonym') : 'Anonym';
     }
 }
