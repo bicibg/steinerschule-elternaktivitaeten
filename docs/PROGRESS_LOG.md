@@ -415,6 +415,11 @@
   - Replaced CSS pseudo-selectors (button:first-of-type) with data-action attributes
   - Added aria-label to navigation buttons for screen readers
 
+- [x] Create missing model factories (6.3/M7)
+  - Files created: ShiftFactory, ShiftVolunteerFactory, PostFactory, CommentFactory, ActivityFactory, SchoolEventFactory, AnnouncementFactory
+  - Added HasFactory trait to: Shift, ShiftVolunteer, Post, Comment, Activity, Announcement
+  - All 39 existing tests still pass
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)
