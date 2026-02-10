@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Shift;
 use App\Models\ShiftVolunteer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 
@@ -22,14 +23,21 @@ class ShiftRepository
      */
     public function findNeedingVolunteers(int $limit = 10): Collection
     {
-        return Shift::with(['bulletinPost', 'volunteers'])
-            ->whereRaw('(offline_filled + (SELECT COUNT(*) FROM shift_volunteers WHERE shift_id = shifts.id)) < needed')
+        $shifts = Shift::with(['bulletinPost', 'volunteers'])
             ->whereHas('bulletinPost', function ($query) {
                 $query->published();
             })
-            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(SUBSTRING_INDEX(time, ',', 2), ' ', -1), '%d.%m.%Y')")
-            ->limit($limit)
-            ->get();
+            ->get()
+            ->filter(function ($shift) {
+                return $shift->filled < $shift->needed;
+            })
+            ->sortBy(function ($shift) {
+                return $this->parseShiftDate($shift->time)?->timestamp ?? PHP_INT_MAX;
+            })
+            ->take($limit)
+            ->values();
+
+        return new Collection($shifts->all());
     }
 
     /**
@@ -54,8 +62,8 @@ class ShiftRepository
     /**
      * Get shifts for a bulletin post ordered by date.
      *
-     * Retrieves all shifts for a bulletin post, parsing and ordering
-     * by the German date format in the time field.
+     * Retrieves all shifts for a bulletin post, sorting by parsed
+     * German date format in the time field.
      *
      * @param int $bulletinPostId Bulletin post ID
      *
@@ -63,10 +71,15 @@ class ShiftRepository
      */
     public function getByBulletinPost(int $bulletinPostId): Collection
     {
-        return Shift::where('bulletin_post_id', $bulletinPostId)
+        $shifts = Shift::where('bulletin_post_id', $bulletinPostId)
             ->with('volunteers.user')
-            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(SUBSTRING_INDEX(time, ',', 2), ' ', -1), '%d.%m.%Y')")
-            ->get();
+            ->get()
+            ->sortBy(function ($shift) {
+                return $this->parseShiftDate($shift->time)?->timestamp ?? PHP_INT_MAX;
+            })
+            ->values();
+
+        return new Collection($shifts->all());
     }
 
     /**
@@ -75,23 +88,31 @@ class ShiftRepository
      * Retrieves shifts occurring within a specified date range,
      * parsing the German date format for comparison.
      *
-     * @param \Carbon\Carbon $startDate Range start date
-     * @param \Carbon\Carbon $endDate   Range end date
+     * @param Carbon $startDate Range start date
+     * @param Carbon $endDate   Range end date
      *
      * @return Collection<int, Shift> Shifts within date range
      */
-    public function getInDateRange($startDate, $endDate): Collection
+    public function getInDateRange(Carbon $startDate, Carbon $endDate): Collection
     {
-        $startStr = $startDate->format('d.m.Y');
-        $endStr = $endDate->format('d.m.Y');
-
-        return Shift::with(['bulletinPost', 'volunteers'])
-            ->whereRaw("STR_TO_DATE(SUBSTRING_INDEX(SUBSTRING_INDEX(time, ',', 2), ' ', -1), '%d.%m.%Y') BETWEEN ? AND ?", [$startStr, $endStr])
+        $shifts = Shift::with(['bulletinPost', 'volunteers'])
             ->whereHas('bulletinPost', function ($query) {
                 $query->published();
             })
-            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(SUBSTRING_INDEX(time, ',', 2), ' ', -1), '%d.%m.%Y')")
-            ->get();
+            ->get()
+            ->filter(function ($shift) use ($startDate, $endDate) {
+                $shiftDate = $this->parseShiftDate($shift->time);
+                if (!$shiftDate) {
+                    return false;
+                }
+                return $shiftDate->between($startDate->startOfDay(), $endDate->endOfDay());
+            })
+            ->sortBy(function ($shift) {
+                return $this->parseShiftDate($shift->time)?->timestamp ?? PHP_INT_MAX;
+            })
+            ->values();
+
+        return new Collection($shifts->all());
     }
 
     /**
@@ -103,31 +124,33 @@ class ShiftRepository
      */
     public function getFillStatisticsByCategory(): SupportCollection
     {
-        return Shift::selectRaw('
-                bulletin_posts.category,
-                COUNT(shifts.id) as total_shifts,
-                SUM(shifts.needed) as total_needed,
-                SUM(shifts.offline_filled) as total_offline,
-                (SELECT COUNT(*) FROM shift_volunteers WHERE shift_id IN (SELECT id FROM shifts WHERE bulletin_post_id = bulletin_posts.id)) as total_online
-            ')
-            ->join('bulletin_posts', 'shifts.bulletin_post_id', '=', 'bulletin_posts.id')
-            ->where('bulletin_posts.status', 'published')
-            ->groupBy('bulletin_posts.category')
-            ->get()
-            ->map(function ($stat) {
-                $totalFilled = $stat->total_offline + $stat->total_online;
-                $fillRate = $stat->total_needed > 0
-                    ? round(($totalFilled / $stat->total_needed) * 100, 2)
-                    : 0;
+        $shifts = Shift::with(['bulletinPost', 'volunteers'])
+            ->whereHas('bulletinPost', function ($query) {
+                $query->where('status', 'published');
+            })
+            ->get();
 
-                return [
-                    'category' => $stat->category,
-                    'total_shifts' => $stat->total_shifts,
-                    'total_needed' => $stat->total_needed,
-                    'total_filled' => $totalFilled,
-                    'fill_rate' => $fillRate,
-                ];
+        return $shifts->groupBy(function ($shift) {
+            return $shift->bulletinPost->category;
+        })->map(function ($categoryShifts, $category) {
+            $totalNeeded = $categoryShifts->sum('needed');
+            $totalOffline = $categoryShifts->sum('offline_filled');
+            $totalOnline = $categoryShifts->sum(function ($shift) {
+                return $shift->volunteers->count();
             });
+            $totalFilled = $totalOffline + $totalOnline;
+            $fillRate = $totalNeeded > 0
+                ? round(($totalFilled / $totalNeeded) * 100, 2)
+                : 0;
+
+            return [
+                'category' => $category,
+                'total_shifts' => $categoryShifts->count(),
+                'total_needed' => $totalNeeded,
+                'total_filled' => $totalFilled,
+                'fill_rate' => $fillRate,
+            ];
+        })->values();
     }
 
     /**
@@ -174,5 +197,20 @@ class ShiftRepository
     public function cleanOrphanedVolunteers(): int
     {
         return ShiftVolunteer::whereDoesntHave('shift')->delete();
+    }
+
+    /**
+     * Parse German date format from shift time string.
+     *
+     * @param string $timeString Shift time string (e.g. "Samstag, 09.11.2024, 09:00 - 11:00 Uhr")
+     *
+     * @return Carbon|null Parsed date or null if parsing fails
+     */
+    private function parseShiftDate(string $timeString): ?Carbon
+    {
+        if (preg_match('/(\d{2})\.(\d{2})\.(\d{4})/', $timeString, $matches)) {
+            return Carbon::createFromFormat('d.m.Y', $matches[0]);
+        }
+        return null;
     }
 }
