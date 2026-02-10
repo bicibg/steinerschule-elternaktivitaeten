@@ -410,6 +410,11 @@
   - Files modified: .env.example
   - Added commented production recommendations for APP_DEBUG, BCRYPT_ROUNDS, LOG_LEVEL, session security
 
+- [x] Fix fragile DOM selectors and add ARIA labels to calendar navigation (5.6/L3 + 5.5/L1)
+  - Files modified: resources/views/calendar/index.blade.php, resources/views/school-calendar/index.blade.php
+  - Replaced CSS pseudo-selectors (button:first-of-type) with data-action attributes
+  - Added aria-label to navigation buttons for screen readers
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)
