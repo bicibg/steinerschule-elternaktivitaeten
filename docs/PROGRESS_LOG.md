@@ -424,6 +424,12 @@
   - Files modified: routes/web.php
   - POST /pinnwand/{slug}/posts and POST /posts/{post}/comments now enforce auth at route level
 
+- [x] Remove legacy ApiController, create ActivityForumController (3.1 cleanup)
+  - Files created: app/Http/Controllers/Api/ActivityForumController.php
+  - Files deleted: app/Http/Controllers/ApiController.php
+  - Moved storeActivityPost/storeActivityComment to dedicated Api controller
+  - Routes updated, all tests pass
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)

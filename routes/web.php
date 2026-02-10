@@ -85,8 +85,8 @@ Route::prefix('api')->middleware('throttle:60,1')->group(function () {
     Route::delete('/comments/{comment}', [\App\Http\Controllers\Api\ForumCommentController::class, 'destroy'])->name('api.comments.destroy');
 
     // Activity posts
-    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storeActivityPost'])->name('api.activity-posts.store');
-    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeActivityComment'])->name('api.activity-comments.store');
+    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\Api\ActivityForumController::class, 'storePost'])->name('api.activity-posts.store');
+    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\Api\ActivityForumController::class, 'storeComment'])->name('api.activity-comments.store');
 
     // Announcements
     Route::post('/announcements/{announcement}/dismiss', [\App\Http\Controllers\AnnouncementController::class, 'dismiss'])->name('api.announcements.dismiss')->middleware('auth');

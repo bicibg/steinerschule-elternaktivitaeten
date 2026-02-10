@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\ActivityPost;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ApiController extends Controller
+class ActivityForumController extends Controller
 {
-    public function storeActivityPost(Request $request, $slug)
+    public function storePost(Request $request, string $slug): JsonResponse
     {
         if (!auth()->check()) {
             return response()->json(['error' => 'Nicht angemeldet'], 401);
@@ -46,7 +48,7 @@ class ApiController extends Controller
         ]);
     }
 
-    public function storeActivityComment(Request $request, ActivityPost $post)
+    public function storeComment(Request $request, ActivityPost $post): JsonResponse
     {
         if (!auth()->check()) {
             return response()->json(['error' => 'Nicht angemeldet'], 401);
