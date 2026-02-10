@@ -430,6 +430,11 @@
   - Moved storeActivityPost/storeActivityComment to dedicated Api controller
   - Routes updated, all tests pass
 
+- [x] Fix expired items logic with 7-day grace period (1.4/H11)
+  - Files modified: app/Console/Commands/UpdateExpiredItems.php
+  - Posts without end_at now expire 7 days after start_at instead of immediately
+  - Prevents multi-day events from being prematurely marked as ended
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)
