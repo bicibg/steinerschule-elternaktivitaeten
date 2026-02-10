@@ -80,7 +80,6 @@
             // Get the calendar content container
             const oldContent = document.querySelector('#calendar-content');
             if (!oldContent) {
-                console.error('Calendar content not found');
                 this.loading = false;
                 return;
             }
@@ -114,7 +113,6 @@
                 this.loading = false;
             }, 150);
         } catch (error) {
-            console.error('Navigation error:', error);
             // Fallback to normal navigation
             window.location.href = url;
         }
