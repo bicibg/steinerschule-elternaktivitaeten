@@ -401,6 +401,11 @@
   - Files modified: composer.json, composer.lock
   - Tinker provides a PHP REPL; shouldn't be in production dependencies
 
+- [x] Improve CI/CD pipeline (7.2/M8)
+  - Files modified: .github/workflows/tests.yml
+  - Added: npm install + build, composer audit, npm audit, pint code style check
+  - Node.js 20 with npm caching for faster builds
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)
