@@ -41,7 +41,8 @@ class UpdateExpiredItems extends Command
                 $query->where('end_at', '<', now())
                     ->orWhere(function($q) {
                         $q->whereNull('end_at')
-                            ->where('start_at', '<', now()->subDay());
+                            ->whereNotNull('start_at')
+                            ->where('start_at', '<', now()->startOfDay());
                     });
             })
             ->update(['status' => 'ended']);
