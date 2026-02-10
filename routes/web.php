@@ -42,7 +42,7 @@ Route::post('/activity-posts/{post}/comments', [App\Http\Controllers\ActivityPos
 
 // School Calendar routes
 Route::get('/schulkalender', [SchoolCalendarController::class, 'index'])->name('school-calendar.index');
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'super_admin'])->group(function () {
     Route::get('/schulkalender/create', [SchoolCalendarController::class, 'create'])->name('school-calendar.create');
     Route::post('/schulkalender', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
     Route::get('/schulkalender/{schoolEvent}/edit', [SchoolCalendarController::class, 'edit'])->name('school-calendar.edit');
