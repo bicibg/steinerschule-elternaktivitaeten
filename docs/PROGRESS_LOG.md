@@ -420,6 +420,10 @@
   - Added HasFactory trait to: Shift, ShiftVolunteer, Post, Comment, Activity, Announcement
   - All 39 existing tests still pass
 
+- [x] Add auth middleware to forum post/comment web routes (3.2/M10)
+  - Files modified: routes/web.php
+  - POST /pinnwand/{slug}/posts and POST /posts/{post}/comments now enforce auth at route level
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)

@@ -51,8 +51,8 @@ Route::middleware(['auth', 'super_admin'])->group(function () {
 });
 Route::get('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'show'])->name('school-calendar.show');
 
-Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
-Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
+Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store')->middleware('auth');
+Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store')->middleware('auth');
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
 Route::delete('/comments/{comment}', [PostController::class, 'destroyComment'])->name('comments.destroy')->middleware('auth');
 
