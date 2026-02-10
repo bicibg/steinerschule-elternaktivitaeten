@@ -42,7 +42,6 @@ class ShiftVolunteerController extends Controller
                     'volunteer' => [
                         'id' => $volunteer->id,
                         'name' => $volunteer->name,
-                        'user_id' => $volunteer->user_id,
                     ],
                     'shift_stats' => $this->shiftService->getShiftStatistics($shift),
                 ],
@@ -96,13 +95,20 @@ class ShiftVolunteerController extends Controller
     {
         $volunteers = $this->shiftService->getShiftVolunteers($shift);
 
+        $isAuthenticated = auth()->check();
+
         return response()->json([
-            'data' => $volunteers->map(function ($volunteer) {
-                return [
-                    'id' => $volunteer->id,
-                    'name' => auth()->check() ? $volunteer->name : 'Angemeldet',
+            'data' => $volunteers->map(function ($volunteer) use ($isAuthenticated) {
+                $item = [
+                    'name' => $isAuthenticated ? $volunteer->name : 'Angemeldet',
                     'created_at' => $volunteer->created_at->format('d.m.Y H:i'),
                 ];
+
+                if ($isAuthenticated) {
+                    $item['id'] = $volunteer->id;
+                }
+
+                return $item;
             }),
         ]);
     }
