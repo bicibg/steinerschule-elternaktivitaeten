@@ -406,6 +406,10 @@
   - Added: npm install + build, composer audit, npm audit, pint code style check
   - Node.js 20 with npm caching for faster builds
 
+- [x] Add production hints to .env.example (7.1)
+  - Files modified: .env.example
+  - Added commented production recommendations for APP_DEBUG, BCRYPT_ROUNDS, LOG_LEVEL, session security
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)
