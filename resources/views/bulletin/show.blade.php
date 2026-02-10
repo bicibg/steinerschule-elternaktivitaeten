@@ -255,7 +255,7 @@
                                         this.commentLoading = true;
 
                                         try {
-                                            const response = await fetch('/api/bulletin-posts/{{ $post->id }}/comments', {
+                                            const response = await fetch('/api/posts/{{ $post->id }}/comments', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Content-Type': 'application/json',

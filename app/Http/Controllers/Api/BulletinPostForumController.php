@@ -13,15 +13,14 @@ class BulletinPostForumController extends Controller
     /**
      * Store a new forum post for a bulletin post.
      *
-     * POST /api/bulletin-posts/{slug}/forum
-     *
-     * @param Request $request
-     * @param string  $slug
-     *
-     * @return JsonResponse
+     * POST /api/pinnwand/{slug}/posts
      */
     public function store(Request $request, string $slug): JsonResponse
     {
+        if (!auth()->check()) {
+            return response()->json(['error' => 'Nicht angemeldet'], 401);
+        }
+
         $bulletinPost = BulletinPost::where('slug', $slug)->published()->first();
 
         if (!$bulletinPost) {
@@ -32,28 +31,29 @@ class BulletinPostForumController extends Controller
             return response()->json(['error' => 'Forum nicht aktiviert'], 403);
         }
 
+        // Honeypot spam check
+        if ($request->filled('website') || $request->filled('email_confirm')) {
+            return response()->json(['error' => 'Spam detected'], 400);
+        }
+
         $validated = $request->validate([
-            'content' => 'required|string|max:5000',
-            'name' => 'nullable|string|max:100',
+            'body' => 'required|string|max:2000',
         ]);
 
-        $post = Post::create([
-            'bulletin_post_id' => $bulletinPost->id,
-            'user_id' => auth()->check() ? auth()->id() : null,
-            'name' => auth()->check() ? auth()->user()->name : ($validated['name'] ?? 'Anonym'),
-            'content' => $validated['content'],
+        $post = $bulletinPost->posts()->create([
+            'user_id' => auth()->id(),
+            'body' => $validated['body'],
+            'ip_hash' => hash('sha256', $request->ip()),
         ]);
 
         return response()->json([
             'success' => true,
-            'data' => [
+            'post' => [
                 'id' => $post->id,
-                'name' => $post->name,
-                'content' => $post->content,
+                'author_name' => $post->user->name,
+                'body' => nl2br(e($post->body)),
                 'created_at' => $post->created_at->format('d.m.Y H:i'),
-                'can_delete' => auth()->check() && auth()->id() === $post->user_id,
             ],
-            'message' => 'Beitrag erstellt',
         ], 201);
     }
 
@@ -61,10 +61,6 @@ class BulletinPostForumController extends Controller
      * List forum posts for a bulletin post.
      *
      * GET /api/bulletin-posts/{slug}/forum
-     *
-     * @param string $slug
-     *
-     * @return JsonResponse
      */
     public function index(string $slug): JsonResponse
     {
@@ -75,9 +71,7 @@ class BulletinPostForumController extends Controller
         }
 
         $posts = $bulletinPost->posts()
-            ->with(['comments' => function ($query) {
-                $query->orderBy('created_at', 'desc');
-            }])
+            ->with(['user', 'comments.user'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -85,15 +79,15 @@ class BulletinPostForumController extends Controller
             'data' => $posts->map(function ($post) {
                 return [
                     'id' => $post->id,
-                    'name' => $post->name,
-                    'content' => $post->content,
+                    'author_name' => $post->author_name,
+                    'body' => nl2br(e($post->body)),
                     'created_at' => $post->created_at->format('d.m.Y H:i'),
                     'can_delete' => auth()->check() && auth()->id() === $post->user_id,
                     'comments' => $post->comments->map(function ($comment) {
                         return [
                             'id' => $comment->id,
-                            'name' => $comment->name,
-                            'content' => $comment->content,
+                            'author_name' => $comment->user ? $comment->user->name : 'Anonym',
+                            'body' => nl2br(e($comment->body)),
                             'created_at' => $comment->created_at->format('d.m.Y H:i'),
                             'can_delete' => auth()->check() && auth()->id() === $comment->user_id,
                         ];

@@ -384,6 +384,41 @@
 
 ---
 
+## 2026-02-10 (Production Readiness Audit - API Merge)
+
+### Tasks Completed
+- [x] Merged legacy ApiController with dedicated API controllers
+  - ForumCommentController: Fixed broken `content`/`name` fields → correct `body`/`ip_hash` DB columns, added auth check, honeypot spam protection
+  - BulletinPostForumController: Fixed same field issues, added `has_forum` gate, honeypot, auth
+  - ShiftVolunteerController: Updated response shape to match frontend expectations (`offline_filled`, `online_count`, `needed`)
+- [x] Fixed broken comment URL in bulletin/show.blade.php
+  - Changed `/api/bulletin-posts/{post_id}/comments` → `/api/posts/{post_id}/comments`
+  - Previous URL matched no route, so bulletin post comments were completely broken
+- [x] Consolidated API routes in web.php
+  - Removed duplicate legacy + new route definitions
+  - Pointed frontend-used URLs at new controllers
+  - Removed dead route URLs that nothing called
+- [x] Cleaned up ApiController
+  - Removed 4 dead methods (shiftSignup, shiftWithdraw, storePost, storeComment)
+  - Kept only activity post/comment methods (still needed by frontend)
+  - Added honeypot spam protection to remaining methods
+
+### Key Findings
+- The "new" API controllers (created on Day 2) were NEVER functional — they wrote to `content` and `name` columns that don't exist in the DB (actual columns: `body` and `ip_hash`)
+- The bulletin comment submission has been broken since the route refactoring — URL didn't match any route
+- The legacy ApiController was the only working path for all API operations
+
+### Files Modified
+- app/Http/Controllers/Api/BulletinPostForumController.php
+- app/Http/Controllers/Api/ForumCommentController.php
+- app/Http/Controllers/Api/ShiftVolunteerController.php
+- app/Http/Controllers/ApiController.php
+- routes/web.php
+- resources/views/bulletin/show.blade.php
+- docs/PROGRESS_LOG.md
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)
