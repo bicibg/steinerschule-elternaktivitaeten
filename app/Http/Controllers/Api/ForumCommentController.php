@@ -28,12 +28,13 @@ class ForumCommentController extends Controller
 
         $validated = $request->validate([
             'content' => 'required|string|max:2000',
+            'name' => 'nullable|string|max:100',
         ]);
 
         $comment = Comment::create([
             'post_id' => $post->id,
             'user_id' => auth()->check() ? auth()->id() : null,
-            'name' => auth()->check() ? auth()->user()->name : $request->input('name', 'Anonym'),
+            'name' => auth()->check() ? auth()->user()->name : ($validated['name'] ?? 'Anonym'),
             'content' => $validated['content'],
         ]);
 

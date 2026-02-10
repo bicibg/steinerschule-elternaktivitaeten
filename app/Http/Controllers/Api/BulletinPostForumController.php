@@ -34,12 +34,13 @@ class BulletinPostForumController extends Controller
 
         $validated = $request->validate([
             'content' => 'required|string|max:5000',
+            'name' => 'nullable|string|max:100',
         ]);
 
         $post = Post::create([
             'bulletin_post_id' => $bulletinPost->id,
             'user_id' => auth()->check() ? auth()->id() : null,
-            'name' => auth()->check() ? auth()->user()->name : $request->input('name', 'Anonym'),
+            'name' => auth()->check() ? auth()->user()->name : ($validated['name'] ?? 'Anonym'),
             'content' => $validated['content'],
         ]);
 
