@@ -347,7 +347,12 @@ class CalendarService
     {
         // Example: "Samstag, 09.11.2024, 09:00 - 11:00 Uhr"
         if (preg_match('/(\d{2})\.(\d{2})\.(\d{4})/', $timeString, $matches)) {
-            return Carbon::createFromFormat('d.m.Y', $matches[0]);
+            try {
+                return Carbon::createFromFormat('d.m.Y', $matches[0])->startOfDay();
+            } catch (\Exception $e) {
+                report($e);
+                return null;
+            }
         }
         return null;
     }
