@@ -18,16 +18,16 @@ Route::get('/', function () {
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
 Route::get('/register', [\App\Http\Controllers\AuthController::class, 'showRegister'])->name('register')->middleware('guest');
-Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware(['guest', 'honeypot']);
-Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login')->middleware('guest');
-Route::post('/demo-admin-login', [\App\Http\Controllers\AuthController::class, 'loginDemoAdmin'])->name('demo.admin.login')->middleware('guest');
+Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
+Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login')->middleware(['throttle:10,1', 'guest']);
+Route::post('/demo-admin-login', [\App\Http\Controllers\AuthController::class, 'loginDemoAdmin'])->name('demo.admin.login')->middleware(['throttle:10,1', 'guest']);
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
 // Password Reset Routes
 Route::get('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request')->middleware('guest');
-Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('guest');
+Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware(['throttle:5,1', 'guest']);
 Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset')->middleware('guest');
-Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update')->middleware('guest');
+Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update')->middleware(['throttle:5,1', 'guest']);
 
 Route::get('/pinnwand', [BulletinController::class, 'index'])->name('bulletin.index');
 Route::get('/pinnwand/{slug}', [BulletinController::class, 'show'])->name('bulletin.show');
@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // API routes for Alpine.js
-Route::prefix('api')->group(function () {
+Route::prefix('api')->middleware('throttle:60,1')->group(function () {
     // Shift volunteer management - RESTful nested resource
     Route::post('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'store'])->name('api.shifts.volunteers.store');
     Route::delete('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'destroy'])->name('api.shifts.volunteers.destroy');
