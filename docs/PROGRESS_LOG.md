@@ -397,6 +397,10 @@
   - Files modified: app/Models/Post.php
   - Added relationLoaded() guard like Shift model to prevent lazy loading
 
+- [x] Move laravel/tinker to require-dev (7.3/M9)
+  - Files modified: composer.json, composer.lock
+  - Tinker provides a PHP REPL; shouldn't be in production dependencies
+
 ---
 
 ## 2026-02-10 (Production Readiness Audit - API Merge)
