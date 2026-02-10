@@ -384,6 +384,17 @@
 
 ---
 
+## 2026-02-10 (Production Readiness Audit - Phase 4: Performance & DevOps)
+
+### Tasks Completed
+- [x] Add database indexes and unique constraint migration (4.2/4.3/H9/M1)
+  - Files created: database/migrations/2026_02_10_100000_add_performance_indexes.php
+  - Added unique(shift_id, user_id) on shift_volunteers to prevent race-condition duplicates
+  - Added indexes on school_events(start_date, event_type), bulletin_posts(end_at, category), announcements(starts_at, expires_at)
+  - Includes proper down() method for rollback
+
+---
+
 ## 2026-02-10 (Production Readiness Audit - API Merge)
 
 ### Tasks Completed
