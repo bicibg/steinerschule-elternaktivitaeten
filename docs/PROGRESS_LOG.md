@@ -384,6 +384,94 @@
 
 ---
 
+## 2026-02-10 (Production Readiness Audit - Phase 4: Performance & DevOps)
+
+### Tasks Completed
+- [x] Add database indexes and unique constraint migration (4.2/4.3/H9/M1)
+  - Files created: database/migrations/2026_02_10_100000_add_performance_indexes.php
+  - Added unique(shift_id, user_id) on shift_volunteers to prevent race-condition duplicates
+  - Added indexes on school_events(start_date, event_type), bulletin_posts(end_at, category), announcements(starts_at, expires_at)
+  - Includes proper down() method for rollback
+
+- [x] Fix Post model N+1 risk in getAuthorNameAttribute (4.6/M13)
+  - Files modified: app/Models/Post.php
+  - Added relationLoaded() guard like Shift model to prevent lazy loading
+
+- [x] Move laravel/tinker to require-dev (7.3/M9)
+  - Files modified: composer.json, composer.lock
+  - Tinker provides a PHP REPL; shouldn't be in production dependencies
+
+- [x] Improve CI/CD pipeline (7.2/M8)
+  - Files modified: .github/workflows/tests.yml
+  - Added: npm install + build, composer audit, npm audit, pint code style check
+  - Node.js 20 with npm caching for faster builds
+
+- [x] Add production hints to .env.example (7.1)
+  - Files modified: .env.example
+  - Added commented production recommendations for APP_DEBUG, BCRYPT_ROUNDS, LOG_LEVEL, session security
+
+- [x] Fix fragile DOM selectors and add ARIA labels to calendar navigation (5.6/L3 + 5.5/L1)
+  - Files modified: resources/views/calendar/index.blade.php, resources/views/school-calendar/index.blade.php
+  - Replaced CSS pseudo-selectors (button:first-of-type) with data-action attributes
+  - Added aria-label to navigation buttons for screen readers
+
+- [x] Create missing model factories (6.3/M7)
+  - Files created: ShiftFactory, ShiftVolunteerFactory, PostFactory, CommentFactory, ActivityFactory, SchoolEventFactory, AnnouncementFactory
+  - Added HasFactory trait to: Shift, ShiftVolunteer, Post, Comment, Activity, Announcement
+  - All 39 existing tests still pass
+
+- [x] Add auth middleware to forum post/comment web routes (3.2/M10)
+  - Files modified: routes/web.php
+  - POST /pinnwand/{slug}/posts and POST /posts/{post}/comments now enforce auth at route level
+
+- [x] Remove legacy ApiController, create ActivityForumController (3.1 cleanup)
+  - Files created: app/Http/Controllers/Api/ActivityForumController.php
+  - Files deleted: app/Http/Controllers/ApiController.php
+  - Moved storeActivityPost/storeActivityComment to dedicated Api controller
+  - Routes updated, all tests pass
+
+- [x] Fix expired items logic with 7-day grace period (1.4/H11)
+  - Files modified: app/Console/Commands/UpdateExpiredItems.php
+  - Posts without end_at now expire 7 days after start_at instead of immediately
+  - Prevents multi-day events from being prematurely marked as ended
+
+---
+
+## 2026-02-10 (Production Readiness Audit - API Merge)
+
+### Tasks Completed
+- [x] Merged legacy ApiController with dedicated API controllers
+  - ForumCommentController: Fixed broken `content`/`name` fields → correct `body`/`ip_hash` DB columns, added auth check, honeypot spam protection
+  - BulletinPostForumController: Fixed same field issues, added `has_forum` gate, honeypot, auth
+  - ShiftVolunteerController: Updated response shape to match frontend expectations (`offline_filled`, `online_count`, `needed`)
+- [x] Fixed broken comment URL in bulletin/show.blade.php
+  - Changed `/api/bulletin-posts/{post_id}/comments` → `/api/posts/{post_id}/comments`
+  - Previous URL matched no route, so bulletin post comments were completely broken
+- [x] Consolidated API routes in web.php
+  - Removed duplicate legacy + new route definitions
+  - Pointed frontend-used URLs at new controllers
+  - Removed dead route URLs that nothing called
+- [x] Cleaned up ApiController
+  - Removed 4 dead methods (shiftSignup, shiftWithdraw, storePost, storeComment)
+  - Kept only activity post/comment methods (still needed by frontend)
+  - Added honeypot spam protection to remaining methods
+
+### Key Findings
+- The "new" API controllers (created on Day 2) were NEVER functional — they wrote to `content` and `name` columns that don't exist in the DB (actual columns: `body` and `ip_hash`)
+- The bulletin comment submission has been broken since the route refactoring — URL didn't match any route
+- The legacy ApiController was the only working path for all API operations
+
+### Files Modified
+- app/Http/Controllers/Api/BulletinPostForumController.php
+- app/Http/Controllers/Api/ForumCommentController.php
+- app/Http/Controllers/Api/ShiftVolunteerController.php
+- app/Http/Controllers/ApiController.php
+- routes/web.php
+- resources/views/bulletin/show.blade.php
+- docs/PROGRESS_LOG.md
+
+---
+
 ## Future Entry Example
 
 ## 2025-01-19 (Day 2)

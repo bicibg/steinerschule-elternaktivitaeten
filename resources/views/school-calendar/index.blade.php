@@ -48,11 +48,11 @@
         if (Math.abs(deltaX) > swipeThreshold && deltaY < verticalThreshold) {
             if (deltaX > 0) {
                 // Swiped right - go to previous month
-                const prevButton = document.querySelector('#calendar-content button:first-of-type');
+                const prevButton = document.querySelector('[data-action=prev-month]');
                 if (prevButton) prevButton.click();
             } else {
                 // Swiped left - go to next month
-                const nextButton = document.querySelector('#calendar-content button:last-of-type');
+                const nextButton = document.querySelector('[data-action=next-month]');
                 if (nextButton) nextButton.click();
             }
         }
@@ -80,7 +80,6 @@
             // Get the calendar content container
             const oldContent = document.querySelector('#calendar-content');
             if (!oldContent) {
-                console.error('Calendar content not found');
                 this.loading = false;
                 return;
             }
@@ -114,7 +113,6 @@
                 this.loading = false;
             }, 150);
         } catch (error) {
-            console.error('Navigation error:', error);
             // Fallback to normal navigation
             window.location.href = url;
         }
@@ -139,8 +137,10 @@
     <x-card noPadding="true">
         <!-- Month Navigation -->
         <div class="flex items-center justify-between p-4 border-b border-gray-200">
-            <button @click="navigateToMonth('{{ route('school-calendar.index', ['month' => $date->copy()->subMonth()->month, 'year' => $date->copy()->subMonth()->year]) }}')"
-                   class="p-2 hover:bg-gray-100 rounded-lg transition">
+            <button data-action="prev-month"
+                    aria-label="Vorheriger Monat"
+                    @click="navigateToMonth('{{ route('school-calendar.index', ['month' => $date->copy()->subMonth()->month, 'year' => $date->copy()->subMonth()->year]) }}')"
+                    class="p-2 hover:bg-gray-100 rounded-lg transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -150,8 +150,10 @@
                 {{ $date->locale('de')->monthName . ' ' . $date->year }}
             </h2>
 
-            <button @click="navigateToMonth('{{ route('school-calendar.index', ['month' => $date->copy()->addMonth()->month, 'year' => $date->copy()->addMonth()->year]) }}')"
-                   class="p-2 hover:bg-gray-100 rounded-lg transition">
+            <button data-action="next-month"
+                    aria-label="Nächster Monat"
+                    @click="navigateToMonth('{{ route('school-calendar.index', ['month' => $date->copy()->addMonth()->month, 'year' => $date->copy()->addMonth()->year]) }}')"
+                    class="p-2 hover:bg-gray-100 rounded-lg transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>

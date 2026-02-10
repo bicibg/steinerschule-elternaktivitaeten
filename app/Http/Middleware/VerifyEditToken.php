@@ -25,7 +25,7 @@ class VerifyEditToken
 
         $helpRequest = BulletinPost::where('slug', $slug)->first();
 
-        if (!$helpRequest || $helpRequest->edit_token !== $token) {
+        if (!$helpRequest || !hash_equals($helpRequest->edit_token, $token)) {
             abort(403, 'Zugriff verweigert. Ungültiger Bearbeitungstoken.');
         }
 

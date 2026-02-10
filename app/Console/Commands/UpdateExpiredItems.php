@@ -36,12 +36,15 @@ class UpdateExpiredItems extends Command
         $this->info("Updated {$expiredNotifications} expired notifications to inactive.");
 
         // Update expired bulletin posts to 'ended' status
+        // Posts with end_at: expire when end_at passes
+        // Posts without end_at: expire 7 days after start_at (grace period for multi-day events)
         $expiredPosts = BulletinPost::where('status', 'published')
             ->where(function($query) {
                 $query->where('end_at', '<', now())
                     ->orWhere(function($q) {
                         $q->whereNull('end_at')
-                            ->where('start_at', '<', now()->subDay());
+                            ->whereNotNull('start_at')
+                            ->where('start_at', '<', now()->subDays(7)->startOfDay());
                     });
             })
             ->update(['status' => 'ended']);

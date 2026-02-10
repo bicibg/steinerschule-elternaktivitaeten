@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verify.edit.token' => \App\Http\Middleware\VerifyEditToken::class,
             'honeypot' => \Spatie\Honeypot\ProtectAgainstSpam::class,
+            'super_admin' => \App\Http\Middleware\EnsureSuperAdmin::class,
         ]);
 
         // Add security headers to all web requests

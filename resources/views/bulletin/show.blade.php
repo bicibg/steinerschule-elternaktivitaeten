@@ -152,7 +152,7 @@
                                 location.reload();
                             }
                         } catch (error) {
-                            console.error('Fehler:', error);
+                            // Silently handle post submission errors
                         }
 
                         this.loading = false;
@@ -255,7 +255,7 @@
                                         this.commentLoading = true;
 
                                         try {
-                                            const response = await fetch('/api/bulletin-posts/{{ $post->id }}/comments', {
+                                            const response = await fetch('/api/posts/{{ $post->id }}/comments', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Content-Type': 'application/json',
@@ -271,7 +271,7 @@
                                                 location.reload();
                                             }
                                         } catch (error) {
-                                            console.error('Fehler:', error);
+                                            // Silently handle comment submission errors
                                         }
 
                                         this.commentLoading = false;
@@ -405,7 +405,6 @@
                                 this.showErrorModal = true;
                             }
                         } catch (error) {
-                            console.error('Error:', error);
                             this.errorMessage = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
                             this.showErrorModal = true;
                         }

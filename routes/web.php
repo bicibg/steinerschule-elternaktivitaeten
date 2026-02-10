@@ -18,16 +18,16 @@ Route::get('/', function () {
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
 Route::get('/register', [\App\Http\Controllers\AuthController::class, 'showRegister'])->name('register')->middleware('guest');
-Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware(['guest', 'honeypot']);
-Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login')->middleware('guest');
-Route::post('/demo-admin-login', [\App\Http\Controllers\AuthController::class, 'loginDemoAdmin'])->name('demo.admin.login')->middleware('guest');
+Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
+Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login')->middleware(['throttle:10,1', 'guest']);
+Route::post('/demo-admin-login', [\App\Http\Controllers\AuthController::class, 'loginDemoAdmin'])->name('demo.admin.login')->middleware(['throttle:10,1', 'guest']);
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
 // Password Reset Routes
 Route::get('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request')->middleware('guest');
-Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('guest');
+Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware(['throttle:5,1', 'guest']);
 Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset')->middleware('guest');
-Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update')->middleware('guest');
+Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update')->middleware(['throttle:5,1', 'guest']);
 
 Route::get('/pinnwand', [BulletinController::class, 'index'])->name('bulletin.index');
 Route::get('/pinnwand/{slug}', [BulletinController::class, 'show'])->name('bulletin.show');
@@ -42,7 +42,7 @@ Route::post('/activity-posts/{post}/comments', [App\Http\Controllers\ActivityPos
 
 // School Calendar routes
 Route::get('/schulkalender', [SchoolCalendarController::class, 'index'])->name('school-calendar.index');
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'super_admin'])->group(function () {
     Route::get('/schulkalender/create', [SchoolCalendarController::class, 'create'])->name('school-calendar.create');
     Route::post('/schulkalender', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
     Route::get('/schulkalender/{schoolEvent}/edit', [SchoolCalendarController::class, 'edit'])->name('school-calendar.edit');
@@ -51,8 +51,8 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('/schulkalender/{schoolEvent}', [SchoolCalendarController::class, 'show'])->name('school-calendar.show');
 
-Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store');
-Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
+Route::post('/pinnwand/{slug}/posts', [PostController::class, 'store'])->name('posts.store')->middleware('auth');
+Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store')->middleware('auth');
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
 Route::delete('/comments/{comment}', [PostController::class, 'destroyComment'])->name('comments.destroy')->middleware('auth');
 
@@ -60,8 +60,8 @@ Route::post('/shifts/{shift}/signup', [ShiftController::class, 'signup'])->name(
 Route::delete('/shifts/{shift}/withdraw', [ShiftController::class, 'withdraw'])->name('shifts.withdraw')->middleware('auth');
 
 // Profile routes
-Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
@@ -69,33 +69,27 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // API routes for Alpine.js
-Route::prefix('api')->group(function () {
-    // Shift volunteer management - RESTful nested resource
-    Route::post('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'store'])->name('api.shifts.volunteers.store');
-    Route::delete('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'destroy'])->name('api.shifts.volunteers.destroy');
+Route::prefix('api')->middleware('throttle:60,1')->group(function () {
+    // Shift volunteer management
+    Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'store'])->name('api.shifts.signup');
+    Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'destroy'])->name('api.shifts.withdraw');
     Route::get('/shifts/{shift}/volunteers', [\App\Http\Controllers\Api\ShiftVolunteerController::class, 'index'])->name('api.shifts.volunteers.index');
 
-    // Bulletin post forum - RESTful nested resource
+    // Bulletin post forum
+    Route::post('/pinnwand/{slug}/posts', [\App\Http\Controllers\Api\BulletinPostForumController::class, 'store'])->name('api.posts.store');
     Route::get('/bulletin-posts/{slug}/forum', [\App\Http\Controllers\Api\BulletinPostForumController::class, 'index'])->name('api.bulletin.forum.index');
-    Route::post('/bulletin-posts/{slug}/forum', [\App\Http\Controllers\Api\BulletinPostForumController::class, 'store'])->name('api.bulletin.forum.store');
 
-    // Forum comments - RESTful nested resource
-    Route::get('/forum-posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'index'])->name('api.forum.comments.index');
-    Route::post('/forum-posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'store'])->name('api.forum.comments.store');
+    // Forum comments
+    Route::post('/posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'store'])->name('api.comments.store');
+    Route::get('/posts/{post}/comments', [\App\Http\Controllers\Api\ForumCommentController::class, 'index'])->name('api.forum.comments.index');
     Route::delete('/comments/{comment}', [\App\Http\Controllers\Api\ForumCommentController::class, 'destroy'])->name('api.comments.destroy');
 
-    // Activity posts - Keep existing for now (to be refactored later)
-    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storeActivityPost'])->name('api.activity-posts.store');
-    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeActivityComment'])->name('api.activity-comments.store');
+    // Activity posts
+    Route::post('/elternaktivitaeten/{slug}/posts', [\App\Http\Controllers\Api\ActivityForumController::class, 'storePost'])->name('api.activity-posts.store');
+    Route::post('/activity-posts/{post}/comments', [\App\Http\Controllers\Api\ActivityForumController::class, 'storeComment'])->name('api.activity-comments.store');
 
     // Announcements
     Route::post('/announcements/{announcement}/dismiss', [\App\Http\Controllers\AnnouncementController::class, 'dismiss'])->name('api.announcements.dismiss')->middleware('auth');
-
-    // Legacy routes - maintain backward compatibility temporarily
-    Route::post('/shifts/{shift}/signup', [\App\Http\Controllers\ApiController::class, 'shiftSignup'])->name('api.shifts.signup');
-    Route::delete('/shifts/{shift}/withdraw', [\App\Http\Controllers\ApiController::class, 'shiftWithdraw'])->name('api.shifts.withdraw');
-    Route::post('/pinnwand/{slug}/posts', [\App\Http\Controllers\ApiController::class, 'storePost'])->name('api.posts.store');
-    Route::post('/posts/{post}/comments', [\App\Http\Controllers\ApiController::class, 'storeComment'])->name('api.comments.store');
 });
 
 Route::middleware(['verify.edit.token'])->group(function () {

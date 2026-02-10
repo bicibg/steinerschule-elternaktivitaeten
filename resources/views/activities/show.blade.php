@@ -108,7 +108,7 @@
                                 location.reload();
                             }
                         } catch (error) {
-                            console.error('Fehler:', error);
+                            // Silently handle post submission errors
                         }
 
                         this.loading = false;
@@ -201,7 +201,7 @@
                                                 location.reload();
                                             }
                                         } catch (error) {
-                                            console.error('Fehler:', error);
+                                            // Silently handle comment submission errors
                                         }
 
                                         this.commentLoading = false;

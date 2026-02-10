@@ -43,7 +43,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        $volunteers = \App\Models\ShiftVolunteer::where('user_id', $user->id)
+        $volunteers = ShiftVolunteer::where('user_id', $user->id)
             ->with(['shift.bulletinPost'])
             ->get();
 

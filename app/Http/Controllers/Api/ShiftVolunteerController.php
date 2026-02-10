@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shift;
+use App\Models\ShiftVolunteer;
 use App\Services\ShiftService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -20,12 +21,7 @@ class ShiftVolunteerController extends Controller
     /**
      * Store a new volunteer signup for a shift.
      *
-     * POST /api/shifts/{shift}/volunteers
-     *
-     * @param Request $request
-     * @param Shift   $shift
-     *
-     * @return JsonResponse
+     * POST /api/shifts/{shift}/signup
      */
     public function store(Request $request, Shift $shift): JsonResponse
     {
@@ -38,15 +34,14 @@ class ShiftVolunteerController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'volunteer' => [
-                        'id' => $volunteer->id,
-                        'name' => $volunteer->name,
-                        'user_id' => $volunteer->user_id,
-                    ],
-                    'shift_stats' => $this->shiftService->getShiftStatistics($shift),
+                'volunteer' => [
+                    'id' => $volunteer->id,
+                    'name' => $volunteer->name,
+                    'user_id' => $volunteer->user_id,
                 ],
-                'message' => 'Erfolgreich angemeldet',
+                'offline_filled' => $shift->offline_filled,
+                'online_count' => $shift->volunteers()->count(),
+                'needed' => $shift->needed,
             ], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -56,11 +51,7 @@ class ShiftVolunteerController extends Controller
     /**
      * Remove volunteer signup from a shift.
      *
-     * DELETE /api/shifts/{shift}/volunteers
-     *
-     * @param Shift $shift
-     *
-     * @return JsonResponse
+     * DELETE /api/shifts/{shift}/withdraw
      */
     public function destroy(Shift $shift): JsonResponse
     {
@@ -73,10 +64,9 @@ class ShiftVolunteerController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'shift_stats' => $this->shiftService->getShiftStatistics($shift),
-                ],
-                'message' => 'Erfolgreich abgemeldet',
+                'offline_filled' => $shift->offline_filled,
+                'online_count' => $shift->volunteers()->count(),
+                'needed' => $shift->needed,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -87,22 +77,25 @@ class ShiftVolunteerController extends Controller
      * List volunteers for a shift.
      *
      * GET /api/shifts/{shift}/volunteers
-     *
-     * @param Shift $shift
-     *
-     * @return JsonResponse
      */
     public function index(Shift $shift): JsonResponse
     {
         $volunteers = $this->shiftService->getShiftVolunteers($shift);
 
+        $isAuthenticated = auth()->check();
+
         return response()->json([
-            'data' => $volunteers->map(function ($volunteer) {
-                return [
-                    'id' => $volunteer->id,
-                    'name' => auth()->check() ? $volunteer->name : 'Angemeldet',
+            'data' => $volunteers->map(function ($volunteer) use ($isAuthenticated) {
+                $item = [
+                    'name' => $isAuthenticated ? $volunteer->name : 'Angemeldet',
                     'created_at' => $volunteer->created_at->format('d.m.Y H:i'),
                 ];
+
+                if ($isAuthenticated) {
+                    $item['id'] = $volunteer->id;
+                }
+
+                return $item;
             }),
         ]);
     }

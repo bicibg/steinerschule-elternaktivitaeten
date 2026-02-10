@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'bulletin_post_id',
         'user_id',
@@ -43,6 +44,10 @@ class Post extends Model
 
     public function getAuthorNameAttribute()
     {
-        return $this->user ? $this->user->name : 'Anonym';
+        if ($this->relationLoaded('user')) {
+            return $this->user ? $this->user->name : 'Anonym';
+        }
+
+        return $this->user_id ? ($this->user?->name ?? 'Anonym') : 'Anonym';
     }
 }

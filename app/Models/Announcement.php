@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Announcement extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'message',
@@ -54,13 +57,15 @@ class Announcement extends Model
             });
     }
 
-    public function scopeForUser($query, $userId, $limit = 3)
+    public static function getForUser($userId, $limit = 3)
     {
+        $base = static::active();
+
         // Get all priority notifications (no limit)
-        $priorityNotifications = (clone $query)->where('is_priority', true)->get();
+        $priorityNotifications = (clone $base)->where('is_priority', true)->get();
 
         // Get recent non-priority notifications (with limit)
-        $regularNotifications = (clone $query)
+        $regularNotifications = (clone $base)
             ->where('is_priority', false)
             ->orderBy('created_at', 'desc')
             ->limit($limit)

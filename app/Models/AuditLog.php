@@ -35,7 +35,7 @@ class AuditLog extends Model
             'action_type' => $actionType,
             'action_name' => $actionName,
             'performed_by' => auth()->id(),
-            'performed_by_name' => auth()->user()->name,
+            'performed_by_name' => auth()->user()?->name ?? 'System',
             'ip_address' => request()->ip(),
             'metadata' => $metadata,
             'description' => $description,

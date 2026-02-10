@@ -8,6 +8,7 @@ use App\Models\AuditLog;
 use App\Models\BulletinPost;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -106,7 +107,7 @@ class YearResetCommand extends Command
             AuditLog::create([
                 'action_type' => 'year_reset',
                 'action_name' => 'Schuljahr zurückgesetzt (Konsole)',
-                'performed_by' => 1, // System user
+                'performed_by' => User::where('is_super_admin', true)->value('id') ?? User::first()->id,
                 'performed_by_name' => 'System (Konsole)',
                 'ip_address' => '127.0.0.1',
                 'metadata' => [

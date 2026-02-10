@@ -347,7 +347,12 @@ class CalendarService
     {
         // Example: "Samstag, 09.11.2024, 09:00 - 11:00 Uhr"
         if (preg_match('/(\d{2})\.(\d{2})\.(\d{4})/', $timeString, $matches)) {
-            return Carbon::createFromFormat('d.m.Y', $matches[0]);
+            try {
+                return Carbon::createFromFormat('d.m.Y', $matches[0])->startOfDay();
+            } catch (\Exception $e) {
+                report($e);
+                return null;
+            }
         }
         return null;
     }
@@ -360,19 +365,52 @@ class CalendarService
         $dates = collect();
         $pattern = strtolower($activity->recurring_pattern);
 
-        // Parse patterns like "jeden Donnerstag", "every Thursday", "wöchentlich"
-        if (str_contains($pattern, 'donnerstag') || str_contains($pattern, 'thursday')) {
-            $current = $startOfMonth->copy()->next('Thursday');
-            while ($current <= $endOfMonth) {
-                if ($activity->start_at <= $current && (!$activity->end_at || $activity->end_at >= $current)) {
-                    $dates->push($current->copy());
-                }
-                $current->addWeek();
+        $weekdayMap = [
+            'montag' => 'Monday',
+            'dienstag' => 'Tuesday',
+            'mittwoch' => 'Wednesday',
+            'donnerstag' => 'Thursday',
+            'freitag' => 'Friday',
+            'samstag' => 'Saturday',
+            'sonntag' => 'Sunday',
+        ];
+
+        // Check for "ersten [weekday] im Monat" (first [weekday] of month)
+        $isFirstOfMonth = str_contains($pattern, 'ersten') && str_contains($pattern, 'monat');
+
+        // Find which weekdays are mentioned
+        $matchedDays = [];
+        foreach ($weekdayMap as $german => $english) {
+            if (str_contains($pattern, $german)) {
+                $matchedDays[] = $english;
             }
         }
-        // Add more pattern parsing as needed
 
-        return $dates;
+        foreach ($matchedDays as $dayName) {
+            if ($isFirstOfMonth) {
+                // "Jeden ersten Dienstag im Monat" — only the first occurrence
+                $first = $startOfMonth->copy()->firstOfMonth(constant('Carbon\Carbon::' . strtoupper($dayName)));
+                if ($first >= $startOfMonth && $first <= $endOfMonth) {
+                    if ($activity->start_at <= $first && (!$activity->end_at || $activity->end_at >= $first)) {
+                        $dates->push($first->copy());
+                    }
+                }
+            } else {
+                // Weekly recurring
+                $current = $startOfMonth->copy()->next($dayName);
+                if ($startOfMonth->is($dayName)) {
+                    $current = $startOfMonth->copy();
+                }
+                while ($current <= $endOfMonth) {
+                    if ($activity->start_at <= $current && (!$activity->end_at || $activity->end_at >= $current)) {
+                        $dates->push($current->copy());
+                    }
+                    $current->addWeek();
+                }
+            }
+        }
+
+        return $dates->sortBy(fn($d) => $d->timestamp)->values();
     }
 
     /**
