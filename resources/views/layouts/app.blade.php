@@ -47,10 +47,12 @@
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Kalender
                     </a>
+                    @if($hasSchoolEvents ?? false)
                     <a href="{{ route('school-calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Schulkalender
                     </a>
+                    @endif
                 </nav>
 
                 <!-- Desktop User Menu -->
@@ -153,10 +155,12 @@
                        class="block px-3 py-2 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Kalender
                     </a>
+                    @if($hasSchoolEvents ?? false)
                     <a href="{{ route('school-calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Schulkalender
                     </a>
+                    @endif
                 </nav>
 
                 <!-- Thick separator between navigation and user menu -->
