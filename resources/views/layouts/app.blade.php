@@ -43,10 +43,12 @@
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Elternaktivitäten
                     </a>
+                    @if($hasCalendarEntries ?? false)
                     <a href="{{ route('calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
                         Kalender
                     </a>
+                    @endif
                     @if($hasSchoolEvents ?? false)
                     <a href="{{ route('school-calendar.index') }}"
                        class="px-2 xl:px-3 py-1.5 text-xs xl:text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue border-b-2 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue' }} transition-colors">
@@ -151,10 +153,12 @@
                        class="block px-3 py-2 text-sm {{ request()->routeIs('activities.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Elternaktivitäten
                     </a>
+                    @if($hasCalendarEntries ?? false)
                     <a href="{{ route('calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">
                         Kalender
                     </a>
+                    @endif
                     @if($hasSchoolEvents ?? false)
                     <a href="{{ route('school-calendar.index') }}"
                        class="block px-3 py-2 text-sm {{ request()->routeIs('school-calendar.*') ? 'text-steiner-blue bg-gray-50 border-l-4 border-steiner-blue' : 'text-gray-600 hover:text-steiner-blue hover:bg-gray-50' }} transition-colors">

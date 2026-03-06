@@ -13,8 +13,10 @@
 
     <x-info-box type="help">
         <strong>Dringende Hilfe gesucht!</strong> Hier posten die <a href="{{ route('activities.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Elternaktivitäten</a> wenn sie besondere Unterstützung brauchen.
+        @if($hasCalendarEntries ?? false)
         <br>
         <span class="text-xs">Für alle regelmässigen Termine siehe <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a></span>
+        @endif
     </x-info-box>
 
     <!-- Category Filter -->

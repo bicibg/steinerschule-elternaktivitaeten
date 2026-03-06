@@ -14,7 +14,7 @@
     <x-info-box type="info">
         <strong>Neue Helfer immer willkommen!</strong> Alle Arbeitsgruppen freuen sich über Verstärkung. Kontaktieren Sie einfach die Verantwortlichen.
         <br>
-        <span class="text-xs">Alle Termine im <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a> | Dringende Gesuche auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
+        <span class="text-xs">@if($hasCalendarEntries ?? false)Alle Termine im <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a> | @endif Dringende Gesuche auf der <a href="{{ route('bulletin.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Pinnwand</a></span>
     </x-info-box>
 
     <!-- Category Filter -->

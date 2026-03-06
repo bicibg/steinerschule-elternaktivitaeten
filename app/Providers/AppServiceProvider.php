@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\SchoolEvent;
+use App\Models\Shift;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.app', function ($view) {
             $view->with('hasSchoolEvents', SchoolEvent::exists());
+            $view->with('hasCalendarEntries', Shift::exists());
         });
     }
 }

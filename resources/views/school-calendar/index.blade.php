@@ -128,8 +128,10 @@
 
     <x-info-box type="info">
         <strong>Offizielle Schultermine</strong> – Dieser Kalender zeigt Veranstaltungen, die von der Schule organisiert werden.
+        @if($hasCalendarEntries ?? false)
         <br>
         <span class="text-xs">Für Helfereinsätze siehe <a href="{{ route('calendar.index') }}" class="underline text-steiner-blue hover:text-steiner-dark">Schichtkalender</a></span>
+        @endif
     </x-info-box>
 
     <!-- Calendar Container -->
