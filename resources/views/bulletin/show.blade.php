@@ -114,7 +114,7 @@
                 :name="$bulletinPost->contact_name"
                 :email="$bulletinPost->contact_email"
                 :phone="$bulletinPost->contact_phone"
-                :profile-url="auth()->check() && $bulletinPost->contactUser ? route('profile.show', $bulletinPost->contactUser) : null" />
+                :contact-users="$bulletinPost->contactUsers" />
         </x-card>
 
         <!-- Forum and Shifts Section -->

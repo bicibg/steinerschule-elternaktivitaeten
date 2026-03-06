@@ -18,10 +18,10 @@ class CreateBulletinPost extends CreateRecord
 
         $activityId = request()->query('activity_id');
 
-        if ($activityId && $activity = Activity::find($activityId)) {
+        if ($activityId && $activity = Activity::with('contactUsers')->find($activityId)) {
             $this->form->fill([
                 'activity_id' => $activity->id,
-                'contact_user_id' => $activity->contact_user_id,
+                'contactUsers' => $activity->contactUsers->pluck('id')->toArray(),
                 'contact_name' => $activity->contact_name,
                 'contact_email' => $activity->contact_email,
                 'contact_phone' => $activity->contact_phone,

@@ -57,38 +57,42 @@ class ActivityResource extends Resource
                     ]),
                 Forms\Components\Section::make('Kontaktperson')
                     ->schema([
-                        Forms\Components\Select::make('contact_user_id')
-                            ->label('Verknüpfter Benutzer')
-                            ->relationship('contactUser', 'name')
+                        Forms\Components\Select::make('contactUsers')
+                            ->label('Verknüpfte Benutzer')
+                            ->relationship('contactUsers', 'name')
+                            ->multiple()
                             ->searchable()
                             ->preload()
-                            ->placeholder('Kein Benutzer verknüpft')
-                            ->helperText('Optional: Kontaktperson mit einem Benutzerkonto verknüpfen')
+                            ->placeholder('Keine Benutzer verknüpft')
+                            ->helperText('Optional: Kontaktpersonen mit Benutzerkonten verknüpfen. Name wird automatisch generiert.')
                             ->reactive()
                             ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                if ($state) {
-                                    $user = \App\Models\User::find($state);
-                                    if ($user) {
-                                        $set('contact_name', $user->name);
-                                        $set('contact_email', $user->email);
-                                        $set('contact_phone', $user->phone);
+                                if (!empty($state)) {
+                                    $users = \App\Models\User::whereIn('id', $state)->get();
+                                    $set('contact_name', $users->pluck('name')->join(', '));
+                                    if ($users->count() === 1) {
+                                        $set('contact_email', $users->first()->email);
+                                        $set('contact_phone', $users->first()->phone);
+                                    } else {
+                                        $set('contact_email', null);
+                                        $set('contact_phone', null);
                                     }
                                 }
                             }),
                         Forms\Components\TextInput::make('contact_name')
                             ->label('Name')
                             ->required()
-                            ->disabled(fn (Forms\Get $get) => filled($get('contact_user_id')))
+                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
                             ->dehydrated(),
                         Forms\Components\TextInput::make('contact_email')
                             ->label('E-Mail')
                             ->email()
-                            ->disabled(fn (Forms\Get $get) => filled($get('contact_user_id')))
+                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
                             ->dehydrated(),
                         Forms\Components\TextInput::make('contact_phone')
                             ->label('Telefon')
                             ->tel()
-                            ->disabled(fn (Forms\Get $get) => filled($get('contact_user_id')))
+                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
                             ->dehydrated(),
                     ]),
                 Forms\Components\Section::make('Einstellungen')

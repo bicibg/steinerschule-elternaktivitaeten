@@ -23,7 +23,6 @@ class Activity extends Model
         'has_forum',
         'is_active',
         'sort_order',
-        'contact_user_id',
     ];
 
     protected $casts = [
@@ -40,9 +39,9 @@ class Activity extends Model
         });
     }
 
-    public function contactUser()
+    public function contactUsers()
     {
-        return $this->belongsTo(User::class, 'contact_user_id');
+        return $this->morphToMany(User::class, 'contactable', 'contact_users');
     }
 
     public function scopeActive($query)

@@ -20,8 +20,11 @@ class BulletinPostSeeder extends Seeder
         // Helper to find activity by title
         $activity = fn (string $title) => Activity::where('title', $title)->first()?->id;
 
-        // Helper to find user by name (same email convention as UserSeeder)
-        $userId = fn (string $name) => User::where('email', Str::slug($name, '.') . '@example.com')->first()?->id;
+        // Helper to find user IDs by names
+        $userIds = fn (array $names) => User::whereIn('email', array_map(
+            fn ($name) => Str::slug($name, '.') . '@example.com',
+            $names
+        ))->pluck('id')->toArray();
 
         // 1. Lagerwoche Zurich - class trip, no parent activity
         $bulletinPost1 = BulletinPost::create([
@@ -44,12 +47,13 @@ Unterkunft wird gestellt. Eine tolle Gelegenheit, die Klasse zu begleiten!',
             'contact_name' => 'Stefan Berger',
             'contact_phone' => '+41 34 402 12 45',
             'contact_email' => 'klasse8@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Stefan Berger'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost1->contactUsers()->attach($userIds(['Stefan Berger']));
 
         $bulletinPost1->shifts()->create([
             'role' => 'Küchenteam Montag-Mittwoch',
@@ -83,12 +87,13 @@ Wir suchen Helfer für:
             'contact_name' => 'Elisabeth Keller',
             'contact_phone' => '+41 34 402 12 50',
             'contact_email' => 'eurythmie@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Elisabeth Keller'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost2->contactUsers()->attach($userIds(['Elisabeth Keller']));
 
         $bulletinPost2->shifts()->create([
             'role' => 'Bühnenaufbau',
@@ -126,12 +131,13 @@ Je mehr Helfer, desto schöner wird das Fest!',
             'contact_name' => 'Julia Winkler',
             'contact_phone' => '+41 34 402 12 20',
             'contact_email' => 'osterstand@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Julia Winkler'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost3->contactUsers()->attach($userIds(['Julia Winkler']));
 
         $bulletinPost3->shifts()->create([
             'role' => 'Osterstand Aufbau und Verkauf',
@@ -175,6 +181,8 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'show_in_calendar' => true,
             'label' => 'urgent',
         ]);
+
+        $bulletinPost4->contactUsers()->attach($userIds(['Swenja Heyers', 'Yves Bönzli']));
 
         $shift1 = $bulletinPost4->shifts()->create([
             'role' => 'Aufbau Freitag',
@@ -232,12 +240,11 @@ Die Arbeit kann flexibel zwischen dem 15. und 25. November erledigt werden. Mate
             'contact_name' => 'Andreas Hofmann',
             'contact_phone' => '+41 34 402 12 35',
             'contact_email' => 'musik@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Andreas Hofmann'),
             'status' => 'published',
             'has_forum' => false,
             'has_shifts' => false,
             'show_in_calendar' => true,
-        ]);
+        ])->contactUsers()->attach($userIds(['Andreas Hofmann']));
 
         // 6. Elternrat Sitzungen -> Elternrat activity
         BulletinPost::create([
@@ -266,7 +273,7 @@ Alle interessierten Eltern sind willkommen!',
             'has_forum' => false,
             'has_shifts' => false,
             'show_in_calendar' => true,
-        ]);
+        ])->contactUsers()->attach($userIds(['Tatjana Baumgartner', 'Maria Mani']));
 
         // 7. Schulgarten-Pflege -> Erneuerung Pausenplatzareal activity
         $bulletinPost7 = BulletinPost::create([
@@ -296,6 +303,7 @@ Kommt vorbei, wann immer ihr Zeit habt. Werkzeug vorhanden.',
             'has_shifts' => false,
             'show_in_calendar' => true,
         ]);
+        $bulletinPost7->contactUsers()->attach($userIds(['Julia Eisenhut', 'Sami Eisenhut', 'Hans Baumgartner']));
 
         // 8. Flohmarkt -> Spielzeug- und Kinderkleiderbörse activity
         $bulletinPost8 = BulletinPost::create([
@@ -323,6 +331,8 @@ Helfer gesucht für Annahme, Sortierung und Verkauf.',
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost8->contactUsers()->attach($userIds(['Linda Denissen', 'Yael Stanca']));
 
         $bulletinPost8->shifts()->create([
             'role' => 'Warenannahme Freitag',
@@ -365,12 +375,13 @@ Helfer für Auf-/Abbau, Feuerwache und Verpflegung gesucht.',
             'contact_name' => 'Daniel Moser',
             'contact_phone' => '+41 34 402 12 60',
             'contact_email' => 'feste@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Daniel Moser'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost9->contactUsers()->attach($userIds(['Daniel Moser']));
 
         $bulletinPost9->shifts()->create([
             'role' => 'Holz sammeln und Feuer vorbereiten',
@@ -420,6 +431,8 @@ Pro Anlass werden 15-20 Kuchen benötigt. Bitte bei Organisatoren melden.',
             'show_in_calendar' => true,
         ]);
 
+        $bulletinPost10->contactUsers()->attach($userIds(['Swenja Heyers', 'Matthias Frey']));
+
         // 11. Bibliothek - no parent activity (standalone)
         $bulletinPost11 = BulletinPost::create([
             'title' => 'Schulbibliothek Betreuung',
@@ -441,12 +454,13 @@ Einarbeitung wird geboten. Ideal für Bücherfreunde!',
             'contact_name' => 'Monika Schmid',
             'contact_phone' => '+41 34 402 12 70',
             'contact_email' => 'bibliothek@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Monika Schmid'),
             'status' => 'published',
             'has_forum' => false,
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost11->contactUsers()->attach($userIds(['Monika Schmid']));
 
         $bulletinPost11->shifts()->create([
             'role' => 'Bibliotheksdienst Montag',
@@ -484,12 +498,11 @@ Materialkosten werden übernommen. Jede helfende Hand willkommen!',
             'contact_name' => 'Hans Baumgartner',
             'contact_phone' => '+41 79 345 67 89',
             'contact_email' => 'hausgruppe@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Hans Baumgartner'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
             'show_in_calendar' => true,
-        ]);
+        ])->contactUsers()->attach($userIds(['Hans Baumgartner']));
 
         // 13. Pausenkiosk - no parent activity (standalone)
         $bulletinPost13 = BulletinPost::create([
@@ -512,12 +525,13 @@ Erlös für Klassenkassen. Helfer für Verkauf und Vorbereitung gesucht.',
             'contact_name' => 'Claudia Baumgartner',
             'contact_phone' => '+41 76 456 78 90',
             'contact_email' => 'kiosk@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Claudia Baumgartner'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
+
+        $bulletinPost13->contactUsers()->attach($userIds(['Claudia Baumgartner']));
 
         $bulletinPost13->shifts()->create([
             'role' => 'Kiosk Dienstag',
@@ -554,12 +568,11 @@ Kreative Köpfe und geschickte Hände gesucht!',
             'contact_name' => 'Regula Fischer',
             'contact_phone' => '+41 34 402 12 80',
             'contact_email' => 'theater@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Regula Fischer'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
             'show_in_calendar' => true,
-        ]);
+        ])->contactUsers()->attach($userIds(['Regula Fischer']));
 
         // 15. Skilager - no parent activity (class trip)
         $bulletinPost15 = BulletinPost::create([
@@ -581,13 +594,14 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
             'contact_name' => 'Thomas Roth',
             'contact_phone' => '+41 34 402 12 90',
             'contact_email' => 'sport@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Thomas Roth'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
             'label' => 'important',
         ]);
+
+        $bulletinPost15->contactUsers()->attach($userIds(['Thomas Roth']));
 
         $bulletinPost15->shifts()->create([
             'role' => 'Begleitperson ganze Woche',
@@ -687,6 +701,8 @@ Putzutensilien vorhanden. Bitte Arbeitskleidung mitbringen.',
             'show_in_calendar' => true,
         ]);
 
+        $bulletinPost17->contactUsers()->attach($userIds(['Susann Glättli', 'Hans Baumgartner']));
+
         $bulletinPost17->shifts()->create([
             'role' => 'Putzteam Vormittag',
             'time' => '04.07.' . (now()->year + 1) . ', 08:00 - 12:00 Uhr',
@@ -721,13 +737,14 @@ Einarbeitung durch das bestehende Team. Auch 14-tägliche Einsätze willkommen!'
             'location' => 'Schulküche',
             'contact_name' => 'Anna Stalder',
             'contact_email' => 'mittagstisch@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Anna Stalder'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
             'show_in_calendar' => true,
             'label' => 'urgent',
         ]);
+
+        $bulletinPost18->contactUsers()->attach($userIds(['Anna Stalder']));
 
         $bulletinPost18->shifts()->create([
             'role' => 'Mittagstisch Dienstag',
@@ -769,6 +786,8 @@ Der Erlös geht ans Klassenlager der 9. Klasse.',
             'show_in_calendar' => true,
         ]);
 
+        $bulletinPost19->contactUsers()->attach($userIds(['Julia Eisenhut', 'Matthias Rytz']));
+
         $bulletinPost19->shifts()->create([
             'role' => 'Streckenposten',
             'time' => '23.05.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
@@ -799,12 +818,11 @@ Wer hilft beim Verteilen der Bestellformulare in die Fächli und beim Einsammeln
             'location' => 'Sekretariat / Eingangsbereich',
             'contact_name' => 'Gisela Wyss',
             'contact_email' => 'lachs@steinerschule-langnau.ch',
-            'contact_user_id' => $userId('Gisela Wyss'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
             'show_in_calendar' => true,
-        ]);
+        ])->contactUsers()->attach($userIds(['Gisela Wyss']));
 
         // Add sample forum posts
         $users = \App\Models\User::where('is_admin', false)->take(4)->get();

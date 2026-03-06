@@ -76,7 +76,7 @@
                 :name="$activity->contact_name"
                 :email="$activity->contact_email"
                 :phone="$activity->contact_phone"
-                :profile-url="auth()->check() && $activity->contactUser ? route('profile.show', $activity->contactUser) : null" />
+                :contact-users="$activity->contactUsers" />
         </x-card>
 
         <!-- Linked Pinnwand Entries -->

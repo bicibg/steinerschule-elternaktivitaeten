@@ -2,23 +2,30 @@
     'name' => null,
     'email' => null,
     'phone' => null,
-    'profileUrl' => null,
+    'contactUsers' => null,
     'title' => 'Kontaktinformationen'
 ])
 
 <div class="bg-steiner-lighter rounded-lg p-4">
     <h3 class="font-semibold text-gray-800 mb-3">{{ $title }}</h3>
     <div class="space-y-2 text-sm">
-        @if($name)
+        @if($contactUsers && $contactUsers->count() > 0 && auth()->check())
+            <div class="flex items-start">
+                <svg class="w-4 h-4 mr-3 mt-0.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                <div>
+                    @foreach($contactUsers as $user)
+                        <a href="{{ route('profile.show', $user) }}" class="font-medium text-steiner-blue hover:text-steiner-dark">{{ $user->name }}</a>@if(!$loop->last), @endif
+                    @endforeach
+                </div>
+            </div>
+        @elseif($name)
             <div class="flex items-center">
                 <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                 </svg>
-                @if($profileUrl)
-                    <a href="{{ $profileUrl }}" class="font-medium text-steiner-blue hover:text-steiner-dark">{{ $name }}</a>
-                @else
-                    <span class="font-medium">{{ $name }}</span>
-                @endif
+                <span class="font-medium">{{ $name }}</span>
             </div>
         @endif
 
