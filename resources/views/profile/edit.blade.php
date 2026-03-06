@@ -6,12 +6,6 @@
     <div class="max-w-3xl mx-auto">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Profil bearbeiten</h1>
 
-        @if(session('success'))
-            <x-alert type="success">
-                {{ session('success') }}
-            </x-alert>
-        @endif
-
         <!-- Profile Information Form -->
         <x-card class="mb-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Persönliche Informationen</h2>
