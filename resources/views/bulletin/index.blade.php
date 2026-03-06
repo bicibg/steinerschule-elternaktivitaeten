@@ -18,6 +18,7 @@
     </x-info-box>
 
     <!-- Category Filter -->
+    @if($totalCount > 0)
     <div class="mb-6 flex flex-wrap gap-2">
         <a href="{{ route('bulletin.index', ['category' => 'all']) }}"
            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors
@@ -30,6 +31,7 @@
             @endif
         </a>
         @foreach($categories as $key => $label)
+            @if(isset($categoryCounts[$key]) && $categoryCounts[$key] > 0)
             <a href="{{ route('bulletin.index', ['category' => $key]) }}"
                class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors
                       {{ $selectedCategory === $key ?
@@ -57,8 +59,10 @@
                     </span>
                 @endif
             </a>
+            @endif
         @endforeach
     </div>
+    @endif
 
     @if($totalCount === 0)
         <x-card>
