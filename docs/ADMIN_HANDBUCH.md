@@ -333,6 +333,10 @@ Gelöschte Beiträge können von Super Admins mit **"Endgültig löschen"** perm
 
 Unter **Kommunikation > Antworten** werden alle Kommentare auf Forumbeiträge angezeigt. Die Moderation funktioniert identisch zu den Forumbeiträgen (Löschen mit Grund, Wiederherstellen, Endgültig löschen).
 
+### Organisatoren-Moderation (via Bearbeitungslink)
+
+Organisatoren, die einen magischen Bearbeitungslink für ihren Pinnwand-Eintrag haben, können selbst Beiträge und Kommentare in ihrem Forum ein-/ausblenden. Das funktioniert ohne Admin-Login - der Bearbeitungslink reicht. Ausgeblendete Beiträge erhalten den Löschgrund "Unangemessen" und können vom Organisator wieder eingeblendet werden.
+
 ### Aktivitäten-Forum
 
 Beiträge und Kommentare im Aktivitäten-Forum verwenden ein anderes System: Sie werden über ein `is_hidden`-Feld ausgeblendet statt gelöscht. Es gibt derzeit **keinen eigenen Admin-Bereich** für die Moderation des Aktivitäten-Forums. Ausblendungen müssen direkt über die Datenbank oder zukünftige Erweiterungen erfolgen.
