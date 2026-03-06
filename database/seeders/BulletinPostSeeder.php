@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\BulletinPost;
 use App\Models\Comment;
 use App\Models\Post;
@@ -15,7 +16,10 @@ class BulletinPostSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Lagerwoche Zurich - Shift-based activity
+        // Helper to find activity by title
+        $activity = fn (string $title) => Activity::where('title', $title)->first()?->id;
+
+        // 1. Lagerwoche Zurich - class trip, no parent activity
         $bulletinPost1 = BulletinPost::create([
             'title' => 'Lagerwoche Zürich - Küchenteam gesucht',
             'category' => 'anlass',
@@ -56,7 +60,7 @@ Unterkunft wird gestellt. Eine tolle Gelegenheit, die Klasse zu begleiten!',
             'offline_filled' => 1,
         ]);
 
-        // 2. Eurythmie-Aufführung - Shift-based
+        // 2. Eurythmie-Aufführung - school event, no parent activity
         $bulletinPost2 = BulletinPost::create([
             'title' => 'Eurythmie-Aufführung - Helfer für Bühnenbild',
             'category' => 'anlass',
@@ -94,38 +98,54 @@ Wir suchen Helfer für:
             'offline_filled' => 0,
         ]);
 
-        // 3. Ostereiersuche - Flexible help
+        // 3. Ostereiersuche -> Osterstand activity
         $bulletinPost3 = BulletinPost::create([
-            'title' => 'Ostereiersuche im Schulgarten',
+            'title' => 'Osterstand und Ostereiersuche',
             'category' => 'anlass',
-            'activity_type' => 'flexible_help',
-            'description' => 'Traditionelle Ostereiersuche für Kindergarten und Unterstufe!
+            'activity_type' => 'shift_based',
+            'activity_id' => $activity('Osterstand'),
+            'description' => 'Traditionelle Ostereiersuche und Osterstand für Kindergarten und Unterstufe!
 
 Wir brauchen Helfer für:
+- Osterstand aufbauen und betreuen (Verkauf von Osterdekoration)
 - Ostereier verstecken (ab 8:00 Uhr)
-- Parcours aufbauen
 - Kinder beaufsichtigen
 - Getränke und Snacks verteilen
 
 Je mehr Helfer, desto schöner wird das Fest!',
             'participation_note' => 'Kommt vorbei, wann ihr könnt!',
             'start_at' => now()->year(now()->year + 1)->month(4)->day(11)->setTime(8, 0),
-            'end_at' => now()->year(now()->year + 1)->month(4)->day(11)->setTime(12, 0),
+            'end_at' => now()->year(now()->year + 1)->month(4)->day(11)->setTime(14, 0),
             'location' => 'Schulgarten und Pausenhof',
-            'contact_name' => 'Sandra Müller',
+            'contact_name' => 'Julia Winkler',
             'contact_phone' => '+41 34 402 12 20',
-            'contact_email' => 'kindergarten@steinerschule-langnau.ch',
+            'contact_email' => 'osterstand@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => true,
-            'has_shifts' => false,
+            'has_shifts' => true,
             'show_in_calendar' => true,
         ]);
 
-        // 4. Weihnachtsbazar (Märit) - Major event with many shifts
+        $bulletinPost3->shifts()->create([
+            'role' => 'Osterstand Aufbau und Verkauf',
+            'time' => '11.04.' . (now()->year + 1) . ', 08:00 - 12:00 Uhr',
+            'needed' => 4,
+            'offline_filled' => 1,
+        ]);
+
+        $bulletinPost3->shifts()->create([
+            'role' => 'Ostereier verstecken und Kinderbetreuung',
+            'time' => '11.04.' . (now()->year + 1) . ', 08:00 - 10:00 Uhr',
+            'needed' => 6,
+            'offline_filled' => 2,
+        ]);
+
+        // 4. Weihnachtsmärit -> Märit-OK activity
         $bulletinPost4 = BulletinPost::create([
             'title' => 'Weihnachtsmärit - Grosser Helferaufruf',
             'category' => 'anlass',
             'activity_type' => 'shift_based',
+            'activity_id' => $activity('Märit-OK'),
             'description' => 'Unser jährlicher Weihnachtsmärit - das grösste Event des Jahres!
 
 Wir brauchen über 100 Helfer für verschiedene Aufgaben:
@@ -139,7 +159,7 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'start_at' => now()->year(now()->year)->month(11)->day(30)->setTime(9, 0),
             'end_at' => now()->year(now()->year)->month(11)->day(30)->setTime(18, 0),
             'location' => 'Gesamtes Schulgelände',
-            'contact_name' => 'Ursula Zimmermann',
+            'contact_name' => 'Swenja Heyers, Yves Bönzli',
             'contact_phone' => '+41 34 402 12 00',
             'contact_email' => 'marit@steinerschule-langnau.ch',
             'status' => 'published',
@@ -149,19 +169,18 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'label' => 'urgent',
         ]);
 
-        // Multiple shifts for Märit
         $shift1 = $bulletinPost4->shifts()->create([
             'role' => 'Aufbau Freitag',
             'time' => '29.11.' . now()->year . ', 14:00 - 20:00 Uhr',
             'needed' => 20,
-            'offline_filled' => 5,  // 5 people registered offline, 1 will be added online below
+            'offline_filled' => 5,
         ]);
 
         $bulletinPost4->shifts()->create([
             'role' => 'Cafeteria Vormittag',
             'time' => '30.11.' . now()->year . ', 09:00 - 12:00 Uhr',
             'needed' => 6,
-            'offline_filled' => 2,  // 2 people registered offline
+            'offline_filled' => 2,
         ]);
 
         $bulletinPost4->shifts()->create([
@@ -175,7 +194,7 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'role' => 'Kinderbereich',
             'time' => '30.11.' . now()->year . ', 10:00 - 16:00 Uhr',
             'needed' => 8,
-            'offline_filled' => 3,  // 3 people registered offline
+            'offline_filled' => 3,
         ]);
 
         $bulletinPost4->shifts()->create([
@@ -185,19 +204,9 @@ Detaillierte Schichtpläne folgen im Oktober.',
             'offline_filled' => 0,
         ]);
 
-        // Add a volunteer to the first shift
-        $users = \App\Models\User::where('is_admin', false)->first();
-        if ($users) {
-            \App\Models\ShiftVolunteer::create([
-                'shift_id' => $shift1->id,
-                'user_id' => $users->id,
-                'name' => $users->name,
-                'email' => $users->email,
-            ]);
-        }
 
-        // 5. Adventssingen - Production activity
-        $bulletinPost5 = BulletinPost::create([
+        // 5. Adventssingen - no parent activity
+        BulletinPost::create([
             'title' => 'Adventssingen - Liedhefte vorbereiten',
             'category' => 'produktion',
             'activity_type' => 'production',
@@ -222,11 +231,12 @@ Die Arbeit kann flexibel zwischen dem 15. und 25. November erledigt werden. Mate
             'show_in_calendar' => true,
         ]);
 
-        // 6. Elternrat - Regular meeting
-        $bulletinPost6 = BulletinPost::create([
+        // 6. Elternrat Sitzungen -> Elternrat activity
+        BulletinPost::create([
             'title' => 'Elternrat Sitzungen',
             'category' => 'organisation',
             'activity_type' => 'meeting',
+            'activity_id' => $activity('Elternrat'),
             'description' => 'Regelmässige Elternratssitzungen zur Koordination aller Elternaktivitäten.
 
 THEMEN:
@@ -241,7 +251,7 @@ Alle interessierten Eltern sind willkommen!',
             'start_at' => now()->year(now()->year)->month(9)->day(1),
             'end_at' => now()->year(now()->year + 1)->month(7)->day(31),
             'location' => 'Musikzimmer',
-            'contact_name' => 'Christine Brunner',
+            'contact_name' => 'Tatjana Baumgartner, Maria Mani',
             'contact_phone' => '+41 34 402 12 40',
             'contact_email' => 'elternrat@steinerschule-langnau.ch',
             'status' => 'published',
@@ -250,17 +260,18 @@ Alle interessierten Eltern sind willkommen!',
             'show_in_calendar' => true,
         ]);
 
-        // 7. Schulgarten - Flexible help
+        // 7. Schulgarten-Pflege -> Erneuerung Pausenplatzareal activity
         $bulletinPost7 = BulletinPost::create([
-            'title' => 'Schulgarten-Pflege',
+            'title' => 'Schulgarten und Aussenbereich - Pflege',
             'category' => 'haus_umgebung_taskforces',
             'activity_type' => 'flexible_help',
-            'description' => 'Unser Schulgarten braucht regelmässige Pflege!
+            'activity_id' => $activity('Erneuerung Pausenplatzareal'),
+            'description' => 'Unser Schulgarten und Pausenplatzareal brauchen regelmässige Pflege!
 
 ARBEITEN JE NACH SAISON:
 - Beete vorbereiten und bepflanzen
 - Unkraut jäten
-- Ernten
+- Spielgeräte kontrollieren
 - Kompost pflegen
 - Geräteschuppen aufräumen
 
@@ -268,37 +279,37 @@ Kommt vorbei, wann immer ihr Zeit habt. Werkzeug vorhanden.',
             'participation_note' => 'Jederzeit während Schulzeiten',
             'start_at' => now()->year(now()->year)->month(3)->day(1),
             'end_at' => now()->year(now()->year)->month(11)->day(30),
-            'location' => 'Schulgarten hinter Turnhalle',
-            'contact_name' => 'Markus Steiner',
+            'location' => 'Schulgarten und Pausenplatz',
+            'contact_name' => 'Julia und Sami Eisenhut, Hans Baumgartner',
             'contact_phone' => '+41 34 402 12 55',
-            'contact_email' => 'garten@steinerschule-langnau.ch',
+            'contact_email' => 'pausenplatz@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
             'show_in_calendar' => true,
         ]);
 
-        // 8. Flohmarkt - Shift-based
+        // 8. Flohmarkt -> Spielzeug- und Kinderkleiderbörse activity
         $bulletinPost8 = BulletinPost::create([
-            'title' => 'Flohmarkt im Frühling',
-            'category' => 'verkauf',
+            'title' => 'Spielzeug- und Kinderkleiderbörse Frühling',
+            'category' => 'anlass',
             'activity_type' => 'shift_based',
-            'description' => 'Grosser Flohmarkt auf dem Schulgelände!
+            'activity_id' => $activity('Spielzeug- und Kinderkleiderbörse'),
+            'description' => 'Unsere Frühlings-Börse für Kinderkleidung und Spielsachen!
 
 Wir sammeln und verkaufen:
 - Kinderkleidung
 - Spielzeug
 - Bücher
 - Sportgeräte
-- Haushaltswaren
 
 Helfer gesucht für Annahme, Sortierung und Verkauf.',
             'start_at' => now()->year(now()->year + 1)->month(3)->day(15)->setTime(9, 0),
             'end_at' => now()->year(now()->year + 1)->month(3)->day(15)->setTime(15, 0),
             'location' => 'Turnhalle',
-            'contact_name' => 'Barbara Wyss',
+            'contact_name' => 'Linda Denissen, Yael Stanca',
             'contact_phone' => '+41 79 234 56 78',
-            'contact_email' => 'flohmarkt@steinerschule-langnau.ch',
+            'contact_email' => 'boerse@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -326,7 +337,7 @@ Helfer gesucht für Annahme, Sortierung und Verkauf.',
             'offline_filled' => 0,
         ]);
 
-        // 9. Johannifeuer - Shift-based
+        // 9. Johannifeuer - no parent activity (standalone school tradition)
         $bulletinPost9 = BulletinPost::create([
             'title' => 'Johannifeuer - Sommerfest',
             'category' => 'anlass',
@@ -373,11 +384,12 @@ Helfer für Auf-/Abbau, Feuerwache und Verpflegung gesucht.',
             'offline_filled' => 0,
         ]);
 
-        // 10. Kuchenbuffet für Anlässe - Production
+        // 10. Kuchen für Schulanlässe -> Backgruppe activity
         $bulletinPost10 = BulletinPost::create([
             'title' => 'Kuchen für Schulanlässe',
             'category' => 'produktion',
             'activity_type' => 'production',
+            'activity_id' => $activity('Backgruppe'),
             'description' => 'Für verschiedene Schulanlässe brauchen wir regelmässig Kuchenbeiträge.
 
 Nächste Anlässe:
@@ -390,16 +402,16 @@ Pro Anlass werden 15-20 Kuchen benötigt. Bitte bei Organisatoren melden.',
             'start_at' => now()->year(now()->year)->month(11)->day(1),
             'end_at' => now()->year(now()->year)->month(12)->day(20),
             'location' => 'Abgabe in Schulküche',
-            'contact_name' => 'Ruth Gerber',
+            'contact_name' => 'Swenja Heyers, Matthias Frey',
             'contact_phone' => '+41 34 402 12 00',
-            'contact_email' => 'info@steinerschule-langnau.ch',
+            'contact_email' => 'backen@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
             'show_in_calendar' => true,
         ]);
 
-        // 11. Bibliothek - Regular shifts with flexible capacity
+        // 11. Bibliothek - no parent activity (standalone)
         $bulletinPost11 = BulletinPost::create([
             'title' => 'Schulbibliothek Betreuung',
             'category' => 'organisation',
@@ -440,11 +452,12 @@ Einarbeitung wird geboten. Ideal für Bücherfreunde!',
             'offline_filled' => 0,
         ]);
 
-        // 12. Renovierung Klassenzimmer - Flexible help
-        $bulletinPost12 = BulletinPost::create([
-            'title' => 'Klassenzimmer renovieren',
+        // 12. Klassenzimmer renovieren -> Hausgruppe activity
+        BulletinPost::create([
+            'title' => 'Klassenzimmer 3. Klasse renovieren',
             'category' => 'haus_umgebung_taskforces',
             'activity_type' => 'flexible_help',
+            'activity_id' => $activity('Hausgruppe'),
             'description' => 'Die 3. Klasse renoviert ihr Klassenzimmer!
 
 ARBEITEN:
@@ -458,16 +471,16 @@ Materialkosten werden übernommen. Jede helfende Hand willkommen!',
             'start_at' => now()->year(now()->year)->month(10)->day(14),
             'end_at' => now()->year(now()->year)->month(10)->day(20),
             'location' => 'Klassenzimmer 3. Klasse',
-            'contact_name' => 'Patrick Frei',
+            'contact_name' => 'Hans Baumgartner',
             'contact_phone' => '+41 79 345 67 89',
-            'contact_email' => 'klasse3@steinerschule-langnau.ch',
+            'contact_email' => 'hausgruppe@steinerschule-langnau.ch',
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
             'show_in_calendar' => true,
         ]);
 
-        // 13. Pausenkiosk - Regular shifts
+        // 13. Pausenkiosk - no parent activity (standalone)
         $bulletinPost13 = BulletinPost::create([
             'title' => 'Pausenkiosk',
             'category' => 'verkauf',
@@ -508,8 +521,8 @@ Erlös für Klassenkassen. Helfer für Verkauf und Vorbereitung gesucht.',
             'offline_filled' => 0,
         ]);
 
-        // 14. Theater-Requisiten - Production
-        $bulletinPost14 = BulletinPost::create([
+        // 14. Theater-Requisiten - no parent activity (class project)
+        BulletinPost::create([
             'title' => 'Theater-Requisiten herstellen',
             'category' => 'produktion',
             'activity_type' => 'production',
@@ -535,7 +548,7 @@ Kreative Köpfe und geschickte Hände gesucht!',
             'show_in_calendar' => true,
         ]);
 
-        // 15. Skilager-Begleitung - Shift-based
+        // 15. Skilager - no parent activity (class trip)
         $bulletinPost15 = BulletinPost::create([
             'title' => 'Skilager Begleitung',
             'category' => 'anlass',
@@ -583,12 +596,205 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
             'offline_filled' => 0,
         ]);
 
+        // === NEW: Pinnwand entries for activities that didn't have one ===
+
+        // 16. Pflanzenmärit -> Pflanzenmärit activity
+        $bulletinPost16 = BulletinPost::create([
+            'title' => 'Pflanzenmärit - Helfer gesucht',
+            'category' => 'anlass',
+            'activity_type' => 'shift_based',
+            'activity_id' => $activity('Pflanzenmärit'),
+            'description' => 'Unser Pflanzenmärit braucht Helfer!
+
+Verkauf von Setzlingen, Pflanzen und Gartenzubehör. Wer hat Setzlinge zu Hause vorgezogen? Bitte melden!
+
+AUFGABEN:
+- Pflanzen sammeln und beschriften
+- Standaufbau und -betreuung
+- Beratung für Besucher
+- Abbau und Aufräumen',
+            'start_at' => now()->year(now()->year + 1)->month(5)->day(3)->setTime(8, 0),
+            'end_at' => now()->year(now()->year + 1)->month(5)->day(3)->setTime(14, 0),
+            'location' => 'Pausenhof',
+            'contact_name' => 'Helfer gesucht',
+            'contact_email' => 'pflanzenmarit@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => true,
+            'show_in_calendar' => true,
+            'label' => 'last_minute',
+        ]);
+
+        $bulletinPost16->shifts()->create([
+            'role' => 'Aufbau und Pflanzentransport',
+            'time' => '03.05.' . (now()->year + 1) . ', 07:00 - 09:00 Uhr',
+            'needed' => 4,
+            'offline_filled' => 0,
+        ]);
+
+        $bulletinPost16->shifts()->create([
+            'role' => 'Standbetreuung Vormittag',
+            'time' => '03.05.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
+            'needed' => 3,
+            'offline_filled' => 1,
+        ]);
+
+        $bulletinPost16->shifts()->create([
+            'role' => 'Abbau und Aufräumen',
+            'time' => '03.05.' . (now()->year + 1) . ', 13:00 - 15:00 Uhr',
+            'needed' => 3,
+            'offline_filled' => 0,
+        ]);
+
+        // 17. Grossputz -> Putzorganisation activity
+        $bulletinPost17 = BulletinPost::create([
+            'title' => 'Grossputz Schulhaus vor Sommerferien',
+            'category' => 'haus_umgebung_taskforces',
+            'activity_type' => 'shift_based',
+            'activity_id' => $activity('Putzorganisation'),
+            'description' => 'Zum Schuljahresende machen wir gemeinsam Grossputz!
+
+ARBEITEN:
+- Fenster putzen
+- Böden wischen und wachsen
+- Garderobe ausmisten
+- Fundgrube aufräumen
+- Schulküche grundreinigen
+
+Putzutensilien vorhanden. Bitte Arbeitskleidung mitbringen.',
+            'start_at' => now()->year(now()->year + 1)->month(7)->day(4)->setTime(8, 0),
+            'end_at' => now()->year(now()->year + 1)->month(7)->day(4)->setTime(16, 0),
+            'location' => 'Schulhaus',
+            'contact_name' => 'Susann Glättli, Hans Baumgartner',
+            'contact_email' => 'putz@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => false,
+            'has_shifts' => true,
+            'show_in_calendar' => true,
+        ]);
+
+        $bulletinPost17->shifts()->create([
+            'role' => 'Putzteam Vormittag',
+            'time' => '04.07.' . (now()->year + 1) . ', 08:00 - 12:00 Uhr',
+            'needed' => 10,
+            'offline_filled' => 3,
+        ]);
+
+        $bulletinPost17->shifts()->create([
+            'role' => 'Putzteam Nachmittag',
+            'time' => '04.07.' . (now()->year + 1) . ', 13:00 - 16:00 Uhr',
+            'needed' => 8,
+            'offline_filled' => 0,
+        ]);
+
+        // 18. Mittagstisch -> Mittagstisch activity
+        $bulletinPost18 = BulletinPost::create([
+            'title' => 'Mittagstisch - Zusätzliche Köche gesucht',
+            'category' => 'haus_umgebung_taskforces',
+            'activity_type' => 'shift_based',
+            'activity_id' => $activity('Mittagstisch'),
+            'description' => 'Für den Mittagstisch suchen wir dringend Verstärkung!
+
+Aktuell fehlen uns Helfer für Dienstag und Donnerstag. Die Aufgaben umfassen:
+- Einfaches Mittagessen zubereiten (Rezepte vorhanden)
+- Tische decken
+- Abwasch und Aufräumen
+
+Einarbeitung durch das bestehende Team. Auch 14-tägliche Einsätze willkommen!',
+            'recurring_pattern' => 'Dienstag und Donnerstag, 10:30-13:30 Uhr',
+            'start_at' => now()->year(now()->year)->month(9)->day(1),
+            'end_at' => now()->year(now()->year + 1)->month(7)->day(15),
+            'location' => 'Schulküche',
+            'contact_name' => 'Anna Stalder',
+            'contact_email' => 'mittagstisch@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => true,
+            'show_in_calendar' => true,
+            'label' => 'urgent',
+        ]);
+
+        $bulletinPost18->shifts()->create([
+            'role' => 'Mittagstisch Dienstag',
+            'time' => 'Dienstags, 10:30 - 13:30 Uhr',
+            'needed' => 2,
+            'offline_filled' => 1,
+        ]);
+
+        $bulletinPost18->shifts()->create([
+            'role' => 'Mittagstisch Donnerstag',
+            'time' => 'Donnerstags, 10:30 - 13:30 Uhr',
+            'needed' => 2,
+            'offline_filled' => 0,
+        ]);
+
+        // 19. Sponsorenlauf -> Sponsorenlauf activity
+        $bulletinPost19 = BulletinPost::create([
+            'title' => 'Sponsorenlauf - Streckenposten und Verpflegung',
+            'category' => 'anlass',
+            'activity_type' => 'shift_based',
+            'activity_id' => $activity('Sponsorenlauf'),
+            'description' => 'Für den Sponsorenlauf brauchen wir Eltern an der Strecke!
+
+AUFGABEN:
+- Streckenposten (Sicherheit an Kreuzungen)
+- Verpflegungsstation betreuen
+- Rundenzähler
+- Erste-Hilfe-Posten
+
+Der Erlös geht ans Klassenlager der 9. Klasse.',
+            'start_at' => now()->year(now()->year + 1)->month(5)->day(23)->setTime(9, 0),
+            'end_at' => now()->year(now()->year + 1)->month(5)->day(23)->setTime(13, 0),
+            'location' => 'Schulgelände und Umgebung',
+            'contact_name' => 'Julia Eisenhut, Matthias Rytz',
+            'contact_email' => 'sponsorenlauf@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => true,
+            'show_in_calendar' => true,
+        ]);
+
+        $bulletinPost19->shifts()->create([
+            'role' => 'Streckenposten',
+            'time' => '23.05.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
+            'needed' => 8,
+            'offline_filled' => 2,
+        ]);
+
+        $bulletinPost19->shifts()->create([
+            'role' => 'Verpflegungsstation',
+            'time' => '23.05.' . (now()->year + 1) . ', 08:30 - 12:30 Uhr',
+            'needed' => 4,
+            'offline_filled' => 1,
+        ]);
+
+        // 20. Lachsverkauf -> Lachsverkauf activity
+        BulletinPost::create([
+            'title' => 'Lachsverkauf Weihnachten - Bestellungen sammeln',
+            'category' => 'verkauf',
+            'activity_type' => 'production',
+            'activity_id' => $activity('Lachsverkauf'),
+            'description' => 'Der jährliche Räucherlachsverkauf startet!
+
+Bestellformulare liegen im Sekretariat und im Eingangsbereich aus. Bestellschluss ist der 1. Dezember.
+
+Wer hilft beim Verteilen der Bestellformulare in die Fächli und beim Einsammeln? Auch Helfer für die Auslieferung am 18. Dezember gesucht.',
+            'start_at' => now()->year(now()->year)->month(11)->day(1),
+            'end_at' => now()->year(now()->year)->month(12)->day(18),
+            'location' => 'Sekretariat / Eingangsbereich',
+            'contact_name' => 'Gisela Wyss',
+            'contact_email' => 'lachs@steinerschule-langnau.ch',
+            'status' => 'published',
+            'has_forum' => true,
+            'has_shifts' => false,
+            'show_in_calendar' => true,
+        ]);
+
         // Add sample forum posts
-        // Get some users for posts
         $users = \App\Models\User::where('is_admin', false)->take(4)->get();
 
         if ($users->count() >= 3) {
-            $post1 = $bulletinPost4->posts()->create([
+            $bulletinPost4->posts()->create([
                 'user_id' => $users[0]->id,
                 'body' => 'Ich übernehme gerne eine Schicht in der Cafeteria! Bringe auch 3 Kuchen mit.',
                 'ip_hash' => hash('sha256', '192.168.1.1'),
@@ -607,7 +813,7 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
             ]);
 
             if ($users->count() >= 4) {
-                $post3 = $bulletinPost10->posts()->create([
+                $bulletinPost10->posts()->create([
                     'user_id' => $users[3]->id,
                     'body' => 'Wir backen 2 glutenfreie Kuchen für den Tag der offenen Tür.',
                     'ip_hash' => hash('sha256', '192.168.1.4'),
@@ -616,30 +822,28 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
         }
 
         // Add sample volunteers to some shifts
-        $users = \App\Models\User::whereIn('email', [
+        $volunteers = \App\Models\User::whereIn('email', [
             'peter.mueller@example.com',
             'anna.schmidt@example.com',
             'maria.weber@example.com',
         ])->get();
 
-        if ($users->count() > 0) {
-            // Add volunteers to Märit
+        if ($volunteers->count() > 0) {
             $maeritShifts = $bulletinPost4->shifts()->get();
-            if ($maeritShifts->count() > 0 && $users->count() > 0) {
+            if ($maeritShifts->count() > 0) {
                 $maeritShifts->first()->volunteers()->create([
-                    'user_id' => $users->first()->id,
-                    'name' => $users->first()->name,
-                    'email' => $users->first()->email,
+                    'user_id' => $volunteers->first()->id,
+                    'name' => $volunteers->first()->name,
+                    'email' => $volunteers->first()->email,
                 ]);
             }
 
-            // Add volunteer to library
             $libraryShifts = $bulletinPost11->shifts()->get();
-            if ($libraryShifts->count() > 0 && $users->count() > 1) {
+            if ($libraryShifts->count() > 0 && $volunteers->count() > 1) {
                 $libraryShifts->first()->volunteers()->create([
-                    'user_id' => $users->skip(1)->first()->id,
-                    'name' => $users->skip(1)->first()->name,
-                    'email' => $users->skip(1)->first()->email,
+                    'user_id' => $volunteers->skip(1)->first()->id,
+                    'name' => $volunteers->skip(1)->first()->name,
+                    'email' => $volunteers->skip(1)->first()->email,
                 ]);
             }
         }

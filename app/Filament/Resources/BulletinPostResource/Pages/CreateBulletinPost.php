@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\BulletinPostResource\Pages;
 
 use App\Filament\Resources\BulletinPostResource;
-use Filament\Actions;
+use App\Models\Activity;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateBulletinPost extends CreateRecord
@@ -11,4 +11,22 @@ class CreateBulletinPost extends CreateRecord
     protected static string $resource = BulletinPostResource::class;
 
     protected static ?string $title = 'Eintrag erstellen';
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        $activityId = request()->query('activity_id');
+
+        if ($activityId && $activity = Activity::find($activityId)) {
+            $this->form->fill([
+                'activity_id' => $activity->id,
+                'contact_name' => $activity->contact_name,
+                'contact_email' => $activity->contact_email,
+                'contact_phone' => $activity->contact_phone,
+                'category' => $activity->category,
+                'location' => $activity->meeting_location,
+            ]);
+        }
+    }
 }
