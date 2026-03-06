@@ -128,7 +128,7 @@
                     <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
-                    <svg x-show="mobileMenuOpen" x-cloak class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg x-show="mobileMenuOpen" x-cloak style="display: none" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -137,6 +137,7 @@
             <!-- Mobile Menu -->
             <div x-show="mobileMenuOpen"
                  x-cloak
+                 style="display: none"
                  @click.away="mobileMenuOpen = false"
                  class="lg:hidden border-t border-gray-200">
                 <!-- Main Navigation Links -->
