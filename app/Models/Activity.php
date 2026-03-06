@@ -49,6 +49,16 @@ class Activity extends Model
         return $query->orderBy('title');
     }
 
+    public function bulletinPosts()
+    {
+        return $this->hasMany(BulletinPost::class);
+    }
+
+    public function activeBulletinPosts()
+    {
+        return $this->hasMany(BulletinPost::class)->active();
+    }
+
     public function posts()
     {
         return $this->hasMany(\App\Models\ActivityPost::class);

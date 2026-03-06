@@ -42,6 +42,13 @@ class BulletinPostResource extends Resource
                             ->dehydrateStateUsing(fn ($state, Forms\Get $get) =>
                                 $state ?? Str::slug($get('title'))
                             ),
+                        Forms\Components\Select::make('activity_id')
+                            ->label('Elternaktivität')
+                            ->relationship('activity', 'title')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Keine Zuordnung')
+                            ->helperText('Optional: Diesen Eintrag einer Elternaktivität zuordnen'),
                         Forms\Components\Textarea::make('description')
                             ->label('Beschreibung')
                             ->required()
@@ -116,6 +123,12 @@ class BulletinPostResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->limit(40),
+                Tables\Columns\TextColumn::make('activity.title')
+                    ->label('Aktivität')
+                    ->limit(20)
+                    ->tooltip(fn ($state) => $state)
+                    ->placeholder('-')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('contact_name')
                     ->label('Kontakt')
                     ->limit(30)

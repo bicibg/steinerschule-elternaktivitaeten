@@ -37,9 +37,12 @@ class ActivityController extends Controller
     {
         $activity = Activity::where('slug', $slug)
             ->active()
-            ->with(['posts' => function ($query) {
-                $query->visible()->with('comments');
-            }])
+            ->with([
+                'posts' => function ($query) {
+                    $query->visible()->with('comments');
+                },
+                'activeBulletinPosts.shifts.volunteers',
+            ])
             ->firstOrFail();
 
         return view('activities.show', compact('activity'));
