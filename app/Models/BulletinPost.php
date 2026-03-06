@@ -30,6 +30,7 @@ class BulletinPost extends Model
         'has_forum',
         'has_shifts',
         'label',
+        'activity_id',
     ];
 
     protected $casts = [
@@ -48,6 +49,11 @@ class BulletinPost extends Model
                 $bulletinPost->edit_token = Str::random(64);
             }
         });
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class);
     }
 
     public function posts()

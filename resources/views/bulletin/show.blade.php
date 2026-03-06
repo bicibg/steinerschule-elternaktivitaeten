@@ -36,6 +36,19 @@
                 </span>
             </div>
 
+            <!-- Parent Activity Link -->
+            @if($bulletinPost->activity)
+                <div class="mb-3">
+                    <a href="{{ route('activities.show', $bulletinPost->activity->slug) }}"
+                       class="inline-flex items-center text-sm text-steiner-blue hover:text-steiner-dark">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Gehört zu: {{ $bulletinPost->activity->title }}
+                    </a>
+                </div>
+            @endif
+
             <!-- Title and Badges -->
             <div class="mb-4">
                 <div class="flex items-start justify-between">

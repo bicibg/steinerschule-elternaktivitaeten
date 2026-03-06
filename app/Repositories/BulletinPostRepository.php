@@ -58,7 +58,8 @@ class BulletinPostRepository
                 'posts' => function ($query) {
                     $query->with('comments');
                 },
-                'shifts.volunteers.user'
+                'shifts.volunteers.user',
+                'activity',
             ])
             ->first();
     }

@@ -78,6 +78,52 @@
                 :phone="$activity->contact_phone" />
         </x-card>
 
+        <!-- Linked Pinnwand Entries -->
+        @if($activity->activeBulletinPosts->count() > 0)
+            <x-card class="mb-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Aktuelle Pinnwand-Einträge</h2>
+                <div class="space-y-3">
+                    @foreach($activity->activeBulletinPosts as $bulletin)
+                        <a href="{{ route('bulletin.show', $bulletin->slug) }}"
+                           class="block p-4 bg-gray-50 rounded-lg hover:bg-steiner-lighter transition-colors duration-200">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">{{ $bulletin->title }}</h3>
+                                    @if($bulletin->start_at)
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            {{ $bulletin->start_at->format('d.m.Y') }}
+                                            @if($bulletin->location)
+                                                &middot; {{ $bulletin->location }}
+                                            @endif
+                                        </p>
+                                    @endif
+                                </div>
+                                @if($bulletin->has_shifts && $bulletin->shifts->count() > 0)
+                                    @php
+                                        $totalNeeded = $bulletin->shifts->sum('needed');
+                                        $totalFilled = $bulletin->shifts->sum('filled');
+                                    @endphp
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {{ $totalFilled >= $totalNeeded ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $totalFilled }}/{{ $totalNeeded }} Helfer
+                                    </span>
+                                @endif
+                            </div>
+                            @if($bulletin->label_text)
+                                <span class="inline-flex items-center mt-2 px-2 py-0.5 rounded text-xs font-medium
+                                    {{ $bulletin->label === 'urgent' ? 'bg-red-100 text-red-800' : '' }}
+                                    {{ $bulletin->label === 'important' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                    {{ $bulletin->label === 'last_minute' ? 'bg-orange-100 text-orange-800' : '' }}
+                                    {{ $bulletin->label === 'featured' ? 'bg-blue-100 text-blue-800' : '' }}">
+                                    {{ $bulletin->label_text }}
+                                </span>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+            </x-card>
+        @endif
+
         <!-- Forum Section -->
         @if($activity->has_forum)
             <x-card>
