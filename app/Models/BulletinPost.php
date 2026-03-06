@@ -31,6 +31,7 @@ class BulletinPost extends Model
         'has_shifts',
         'label',
         'activity_id',
+        'contact_user_id',
     ];
 
     protected $casts = [
@@ -54,6 +55,11 @@ class BulletinPost extends Model
     public function activity()
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    public function contactUser()
+    {
+        return $this->belongsTo(User::class, 'contact_user_id');
     }
 
     public function posts()

@@ -49,6 +49,12 @@ class UserResource extends Resource
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
+                Forms\Components\TextInput::make('phone')
+                    ->label('Telefon')
+                    ->tel(),
+                Forms\Components\Textarea::make('remarks')
+                    ->label('Bemerkungen')
+                    ->rows(3),
                 Forms\Components\Toggle::make('is_admin')
                     ->label('Administrator')
                     ->helperText('Administratoren können auf das Admin-Panel zugreifen')
@@ -82,6 +88,10 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-Mail')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->label('Telefon')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_admin')
                     ->label('Admin')
                     ->boolean()

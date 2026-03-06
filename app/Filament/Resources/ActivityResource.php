@@ -57,15 +57,39 @@ class ActivityResource extends Resource
                     ]),
                 Forms\Components\Section::make('Kontaktperson')
                     ->schema([
+                        Forms\Components\Select::make('contact_user_id')
+                            ->label('Verknüpfter Benutzer')
+                            ->relationship('contactUser', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Kein Benutzer verknüpft')
+                            ->helperText('Optional: Kontaktperson mit einem Benutzerkonto verknüpfen')
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                if ($state) {
+                                    $user = \App\Models\User::find($state);
+                                    if ($user) {
+                                        $set('contact_name', $user->name);
+                                        $set('contact_email', $user->email);
+                                        $set('contact_phone', $user->phone);
+                                    }
+                                }
+                            }),
                         Forms\Components\TextInput::make('contact_name')
                             ->label('Name')
-                            ->required(),
+                            ->required()
+                            ->disabled(fn (Forms\Get $get) => filled($get('contact_user_id')))
+                            ->dehydrated(),
                         Forms\Components\TextInput::make('contact_email')
                             ->label('E-Mail')
-                            ->email(),
+                            ->email()
+                            ->disabled(fn (Forms\Get $get) => filled($get('contact_user_id')))
+                            ->dehydrated(),
                         Forms\Components\TextInput::make('contact_phone')
                             ->label('Telefon')
-                            ->tel(),
+                            ->tel()
+                            ->disabled(fn (Forms\Get $get) => filled($get('contact_user_id')))
+                            ->dehydrated(),
                     ]),
                 Forms\Components\Section::make('Einstellungen')
                     ->schema([

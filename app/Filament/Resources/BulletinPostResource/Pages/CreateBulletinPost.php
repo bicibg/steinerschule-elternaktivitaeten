@@ -21,6 +21,7 @@ class CreateBulletinPost extends CreateRecord
         if ($activityId && $activity = Activity::find($activityId)) {
             $this->form->fill([
                 'activity_id' => $activity->id,
+                'contact_user_id' => $activity->contact_user_id,
                 'contact_name' => $activity->contact_name,
                 'contact_email' => $activity->contact_email,
                 'contact_phone' => $activity->contact_phone,

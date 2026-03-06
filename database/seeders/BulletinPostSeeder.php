@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\BulletinPost;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,9 @@ class BulletinPostSeeder extends Seeder
     {
         // Helper to find activity by title
         $activity = fn (string $title) => Activity::where('title', $title)->first()?->id;
+
+        // Helper to find user by name (same email convention as UserSeeder)
+        $userId = fn (string $name) => User::where('email', Str::slug($name, '.') . '@example.com')->first()?->id;
 
         // 1. Lagerwoche Zurich - class trip, no parent activity
         $bulletinPost1 = BulletinPost::create([
@@ -40,6 +44,7 @@ Unterkunft wird gestellt. Eine tolle Gelegenheit, die Klasse zu begleiten!',
             'contact_name' => 'Stefan Berger',
             'contact_phone' => '+41 34 402 12 45',
             'contact_email' => 'klasse8@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Stefan Berger'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -78,6 +83,7 @@ Wir suchen Helfer für:
             'contact_name' => 'Elisabeth Keller',
             'contact_phone' => '+41 34 402 12 50',
             'contact_email' => 'eurythmie@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Elisabeth Keller'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -120,6 +126,7 @@ Je mehr Helfer, desto schöner wird das Fest!',
             'contact_name' => 'Julia Winkler',
             'contact_phone' => '+41 34 402 12 20',
             'contact_email' => 'osterstand@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Julia Winkler'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -225,6 +232,7 @@ Die Arbeit kann flexibel zwischen dem 15. und 25. November erledigt werden. Mate
             'contact_name' => 'Andreas Hofmann',
             'contact_phone' => '+41 34 402 12 35',
             'contact_email' => 'musik@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Andreas Hofmann'),
             'status' => 'published',
             'has_forum' => false,
             'has_shifts' => false,
@@ -357,6 +365,7 @@ Helfer für Auf-/Abbau, Feuerwache und Verpflegung gesucht.',
             'contact_name' => 'Daniel Moser',
             'contact_phone' => '+41 34 402 12 60',
             'contact_email' => 'feste@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Daniel Moser'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -432,6 +441,7 @@ Einarbeitung wird geboten. Ideal für Bücherfreunde!',
             'contact_name' => 'Monika Schmid',
             'contact_phone' => '+41 34 402 12 70',
             'contact_email' => 'bibliothek@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Monika Schmid'),
             'status' => 'published',
             'has_forum' => false,
             'has_shifts' => true,
@@ -474,6 +484,7 @@ Materialkosten werden übernommen. Jede helfende Hand willkommen!',
             'contact_name' => 'Hans Baumgartner',
             'contact_phone' => '+41 79 345 67 89',
             'contact_email' => 'hausgruppe@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Hans Baumgartner'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
@@ -501,6 +512,7 @@ Erlös für Klassenkassen. Helfer für Verkauf und Vorbereitung gesucht.',
             'contact_name' => 'Claudia Baumgartner',
             'contact_phone' => '+41 76 456 78 90',
             'contact_email' => 'kiosk@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Claudia Baumgartner'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -542,6 +554,7 @@ Kreative Köpfe und geschickte Hände gesucht!',
             'contact_name' => 'Regula Fischer',
             'contact_phone' => '+41 34 402 12 80',
             'contact_email' => 'theater@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Regula Fischer'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
@@ -568,6 +581,7 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
             'contact_name' => 'Thomas Roth',
             'contact_phone' => '+41 34 402 12 90',
             'contact_email' => 'sport@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Thomas Roth'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -707,6 +721,7 @@ Einarbeitung durch das bestehende Team. Auch 14-tägliche Einsätze willkommen!'
             'location' => 'Schulküche',
             'contact_name' => 'Anna Stalder',
             'contact_email' => 'mittagstisch@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Anna Stalder'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => true,
@@ -784,6 +799,7 @@ Wer hilft beim Verteilen der Bestellformulare in die Fächli und beim Einsammeln
             'location' => 'Sekretariat / Eingangsbereich',
             'contact_name' => 'Gisela Wyss',
             'contact_email' => 'lachs@steinerschule-langnau.ch',
+            'contact_user_id' => $userId('Gisela Wyss'),
             'status' => 'published',
             'has_forum' => true,
             'has_shifts' => false,
@@ -823,9 +839,9 @@ Wer hilft beim Verteilen der Bestellformulare in die Fächli und beim Einsammeln
 
         // Add sample volunteers to some shifts
         $volunteers = \App\Models\User::whereIn('email', [
-            'peter.mueller@example.com',
-            'anna.schmidt@example.com',
-            'maria.weber@example.com',
+            'julia.winkler@example.com',
+            'matthias.rytz@example.com',
+            'maria.mani@example.com',
         ])->get();
 
         if ($volunteers->count() > 0) {

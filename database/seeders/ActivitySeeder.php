@@ -3,10 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\Activity;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ActivitySeeder extends Seeder
 {
+    private function userId(string $name): ?int
+    {
+        return User::where('email', Str::slug($name, '.') . '@example.com')->first()?->id;
+    }
+
     public function run(): void
     {
         // ANLÄSSE
@@ -16,16 +23,18 @@ class ActivitySeeder extends Seeder
             'category' => 'anlass',
             'contact_name' => 'Julia Winkler',
             'contact_email' => 'osterstand@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Julia Winkler'),
             'has_forum' => true,
             'is_active' => true,
         ]);
 
         Activity::create([
             'title' => 'Sponsorenlauf',
-            'description' => null,  // Testing null description
+            'description' => null,
             'category' => 'anlass',
             'contact_name' => 'Julia Eisenhut, Matthias Rytz',
             'contact_email' => 'sponsorenlauf@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Julia Eisenhut'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -36,6 +45,7 @@ class ActivitySeeder extends Seeder
             'category' => 'anlass',
             'contact_name' => 'Maria Mani, Selina Lüchiger',
             'contact_email' => 'trubschachen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Maria Mani'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -46,6 +56,7 @@ class ActivitySeeder extends Seeder
             'category' => 'anlass',
             'contact_name' => 'Bylie Beese, Anna Stalder',
             'contact_email' => 'kaffeestube@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Bylie Beese'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -64,8 +75,9 @@ class ActivitySeeder extends Seeder
             'title' => 'Spielzeug- und Kinderkleiderbörse',
             'description' => 'Zweimal jährlich stattfindende Börse für gebrauchte Spielsachen und Kinderkleidung. Im Umbruch - neue Organisatoren willkommen!',
             'category' => 'anlass',
-            'contact_name' => 'Linda Denissen, Yael Stanca, Diego Stanca, Reinhart Rebling, Christina Mokos',
+            'contact_name' => 'Linda Denissen, Yael Stanca',
             'contact_email' => 'boerse@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Linda Denissen'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -76,6 +88,7 @@ class ActivitySeeder extends Seeder
             'category' => 'anlass',
             'contact_name' => 'Swenja Heyers, Yves Bönzli',
             'contact_email' => 'marit@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Swenja Heyers'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -83,10 +96,11 @@ class ActivitySeeder extends Seeder
         // HAUS, UMGEBUNG UND TASKFORCES
         Activity::create([
             'title' => 'Putzorganisation',
-            'description' => null,  // Testing null description
+            'description' => null,
             'category' => 'haus_umgebung_taskforces',
             'contact_name' => 'Susann Glättli, Hans Baumgartner',
             'contact_email' => 'putz@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Susann Glättli'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -95,8 +109,9 @@ class ActivitySeeder extends Seeder
             'title' => 'Mittagstisch',
             'description' => 'Organisation und Durchführung des Mittagstisches für Schülerinnen und Schüler. Planung, Administration, Reinigung und Wäscheverwaltung.',
             'category' => 'haus_umgebung_taskforces',
-            'contact_name' => 'Anna Stalder (Planung), Ioana Wigger (Reinigung), Hans Baumgartner (Putzmittel), Katharina Baumgartner (Wäsche)',
+            'contact_name' => 'Anna Stalder',
             'contact_email' => 'mittagstisch@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Anna Stalder'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -107,6 +122,7 @@ class ActivitySeeder extends Seeder
             'category' => 'haus_umgebung_taskforces',
             'contact_name' => 'Céline Zaugg',
             'contact_email' => 'laeuseteam@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Céline Zaugg'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -117,6 +133,7 @@ class ActivitySeeder extends Seeder
             'category' => 'haus_umgebung_taskforces',
             'contact_name' => 'Katharina Baumgartner',
             'contact_email' => 'waesche@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Katharina Baumgartner'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -127,6 +144,7 @@ class ActivitySeeder extends Seeder
             'category' => 'haus_umgebung_taskforces',
             'contact_name' => 'Hans Baumgartner',
             'contact_email' => 'hausgruppe@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Hans Baumgartner'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -135,8 +153,9 @@ class ActivitySeeder extends Seeder
             'title' => 'Erneuerung Pausenplatzareal',
             'description' => 'Projektgruppe zur Neugestaltung und Erneuerung des Pausenplatzes. Planung und Umsetzung von Spielgeräten und Gestaltungselementen.',
             'category' => 'haus_umgebung_taskforces',
-            'contact_name' => 'Julia und Sami Eisenhut, Hans Baumgartner, Tinu Brenner, Tom Schick, Susanne Marienfeld',
+            'contact_name' => 'Julia Eisenhut, Sami Eisenhut',
             'contact_email' => 'pausenplatz@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Julia Eisenhut'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -148,16 +167,18 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Maria Mani',
             'contact_email' => 'filzen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Maria Mani'),
             'has_forum' => true,
             'is_active' => true,
         ]);
 
         Activity::create([
             'title' => 'Kerzenziehen',
-            'description' => null,  // Testing null description
+            'description' => null,
             'category' => 'produktion',
             'contact_name' => 'Rene Winkler',
             'contact_email' => 'kerzen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Rene Winkler'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -168,6 +189,7 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Manila Dür',
             'contact_email' => 'puppen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Manila Dür'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -178,6 +200,7 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Elsa Zürcher Ledermann',
             'contact_email' => 'kranz@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Elsa Zürcher Ledermann'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -188,6 +211,7 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Claudia Pereira',
             'contact_email' => 'seife@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Claudia Pereira'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -198,6 +222,7 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Swenja Heyers, Matthias Frey',
             'contact_email' => 'backen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Swenja Heyers'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -208,6 +233,7 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Anna Stalder',
             'contact_email' => 'tee@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Anna Stalder'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -218,6 +244,7 @@ class ActivitySeeder extends Seeder
             'category' => 'produktion',
             'contact_name' => 'Manuela Tschanz',
             'contact_email' => 'paecklifischen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Manuela Tschanz'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -226,8 +253,9 @@ class ActivitySeeder extends Seeder
             'title' => 'Lebkuchenverzieren',
             'description' => 'Lebkuchen backen und verzieren für den Weihnachtsmarkt.',
             'category' => 'produktion',
-            'contact_name' => 'Tom',
+            'contact_name' => 'Tom Schick',
             'contact_email' => 'lebkuchen@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Tom Schick'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -235,20 +263,22 @@ class ActivitySeeder extends Seeder
         // ORGANISATION
         Activity::create([
             'title' => 'Liegenschaftsverein der RSS Langnau',
-            'description' => 'Verwaltung der Schulliegenschaften. Der Vorstand besteht aus Christian Konopka, Hane Lory, Stefan Heppler, Martin Brenner und Hans Baumgartner (Kassier).',
+            'description' => 'Verwaltung der Schulliegenschaften.',
             'category' => 'organisation',
-            'contact_name' => 'Christian Konopka, Hane Lory, Stefan Heppler, Martin Brenner',
+            'contact_name' => 'Christian Konopka',
             'contact_email' => 'liegenschaft@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Christian Konopka'),
             'has_forum' => true,
             'is_active' => true,
         ]);
 
         Activity::create([
             'title' => 'Elternrat',
-            'description' => null,  // Testing null description
+            'description' => null,
             'category' => 'organisation',
             'contact_name' => 'Tatjana Baumgartner, Maria Mani',
             'contact_email' => 'elternrat@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Tatjana Baumgartner'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -259,6 +289,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Rebekka Schaerer',
             'contact_email' => 'plakate@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Rebekka Schaerer'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -269,6 +300,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Marianne Wey',
             'contact_email' => 'wzq@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Marianne Wey'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -279,6 +311,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Yves Bönzli',
             'contact_email' => 'pr@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Yves Bönzli'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -289,6 +322,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Sandra Lanz, Heinz Ledermann, Tamás Mokos',
             'contact_email' => 'erstgespraeche@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Sandra Lanz'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -299,6 +333,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Marisa Frey, Susanne Marienfeld',
             'contact_email' => 'forum@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Marisa Frey'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -309,6 +344,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Marianne Wey',
             'contact_email' => 'budget@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Marianne Wey'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -319,6 +355,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Matthias Hartmann',
             'contact_email' => 'it@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Matthias Hartmann'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -329,6 +366,7 @@ class ActivitySeeder extends Seeder
             'category' => 'organisation',
             'contact_name' => 'Christa Aeschlimann, Christian Brendle',
             'contact_email' => 'medien@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Christa Aeschlimann'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -340,6 +378,7 @@ class ActivitySeeder extends Seeder
             'category' => 'verkauf',
             'contact_name' => 'Daniela Wüthrich',
             'contact_email' => 'probon@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Daniela Wüthrich'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -350,6 +389,7 @@ class ActivitySeeder extends Seeder
             'category' => 'verkauf',
             'contact_name' => 'Gisela Wyss',
             'contact_email' => 'lachs@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Gisela Wyss'),
             'has_forum' => true,
             'is_active' => true,
         ]);
@@ -360,6 +400,7 @@ class ActivitySeeder extends Seeder
             'category' => 'verkauf',
             'contact_name' => 'Rémy Reist',
             'contact_email' => 'weleda@steinerschule-langnau.ch',
+            'contact_user_id' => $this->userId('Rémy Reist'),
             'has_forum' => true,
             'is_active' => true,
         ]);

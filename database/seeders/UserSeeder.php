@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -22,22 +23,66 @@ class UserSeeder extends Seeder
             'is_super_admin' => true,
         ]);
 
-        // Sample parent users
-        $users = [
-            ['name' => 'Anna Schmidt', 'email' => 'anna.schmidt@example.com'],
-            ['name' => 'Peter Müller', 'email' => 'peter.mueller@example.com'],
-            ['name' => 'Maria Weber', 'email' => 'maria.weber@example.com'],
-            ['name' => 'Thomas Fischer', 'email' => 'thomas.fischer@example.com'],
-            ['name' => 'Lisa Meier', 'email' => 'lisa.meier@example.com'],
-            ['name' => 'Michael Wagner', 'email' => 'michael.wagner@example.com'],
-            ['name' => 'Sandra Koch', 'email' => 'sandra.koch@example.com'],
-            ['name' => 'Stefan Bauer', 'email' => 'stefan.bauer@example.com'],
+        // All contact persons from activities and bulletin posts
+        $contacts = [
+            // Activity contacts
+            'Julia Winkler',
+            'Julia Eisenhut',
+            'Matthias Rytz',
+            'Maria Mani',
+            'Selina Lüchiger',
+            'Bylie Beese',
+            'Anna Stalder',
+            'Linda Denissen',
+            'Yael Stanca',
+            'Swenja Heyers',
+            'Yves Bönzli',
+            'Susann Glättli',
+            'Hans Baumgartner',
+            'Ioana Wigger',
+            'Katharina Baumgartner',
+            'Céline Zaugg',
+            'Sami Eisenhut',
+            'Tinu Brenner',
+            'Tom Schick',
+            'Susanne Marienfeld',
+            'Rene Winkler',
+            'Manila Dür',
+            'Elsa Zürcher Ledermann',
+            'Claudia Pereira',
+            'Matthias Frey',
+            'Manuela Tschanz',
+            'Christian Konopka',
+            'Tatjana Baumgartner',
+            'Rebekka Schaerer',
+            'Marianne Wey',
+            'Sandra Lanz',
+            'Heinz Ledermann',
+            'Tamás Mokos',
+            'Marisa Frey',
+            'Matthias Hartmann',
+            'Christa Aeschlimann',
+            'Christian Brendle',
+            'Daniela Wüthrich',
+            'Gisela Wyss',
+            'Rémy Reist',
+            // Bulletin post contacts (not already in activities)
+            'Stefan Berger',
+            'Elisabeth Keller',
+            'Daniel Moser',
+            'Monika Schmid',
+            'Claudia Baumgartner',
+            'Regula Fischer',
+            'Thomas Roth',
+            'Andreas Hofmann',
         ];
 
-        foreach ($users as $userData) {
+        foreach ($contacts as $name) {
+            $email = Str::slug($name, '.') . '@example.com';
+
             User::create([
-                'name' => $userData['name'],
-                'email' => $userData['email'],
+                'name' => $name,
+                'email' => $email,
                 'password' => Hash::make('password123'),
             ]);
         }

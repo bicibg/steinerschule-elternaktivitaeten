@@ -42,6 +42,7 @@ class ActivityController extends Controller
                     $query->visible()->with('comments');
                 },
                 'activeBulletinPosts.shifts.volunteers',
+                'contactUser',
             ])
             ->firstOrFail();
 

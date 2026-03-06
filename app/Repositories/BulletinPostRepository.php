@@ -60,6 +60,7 @@ class BulletinPostRepository
                 },
                 'shifts.volunteers.user',
                 'activity',
+                'contactUser',
             ])
             ->first();
     }

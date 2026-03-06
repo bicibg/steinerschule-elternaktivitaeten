@@ -113,7 +113,8 @@
             <x-contact-info
                 :name="$bulletinPost->contact_name"
                 :email="$bulletinPost->contact_email"
-                :phone="$bulletinPost->contact_phone" />
+                :phone="$bulletinPost->contact_phone"
+                :profile-url="auth()->check() && $bulletinPost->contactUser ? route('profile.show', $bulletinPost->contactUser) : null" />
         </x-card>
 
         <!-- Forum and Shifts Section -->
