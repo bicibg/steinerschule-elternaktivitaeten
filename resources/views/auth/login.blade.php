@@ -56,29 +56,6 @@
                 </p>
             </div>
 
-            @if(app()->environment('local'))
-            <div class="mt-4 pt-4 border-t border-gray-200">
-                <div class="space-y-3">
-                    <form action="{{ route('demo.login') }}" method="POST">
-                        @csrf
-                        <x-button type="submit" variant="success" block>
-                            Als Gast testen (Demo-Benutzer)
-                        </x-button>
-                    </form>
-
-                    <form action="{{ route('demo.admin.login') }}" method="POST">
-                        @csrf
-                        <x-button type="submit" variant="warning" block>
-                            Als Admin testen (Demo-Admin)
-                        </x-button>
-                    </form>
-                </div>
-
-                <p class="mt-3 text-xs text-gray-500 text-center">
-                    Demo-Konten werden automatisch zurückgesetzt. Keine echten Daten werden gespeichert.
-                </p>
-            </div>
-            @endif
         </x-card>
     </div>
 @endsection

@@ -197,10 +197,6 @@ php artisan serve    # Laravel server
 
 ## Testing
 
-### Demo Access
-- Demo user: `demo@example.com` / `demo123456`
-- Admin access: Contact system administrator
-
 ### Running Tests
 ```bash
 php artisan test

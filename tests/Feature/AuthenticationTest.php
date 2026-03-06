@@ -177,41 +177,6 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect('/pinnwand');
     }
 
-    public function test_demo_login_creates_and_authenticates_demo_user(): void
-    {
-        $response = $this->post('/demo-login');
-
-        $this->assertAuthenticated();
-        $response->assertRedirect('/pinnwand');
-        $response->assertSessionHas('success', 'Als Demo-Benutzer angemeldet.');
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'demo@example.com',
-            'name' => 'Demo User',
-        ]);
-    }
-
-    public function test_demo_login_uses_existing_demo_user_if_exists(): void
-    {
-        // Create demo user first
-        $demoUser = User::factory()->create([
-            'email' => 'demo@example.com',
-            'name' => 'Existing Demo',
-        ]);
-
-        $response = $this->post('/demo-login');
-
-        $this->assertAuthenticated();
-        $response->assertRedirect('/pinnwand');
-
-        // Should still be the same user (not recreated)
-        $this->assertDatabaseCount('users', 1);
-        $this->assertDatabaseHas('users', [
-            'email' => 'demo@example.com',
-            'name' => 'Existing Demo', // Original name preserved
-        ]);
-    }
-
     public function test_password_reset_link_screen_can_be_rendered(): void
     {
         $response = $this->get('/forgot-password');

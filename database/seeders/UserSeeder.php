@@ -22,23 +22,6 @@ class UserSeeder extends Seeder
             'is_super_admin' => true,
         ]);
 
-        // Demo user
-        User::create([
-            'name' => 'Demo User',
-            'email' => 'demo@example.com',
-            'password' => Hash::make('demo123456'),
-            'is_admin' => false,
-        ]);
-
-        // Demo admin user
-        User::create([
-            'name' => 'Demo Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('admin123456'),
-            'is_admin' => true,
-            'is_super_admin' => true,
-        ]);
-
         // Sample parent users
         $users = [
             ['name' => 'Anna Schmidt', 'email' => 'anna.schmidt@example.com'],

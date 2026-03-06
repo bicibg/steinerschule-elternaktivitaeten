@@ -19,8 +19,7 @@ Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
 Route::get('/register', [\App\Http\Controllers\AuthController::class, 'showRegister'])->name('register')->middleware('guest');
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
-Route::post('/demo-login', [\App\Http\Controllers\AuthController::class, 'loginDemo'])->name('demo.login')->middleware(['throttle:10,1', 'guest']);
-Route::post('/demo-admin-login', [\App\Http\Controllers\AuthController::class, 'loginDemoAdmin'])->name('demo.admin.login')->middleware(['throttle:10,1', 'guest']);
+
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
 // Password Reset Routes
