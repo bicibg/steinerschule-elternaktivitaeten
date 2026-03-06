@@ -18,7 +18,7 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
-    <header class="bg-white shadow-sm border-b border-gray-200" x-data="{ mobileMenuOpen: false }">
+    <header class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-14 sm:h-16">
                 <!-- Logo -->
@@ -123,22 +123,20 @@
                 </div>
 
                 <!-- Mobile Hamburger Menu Button -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen"
+                <button id="mobile-menu-btn"
                         class="lg:hidden p-2 rounded-md text-gray-600 hover:text-steiner-blue hover:bg-gray-100 transition-colors">
-                    <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="mobile-menu-icon-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
-                    <svg x-show="mobileMenuOpen" x-cloak style="display: none" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="mobile-menu-icon-close" style="display: none" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
 
             <!-- Mobile Menu -->
-            <div x-show="mobileMenuOpen"
-                 x-cloak
+            <div id="mobile-menu"
                  style="display: none"
-                 @click.away="mobileMenuOpen = false"
                  class="lg:hidden border-t border-gray-200">
                 <!-- Main Navigation Links -->
                 <nav class="py-2 bg-white">
@@ -222,6 +220,29 @@
             </div>
         </div>
     </header>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('mobile-menu-btn');
+            var menu = document.getElementById('mobile-menu');
+            var iconOpen = document.getElementById('mobile-menu-icon-open');
+            var iconClose = document.getElementById('mobile-menu-icon-close');
+            if (!btn || !menu) return;
+            btn.addEventListener('click', function() {
+                var isHidden = menu.style.display === 'none';
+                menu.style.display = isHidden ? '' : 'none';
+                iconOpen.style.display = isHidden ? 'none' : '';
+                iconClose.style.display = isHidden ? '' : 'none';
+            });
+            document.addEventListener('click', function(e) {
+                if (menu.style.display !== 'none' && !menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.style.display = 'none';
+                    iconOpen.style.display = '';
+                    iconClose.style.display = 'none';
+                }
+            });
+        })();
+    </script>
 
     <!-- Notifications -->
     @auth
