@@ -10,7 +10,11 @@ use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/pinnwand');
+    if (\App\Models\BulletinPost::active()->exists()) {
+        return redirect('/pinnwand');
+    }
+
+    return redirect('/elternaktivitaeten');
 });
 
 
