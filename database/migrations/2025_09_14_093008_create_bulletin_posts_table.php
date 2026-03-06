@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('contact_phone')->nullable();
             $table->string('contact_email')->nullable();
             $table->string('slug')->unique();
-            $table->enum('status', ['published', 'archived'])->default('published');
+            $table->enum('status', ['draft', 'published', 'archived'])->default('published');
             $table->string('edit_token', 64)->unique();
             $table->timestamps();
 
