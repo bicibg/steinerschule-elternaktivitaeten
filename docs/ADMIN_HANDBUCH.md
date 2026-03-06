@@ -70,6 +70,8 @@ Das Seitenmenü ist in drei Gruppen unterteilt:
 - **Schulkalender** - Schulveranstaltungen verwalten
 - **Benutzer** - Benutzerverwaltung und DSGVO
 - **Ankündigungen** - Plattform-weite Mitteilungen
+- **Exporte** - Abgeschlossene Datenexporte herunterladen (auch für Admins sichtbar)
+- **Importe** - Massenimporte verwalten (nur Super Admin)
 - **Audit-Protokoll** - Systemaktionen nachverfolgen
 - **Neues Schuljahr** - Jahresreset durchführen
 
@@ -501,28 +503,34 @@ Die Seite zeigt Informationen zum letzten durchgeführten Reset: Datum, wer hat 
 
 ## 10. Datenexport und -import
 
-### Verfügbare Exporte
+### Exporte starten
 
-Die Plattform unterstützt CSV/XLSX-Export für:
+Exporte werden über die jeweilige Ressourcen-Seite gestartet (Aktionsbutton oben auf der Tabelle). Alle Admins können Exporte aus ihren sichtbaren Bereichen starten. Abgeschlossene Exporte erscheinen unter **Administration > Exporte** und können als CSV oder XLSX heruntergeladen werden.
 
-| Datentyp | Exportierte Felder |
-|---|---|
-| **Benutzer** | Name, E-Mail, Kontaktdaten |
-| **Aktivitäten** | Titel, Kategorie, Kontakt, Treffzeiten |
-| **Pinnwand-Einträge** | Titel, Beschreibung, Datum, Kontakt, Status |
-| **Schulveranstaltungen** | Titel, Datum, Ort, Typ |
-| **Schicht-Anmeldungen** | Aktivität, Schicht, Zeit, Name, E-Mail, Anmeldedatum |
+| Datentyp | Exportierte Felder | Einschränkung |
+|---|---|---|
+| **Benutzer** | ID, Name, E-Mail, Admin-Status, Erstellt am | Ohne gelöschte/anonymisierte |
+| **Aktivitäten** | Titel, Beschreibung, Kategorie, Kontakt, Treffzeiten/-ort | Nur aktive |
+| **Pinnwand-Einträge** | Titel, Beschreibung, Datum, Ort, Kontakt, Status, Kategorie | Nur veröffentlichte |
+| **Schulveranstaltungen** | Titel, Datum, Ort, Typ | Alle |
+| **Schicht-Anmeldungen** | Aktivität, Schicht, Zeit, Name, E-Mail, Telefon, Anmeldedatum | Alle |
 
-### Verfügbare Importe
+Exporte laufen als Hintergrundjobs. Die Tabelle zeigt den Status: Anzahl erfolgreicher Zeilen, Dateiname, Abschlusszeitpunkt.
 
-| Datentyp | Beschreibung |
-|---|---|
-| **Benutzer** | Massenanlage von Benutzerkonten |
-| **Aktivitäten** | Massenanlage von Elterngruppen |
-| **Pinnwand-Einträge** | Massenanlage von Hilfegesuchen |
-| **Schulveranstaltungen** | Massenanlage von Schulkalenterterminen |
+### Importe durchführen (nur Super Admin)
 
-Exporte und Importe sind über die jeweilige Ressourcen-Seite erreichbar (Aktionsbuttons oben auf der Tabelle).
+Importe werden ebenfalls über die jeweilige Ressourcen-Seite gestartet. Abgeschlossene Importe erscheinen unter **Administration > Importe**. Fehlgeschlagene Zeilen können als Datei heruntergeladen werden.
+
+| Datentyp | Pflichtfelder | Verhalten bei Duplikaten |
+|---|---|---|
+| **Benutzer** | Name, E-Mail | Findet bestehende per E-Mail, stellt gelöschte wieder her |
+| **Aktivitäten** | Titel, Kategorie, Kontaktperson | Findet bestehende per Titel |
+| **Pinnwand-Einträge** | Titel, Beschreibung, Kontaktperson | Findet bestehende per Titel |
+| **Schulveranstaltungen** | Titel, Startdatum, Veranstaltungstyp | Findet bestehende per Titel + Startdatum |
+
+Beim Benutzer-Import: Wird kein Passwort angegeben, wird automatisch "12345678" gesetzt. Benutzer sollten beim ersten Login ihr Passwort ändern.
+
+Zusätzlich können Schulkalender-Einträge auch per **ICS-Datei** (iCalendar) importiert werden - nützlich für den Import aus bestehenden Kalendersystemen.
 
 ---
 
