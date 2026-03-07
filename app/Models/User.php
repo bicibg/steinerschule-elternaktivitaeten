@@ -52,6 +52,7 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'deleted_at' => 'datetime',
             'anonymized_at' => 'datetime',
+            'deletion_requested_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'is_super_admin' => 'boolean',
@@ -89,5 +90,55 @@ class User extends Authenticatable implements FilamentUser
     public function isAnonymized(): bool
     {
         return ! is_null($this->anonymized_at);
+    }
+
+    /**
+     * Check if user has requested account deletion
+     */
+    public function isDeletionRequested(): bool
+    {
+        return ! is_null($this->deletion_requested_at);
+    }
+
+    /**
+     * Request account deletion (self-service)
+     */
+    public function requestDeletion(): void
+    {
+        static::withTrashed()->where('id', $this->id)->update([
+            'deletion_requested_at' => now(),
+            'deleted_at' => now(),
+        ]);
+
+        UserDeletionLog::logAction($this, 'self_deletion_requested');
+
+        $this->refresh();
+    }
+
+    /**
+     * Cancel a pending deletion request (self-reactivation)
+     */
+    public function cancelDeletion(): void
+    {
+        static::withTrashed()->where('id', $this->id)->update([
+            'deletion_requested_at' => null,
+            'deleted_at' => null,
+        ]);
+
+        UserDeletionLog::logAction($this, 'self_reactivated');
+
+        $this->refresh();
+    }
+
+    /**
+     * Days remaining until auto-anonymization
+     */
+    public function daysUntilAnonymization(): int
+    {
+        if (! $this->deletion_requested_at) {
+            return 0;
+        }
+
+        return max(0, (int) now()->diffInDays($this->deletion_requested_at->addDays(30), false));
     }
 }

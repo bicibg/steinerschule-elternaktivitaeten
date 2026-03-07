@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Schedule the command to run every hour
 Schedule::command('app:update-expired-items')->hourly();
+
+// Anonymize users whose 30-day deletion grace period has expired
+Schedule::command('app:anonymize-expired-users')->daily();

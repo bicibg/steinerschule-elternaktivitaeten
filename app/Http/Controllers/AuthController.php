@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Http\Requests\RegisterUserRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +22,22 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        // Check for soft-deleted users with pending deletion requests
+        $deletedUser = User::withTrashed()
+            ->where('email', $credentials['email'])
+            ->whereNotNull('deletion_requested_at')
+            ->whereNull('anonymized_at')
+            ->first();
+
+        if ($deletedUser && Hash::check($credentials['password'], $deletedUser->password)) {
+            $request->session()->put('reactivation_pending', $deletedUser->id);
+
+            return redirect()->route('reactivate');
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
             return redirect()->intended('/pinnwand');
         }
 
@@ -50,6 +64,50 @@ class AuthController extends Controller
         Auth::login($user);
 
         return redirect('/pinnwand');
+    }
+
+    public function showReactivation(Request $request)
+    {
+        $userId = $request->session()->get('reactivation_pending');
+
+        if (! $userId) {
+            return redirect('/login');
+        }
+
+        $user = User::withTrashed()->find($userId);
+
+        if (! $user || ! $user->isDeletionRequested()) {
+            $request->session()->forget('reactivation_pending');
+
+            return redirect('/login');
+        }
+
+        return view('auth.reactivate', [
+            'daysRemaining' => $user->daysUntilAnonymization(),
+        ]);
+    }
+
+    public function reactivate(Request $request)
+    {
+        $userId = $request->session()->pull('reactivation_pending');
+
+        if (! $userId) {
+            return redirect('/login');
+        }
+
+        $user = User::withTrashed()->find($userId);
+
+        if (! $user || ! $user->isDeletionRequested()) {
+            return redirect('/login');
+        }
+
+        $user->cancelDeletion();
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect('/pinnwand')
+            ->with('success', 'Ihr Konto wurde erfolgreich reaktiviert.');
     }
 
     public function logout(Request $request)
