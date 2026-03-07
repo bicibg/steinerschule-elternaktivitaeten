@@ -25,6 +25,9 @@ class SecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
+        // Prevent search engine indexing
+        $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+
         // Referrer Policy - don't leak URLs to external sites
         $response->headers->set('Referrer-Policy', 'same-origin');
 
