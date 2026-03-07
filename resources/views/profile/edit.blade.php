@@ -56,6 +56,17 @@
                     </p>
                 </div>
 
+                <div class="mb-5">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="hidden" name="hide_contact_details" value="0">
+                        <input type="checkbox" name="hide_contact_details" value="1"
+                               {{ old('hide_contact_details', $user->hide_contact_details) ? 'checked' : '' }}
+                               class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
+                        <span class="ml-3 text-sm font-medium text-gray-700">Kontaktdaten nur für angemeldete Nutzer sichtbar</span>
+                    </label>
+                    <p class="mt-1 ml-7 text-xs text-gray-500">Wenn aktiviert, können nur angemeldete Eltern Ihre E-Mail und Telefonnummer sehen. Ihr Name wird für nicht angemeldete Besucher gekürzt angezeigt.</p>
+                </div>
+
                 <div class="flex justify-end">
                     <x-button type="submit" variant="primary">
                         Änderungen speichern

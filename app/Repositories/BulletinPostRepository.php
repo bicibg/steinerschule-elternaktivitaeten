@@ -36,7 +36,7 @@ class BulletinPostRepository
                 ELSE 5
             END")
             ->orderByRaw('COALESCE(start_at, end_at) ASC')
-            ->with(['posts', 'shifts.volunteers'])
+            ->with(['posts', 'shifts.volunteers', 'contactUsers'])
             ->get();
     }
 

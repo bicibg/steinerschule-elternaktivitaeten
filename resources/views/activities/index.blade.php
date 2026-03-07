@@ -127,7 +127,13 @@
                                 <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
-                                <span class="font-medium">{{ $activity->contact_name }}</span>
+                                <span class="font-medium">
+                                    @if(!auth()->check() && $activity->contactUsers->count() > 0 && $activity->contactUsers->contains(fn ($u) => $u->hide_contact_details))
+                                        @foreach($activity->contactUsers as $u){{ $u->maskedName() }}@if(!$loop->last), @endif @endforeach
+                                    @else
+                                        {{ $activity->contact_name }}
+                                    @endif
+                                </span>
                             </div>
 
                             @if($activity->meeting_time || $activity->meeting_location)
