@@ -42,10 +42,10 @@ class ActivityExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Der Export der Aktivitäten wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Zeile')->plural($export->successful_rows) . ' exportiert.';
+        $body = 'Der Export der Aktivitäten wurde abgeschlossen. '.number_format($export->successful_rows).' '.str('Zeile')->plural($export->successful_rows).' exportiert.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht exportiert werden.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Zeile')->plural($failedRowsCount).' konnte nicht exportiert werden.';
         }
 
         return $body;

@@ -10,7 +10,7 @@ class AnnouncementController extends Controller
 {
     public function dismiss(Request $request, Announcement $announcement)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

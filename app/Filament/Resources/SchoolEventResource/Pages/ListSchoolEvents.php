@@ -36,7 +36,7 @@ class ListSchoolEvents extends ListRecords
                     $disk = Storage::disk('public');
                     $filePath = $disk->path($data['ics_file']);
 
-                    $service = new IcsImportService();
+                    $service = new IcsImportService;
                     $results = $service->import($filePath);
 
                     $disk->delete($data['ics_file']);

@@ -5,10 +5,17 @@ namespace App\Services;
 use App\Models\Shift;
 use App\Models\ShiftVolunteer;
 use App\Models\User;
+use App\Notifications\ShiftFullNotification;
+use App\Notifications\ShiftSignupNotification;
+use App\Notifications\ShiftWithdrawalNotification;
 use Illuminate\Support\Facades\DB;
 
 class ShiftService
 {
+    public function __construct(
+        private NotificationService $notificationService,
+    ) {}
+
     /**
      * Sign up a user for a shift.
      *
@@ -16,9 +23,8 @@ class ShiftService
      * users attempt to sign up simultaneously. Validates capacity and duplicate
      * signups before creating the volunteer record.
      *
-     * @param Shift $shift Target shift to sign up for
-     * @param User  $user  User attempting to sign up
-     *
+     * @param  Shift  $shift  Target shift to sign up for
+     * @param  User  $user  User attempting to sign up
      * @return ShiftVolunteer Created volunteer record
      *
      * @throws \Exception When shift is at capacity or user already signed up
@@ -37,12 +43,16 @@ class ShiftService
             }
 
             // Create the volunteer signup
-            return ShiftVolunteer::create([
+            $volunteer = ShiftVolunteer::create([
                 'shift_id' => $shift->id,
                 'user_id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
             ]);
+
+            $this->sendSignupNotifications($shift, $user);
+
+            return $volunteer;
         });
     }
 
@@ -52,9 +62,8 @@ class ShiftService
      * Removes the user's volunteer signup from the specified shift.
      * Validates that the user is actually signed up before attempting deletion.
      *
-     * @param Shift $shift Shift to withdraw from
-     * @param User  $user  User requesting withdrawal
-     *
+     * @param  Shift  $shift  Shift to withdraw from
+     * @param  User  $user  User requesting withdrawal
      * @return bool True if withdrawal successful
      *
      * @throws \Exception When user is not signed up for the shift
@@ -65,11 +74,20 @@ class ShiftService
             ->where('user_id', $user->id)
             ->first();
 
-        if (!$volunteer) {
+        if (! $volunteer) {
             throw new \Exception('Sie sind nicht für diese Schicht angemeldet.');
         }
 
-        return $volunteer->delete();
+        $result = $volunteer->delete();
+
+        $shift->load('bulletinPost');
+        $this->notificationService->notifyContacts(
+            $shift->bulletinPost,
+            new ShiftWithdrawalNotification($shift, $user),
+            $user->id,
+        );
+
+        return $result;
     }
 
     /**
@@ -79,8 +97,7 @@ class ShiftService
      * offline volunteers (manually tracked) to determine if the shift
      * has reached its needed capacity.
      *
-     * @param Shift $shift Shift to check capacity for
-     *
+     * @param  Shift  $shift  Shift to check capacity for
      * @return bool True if shift is at or over capacity
      */
     public function isShiftFull(Shift $shift): bool
@@ -97,9 +114,8 @@ class ShiftService
      * Queries the shift_volunteers table to determine if a signup
      * record exists for the given user and shift combination.
      *
-     * @param Shift $shift Shift to check
-     * @param User  $user  User to check for existing signup
-     *
+     * @param  Shift  $shift  Shift to check
+     * @param  User  $user  User to check for existing signup
      * @return bool True if user has already signed up
      */
     public function isUserSignedUp(Shift $shift, User $user): bool
@@ -115,8 +131,7 @@ class ShiftService
      * Returns the number of additional volunteers needed, accounting for
      * both online and offline registrations. Never returns negative values.
      *
-     * @param Shift $shift Shift to calculate availability for
-     *
+     * @param  Shift  $shift  Shift to calculate availability for
      * @return int Number of available spots (0 if full or overfilled)
      */
     public function getAvailableSpots(Shift $shift): int
@@ -133,8 +148,7 @@ class ShiftService
      * Retrieves volunteer records with eager loaded user relationships
      * for efficient display in volunteer lists.
      *
-     * @param Shift $shift Shift to get volunteers for
-     *
+     * @param  Shift  $shift  Shift to get volunteers for
      * @return \Illuminate\Database\Eloquent\Collection<int, ShiftVolunteer>
      */
     public function getShiftVolunteers(Shift $shift)
@@ -148,8 +162,7 @@ class ShiftService
      * Retrieves all shift records where the user has an active volunteer
      * signup, including the parent bulletin post for context.
      *
-     * @param User $user User to get shift signups for
-     *
+     * @param  User  $user  User to get shift signups for
      * @return \Illuminate\Support\Collection<int, Shift> Collection of shifts
      */
     public function getUserShifts(User $user)
@@ -166,9 +179,8 @@ class ShiftService
      * Performs validation checks and returns both the eligibility status
      * and a human-readable reason if signup is not allowed.
      *
-     * @param Shift $shift Shift to check signup eligibility for
-     * @param User  $user  User requesting signup
-     *
+     * @param  Shift  $shift  Shift to check signup eligibility for
+     * @param  User  $user  User requesting signup
      * @return array{can_signup: bool, reason: string|null} Signup eligibility and reason
      */
     public function canUserSignup(Shift $shift, User $user): array
@@ -197,8 +209,7 @@ class ShiftService
      * fill percentage, and availability status. Useful for dashboards and
      * reporting features.
      *
-     * @param Shift $shift Shift to generate statistics for
-     *
+     * @param  Shift  $shift  Shift to generate statistics for
      * @return array{
      *     online_volunteers: int,
      *     offline_volunteers: int,
@@ -209,6 +220,26 @@ class ShiftService
      *     fill_percentage: int
      * } Comprehensive shift statistics
      */
+    private function sendSignupNotifications(Shift $shift, User $volunteer): void
+    {
+        $shift->load('bulletinPost');
+        $bulletinPost = $shift->bulletinPost;
+
+        $this->notificationService->notifyContacts(
+            $bulletinPost,
+            new ShiftSignupNotification($shift, $volunteer),
+            $volunteer->id,
+        );
+
+        // Check if the shift is now full after this signup
+        if ($this->isShiftFull($shift)) {
+            $this->notificationService->notifyContacts(
+                $bulletinPost,
+                new ShiftFullNotification($shift),
+            );
+        }
+    }
+
     public function getShiftStatistics(Shift $shift): array
     {
         $onlineCount = $shift->volunteers()->count();

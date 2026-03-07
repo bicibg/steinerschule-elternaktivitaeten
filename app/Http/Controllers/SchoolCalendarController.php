@@ -20,11 +20,11 @@ class SchoolCalendarController extends Controller
         // Get all events that overlap with this month
         $events = SchoolEvent::where(function ($query) use ($startOfMonth, $endOfMonth) {
             $query->whereBetween('start_date', [$startOfMonth, $endOfMonth])
-                  ->orWhereBetween('end_date', [$startOfMonth, $endOfMonth])
-                  ->orWhere(function ($q) use ($startOfMonth, $endOfMonth) {
-                      $q->where('start_date', '<=', $startOfMonth)
+                ->orWhereBetween('end_date', [$startOfMonth, $endOfMonth])
+                ->orWhere(function ($q) use ($startOfMonth, $endOfMonth) {
+                    $q->where('start_date', '<=', $startOfMonth)
                         ->where('end_date', '>=', $endOfMonth);
-                  });
+                });
         })->orderBy('start_date')->get();
 
         // Organize events by date for the calendar grid
@@ -37,7 +37,7 @@ class SchoolCalendarController extends Controller
             while ($current <= $end) {
                 $dateKey = $current->format('Y-m-d');
 
-                if (!$eventsByDate->has($dateKey)) {
+                if (! $eventsByDate->has($dateKey)) {
                     $eventsByDate->put($dateKey, collect());
                 }
 
@@ -45,8 +45,8 @@ class SchoolCalendarController extends Controller
                     'event' => $event,
                     'is_start' => $current->isSameDay($event->start_date),
                     'is_end' => $event->end_date && $current->isSameDay($event->end_date),
-                    'is_middle' => !$current->isSameDay($event->start_date) &&
-                                  ($event->end_date && !$current->isSameDay($event->end_date)),
+                    'is_middle' => ! $current->isSameDay($event->start_date) &&
+                                  ($event->end_date && ! $current->isSameDay($event->end_date)),
                 ]);
 
                 $current->addDay();
@@ -68,7 +68,7 @@ class SchoolCalendarController extends Controller
 
     public function create()
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
+        if (! auth()->user() || ! auth()->user()->is_super_admin) {
             abort(403);
         }
 
@@ -77,7 +77,7 @@ class SchoolCalendarController extends Controller
 
     public function store(Request $request)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
+        if (! auth()->user() || ! auth()->user()->is_super_admin) {
             abort(403);
         }
 
@@ -94,12 +94,12 @@ class SchoolCalendarController extends Controller
         $event = SchoolEvent::create($validated);
 
         return redirect()->route('school-calendar.index')
-                        ->with('success', 'Veranstaltung wurde erfolgreich erstellt.');
+            ->with('success', 'Veranstaltung wurde erfolgreich erstellt.');
     }
 
     public function edit(SchoolEvent $schoolEvent)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
+        if (! auth()->user() || ! auth()->user()->is_super_admin) {
             abort(403);
         }
 
@@ -108,7 +108,7 @@ class SchoolCalendarController extends Controller
 
     public function update(Request $request, SchoolEvent $schoolEvent)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
+        if (! auth()->user() || ! auth()->user()->is_super_admin) {
             abort(403);
         }
 
@@ -125,18 +125,18 @@ class SchoolCalendarController extends Controller
         $schoolEvent->update($validated);
 
         return redirect()->route('school-calendar.index')
-                        ->with('success', 'Veranstaltung wurde erfolgreich aktualisiert.');
+            ->with('success', 'Veranstaltung wurde erfolgreich aktualisiert.');
     }
 
     public function destroy(SchoolEvent $schoolEvent)
     {
-        if (!auth()->user() || !auth()->user()->is_super_admin) {
+        if (! auth()->user() || ! auth()->user()->is_super_admin) {
             abort(403);
         }
 
         $schoolEvent->delete();
 
         return redirect()->route('school-calendar.index')
-                        ->with('success', 'Veranstaltung wurde erfolgreich gelöscht.');
+            ->with('success', 'Veranstaltung wurde erfolgreich gelöscht.');
     }
 }

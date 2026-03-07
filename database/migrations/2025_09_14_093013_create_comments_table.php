@@ -19,7 +19,7 @@ return new class extends Migration
                 'spam',
                 'inappropriate',
                 'user_requested',
-                'duplicate'
+                'duplicate',
             ])->nullable();
             $table->softDeletes();
             $table->timestamps();

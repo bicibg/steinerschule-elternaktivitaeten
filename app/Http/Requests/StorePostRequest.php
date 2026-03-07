@@ -13,12 +13,12 @@ class StorePostRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
         // Check rate limiting
-        $key = 'post-' . $this->ip();
+        $key = 'post-'.$this->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
             return false;
         }
@@ -65,14 +65,14 @@ class StorePostRequest extends FormRequest
      */
     protected function failedAuthorization()
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             redirect()->route('login')
                 ->with('error', 'Bitte melden Sie sich an, um einen Beitrag zu verfassen.')
                 ->send();
             exit;
         }
 
-        if (RateLimiter::tooManyAttempts('post-' . $this->ip(), 1)) {
+        if (RateLimiter::tooManyAttempts('post-'.$this->ip(), 1)) {
             redirect()->back()
                 ->withErrors(['rate_limit' => 'Bitte warten Sie 30 Sekunden vor dem nächsten Beitrag.'])
                 ->send();

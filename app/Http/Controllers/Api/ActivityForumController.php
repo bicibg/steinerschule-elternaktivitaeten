@@ -5,20 +5,27 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\ActivityPost;
+use App\Notifications\NewActivityCommentNotification;
+use App\Notifications\NewActivityPostNotification;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ActivityForumController extends Controller
 {
+    public function __construct(
+        private NotificationService $notificationService,
+    ) {}
+
     public function storePost(Request $request, string $slug): JsonResponse
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
         $activity = Activity::where('slug', $slug)->active()->firstOrFail();
 
-        if (!$activity->has_forum) {
+        if (! $activity->has_forum) {
             return response()->json(['error' => 'Forum ist für diese Aktivität nicht aktiviert'], 403);
         }
 
@@ -37,6 +44,13 @@ class ActivityForumController extends Controller
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
 
+        $post->load('user');
+        $this->notificationService->notifyContacts(
+            $activity,
+            new NewActivityPostNotification($post, $activity),
+            auth()->id(),
+        );
+
         return response()->json([
             'success' => true,
             'post' => [
@@ -50,11 +64,11 @@ class ActivityForumController extends Controller
 
     public function storeComment(Request $request, ActivityPost $post): JsonResponse
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
-        if (!$post->activity->has_forum) {
+        if (! $post->activity->has_forum) {
             return response()->json(['error' => 'Forum ist für diese Aktivität nicht aktiviert'], 403);
         }
 
@@ -72,6 +86,17 @@ class ActivityForumController extends Controller
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
+
+        $activity = $post->activity;
+        $notification = new NewActivityCommentNotification($comment, $activity);
+
+        // Notify post author
+        if ($post->user_id && $post->user_id !== auth()->id()) {
+            $this->notificationService->notifyUser($post->user, $notification, auth()->id());
+        }
+
+        // Notify organizer contacts
+        $this->notificationService->notifyContacts($activity, $notification, auth()->id());
 
         return response()->json([
             'success' => true,

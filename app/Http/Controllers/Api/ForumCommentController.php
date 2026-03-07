@@ -5,11 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Notifications\NewForumCommentNotification;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ForumCommentController extends Controller
 {
+    public function __construct(
+        private NotificationService $notificationService,
+    ) {}
+
     /**
      * Store a new comment on a forum post.
      *
@@ -17,7 +23,7 @@ class ForumCommentController extends Controller
      */
     public function store(Request $request, Post $post): JsonResponse
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
@@ -35,6 +41,18 @@ class ForumCommentController extends Controller
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
+
+        $post->load('bulletinPost');
+        $bulletinPost = $post->bulletinPost;
+        $notification = new NewForumCommentNotification($comment, $bulletinPost);
+
+        // Notify post author
+        if ($post->user_id && $post->user_id !== auth()->id()) {
+            $this->notificationService->notifyUser($post->user, $notification, auth()->id());
+        }
+
+        // Notify organizer contacts
+        $this->notificationService->notifyContacts($bulletinPost, $notification, auth()->id());
 
         return response()->json([
             'success' => true,
@@ -54,7 +72,7 @@ class ForumCommentController extends Controller
      */
     public function destroy(Comment $comment): JsonResponse
     {
-        if (!auth()->check() || auth()->id() !== $comment->user_id) {
+        if (! auth()->check() || auth()->id() !== $comment->user_id) {
             return response()->json(['error' => 'Nicht berechtigt'], 403);
         }
 

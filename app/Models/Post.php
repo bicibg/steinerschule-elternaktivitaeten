@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Post extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'bulletin_post_id',
         'user_id',
@@ -35,7 +36,6 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class)->withTrashed()->orderBy('created_at', 'asc');
     }
-
 
     public function user()
     {

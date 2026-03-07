@@ -3,16 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ExportResource\Pages;
-use App\Filament\Resources\ExportResource\RelationManagers;
 use Filament\Actions\Exports\Models\Export;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Storage;
 
 class ExportResource extends Resource
 {
@@ -48,14 +44,14 @@ class ExportResource extends Resource
         return $table
             ->modifyQueryUsing(function (Builder $query) {
                 // If user is not super admin, hide exports from super-admin-only resources
-                if (!auth()->user()->is_super_admin) {
+                if (! auth()->user()->is_super_admin) {
                     $query->where(function ($q) {
                         $q->where('exporter', 'not like', '%UserExporter%')
-                          ->where('exporter', 'not like', '%UserResource%')
-                          ->where('exporter', 'not like', '%SchoolEventExporter%')
-                          ->where('exporter', 'not like', '%SchoolEventResource%')
-                          ->where('exporter', 'not like', '%AnnouncementExporter%')
-                          ->where('exporter', 'not like', '%AnnouncementResource%');
+                            ->where('exporter', 'not like', '%UserResource%')
+                            ->where('exporter', 'not like', '%SchoolEventExporter%')
+                            ->where('exporter', 'not like', '%SchoolEventResource%')
+                            ->where('exporter', 'not like', '%AnnouncementExporter%')
+                            ->where('exporter', 'not like', '%AnnouncementResource%');
                     });
                 }
             })

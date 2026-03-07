@@ -7,7 +7,6 @@ use App\Models\Post;
 use App\Models\Shift;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class BulletinTest extends TestCase
@@ -15,6 +14,7 @@ class BulletinTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private BulletinPost $bulletinPost;
 
     protected function setUp(): void
@@ -87,7 +87,7 @@ class BulletinTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('bulletin.edit', [
                 'slug' => $this->bulletinPost->slug,
-                'token' => $this->bulletinPost->edit_token
+                'token' => $this->bulletinPost->edit_token,
             ]));
 
         $response->assertStatus(200);
@@ -108,7 +108,7 @@ class BulletinTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('bulletin.edit', [
                 'slug' => $this->bulletinPost->slug,
-                'token' => 'wrong-token'
+                'token' => 'wrong-token',
             ]));
 
         $response->assertStatus(403);
@@ -131,7 +131,7 @@ class BulletinTest extends TestCase
         $response = $this->actingAs($this->user)
             ->put(route('bulletin.update', [
                 'slug' => $this->bulletinPost->slug,
-                'token' => $this->bulletinPost->edit_token
+                'token' => $this->bulletinPost->edit_token,
             ]), $updateData);
 
         $response->assertRedirect();
@@ -179,7 +179,7 @@ class BulletinTest extends TestCase
         $response = $this->actingAs($this->user)
             ->put(route('bulletin.update', [
                 'slug' => $this->bulletinPost->slug,
-                'token' => $this->bulletinPost->edit_token
+                'token' => $this->bulletinPost->edit_token,
             ]), $updateData);
 
         $this->bulletinPost->refresh();
@@ -202,7 +202,7 @@ class BulletinTest extends TestCase
         $response = $this->actingAs($this->user)
             ->put(route('bulletin.update', [
                 'slug' => $this->bulletinPost->slug,
-                'token' => $this->bulletinPost->edit_token
+                'token' => $this->bulletinPost->edit_token,
             ]), $updateData);
 
         $response->assertSessionHasErrors(['title', 'description', 'location', 'contact_name', 'status']);

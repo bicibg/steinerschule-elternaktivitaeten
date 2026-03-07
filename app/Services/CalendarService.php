@@ -15,9 +15,8 @@ class CalendarService
      * into calendar items grouped by date. Handles different activity types:
      * shifts, production, meetings, and flexible help.
      *
-     * @param int $month Month number (1-12)
-     * @param int $year  Year (e.g., 2024)
-     *
+     * @param  int  $month  Month number (1-12)
+     * @param  int  $year  Year (e.g., 2024)
      * @return array{
      *     itemsByDate: Collection,
      *     upcomingItems: Collection,
@@ -47,7 +46,7 @@ class CalendarService
         $calendarItems = $calendarItems->merge($this->processFlexibleActivities($activities, $startOfMonth, $endOfMonth, $year, $month));
 
         // Group items by date
-        $itemsByDate = $calendarItems->groupBy(function($item) {
+        $itemsByDate = $calendarItems->groupBy(function ($item) {
             return $item['date']->format('Y-m-d');
         });
 
@@ -76,23 +75,22 @@ class CalendarService
      * - Overlap with the given month period
      * - Includes eager loading of shifts and volunteers
      *
-     * @param Carbon $startOfMonth First day of month at 00:00:00
-     * @param Carbon $endOfMonth   Last day of month at 23:59:59
-     *
+     * @param  Carbon  $startOfMonth  First day of month at 00:00:00
+     * @param  Carbon  $endOfMonth  Last day of month at 23:59:59
      * @return Collection<int, BulletinPost> Activities with loaded relationships
      */
     private function getActivitiesForMonth(Carbon $startOfMonth, Carbon $endOfMonth): Collection
     {
         return BulletinPost::published()
             ->where('show_in_calendar', true)
-            ->where(function($query) use ($startOfMonth, $endOfMonth) {
-                $query->where(function($q) use ($startOfMonth, $endOfMonth) {
+            ->where(function ($query) use ($startOfMonth, $endOfMonth) {
+                $query->where(function ($q) use ($startOfMonth, $endOfMonth) {
                     $q->whereBetween('start_at', [$startOfMonth, $endOfMonth])
-                      ->orWhereBetween('end_at', [$startOfMonth, $endOfMonth])
-                      ->orWhere(function($q2) use ($startOfMonth, $endOfMonth) {
-                          $q2->where('start_at', '<=', $startOfMonth)
-                             ->where('end_at', '>=', $endOfMonth);
-                      });
+                        ->orWhereBetween('end_at', [$startOfMonth, $endOfMonth])
+                        ->orWhere(function ($q2) use ($startOfMonth, $endOfMonth) {
+                            $q2->where('start_at', '<=', $startOfMonth)
+                                ->where('end_at', '>=', $endOfMonth);
+                        });
                 });
             })
             ->with(['shifts.volunteers'])
@@ -105,10 +103,9 @@ class CalendarService
      * Converts each shift of shift-based activities into individual calendar items.
      * Parses German date format from shift time strings.
      *
-     * @param Collection $activities Collection of BulletinPost models
-     * @param int        $year       Target year
-     * @param int        $month      Target month (1-12)
-     *
+     * @param  Collection  $activities  Collection of BulletinPost models
+     * @param  int  $year  Target year
+     * @param  int  $month  Target month (1-12)
      * @return Collection<int, array> Calendar items for shifts
      */
     private function processShiftActivities(Collection $activities, int $year, int $month): Collection
@@ -231,10 +228,9 @@ class CalendarService
      * Determines the visible date range for activities that span multiple days,
      * clipping to month boundaries when necessary.
      *
-     * @param BulletinPost $activity     Activity with start_at and end_at dates
-     * @param Carbon       $startOfMonth First day of display month
-     * @param Carbon       $endOfMonth   Last day of display month
-     *
+     * @param  BulletinPost  $activity  Activity with start_at and end_at dates
+     * @param  Carbon  $startOfMonth  First day of display month
+     * @param  Carbon  $endOfMonth  Last day of display month
      * @return array{displayStart: Carbon, displayEnd: Carbon}|null Range or null if no overlap
      */
     private function calculateDisplayRange($activity, Carbon $startOfMonth, Carbon $endOfMonth): ?array
@@ -280,10 +276,10 @@ class CalendarService
                 'activity' => $activity,
                 'color' => $this->getItemColor($activity),
                 'note' => $note,
-                'date_range' => $displayStart->format('d.m') . '-' . $displayEnd->format('d.m'),
+                'date_range' => $displayStart->format('d.m').'-'.$displayEnd->format('d.m'),
                 'is_start' => $current->isSameDay($displayStart),
                 'is_end' => $current->isSameDay($displayEnd),
-                'is_middle' => !$current->isSameDay($displayStart) && !$current->isSameDay($displayEnd),
+                'is_middle' => ! $current->isSameDay($displayStart) && ! $current->isSameDay($displayEnd),
             ]);
             $current->addDay();
         }
@@ -323,10 +319,11 @@ class CalendarService
     private function getUpcomingItems(Collection $calendarItems): Collection
     {
         return $calendarItems
-            ->filter(function($item) {
+            ->filter(function ($item) {
                 if ($item['type'] === 'shift' && isset($item['shift'])) {
-                    return $item['date']->isFuture() && !$item['shift']->is_full;
+                    return $item['date']->isFuture() && ! $item['shift']->is_full;
                 }
+
                 return $item['date']->isFuture();
             })
             ->sortBy('date')
@@ -339,8 +336,7 @@ class CalendarService
      * Extracts date from German formatted shift times.
      * Example input: "Samstag, 09.11.2024, 09:00 - 11:00 Uhr"
      *
-     * @param string $timeString Shift time string in German format
-     *
+     * @param  string  $timeString  Shift time string in German format
      * @return Carbon|null Parsed date or null if parsing fails
      */
     private function parseShiftDate($timeString): ?Carbon
@@ -351,9 +347,11 @@ class CalendarService
                 return Carbon::createFromFormat('d.m.Y', $matches[0])->startOfDay();
             } catch (\Exception $e) {
                 report($e);
+
                 return null;
             }
         }
+
         return null;
     }
 
@@ -389,9 +387,9 @@ class CalendarService
         foreach ($matchedDays as $dayName) {
             if ($isFirstOfMonth) {
                 // "Jeden ersten Dienstag im Monat" — only the first occurrence
-                $first = $startOfMonth->copy()->firstOfMonth(constant('Carbon\Carbon::' . strtoupper($dayName)));
+                $first = $startOfMonth->copy()->firstOfMonth(constant('Carbon\Carbon::'.strtoupper($dayName)));
                 if ($first >= $startOfMonth && $first <= $endOfMonth) {
-                    if ($activity->start_at <= $first && (!$activity->end_at || $activity->end_at >= $first)) {
+                    if ($activity->start_at <= $first && (! $activity->end_at || $activity->end_at >= $first)) {
                         $dates->push($first->copy());
                     }
                 }
@@ -402,7 +400,7 @@ class CalendarService
                     $current = $startOfMonth->copy();
                 }
                 while ($current <= $endOfMonth) {
-                    if ($activity->start_at <= $current && (!$activity->end_at || $activity->end_at >= $current)) {
+                    if ($activity->start_at <= $current && (! $activity->end_at || $activity->end_at >= $current)) {
                         $dates->push($current->copy());
                     }
                     $current->addWeek();
@@ -410,7 +408,7 @@ class CalendarService
             }
         }
 
-        return $dates->sortBy(fn($d) => $d->timestamp)->values();
+        return $dates->sortBy(fn ($d) => $d->timestamp)->values();
     }
 
     /**
@@ -420,9 +418,8 @@ class CalendarService
      * Uses CRC32 hash for better distribution across color palette.
      * Same activity always gets same color.
      *
-     * @param BulletinPost $activity  Activity model
-     * @param string|null  $shiftRole Optional shift role (currently unused)
-     *
+     * @param  BulletinPost  $activity  Activity model
+     * @param  string|null  $shiftRole  Optional shift role (currently unused)
      * @return string Tailwind CSS color class (e.g., 'bg-blue-500')
      */
     private function getItemColor($activity, $shiftRole = null): string
@@ -437,7 +434,7 @@ class CalendarService
         ];
 
         // Generate a consistent hash based on activity ID
-        $hash = crc32($activity->id . $activity->title);
+        $hash = crc32($activity->id.$activity->title);
         $colorIndex = abs($hash) % count($colors);
 
         return $colors[$colorIndex];

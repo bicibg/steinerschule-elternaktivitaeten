@@ -7,14 +7,15 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ShiftsRelationManager extends RelationManager
 {
     protected static string $relationship = 'shifts';
+
     protected static ?string $title = 'Schichten';
+
     protected static ?string $modelLabel = 'Schicht';
+
     protected static ?string $pluralModelLabel = 'Schichten';
 
     public function form(Form $form): Form
@@ -40,8 +41,7 @@ class ShiftsRelationManager extends RelationManager
                             }
                         }
                     })
-                    ->afterStateUpdated(fn ($state, Forms\Set $set, Forms\Get $get) =>
-                        self::updateTimeField($state, $get, $set)
+                    ->afterStateUpdated(fn ($state, Forms\Set $set, Forms\Get $get) => self::updateTimeField($state, $get, $set)
                     ),
                 Forms\Components\Grid::make(2)
                     ->schema([
@@ -59,8 +59,7 @@ class ShiftsRelationManager extends RelationManager
                                     }
                                 }
                             })
-                            ->afterStateUpdated(fn ($state, Forms\Set $set, Forms\Get $get) =>
-                                self::updateTimeField($get('date'), $get, $set)
+                            ->afterStateUpdated(fn ($state, Forms\Set $set, Forms\Get $get) => self::updateTimeField($get('date'), $get, $set)
                             ),
                         Forms\Components\TimePicker::make('end_time')
                             ->label('Bis')
@@ -76,13 +75,11 @@ class ShiftsRelationManager extends RelationManager
                                     }
                                 }
                             })
-                            ->afterStateUpdated(fn ($state, Forms\Set $set, Forms\Get $get) =>
-                                self::updateTimeField($get('date'), $get, $set)
+                            ->afterStateUpdated(fn ($state, Forms\Set $set, Forms\Get $get) => self::updateTimeField($get('date'), $get, $set)
                             ),
                     ]),
                 Forms\Components\Hidden::make('time')
-                    ->dehydrateStateUsing(fn (Forms\Get $get) =>
-                        self::formatTimeString($get('date'), $get('start_time'), $get('end_time'))
+                    ->dehydrateStateUsing(fn (Forms\Get $get) => self::formatTimeString($get('date'), $get('start_time'), $get('end_time'))
                     ),
                 Forms\Components\Grid::make(2)
                     ->schema([
@@ -112,12 +109,12 @@ class ShiftsRelationManager extends RelationManager
 
     private static function formatTimeString($date, $startTime, $endTime): ?string
     {
-        if (!$date || !$startTime || !$endTime) {
+        if (! $date || ! $startTime || ! $endTime) {
             return null;
         }
 
         $dateObj = \Carbon\Carbon::parse($date);
-        $dayName = match($dateObj->dayOfWeek) {
+        $dayName = match ($dateObj->dayOfWeek) {
             0 => 'Sonntag',
             1 => 'Montag',
             2 => 'Dienstag',
@@ -138,7 +135,7 @@ class ShiftsRelationManager extends RelationManager
 
     private static function parseTimeString($timeString): ?array
     {
-        if (!$timeString) {
+        if (! $timeString) {
             return null;
         }
 
@@ -181,8 +178,7 @@ class ShiftsRelationManager extends RelationManager
                     ->label('Total')
                     ->getStateUsing(fn ($record) => $record->filled + $record->volunteers_count)
                     ->badge()
-                    ->color(fn ($record) =>
-                        ($record->filled + $record->volunteers_count) >= $record->needed ? 'success' :
+                    ->color(fn ($record) => ($record->filled + $record->volunteers_count) >= $record->needed ? 'success' :
                         (($record->filled + $record->volunteers_count) > 0 ? 'warning' : 'danger')
                     ),
             ])

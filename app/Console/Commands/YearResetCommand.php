@@ -25,6 +25,7 @@ class YearResetCommand extends Command
         // Check if recently reset
         if (AuditLog::wasActionPerformedRecently('year_reset', 30)) {
             $this->error('System was reset within the last 30 days. Cannot reset again so soon.');
+
             return 1;
         }
 
@@ -49,7 +50,7 @@ class YearResetCommand extends Command
 
         // Get school year
         $schoolYear = $this->option('school-year');
-        if (!$schoolYear) {
+        if (! $schoolYear) {
             $currentYear = now()->year;
             $nextYear = $currentYear + 1;
             $defaultYear = "{$currentYear}/{$nextYear}";
@@ -57,15 +58,17 @@ class YearResetCommand extends Command
         }
 
         // Confirmation
-        if (!$this->option('force')) {
+        if (! $this->option('force')) {
             $confirmText = $this->ask('Zum Bestätigen tippen Sie: SCHULJAHR ZURÜCKSETZEN');
             if ($confirmText !== 'SCHULJAHR ZURÜCKSETZEN') {
                 $this->error('Ungültige Bestätigung. Abbruch.');
+
                 return 1;
             }
 
-            if (!$this->confirm('LETZTE WARNUNG: Sind Sie absolut sicher?')) {
+            if (! $this->confirm('LETZTE WARNUNG: Sind Sie absolut sicher?')) {
                 $this->info('Abbruch.');
+
                 return 0;
             }
         }
@@ -142,7 +145,8 @@ class YearResetCommand extends Command
 
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error('Fehler beim Zurücksetzen: ' . $e->getMessage());
+            $this->error('Fehler beim Zurücksetzen: '.$e->getMessage());
+
             return 1;
         }
     }

@@ -65,7 +65,7 @@ class AnnouncementResource extends Resource
                     ->validationMessages([
                         'max' => 'Die Nachricht darf maximal 300 Zeichen lang sein.',
                     ])
-                    ->helperText(fn (?string $state): string => strlen($state ?? '') . '/300 Zeichen')
+                    ->helperText(fn (?string $state): string => strlen($state ?? '').'/300 Zeichen')
                     ->live()
                     ->rows(4)
                     ->columnSpanFull(),
@@ -104,9 +104,9 @@ class AnnouncementResource extends Resource
                     ->default(false)
                     ->live()
                     ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                        if (!$state) {
+                        if (! $state) {
                             // Non-priority: Set default expiry to 14 days from now if not already set
-                            if (!$get('expires_at')) {
+                            if (! $get('expires_at')) {
                                 $set('expires_at', now()->addDays(14));
                             }
                         }
@@ -114,8 +114,7 @@ class AnnouncementResource extends Resource
                     }),
 
                 Forms\Components\Section::make('Zeitraum')
-                    ->description(fn (Get $get) =>
-                        $get('is_priority')
+                    ->description(fn (Get $get) => $get('is_priority')
                             ? 'Optional: Prioritäts-Benachrichtigungen laufen standardmässig nie ab'
                             : 'Normale Benachrichtigungen laufen automatisch nach 14 Tagen ab (anpassbar)'
                     )
@@ -148,7 +147,7 @@ class AnnouncementResource extends Resource
 
                 Tables\Columns\BadgeColumn::make('type')
                     ->label('Typ')
-                    ->formatStateUsing(fn (string $state): string => match($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'info' => 'Information',
                         'announcement' => 'Ankündigung',
                         'reminder' => 'Erinnerung',

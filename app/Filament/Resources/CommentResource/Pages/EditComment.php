@@ -4,8 +4,8 @@ namespace App\Filament\Resources\CommentResource\Pages;
 
 use App\Filament\Resources\CommentResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Forms;
+use Filament\Resources\Pages\EditRecord;
 
 class EditComment extends EditRecord
 {
@@ -38,7 +38,7 @@ class EditComment extends EditRecord
                     $record->deletion_reason = $data['deletion_reason'];
                     $record->save();
                 })
-                ->visible(fn ($record) => !$record->trashed() && auth()->user()?->is_admin),
+                ->visible(fn ($record) => ! $record->trashed() && auth()->user()?->is_admin),
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BulletinPost;
 use App\Http\Requests\UpdateBulletinRequest;
+use App\Models\BulletinPost;
 use App\Repositories\BulletinPostRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,6 +16,7 @@ class BulletinController extends Controller
     {
         $this->repository = $repository;
     }
+
     public function index(Request $request)
     {
         $selectedCategory = $request->get('category', 'all');
@@ -35,7 +36,7 @@ class BulletinController extends Controller
     {
         $bulletinPost = $this->repository->findPublishedBySlug($slug);
 
-        if (!$bulletinPost) {
+        if (! $bulletinPost) {
             abort(404);
         }
 
@@ -46,7 +47,7 @@ class BulletinController extends Controller
     {
         $bulletinPost = $this->repository->findBySlug($slug);
 
-        if (!$bulletinPost) {
+        if (! $bulletinPost) {
             abort(404);
         }
 
@@ -57,14 +58,14 @@ class BulletinController extends Controller
     {
         $bulletinPost = $this->repository->findBySlug($slug);
 
-        if (!$bulletinPost) {
+        if (! $bulletinPost) {
             abort(404);
         }
 
         $validated = $request->validated();
 
         if ($validated['title'] !== $bulletinPost->title) {
-            $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+            $validated['slug'] = Str::slug($validated['title']).'-'.Str::random(6);
         }
 
         $bulletinPost->update($validated);

@@ -78,7 +78,7 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($contacts as $name) {
-            $email = Str::slug($name, '.') . '@example.com';
+            $email = Str::slug($name, '.').'@example.com';
 
             User::create([
                 'name' => $name,

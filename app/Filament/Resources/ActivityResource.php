@@ -16,10 +16,15 @@ class ActivityResource extends Resource
     protected static ?string $model = Activity::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
     protected static ?string $navigationLabel = 'Elternaktivitäten';
+
     protected static ?string $navigationGroup = 'Aktivitäten';
+
     protected static ?string $modelLabel = 'Aktivität';
+
     protected static ?string $pluralModelLabel = 'Aktivitäten';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -32,12 +37,10 @@ class ActivityResource extends Resource
                             ->label('Titel')
                             ->required()
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
-                                $operation === 'create' ? $set('slug', Str::slug($state)) : null
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null
                             ),
                         Forms\Components\Hidden::make('slug')
-                            ->dehydrateStateUsing(fn ($state, Forms\Get $get) =>
-                                $state ?? Str::slug($get('title'))
+                            ->dehydrateStateUsing(fn ($state, Forms\Get $get) => $state ?? Str::slug($get('title'))
                             ),
                         Forms\Components\Textarea::make('description')
                             ->label('Beschreibung')
@@ -67,7 +70,7 @@ class ActivityResource extends Resource
                             ->helperText('Optional: Kontaktpersonen mit Benutzerkonten verknüpfen. Name wird automatisch generiert.')
                             ->reactive()
                             ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                if (!empty($state)) {
+                                if (! empty($state)) {
                                     $users = \App\Models\User::whereIn('id', $state)->get();
                                     $set('contact_name', $users->pluck('name')->join(', '));
                                     if ($users->count() === 1) {
@@ -82,17 +85,17 @@ class ActivityResource extends Resource
                         Forms\Components\TextInput::make('contact_name')
                             ->label('Name')
                             ->required()
-                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
+                            ->disabled(fn (Forms\Get $get) => ! empty($get('contactUsers')))
                             ->dehydrated(),
                         Forms\Components\TextInput::make('contact_email')
                             ->label('E-Mail')
                             ->email()
-                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
+                            ->disabled(fn (Forms\Get $get) => ! empty($get('contactUsers')))
                             ->dehydrated(),
                         Forms\Components\TextInput::make('contact_phone')
                             ->label('Telefon')
                             ->tel()
-                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
+                            ->disabled(fn (Forms\Get $get) => ! empty($get('contactUsers')))
                             ->dehydrated(),
                     ]),
                 Forms\Components\Section::make('Einstellungen')
@@ -151,8 +154,7 @@ class ActivityResource extends Resource
                 Tables\Columns\TextColumn::make('url')
                     ->label('')
                     ->getStateUsing(fn (Activity $record): string => '')
-                    ->url(fn (Activity $record): string =>
-                        url("/elternaktivitaeten/{$record->slug}")
+                    ->url(fn (Activity $record): string => url("/elternaktivitaeten/{$record->slug}")
                     )
                     ->openUrlInNewTab()
                     ->icon('heroicon-m-arrow-top-right-on-square')

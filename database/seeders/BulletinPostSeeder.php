@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Activity;
 use App\Models\BulletinPost;
-use App\Models\Comment;
-use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -22,7 +20,7 @@ class BulletinPostSeeder extends Seeder
 
         // Helper to find user IDs by names
         $userIds = fn (array $names) => User::whereIn('email', array_map(
-            fn ($name) => Str::slug($name, '.') . '@example.com',
+            fn ($name) => Str::slug($name, '.').'@example.com',
             $names
         ))->pluck('id')->toArray();
 
@@ -57,14 +55,14 @@ Unterkunft wird gestellt. Eine tolle Gelegenheit, die Klasse zu begleiten!',
 
         $bulletinPost1->shifts()->create([
             'role' => 'Küchenteam Montag-Mittwoch',
-            'time' => '03.06.' . (now()->year + 1) . ' - 05.06.' . (now()->year + 1),
+            'time' => '03.06.'.(now()->year + 1).' - 05.06.'.(now()->year + 1),
             'needed' => 2,
             'offline_filled' => 0,
         ]);
 
         $bulletinPost1->shifts()->create([
             'role' => 'Küchenteam Mittwoch-Freitag',
-            'time' => '05.06.' . (now()->year + 1) . ' - 07.06.' . (now()->year + 1),
+            'time' => '05.06.'.(now()->year + 1).' - 07.06.'.(now()->year + 1),
             'needed' => 2,
             'offline_filled' => 1,
         ]);
@@ -97,14 +95,14 @@ Wir suchen Helfer für:
 
         $bulletinPost2->shifts()->create([
             'role' => 'Bühnenaufbau',
-            'time' => '17.05.' . (now()->year + 1) . ', 15:00 - 18:00 Uhr',
+            'time' => '17.05.'.(now()->year + 1).', 15:00 - 18:00 Uhr',
             'needed' => 4,
             'offline_filled' => 2,
         ]);
 
         $bulletinPost2->shifts()->create([
             'role' => 'Garderobe während Aufführung',
-            'time' => '17.05.' . (now()->year + 1) . ', 18:30 - 21:00 Uhr',
+            'time' => '17.05.'.(now()->year + 1).', 18:30 - 21:00 Uhr',
             'needed' => 2,
             'offline_filled' => 0,
         ]);
@@ -141,14 +139,14 @@ Je mehr Helfer, desto schöner wird das Fest!',
 
         $bulletinPost3->shifts()->create([
             'role' => 'Osterstand Aufbau und Verkauf',
-            'time' => '11.04.' . (now()->year + 1) . ', 08:00 - 12:00 Uhr',
+            'time' => '11.04.'.(now()->year + 1).', 08:00 - 12:00 Uhr',
             'needed' => 4,
             'offline_filled' => 1,
         ]);
 
         $bulletinPost3->shifts()->create([
             'role' => 'Ostereier verstecken und Kinderbetreuung',
-            'time' => '11.04.' . (now()->year + 1) . ', 08:00 - 10:00 Uhr',
+            'time' => '11.04.'.(now()->year + 1).', 08:00 - 10:00 Uhr',
             'needed' => 6,
             'offline_filled' => 2,
         ]);
@@ -186,39 +184,38 @@ Detaillierte Schichtpläne folgen im Oktober.',
 
         $shift1 = $bulletinPost4->shifts()->create([
             'role' => 'Aufbau Freitag',
-            'time' => '29.11.' . now()->year . ', 14:00 - 20:00 Uhr',
+            'time' => '29.11.'.now()->year.', 14:00 - 20:00 Uhr',
             'needed' => 20,
             'offline_filled' => 5,
         ]);
 
         $bulletinPost4->shifts()->create([
             'role' => 'Cafeteria Vormittag',
-            'time' => '30.11.' . now()->year . ', 09:00 - 12:00 Uhr',
+            'time' => '30.11.'.now()->year.', 09:00 - 12:00 Uhr',
             'needed' => 6,
             'offline_filled' => 2,
         ]);
 
         $bulletinPost4->shifts()->create([
             'role' => 'Cafeteria Nachmittag',
-            'time' => '30.11.' . now()->year . ', 12:00 - 16:00 Uhr',
+            'time' => '30.11.'.now()->year.', 12:00 - 16:00 Uhr',
             'needed' => 6,
             'offline_filled' => 0,
         ]);
 
         $bulletinPost4->shifts()->create([
             'role' => 'Kinderbereich',
-            'time' => '30.11.' . now()->year . ', 10:00 - 16:00 Uhr',
+            'time' => '30.11.'.now()->year.', 10:00 - 16:00 Uhr',
             'needed' => 8,
             'offline_filled' => 3,
         ]);
 
         $bulletinPost4->shifts()->create([
             'role' => 'Abbau',
-            'time' => '30.11.' . now()->year . ', 16:00 - 19:00 Uhr',
+            'time' => '30.11.'.now()->year.', 16:00 - 19:00 Uhr',
             'needed' => 15,
             'offline_filled' => 0,
         ]);
-
 
         // 5. Adventssingen - no parent activity
         BulletinPost::create([
@@ -336,21 +333,21 @@ Helfer gesucht für Annahme, Sortierung und Verkauf.',
 
         $bulletinPost8->shifts()->create([
             'role' => 'Warenannahme Freitag',
-            'time' => '14.03.' . (now()->year + 1) . ', 14:00 - 18:00 Uhr',
+            'time' => '14.03.'.(now()->year + 1).', 14:00 - 18:00 Uhr',
             'needed' => 5,
             'offline_filled' => 1,
         ]);
 
         $bulletinPost8->shifts()->create([
             'role' => 'Verkauf Vormittag',
-            'time' => '15.03.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
+            'time' => '15.03.'.(now()->year + 1).', 09:00 - 12:00 Uhr',
             'needed' => 8,
             'offline_filled' => 2,
         ]);
 
         $bulletinPost8->shifts()->create([
             'role' => 'Aufräumen',
-            'time' => '15.03.' . (now()->year + 1) . ', 14:00 - 16:00 Uhr',
+            'time' => '15.03.'.(now()->year + 1).', 14:00 - 16:00 Uhr',
             'needed' => 6,
             'offline_filled' => 0,
         ]);
@@ -385,21 +382,21 @@ Helfer für Auf-/Abbau, Feuerwache und Verpflegung gesucht.',
 
         $bulletinPost9->shifts()->create([
             'role' => 'Holz sammeln und Feuer vorbereiten',
-            'time' => '24.06.' . (now()->year + 1) . ', 16:00 - 18:00 Uhr',
+            'time' => '24.06.'.(now()->year + 1).', 16:00 - 18:00 Uhr',
             'needed' => 6,
             'offline_filled' => 2,
         ]);
 
         $bulletinPost9->shifts()->create([
             'role' => 'Feuerwache',
-            'time' => '24.06.' . (now()->year + 1) . ', 19:00 - 23:00 Uhr',
+            'time' => '24.06.'.(now()->year + 1).', 19:00 - 23:00 Uhr',
             'needed' => 4,
             'offline_filled' => 1,
         ]);
 
         $bulletinPost9->shifts()->create([
             'role' => 'Stockbrot-Station',
-            'time' => '24.06.' . (now()->year + 1) . ', 19:00 - 21:00 Uhr',
+            'time' => '24.06.'.(now()->year + 1).', 19:00 - 21:00 Uhr',
             'needed' => 3,
             'offline_filled' => 0,
         ]);
@@ -605,21 +602,21 @@ Unterkunft und Verpflegung werden gestellt. Skifahren sollte gut beherrscht werd
 
         $bulletinPost15->shifts()->create([
             'role' => 'Begleitperson ganze Woche',
-            'time' => '10.02.' . (now()->year + 1) . ' - 14.02.' . (now()->year + 1),
+            'time' => '10.02.'.(now()->year + 1).' - 14.02.'.(now()->year + 1),
             'needed' => 4,
             'offline_filled' => 1,
         ]);
 
         $bulletinPost15->shifts()->create([
             'role' => 'Begleitung Mo-Mi',
-            'time' => '10.02.' . (now()->year + 1) . ' - 12.02.' . (now()->year + 1),
+            'time' => '10.02.'.(now()->year + 1).' - 12.02.'.(now()->year + 1),
             'needed' => 2,
             'offline_filled' => 0,
         ]);
 
         $bulletinPost15->shifts()->create([
             'role' => 'Begleitung Mi-Fr',
-            'time' => '12.02.' . (now()->year + 1) . ' - 14.02.' . (now()->year + 1),
+            'time' => '12.02.'.(now()->year + 1).' - 14.02.'.(now()->year + 1),
             'needed' => 2,
             'offline_filled' => 0,
         ]);
@@ -655,21 +652,21 @@ AUFGABEN:
 
         $bulletinPost16->shifts()->create([
             'role' => 'Aufbau und Pflanzentransport',
-            'time' => '03.05.' . (now()->year + 1) . ', 07:00 - 09:00 Uhr',
+            'time' => '03.05.'.(now()->year + 1).', 07:00 - 09:00 Uhr',
             'needed' => 4,
             'offline_filled' => 0,
         ]);
 
         $bulletinPost16->shifts()->create([
             'role' => 'Standbetreuung Vormittag',
-            'time' => '03.05.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
+            'time' => '03.05.'.(now()->year + 1).', 09:00 - 12:00 Uhr',
             'needed' => 3,
             'offline_filled' => 1,
         ]);
 
         $bulletinPost16->shifts()->create([
             'role' => 'Abbau und Aufräumen',
-            'time' => '03.05.' . (now()->year + 1) . ', 13:00 - 15:00 Uhr',
+            'time' => '03.05.'.(now()->year + 1).', 13:00 - 15:00 Uhr',
             'needed' => 3,
             'offline_filled' => 0,
         ]);
@@ -705,14 +702,14 @@ Putzutensilien vorhanden. Bitte Arbeitskleidung mitbringen.',
 
         $bulletinPost17->shifts()->create([
             'role' => 'Putzteam Vormittag',
-            'time' => '04.07.' . (now()->year + 1) . ', 08:00 - 12:00 Uhr',
+            'time' => '04.07.'.(now()->year + 1).', 08:00 - 12:00 Uhr',
             'needed' => 10,
             'offline_filled' => 3,
         ]);
 
         $bulletinPost17->shifts()->create([
             'role' => 'Putzteam Nachmittag',
-            'time' => '04.07.' . (now()->year + 1) . ', 13:00 - 16:00 Uhr',
+            'time' => '04.07.'.(now()->year + 1).', 13:00 - 16:00 Uhr',
             'needed' => 8,
             'offline_filled' => 0,
         ]);
@@ -790,14 +787,14 @@ Der Erlös geht ans Klassenlager der 9. Klasse.',
 
         $bulletinPost19->shifts()->create([
             'role' => 'Streckenposten',
-            'time' => '23.05.' . (now()->year + 1) . ', 09:00 - 12:00 Uhr',
+            'time' => '23.05.'.(now()->year + 1).', 09:00 - 12:00 Uhr',
             'needed' => 8,
             'offline_filled' => 2,
         ]);
 
         $bulletinPost19->shifts()->create([
             'role' => 'Verpflegungsstation',
-            'time' => '23.05.' . (now()->year + 1) . ', 08:30 - 12:30 Uhr',
+            'time' => '23.05.'.(now()->year + 1).', 08:30 - 12:30 Uhr',
             'needed' => 4,
             'offline_filled' => 1,
         ]);

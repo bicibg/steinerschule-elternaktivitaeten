@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\BulletinPost;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as SupportCollection;
 
 class BulletinPostRepository
 {
@@ -15,8 +14,7 @@ class BulletinPostRepository
      * and date, with optional category filtering. Includes eager loading of
      * related posts and shift volunteers for performance.
      *
-     * @param string|null $category Optional category filter
-     *
+     * @param  string|null  $category  Optional category filter
      * @return Collection<int, BulletinPost> Ordered bulletin posts with relationships
      */
     public function getActiveWithPriority(?string $category = null): Collection
@@ -46,8 +44,7 @@ class BulletinPostRepository
      * Retrieves a single published bulletin post including nested relationships:
      * posts with comments and shifts with volunteers and users.
      *
-     * @param string $slug URL slug of the bulletin post
-     *
+     * @param  string  $slug  URL slug of the bulletin post
      * @return BulletinPost|null Post with loaded relationships or null
      */
     public function findPublishedBySlug(string $slug): ?BulletinPost
@@ -97,8 +94,7 @@ class BulletinPostRepository
      *
      * Simple retrieval without eager loading, used for edit forms.
      *
-     * @param string $slug URL slug of the bulletin post
-     *
+     * @param  string  $slug  URL slug of the bulletin post
      * @return BulletinPost|null Post or null if not found
      */
     public function findBySlug(string $slug): ?BulletinPost
@@ -112,8 +108,7 @@ class BulletinPostRepository
      * Retrieves published posts that should appear in the calendar view,
      * with eager loaded shifts and volunteers for availability display.
      *
-     * @param bool $withRelations Whether to eager load relationships
-     *
+     * @param  bool  $withRelations  Whether to eager load relationships
      * @return Collection<int, BulletinPost> Calendar-enabled posts
      */
     public function getCalendarPosts(bool $withRelations = true): Collection
@@ -134,8 +129,7 @@ class BulletinPostRepository
      * Retrieves posts with unfilled shifts starting in the future,
      * useful for volunteer recruitment displays.
      *
-     * @param int $limit Maximum number of posts to return
-     *
+     * @param  int  $limit  Maximum number of posts to return
      * @return Collection<int, BulletinPost> Posts with available volunteer spots
      */
     public function getUpcomingNeedingHelp(int $limit = 5): Collection
@@ -156,14 +150,13 @@ class BulletinPostRepository
      *
      * Performs a text search across title, description, and participation note.
      *
-     * @param string $keyword Search term
-     * @param int    $limit   Maximum results to return
-     *
+     * @param  string  $keyword  Search term
+     * @param  int  $limit  Maximum results to return
      * @return Collection<int, BulletinPost> Matching posts
      */
     public function searchByKeyword(string $keyword, int $limit = 20): Collection
     {
-        $searchTerm = '%' . $keyword . '%';
+        $searchTerm = '%'.$keyword.'%';
 
         return BulletinPost::published()
             ->where(function ($query) use ($searchTerm) {
@@ -179,9 +172,8 @@ class BulletinPostRepository
     /**
      * Get posts by category with pagination support.
      *
-     * @param string $category Category to filter by
-     * @param int    $perPage  Items per page
-     *
+     * @param  string  $category  Category to filter by
+     * @param  int  $perPage  Items per page
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginateByCategory(string $category, int $perPage = 15)

@@ -29,8 +29,9 @@ class MakeUserAdmin extends Command
         $email = $this->argument('email');
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User with email {$email} not found.");
+
             return 1;
         }
 
@@ -38,6 +39,7 @@ class MakeUserAdmin extends Command
         $user->save();
 
         $this->info("User {$user->name} ({$email}) is now an admin.");
+
         return 0;
     }
 }

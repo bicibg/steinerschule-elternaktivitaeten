@@ -4,8 +4,8 @@ namespace App\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Forms;
+use Filament\Resources\Pages\EditRecord;
 
 class EditPost extends EditRecord
 {
@@ -38,7 +38,7 @@ class EditPost extends EditRecord
                     $record->deletion_reason = $data['deletion_reason'];
                     $record->save();
                 })
-                ->visible(fn ($record) => !$record->trashed() && auth()->user()?->is_admin),
+                ->visible(fn ($record) => ! $record->trashed() && auth()->user()?->is_admin),
         ];
     }
 }

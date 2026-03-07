@@ -14,7 +14,9 @@ class ShiftManagementTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private BulletinPost $bulletinPost;
+
     private Shift $shift;
 
     protected function setUp(): void

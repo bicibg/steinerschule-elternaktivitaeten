@@ -27,6 +27,7 @@ class ProfileController extends Controller
             'phone' => ['nullable', 'string', 'max:50'],
             'remarks' => ['nullable', 'string', 'max:500'],
             'hide_contact_details' => ['boolean'],
+            'email_notifications' => ['boolean'],
         ]);
 
         $user->update($validated);

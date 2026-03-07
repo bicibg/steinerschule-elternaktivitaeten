@@ -184,5 +184,4 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Passwort');
     }
-
 }

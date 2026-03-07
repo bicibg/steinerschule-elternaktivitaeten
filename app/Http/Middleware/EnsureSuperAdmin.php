@@ -10,7 +10,7 @@ class EnsureSuperAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->is_super_admin) {
+        if (! auth()->check() || ! auth()->user()->is_super_admin) {
             abort(403);
         }
 

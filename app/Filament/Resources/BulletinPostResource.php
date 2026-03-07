@@ -10,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
 class BulletinPostResource extends Resource
@@ -19,10 +17,15 @@ class BulletinPostResource extends Resource
     protected static ?string $model = BulletinPost::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+
     protected static ?string $navigationLabel = 'Pinnwand';
+
     protected static ?string $navigationGroup = 'Aktivitäten';
+
     protected static ?string $modelLabel = 'Eintrag';
+
     protected static ?string $pluralModelLabel = 'Einträge';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
@@ -35,12 +38,10 @@ class BulletinPostResource extends Resource
                             ->label('Titel')
                             ->required()
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
-                                $operation === 'create' ? $set('slug', Str::slug($state)) : null
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null
                             ),
                         Forms\Components\Hidden::make('slug')
-                            ->dehydrateStateUsing(fn ($state, Forms\Get $get) =>
-                                $state ?? Str::slug($get('title'))
+                            ->dehydrateStateUsing(fn ($state, Forms\Get $get) => $state ?? Str::slug($get('title'))
                             ),
                         Forms\Components\Select::make('activity_id')
                             ->label('Elternaktivität')
@@ -78,7 +79,7 @@ class BulletinPostResource extends Resource
                             ->helperText('Optional: Kontaktpersonen mit Benutzerkonten verknüpfen. Name wird automatisch generiert.')
                             ->reactive()
                             ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                if (!empty($state)) {
+                                if (! empty($state)) {
                                     $users = \App\Models\User::whereIn('id', $state)->get();
                                     $set('contact_name', $users->pluck('name')->join(', '));
                                     if ($users->count() === 1) {
@@ -93,17 +94,17 @@ class BulletinPostResource extends Resource
                         Forms\Components\TextInput::make('contact_name')
                             ->label('Name')
                             ->required()
-                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
+                            ->disabled(fn (Forms\Get $get) => ! empty($get('contactUsers')))
                             ->dehydrated(),
                         Forms\Components\TextInput::make('contact_phone')
                             ->label('Telefon')
                             ->tel()
-                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
+                            ->disabled(fn (Forms\Get $get) => ! empty($get('contactUsers')))
                             ->dehydrated(),
                         Forms\Components\TextInput::make('contact_email')
                             ->label('E-Mail')
                             ->email()
-                            ->disabled(fn (Forms\Get $get) => !empty($get('contactUsers')))
+                            ->disabled(fn (Forms\Get $get) => ! empty($get('contactUsers')))
                             ->dehydrated(),
                     ]),
                 Forms\Components\Section::make('Einstellungen')
@@ -165,8 +166,7 @@ class BulletinPostResource extends Resource
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('category')
                     ->label('Kategorie')
-                    ->formatStateUsing(fn ($state) =>
-                        $state === 'haus_umgebung_taskforces'
+                    ->formatStateUsing(fn ($state) => $state === 'haus_umgebung_taskforces'
                             ? 'Haus, Umgebung<br>und Taskforces'
                             : (\App\Models\BulletinPost::getAvailableCategories()[$state] ?? '-')
                     )
@@ -181,16 +181,16 @@ class BulletinPostResource extends Resource
                 Tables\Columns\TextColumn::make('start_at')
                     ->label('Beginnt')
                     ->formatStateUsing(fn ($state) => $state ?
-                        $state->format('d.m.Y') . '<br>' .
-                        $state->format('H:i') . ' Uhr' : '-'
+                        $state->format('d.m.Y').'<br>'.
+                        $state->format('H:i').' Uhr' : '-'
                     )
                     ->html()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_at')
                     ->label('Endet')
                     ->formatStateUsing(fn ($state) => $state ?
-                        $state->format('d.m.Y') . '<br>' .
-                        $state->format('H:i') . ' Uhr' : '-'
+                        $state->format('d.m.Y').'<br>'.
+                        $state->format('H:i').' Uhr' : '-'
                     )
                     ->html()
                     ->sortable(),
@@ -215,15 +215,13 @@ class BulletinPostResource extends Resource
                         'info' => 'featured',
                         'gray' => 'last_minute',
                     ])
-                    ->formatStateUsing(fn (?string $state): ?string =>
-                        $state ? \App\Models\BulletinPost::getAvailableLabels()[$state] ?? null : null
+                    ->formatStateUsing(fn (?string $state): ?string => $state ? \App\Models\BulletinPost::getAvailableLabels()[$state] ?? null : null
                     )
                     ->visible(fn () => auth()->user()?->is_super_admin),
                 Tables\Columns\TextColumn::make('url')
                     ->label('')
                     ->getStateUsing(fn (BulletinPost $record): string => '')
-                    ->url(fn (BulletinPost $record): string =>
-                        url("/pinnwand/{$record->slug}")
+                    ->url(fn (BulletinPost $record): string => url("/pinnwand/{$record->slug}")
                     )
                     ->openUrlInNewTab()
                     ->icon('heroicon-m-arrow-top-right-on-square')

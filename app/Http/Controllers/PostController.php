@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\BulletinPost;
 use App\Models\Comment;
 use App\Models\Post;
-use App\Http\Requests\StorePostRequest;
+use App\Notifications\NewForumCommentNotification;
+use App\Notifications\NewForumPostNotification;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 
 class PostController extends Controller
 {
+    public function __construct(
+        private NotificationService $notificationService,
+    ) {}
+
     public function store($slug, StorePostRequest $request)
     {
         $helpRequest = BulletinPost::where('slug', $slug)->published()->firstOrFail();
@@ -24,7 +31,14 @@ class PostController extends Controller
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
 
-        RateLimiter::hit('post-' . $request->ip(), 30);
+        $post->load('user');
+        $this->notificationService->notifyContacts(
+            $helpRequest,
+            new NewForumPostNotification($post, $helpRequest),
+            auth()->id(),
+        );
+
+        RateLimiter::hit('post-'.$request->ip(), 30);
 
         return redirect()->route('help-requests.show', $helpRequest->slug)
             ->with('success', 'Ihr Beitrag wurde erfolgreich veröffentlicht.');
@@ -32,11 +46,11 @@ class PostController extends Controller
 
     public function storeComment(Post $post, Request $request)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login')->with('error', 'Bitte melden Sie sich an, um zu kommentieren.');
         }
 
-        $key = 'comment-' . $request->ip();
+        $key = 'comment-'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
             return back()->withErrors(['rate_limit' => 'Bitte warten Sie 30 Sekunden vor dem nächsten Kommentar.']);
         }
@@ -57,6 +71,15 @@ class PostController extends Controller
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
 
+        $post->load('bulletinPost');
+        $bulletinPost = $post->bulletinPost;
+        $notification = new NewForumCommentNotification($comment, $bulletinPost);
+
+        if ($post->user_id && $post->user_id !== auth()->id()) {
+            $this->notificationService->notifyUser($post->user, $notification, auth()->id());
+        }
+        $this->notificationService->notifyContacts($bulletinPost, $notification, auth()->id());
+
         RateLimiter::hit($key, 30);
 
         return redirect()->route('help-requests.show', $post->helpRequest->slug)
@@ -66,7 +89,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         // Check if user owns the post or is admin
-        if (auth()->id() !== $post->user_id && !auth()->user()->is_admin) {
+        if (auth()->id() !== $post->user_id && ! auth()->user()->is_admin) {
             abort(403, 'Nicht autorisiert');
         }
 
@@ -80,7 +103,7 @@ class PostController extends Controller
     public function destroyComment(Comment $comment)
     {
         // Check if user owns the comment or is admin
-        if (auth()->id() !== $comment->user_id && !auth()->user()->is_admin) {
+        if (auth()->id() !== $comment->user_id && ! auth()->user()->is_admin) {
             abort(403, 'Nicht autorisiert');
         }
 

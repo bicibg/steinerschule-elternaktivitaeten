@@ -29,8 +29,9 @@ class MakeUserSuperAdmin extends Command
         $email = $this->argument('email');
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User with email {$email} not found.");
+
             return 1;
         }
 
@@ -39,6 +40,7 @@ class MakeUserSuperAdmin extends Command
         $user->save();
 
         $this->info("User {$user->name} ({$email}) is now a super admin.");
+
         return 0;
     }
 }

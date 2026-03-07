@@ -4,30 +4,37 @@ namespace App\Filament\Pages;
 
 use App\Models\Activity;
 use App\Models\Announcement;
-use App\Models\BulletinPost;
-use App\Models\Post;
-use App\Models\Comment;
 use App\Models\AuditLog;
+use App\Models\BulletinPost;
+use App\Models\Comment;
+use App\Models\Post;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Pages\Page;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class YearReset extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
+
     protected static ?string $navigationLabel = '🔒 Neues Schuljahr';
+
     protected static ?string $navigationGroup = 'Administration';
+
     protected static ?int $navigationSort = 100;
+
     protected static string $view = 'filament.pages.year-reset';
 
     public ?array $data = [];
 
     public ?string $yearResetConfirmPhrase = '';
+
     public ?string $password = '';
+
     public ?string $schoolYear = '';
+
     public ?string $notes = '';
 
     protected static ?string $title = 'Neues Schuljahr';
@@ -120,7 +127,7 @@ class YearReset extends Page
                             ->required()
                             ->helperText('Geben Sie Ihr Passwort zur Bestätigung ein')
                             ->rule(fn () => function ($attribute, $value, $fail) {
-                                if (!Hash::check($value, auth()->user()->password)) {
+                                if (! Hash::check($value, auth()->user()->password)) {
                                     $fail('Das Passwort ist nicht korrekt.');
                                 }
                             }),
@@ -134,7 +141,7 @@ class YearReset extends Page
     {
         $lastReset = AuditLog::getLastAction('year_reset');
 
-        if (!$lastReset) {
+        if (! $lastReset) {
             return null;
         }
 
@@ -163,6 +170,7 @@ class YearReset extends Page
                 ->body('Das neue Schuljahr wurde in den letzten 30 Tagen bereits vorbereitet.')
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -173,16 +181,18 @@ class YearReset extends Page
                 ->body('Der Bestätigungstext ist nicht korrekt.')
                 ->danger()
                 ->send();
+
             return;
         }
 
         // Check password
-        if (!Hash::check($data['password'], auth()->user()->password)) {
+        if (! Hash::check($data['password'], auth()->user()->password)) {
             Notification::make()
                 ->title('Ungültiges Passwort')
                 ->body('Das eingegebene Passwort ist nicht korrekt.')
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -260,7 +270,7 @@ class YearReset extends Page
 
             Notification::make()
                 ->title('Fehler bei der Vorbereitung')
-                ->body('Es ist ein Fehler aufgetreten: ' . $e->getMessage())
+                ->body('Es ist ein Fehler aufgetreten: '.$e->getMessage())
                 ->danger()
                 ->send();
         }

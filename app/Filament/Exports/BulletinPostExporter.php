@@ -41,8 +41,7 @@ class BulletinPostExporter extends Exporter
                 }),
             ExportColumn::make('category')
                 ->label('Kategorie')
-                ->formatStateUsing(fn (?string $state): string =>
-                    $state ? (BulletinPost::getAvailableCategories()[$state] ?? '-') : '-'
+                ->formatStateUsing(fn (?string $state): string => $state ? (BulletinPost::getAvailableCategories()[$state] ?? '-') : '-'
                 ),
         ];
     }
@@ -54,10 +53,10 @@ class BulletinPostExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Der Export der Pinnwand-Einträge wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Eintrag')->plural($export->successful_rows) . ' exportiert.';
+        $body = 'Der Export der Pinnwand-Einträge wurde abgeschlossen. '.number_format($export->successful_rows).' '.str('Eintrag')->plural($export->successful_rows).' exportiert.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Eintrag')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Eintrag')->plural($failedRowsCount).' fehlgeschlagen.';
         }
 
         return $body;

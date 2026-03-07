@@ -29,7 +29,7 @@ class AuditLog extends Model
     }
 
     // Helper method to create audit log
-    public static function log(string $actionType, string $actionName, array $metadata = [], string $description = null, string $severity = 'info')
+    public static function log(string $actionType, string $actionName, array $metadata = [], ?string $description = null, string $severity = 'info')
     {
         return static::create([
             'action_type' => $actionType,
@@ -56,7 +56,7 @@ class AuditLog extends Model
     {
         $lastAction = static::getLastAction($actionType);
 
-        if (!$lastAction) {
+        if (! $lastAction) {
             return false;
         }
 

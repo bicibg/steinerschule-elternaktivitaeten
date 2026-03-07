@@ -16,7 +16,7 @@ class SchoolEventFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . Str::random(6),
+            'slug' => Str::slug($title).'-'.Str::random(6),
             'description' => $this->faker->sentence(),
             'start_date' => $this->faker->dateTimeBetween('now', '+3 months'),
             'end_date' => null,

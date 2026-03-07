@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
 use App\Models\Announcement;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class AnnouncementSeeder extends Seeder
 {
@@ -20,8 +19,9 @@ class AnnouncementSeeder extends Seeder
             ?? User::first();
 
         // If no users exist, skip seeding
-        if (!$creator) {
+        if (! $creator) {
             $this->command->warn('No users found. Skipping notification seeding.');
+
             return;
         }
 

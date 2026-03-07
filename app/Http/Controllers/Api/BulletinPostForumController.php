@@ -5,11 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BulletinPost;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Notifications\NewForumPostNotification;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class BulletinPostForumController extends Controller
 {
+    public function __construct(
+        private NotificationService $notificationService,
+    ) {}
+
     /**
      * Store a new forum post for a bulletin post.
      *
@@ -17,17 +23,17 @@ class BulletinPostForumController extends Controller
      */
     public function store(Request $request, string $slug): JsonResponse
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json(['error' => 'Nicht angemeldet'], 401);
         }
 
         $bulletinPost = BulletinPost::where('slug', $slug)->published()->first();
 
-        if (!$bulletinPost) {
+        if (! $bulletinPost) {
             return response()->json(['error' => 'Beitrag nicht gefunden'], 404);
         }
 
-        if (!$bulletinPost->has_forum) {
+        if (! $bulletinPost->has_forum) {
             return response()->json(['error' => 'Forum nicht aktiviert'], 403);
         }
 
@@ -45,6 +51,13 @@ class BulletinPostForumController extends Controller
             'body' => $validated['body'],
             'ip_hash' => hash('sha256', $request->ip()),
         ]);
+
+        $post->load('user');
+        $this->notificationService->notifyContacts(
+            $bulletinPost,
+            new NewForumPostNotification($post, $bulletinPost),
+            auth()->id(),
+        );
 
         return response()->json([
             'success' => true,
@@ -66,7 +79,7 @@ class BulletinPostForumController extends Controller
     {
         $bulletinPost = BulletinPost::where('slug', $slug)->published()->first();
 
-        if (!$bulletinPost) {
+        if (! $bulletinPost) {
             return response()->json(['error' => 'Beitrag nicht gefunden'], 404);
         }
 

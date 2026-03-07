@@ -17,12 +17,13 @@ class ShiftController extends Controller
 
     public function signup(Request $request, Shift $shift)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login')->with('error', 'Bitte melden Sie sich an, um sich für Schichten anzumelden.');
         }
 
         try {
             $this->shiftService->signupForShift($shift, auth()->user());
+
             return back()->with('success', 'Sie haben sich erfolgreich für die Schicht angemeldet.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -31,12 +32,13 @@ class ShiftController extends Controller
 
     public function withdraw(Shift $shift)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
         try {
             $this->shiftService->withdrawFromShift($shift, auth()->user());
+
             return back()->with('success', 'Sie haben sich erfolgreich von der Schicht abgemeldet.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

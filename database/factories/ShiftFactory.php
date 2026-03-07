@@ -17,7 +17,7 @@ class ShiftFactory extends Factory
         return [
             'bulletin_post_id' => BulletinPost::factory(),
             'role' => $this->faker->randomElement(['Aufbau', 'Abbau', 'Küche', 'Kasse', 'Betreuung']),
-            'time' => $date->format('d.m.Y') . ', 09:00 - 12:00 Uhr',
+            'time' => $date->format('d.m.Y').', 09:00 - 12:00 Uhr',
             'needed' => $this->faker->numberBetween(2, 10),
             'offline_filled' => 0,
         ];

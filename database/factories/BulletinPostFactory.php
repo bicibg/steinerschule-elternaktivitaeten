@@ -21,7 +21,7 @@ class BulletinPostFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . Str::random(6),
+            'slug' => Str::slug($title).'-'.Str::random(6),
             'description' => $this->faker->paragraph(),
             'participation_note' => 'Bitte melden Sie sich an, wenn Sie teilnehmen möchten.',
             'start_at' => $this->faker->dateTimeBetween('now', '+1 month'),

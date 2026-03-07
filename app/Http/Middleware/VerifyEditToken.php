@@ -19,13 +19,13 @@ class VerifyEditToken
         $slug = $request->route('slug');
         $token = $request->query('token');
 
-        if (!$slug || !$token) {
+        if (! $slug || ! $token) {
             abort(403, 'Zugriff verweigert. Kein gültiger Bearbeitungstoken.');
         }
 
         $helpRequest = BulletinPost::where('slug', $slug)->first();
 
-        if (!$helpRequest || !hash_equals($helpRequest->edit_token, $token)) {
+        if (! $helpRequest || ! hash_equals($helpRequest->edit_token, $token)) {
             abort(403, 'Zugriff verweigert. Ungültiger Bearbeitungstoken.');
         }
 

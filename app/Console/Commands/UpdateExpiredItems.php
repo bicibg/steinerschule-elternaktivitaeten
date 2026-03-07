@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Announcement;
 use App\Models\BulletinPost;
+use Illuminate\Console\Command;
 
 class UpdateExpiredItems extends Command
 {
@@ -39,9 +39,9 @@ class UpdateExpiredItems extends Command
         // Posts with end_at: expire when end_at passes
         // Posts without end_at: expire 7 days after start_at (grace period for multi-day events)
         $expiredPosts = BulletinPost::where('status', 'published')
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('end_at', '<', now())
-                    ->orWhere(function($q) {
+                    ->orWhere(function ($q) {
                         $q->whereNull('end_at')
                             ->whereNotNull('start_at')
                             ->where('start_at', '<', now()->subDays(7)->startOfDay());

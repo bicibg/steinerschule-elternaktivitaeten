@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\SchoolEvent;
-use Illuminate\Support\Str;
 use Sabre\VObject\Reader;
 
 class IcsImportService
@@ -43,12 +42,14 @@ class IcsImportService
         $title = trim((string) ($vevent->SUMMARY ?? ''));
         if ($title === '') {
             $this->skipped++;
+
             return;
         }
 
         $dtstart = $vevent->DTSTART;
         if (! $dtstart) {
             $this->skipped++;
+
             return;
         }
 
@@ -74,7 +75,7 @@ class IcsImportService
 
         $eventTime = null;
         if (! $allDay) {
-            $eventTime = $startDate->format('H:i') . ' Uhr';
+            $eventTime = $startDate->format('H:i').' Uhr';
         }
 
         $event = SchoolEvent::firstOrNew([

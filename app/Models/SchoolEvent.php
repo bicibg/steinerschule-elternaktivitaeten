@@ -48,6 +48,7 @@ class SchoolEvent extends Model
     public function getEventTypeLabel()
     {
         $types = self::getEventTypes();
+
         return $types[$this->event_type] ?? $this->event_type;
     }
 
@@ -67,14 +68,14 @@ class SchoolEvent extends Model
         static::creating(function ($event) {
             if (empty($event->slug)) {
                 // Generate slug with random suffix like other models
-                $event->slug = Str::slug($event->title) . '-' . Str::random(6);
+                $event->slug = Str::slug($event->title).'-'.Str::random(6);
             }
         });
 
         static::updating(function ($event) {
-            if ($event->isDirty('title') && !$event->isDirty('slug')) {
+            if ($event->isDirty('title') && ! $event->isDirty('slug')) {
                 // Generate new slug with random suffix when title changes
-                $event->slug = Str::slug($event->title) . '-' . Str::random(6);
+                $event->slug = Str::slug($event->title).'-'.Str::random(6);
             }
         });
     }

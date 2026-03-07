@@ -17,8 +17,7 @@ class ShiftRepository
      * Retrieves shifts that haven't reached their needed capacity,
      * ordered by date. Useful for volunteer recruitment displays.
      *
-     * @param int $limit Maximum number of shifts to return
-     *
+     * @param  int  $limit  Maximum number of shifts to return
      * @return Collection<int, Shift> Shifts with available spots
      */
     public function findNeedingVolunteers(int $limit = 10): Collection
@@ -46,8 +45,7 @@ class ShiftRepository
      * Retrieves all shifts where the user has volunteered, including
      * the parent bulletin post for context.
      *
-     * @param User $user User to get shifts for
-     *
+     * @param  User  $user  User to get shifts for
      * @return Collection<int, Shift> User's volunteer shifts
      */
     public function getUserShifts(User $user): Collection
@@ -65,8 +63,7 @@ class ShiftRepository
      * Retrieves all shifts for a bulletin post, sorting by parsed
      * German date format in the time field.
      *
-     * @param int $bulletinPostId Bulletin post ID
-     *
+     * @param  int  $bulletinPostId  Bulletin post ID
      * @return Collection<int, Shift> Ordered shifts with volunteers
      */
     public function getByBulletinPost(int $bulletinPostId): Collection
@@ -88,9 +85,8 @@ class ShiftRepository
      * Retrieves shifts occurring within a specified date range,
      * parsing the German date format for comparison.
      *
-     * @param Carbon $startDate Range start date
-     * @param Carbon $endDate   Range end date
-     *
+     * @param  Carbon  $startDate  Range start date
+     * @param  Carbon  $endDate  Range end date
      * @return Collection<int, Shift> Shifts within date range
      */
     public function getInDateRange(Carbon $startDate, Carbon $endDate): Collection
@@ -102,9 +98,10 @@ class ShiftRepository
             ->get()
             ->filter(function ($shift) use ($startDate, $endDate) {
                 $shiftDate = $this->parseShiftDate($shift->time);
-                if (!$shiftDate) {
+                if (! $shiftDate) {
                     return false;
                 }
+
                 return $shiftDate->between($startDate->startOfDay(), $endDate->endOfDay());
             })
             ->sortBy(function ($shift) {
@@ -158,8 +155,7 @@ class ShiftRepository
      *
      * Retrieves a single shift with all nested relationships loaded.
      *
-     * @param int $shiftId Shift ID
-     *
+     * @param  int  $shiftId  Shift ID
      * @return Shift|null Shift with relationships or null
      */
     public function findWithRelations(int $shiftId): ?Shift
@@ -173,9 +169,8 @@ class ShiftRepository
      *
      * Retrieves all volunteer signups for a user with shift details.
      *
-     * @param User $user    User to get history for
-     * @param int  $limit   Maximum records to return
-     *
+     * @param  User  $user  User to get history for
+     * @param  int  $limit  Maximum records to return
      * @return Collection<int, ShiftVolunteer> Volunteer history
      */
     public function getUserVolunteerHistory(User $user, int $limit = 50): Collection
@@ -202,8 +197,7 @@ class ShiftRepository
     /**
      * Parse German date format from shift time string.
      *
-     * @param string $timeString Shift time string (e.g. "Samstag, 09.11.2024, 09:00 - 11:00 Uhr")
-     *
+     * @param  string  $timeString  Shift time string (e.g. "Samstag, 09.11.2024, 09:00 - 11:00 Uhr")
      * @return Carbon|null Parsed date or null if parsing fails
      */
     private function parseShiftDate(string $timeString): ?Carbon
@@ -211,6 +205,7 @@ class ShiftRepository
         if (preg_match('/(\d{2})\.(\d{2})\.(\d{4})/', $timeString, $matches)) {
             return Carbon::createFromFormat('d.m.Y', $matches[0]);
         }
+
         return null;
     }
 }

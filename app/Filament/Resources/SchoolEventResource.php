@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SchoolEventResource\Pages;
-use App\Filament\Resources\SchoolEventResource\RelationManagers;
 use App\Models\SchoolEvent;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SchoolEventResource extends Resource
 {
@@ -99,7 +96,7 @@ class SchoolEventResource extends Resource
                     ->toggleable(),
                 Tables\Columns\BadgeColumn::make('event_type')
                     ->label('Typ')
-                    ->formatStateUsing(fn (string $state): string => match($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'festival' => 'Fest',
                         'meeting' => 'Treffen',
                         'performance' => 'Aufführung',

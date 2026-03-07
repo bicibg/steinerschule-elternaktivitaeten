@@ -31,6 +31,7 @@ class ActivityImporter extends Importer
                 ->castStateUsing(function (string $state): string {
                     // Try to match the German category names to the keys
                     $categories = array_flip(Activity::getCategories());
+
                     return $categories[trim($state)] ?? trim($state);
                 }),
             ImportColumn::make('contact_name')
@@ -73,25 +74,25 @@ class ActivityImporter extends Importer
         }
 
         // Set default values
-        if (!isset($this->record->is_active)) {
+        if (! isset($this->record->is_active)) {
             $this->record->is_active = true;
         }
 
-        if (!isset($this->record->has_forum)) {
+        if (! isset($this->record->has_forum)) {
             $this->record->has_forum = true;
         }
 
-        if (!isset($this->record->sort_order)) {
+        if (! isset($this->record->sort_order)) {
             $this->record->sort_order = 0;
         }
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Der Import der Aktivitäten wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Zeile')->plural($import->successful_rows) . ' importiert.';
+        $body = 'Der Import der Aktivitäten wurde abgeschlossen. '.number_format($import->successful_rows).' '.str('Zeile')->plural($import->successful_rows).' importiert.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht importiert werden.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Zeile')->plural($failedRowsCount).' konnte nicht importiert werden.';
         }
 
         return $body;

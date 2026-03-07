@@ -67,6 +67,17 @@
                     <p class="mt-1 ml-7 text-xs text-gray-500">Wenn aktiviert, können nur angemeldete Eltern Ihre E-Mail und Telefonnummer sehen. Ihr Name wird für nicht angemeldete Besucher gekürzt angezeigt.</p>
                 </div>
 
+                <div class="mb-5">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="hidden" name="email_notifications" value="0">
+                        <input type="checkbox" name="email_notifications" value="1"
+                               {{ old('email_notifications', $user->email_notifications) ? 'checked' : '' }}
+                               class="rounded border-gray-300 text-steiner-blue focus:ring-steiner-blue">
+                        <span class="ml-3 text-sm font-medium text-gray-700">E-Mail-Benachrichtigungen erhalten</span>
+                    </label>
+                    <p class="mt-1 ml-7 text-xs text-gray-500">Sie werden per E-Mail benachrichtigt, wenn sich jemand für Ihre Schichten anmeldet oder in Ihren Foren schreibt.</p>
+                </div>
+
                 <div class="flex justify-end">
                     <x-button type="submit" variant="primary">
                         Änderungen speichern

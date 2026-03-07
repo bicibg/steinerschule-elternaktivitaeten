@@ -34,7 +34,7 @@ class Activity extends Model
     {
         static::creating(function ($activity) {
             if (empty($activity->slug)) {
-                $activity->slug = Str::slug($activity->title) . '-' . Str::random(6);
+                $activity->slug = Str::slug($activity->title).'-'.Str::random(6);
             }
         });
     }
@@ -83,6 +83,7 @@ class Activity extends Model
     public function getCategoryTextAttribute(): ?string
     {
         $categories = self::getCategories();
+
         return $categories[$this->category] ?? null;
     }
 }

@@ -40,10 +40,10 @@ class ShiftVolunteersExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Der Export der Schicht-Anmeldungen wurde abgeschlossen. ' . number_format($export->successful_rows) . ' ' . str('Anmeldung')->plural($export->successful_rows) . ' exportiert.';
+        $body = 'Der Export der Schicht-Anmeldungen wurde abgeschlossen. '.number_format($export->successful_rows).' '.str('Anmeldung')->plural($export->successful_rows).' exportiert.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Anmeldung')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Anmeldung')->plural($failedRowsCount).' fehlgeschlagen.';
         }
 
         return $body;

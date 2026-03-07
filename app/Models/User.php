@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
         'is_admin',
         'is_super_admin',
         'hide_contact_details',
+        'email_notifications',
     ];
 
     /**
@@ -58,6 +59,7 @@ class User extends Authenticatable implements FilamentUser
             'is_admin' => 'boolean',
             'is_super_admin' => 'boolean',
             'hide_contact_details' => 'boolean',
+            'email_notifications' => 'boolean',
         ];
     }
 
@@ -156,5 +158,10 @@ class User extends Authenticatable implements FilamentUser
         }
 
         return max(0, (int) now()->diffInDays($this->deletion_requested_at->addDays(30), false));
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
 }

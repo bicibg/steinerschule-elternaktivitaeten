@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Comment extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'post_id',
         'user_id',
@@ -25,7 +26,6 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class);
     }
-
 
     public function user()
     {

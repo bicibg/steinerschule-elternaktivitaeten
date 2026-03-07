@@ -16,7 +16,7 @@ class ActivityFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . Str::random(6),
+            'slug' => Str::slug($title).'-'.Str::random(6),
             'description' => $this->faker->paragraph(),
             'category' => $this->faker->randomElement(['anlass', 'haus_umgebung_taskforces', 'produktion', 'organisation', 'verkauf']),
             'contact_name' => $this->faker->name(),

@@ -70,7 +70,7 @@ class BulletinPostImporter extends Importer
         ]);
 
         // Generate slug if it's a new record
-        if (!$bulletinPost->exists) {
+        if (! $bulletinPost->exists) {
             $bulletinPost->slug = Str::slug($this->data['title']);
         }
 
@@ -79,10 +79,10 @@ class BulletinPostImporter extends Importer
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Der Import der Pinnwand-Einträge wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Eintrag')->plural($import->successful_rows) . ' importiert.';
+        $body = 'Der Import der Pinnwand-Einträge wurde abgeschlossen. '.number_format($import->successful_rows).' '.str('Eintrag')->plural($import->successful_rows).' importiert.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Eintrag')->plural($failedRowsCount) . ' fehlgeschlagen.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Eintrag')->plural($failedRowsCount).' fehlgeschlagen.';
         }
 
         return $body;

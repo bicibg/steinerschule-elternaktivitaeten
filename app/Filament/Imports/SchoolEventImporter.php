@@ -47,6 +47,7 @@ class SchoolEventImporter extends Importer
                 ->castStateUsing(function (string $state): string {
                     // Try to match the German event type names to the keys
                     $types = array_flip(SchoolEvent::getEventTypes());
+
                     return $types[trim($state)] ?? trim($state);
                 }),
             ImportColumn::make('all_day')
@@ -76,25 +77,25 @@ class SchoolEventImporter extends Importer
     protected function beforeSave(): void
     {
         // Set default values
-        if (!isset($this->data['event_type'])) {
+        if (! isset($this->data['event_type'])) {
             $this->data['event_type'] = 'other';
         }
 
-        if (!isset($this->data['all_day'])) {
+        if (! isset($this->data['all_day'])) {
             $this->data['all_day'] = true;
         }
 
-        if (!isset($this->data['is_recurring'])) {
+        if (! isset($this->data['is_recurring'])) {
             $this->data['is_recurring'] = false;
         }
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Der Import der Schulveranstaltungen wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Zeile')->plural($import->successful_rows) . ' importiert.';
+        $body = 'Der Import der Schulveranstaltungen wurde abgeschlossen. '.number_format($import->successful_rows).' '.str('Zeile')->plural($import->successful_rows).' importiert.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht importiert werden.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Zeile')->plural($failedRowsCount).' konnte nicht importiert werden.';
         }
 
         return $body;

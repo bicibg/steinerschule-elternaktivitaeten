@@ -16,10 +16,15 @@ class AuditLogResource extends Resource
     protected static ?string $model = AuditLog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+
     protected static ?string $navigationLabel = '🔒 Audit-Protokoll';
+
     protected static ?string $navigationGroup = 'Administration';
+
     protected static ?string $modelLabel = 'Audit-Eintrag';
+
     protected static ?string $pluralModelLabel = 'Audit-Protokoll';
+
     protected static ?int $navigationSort = 52;
 
     public static function canCreate(): bool
@@ -97,7 +102,7 @@ class AuditLogResource extends Resource
                     ->label('Typ')
                     ->badge()
                     ->searchable()
-                    ->formatStateUsing(fn (string $state): string => match($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'year_reset' => 'Neues Schuljahr',
                         'user_deletion' => 'Benutzer gelöscht',
                         'bulk_import' => 'Massenimport',
@@ -115,7 +120,7 @@ class AuditLogResource extends Resource
                         'warning' => 'warning',
                         'danger' => 'critical',
                     ])
-                    ->formatStateUsing(fn (string $state): string => match($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'info' => 'Information',
                         'warning' => 'Warnung',
                         'critical' => 'Kritisch',

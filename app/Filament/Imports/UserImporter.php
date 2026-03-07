@@ -58,11 +58,11 @@ class UserImporter extends Importer
     protected function beforeSave(): void
     {
         // Set default values
-        if (!isset($this->data['is_admin'])) {
+        if (! isset($this->data['is_admin'])) {
             $this->data['is_admin'] = false;
         }
 
-        if (!isset($this->data['is_super_admin'])) {
+        if (! isset($this->data['is_super_admin'])) {
             $this->data['is_super_admin'] = false;
         }
 
@@ -72,7 +72,7 @@ class UserImporter extends Importer
         }
 
         // Hash the password if it's not already hashed (for new users or password updates)
-        if (!$this->record->exists || !empty($this->data['password'])) {
+        if (! $this->record->exists || ! empty($this->data['password'])) {
             $this->data['password'] = Hash::make($this->data['password']);
         }
 
@@ -84,10 +84,10 @@ class UserImporter extends Importer
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Der Import der Benutzer wurde abgeschlossen. ' . number_format($import->successful_rows) . ' ' . str('Zeile')->plural($import->successful_rows) . ' importiert.';
+        $body = 'Der Import der Benutzer wurde abgeschlossen. '.number_format($import->successful_rows).' '.str('Zeile')->plural($import->successful_rows).' importiert.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('Zeile')->plural($failedRowsCount) . ' konnte nicht importiert werden.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('Zeile')->plural($failedRowsCount).' konnte nicht importiert werden.';
         }
 
         return $body;

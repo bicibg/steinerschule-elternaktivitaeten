@@ -3,17 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ImportResource\Pages;
-use App\Filament\Resources\ImportResource\RelationManagers;
-use Filament\Actions\Imports\Models\Import;
 use Filament\Actions\Imports\Models\FailedImportRow;
-use Filament\Forms;
+use Filament\Actions\Imports\Models\Import;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Storage;
 
 class ImportResource extends Resource
 {
@@ -92,6 +87,7 @@ class ImportResource extends Resource
                                 ->title('Keine fehlgeschlagenen Zeilen')
                                 ->success()
                                 ->send();
+
                             return;
                         }
 
@@ -109,7 +105,7 @@ class ImportResource extends Resource
                                 $data = json_decode($row->data, true);
                                 $validationErrors = json_decode($row->validation_error, true);
                                 $errorMessage = is_array($validationErrors)
-                                    ? implode('; ', array_map(fn($errors) => implode(', ', $errors), $validationErrors))
+                                    ? implode('; ', array_map(fn ($errors) => implode(', ', $errors), $validationErrors))
                                     : $row->validation_error;
                                 fputcsv($csv, array_merge(array_values($data), [$errorMessage]));
                             }
@@ -120,8 +116,8 @@ class ImportResource extends Resource
                         fclose($csv);
 
                         return response()->streamDownload(
-                            fn () => print($csvContent),
-                            'failed_rows_' . $record->id . '.csv',
+                            fn () => print ($csvContent),
+                            'failed_rows_'.$record->id.'.csv',
                             ['Content-Type' => 'text/csv']
                         );
                     })

@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\SchoolEvent;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use App\Models\SchoolEvent;
 
 return new class extends Migration
 {
@@ -19,7 +19,7 @@ return new class extends Migration
 
         // Generate slugs for existing events with random suffix
         SchoolEvent::whereNull('slug')->get()->each(function ($event) {
-            $event->slug = Str::slug($event->title) . '-' . Str::random(6);
+            $event->slug = Str::slug($event->title).'-'.Str::random(6);
             $event->save();
         });
 

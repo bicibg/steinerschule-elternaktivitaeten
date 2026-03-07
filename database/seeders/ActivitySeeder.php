@@ -12,7 +12,7 @@ class ActivitySeeder extends Seeder
     private function userIds(array $names): array
     {
         return User::whereIn('email', array_map(
-            fn ($name) => Str::slug($name, '.') . '@example.com',
+            fn ($name) => Str::slug($name, '.').'@example.com',
             $names
         ))->pluck('id')->toArray();
     }
@@ -20,9 +20,10 @@ class ActivitySeeder extends Seeder
     private function createWithContacts(array $data, array $contactNames = []): Activity
     {
         $activity = Activity::create($data);
-        if (!empty($contactNames)) {
+        if (! empty($contactNames)) {
             $activity->contactUsers()->attach($this->userIds($contactNames));
         }
+
         return $activity;
     }
 
