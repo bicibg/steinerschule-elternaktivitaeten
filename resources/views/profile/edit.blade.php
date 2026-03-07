@@ -97,5 +97,61 @@
                 </div>
             </form>
         </x-card>
+        <!-- Delete Account Section -->
+        @unless(auth()->user()->is_admin || auth()->user()->is_super_admin)
+        <x-card class="mt-6 border-red-200">
+            <h2 class="text-lg font-semibold text-red-700 mb-4">Konto löschen</h2>
+
+            <div class="mb-4 text-sm text-gray-600 space-y-2">
+                <p>Wenn Sie Ihr Konto löschen:</p>
+                <ul class="list-disc list-inside space-y-1 ml-2">
+                    <li>Ihr Konto wird sofort deaktiviert und Sie werden abgemeldet.</li>
+                    <li>Nach <strong>30 Tagen</strong> werden alle persönlichen Daten unwiderruflich anonymisiert.</li>
+                    <li>Ihre Beiträge bleiben erhalten, werden aber als «Anonymer Benutzer» angezeigt.</li>
+                    <li>Sie können Ihr Konto innerhalb von 30 Tagen reaktivieren, indem Sie sich erneut anmelden.</li>
+                </ul>
+            </div>
+
+            <form method="POST" action="{{ route('profile.destroy') }}"
+                  x-data="{ confirmed: false }"
+                  @submit.prevent="if (confirmed) { $el.submit() } else { confirmed = true }">
+                @csrf
+                @method('DELETE')
+
+                <div x-show="!confirmed">
+                    <x-button type="submit" variant="danger">
+                        Konto löschen
+                    </x-button>
+                </div>
+
+                <div x-show="confirmed" x-cloak class="space-y-4">
+                    <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                        Bitte geben Sie Ihr Passwort ein, um die Löschung zu bestätigen.
+                    </div>
+
+                    <x-form.input
+                        label="Passwort bestätigen"
+                        name="current_password"
+                        type="password"
+                        required />
+
+                    <div class="flex items-center gap-3">
+                        <x-button type="submit" variant="danger">
+                            Endgültig löschen
+                        </x-button>
+                        <button type="button" @click="confirmed = false"
+                                class="text-sm text-gray-500 hover:text-gray-700">
+                            Abbrechen
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </x-card>
+        @else
+        <x-card class="mt-6 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-500 mb-2">Konto löschen</h2>
+            <p class="text-sm text-gray-500">Als Administrator können Sie Ihr eigenes Konto nicht löschen. Bitte wenden Sie sich an einen anderen Super-Administrator.</p>
+        </x-card>
+        @endunless
     </div>
 @endsection

@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\BulletinController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\ModerationController;
-use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\SchoolCalendarController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\ModerationController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\SchoolCalendarController;
+use App\Http\Controllers\ShiftController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,7 +17,6 @@ Route::get('/', function () {
     return redirect('/elternaktivitaeten');
 });
 
-
 // Authentication routes
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
@@ -25,6 +24,10 @@ Route::get('/register', [\App\Http\Controllers\AuthController::class, 'showRegis
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->middleware(['throttle:5,1', 'guest', 'honeypot']);
 
 Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
+// Account reactivation
+Route::get('/reactivate', [\App\Http\Controllers\AuthController::class, 'showReactivation'])->name('reactivate');
+Route::post('/reactivate', [\App\Http\Controllers\AuthController::class, 'reactivate'])->name('reactivate.confirm');
 
 // Password Reset Routes
 Route::get('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request')->middleware('guest');
@@ -68,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'requestDeletion'])->name('profile.destroy');
     Route::get('/my-shifts', [App\Http\Controllers\ProfileController::class, 'shifts'])->name('profile.shifts');
 });
 

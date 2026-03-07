@@ -23,8 +23,8 @@ class UserDeletionLog extends Model
             'user_name' => $user->name,
             'user_email' => $user->email,
             'action_type' => $actionType,
-            'performed_by' => auth()->id(),
-            'performed_by_name' => auth()->user()->name,
+            'performed_by' => auth()->id() ?? $user->id,
+            'performed_by_name' => auth()->user()?->name ?? $user->name,
             'reason' => $reason,
         ]);
     }

@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\ShiftVolunteer;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
-
     public function edit()
     {
         return view('profile.edit', [
-            'user' => auth()->user()
+            'user' => auth()->user(),
         ]);
     }
 
@@ -63,5 +63,28 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.edit')
             ->with('success', 'Passwort erfolgreich geändert.');
+    }
+
+    public function requestDeletion(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        if ($user->is_admin || $user->is_super_admin) {
+            return redirect()->route('profile.edit')
+                ->with('error', 'Administratoren können ihr eigenes Konto nicht löschen.');
+        }
+
+        $user->requestDeletion();
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/pinnwand')
+            ->with('success', 'Ihr Konto wurde zur Löschung vorgemerkt. Sie haben 30 Tage, um sich erneut anzumelden und die Löschung rückgängig zu machen.');
     }
 }
