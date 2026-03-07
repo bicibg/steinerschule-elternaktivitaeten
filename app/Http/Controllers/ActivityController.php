@@ -16,7 +16,7 @@ class ActivityController extends Controller
             $query->where('category', $request->category);
         }
 
-        $activities = $query->ordered()->get();
+        $activities = $query->ordered()->with('contactUsers')->get();
 
         $categories = Activity::getCategories();
         $selectedCategory = $request->get('category', 'all');

@@ -29,6 +29,7 @@ class User extends Authenticatable implements FilamentUser
         'remarks',
         'is_admin',
         'is_super_admin',
+        'hide_contact_details',
     ];
 
     /**
@@ -56,7 +57,22 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'is_super_admin' => 'boolean',
+            'hide_contact_details' => 'boolean',
         ];
+    }
+
+    public function maskedName(): string
+    {
+        $parts = explode(' ', $this->name, 2);
+
+        if (count($parts) === 1) {
+            return $parts[0];
+        }
+
+        $firstName = $parts[0];
+        $lastName = $parts[1];
+
+        return $firstName.' '.mb_substr($lastName, 0, 1).str_repeat('*', max(1, mb_strlen($lastName) - 1));
     }
 
     public function canAccessPanel(Panel $panel): bool
