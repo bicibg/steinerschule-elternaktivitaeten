@@ -3,28 +3,32 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use App\Models\UserDeletionLog;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\Action;
-use Filament\Notifications\Notification;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
     protected static ?string $navigationLabel = '🔒 Benutzer';
+
     protected static ?string $navigationGroup = 'Administration';
+
     protected static ?string $modelLabel = 'Benutzer';
+
     protected static ?string $pluralModelLabel = 'Benutzer';
+
     protected static ?int $navigationSort = 10;
 
     public static function canViewAny(): bool
@@ -58,7 +62,7 @@ class UserResource extends Resource
                 Forms\Components\Toggle::make('is_admin')
                     ->label('Administrator')
                     ->helperText('Administratoren können auf das Admin-Panel zugreifen')
-                    ->disabled(fn () => !auth()->user()->is_super_admin)
+                    ->disabled(fn () => ! auth()->user()->is_super_admin)
                     ->dehydrated(fn () => auth()->user()->is_super_admin),
                 Forms\Components\Toggle::make('is_super_admin')
                     ->label('Super Administrator')
@@ -78,11 +82,12 @@ class UserResource extends Resource
                     ->searchable()
                     ->formatStateUsing(function ($state, User $record) {
                         if ($record->isAnonymized()) {
-                            return $state . ' (Anonymisiert)';
+                            return $state.' (Anonymisiert)';
                         }
                         if ($record->trashed()) {
-                            return $state . ' (Deaktiviert)';
+                            return $state.' (Deaktiviert)';
                         }
+
                         return $state;
                     }),
                 Tables\Columns\TextColumn::make('email')
@@ -125,7 +130,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn (User $record) => !$record->isAnonymized()),
+                    ->visible(fn (User $record) => ! $record->isAnonymized()),
 
                 // Soft Delete (Deactivation) Action
                 Action::make('deactivate')
@@ -136,7 +141,7 @@ class UserResource extends Resource
                     ->modalHeading('Benutzer deaktivieren')
                     ->modalDescription('Sind Sie sicher, dass Sie diesen Benutzer deaktivieren möchten? Der Benutzer kann sich nicht mehr anmelden, aber alle Daten bleiben erhalten.')
                     ->modalSubmitActionLabel('Ja, deaktivieren')
-                    ->visible(fn (User $record) => !$record->trashed() && !$record->isAnonymized() && $record->id !== auth()->id())
+                    ->visible(fn (User $record) => ! $record->trashed() && ! $record->isAnonymized() && $record->id !== auth()->id())
                     ->action(function (User $record) {
                         $record->deleted_by = auth()->id();
                         $record->save();
@@ -170,11 +175,15 @@ class UserResource extends Resource
                     ->modalHeading('Benutzer anonymisieren (DSGVO)')
                     ->modalDescription('WARNUNG: Diese Aktion kann nicht rückgängig gemacht werden! Alle persönlichen Daten werden dauerhaft anonymisiert.')
                     ->modalSubmitActionLabel('Unwiderruflich anonymisieren')
-                    ->visible(fn (User $record) => !$record->isAnonymized() && $record->id !== auth()->id())
+                    ->visible(fn (User $record) => ! $record->isAnonymized() && $record->id !== auth()->id())
                     ->action(function (User $record) {
                         UserDeletionLog::logAction($record, 'anonymized');
 
                         $record->anonymize(auth()->id());
+
+                        if (! $record->trashed()) {
+                            $record->delete();
+                        }
 
                         Notification::make()
                             ->title('Benutzer anonymisiert')
