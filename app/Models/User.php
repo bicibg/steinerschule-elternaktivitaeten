@@ -3,13 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Contracts\Auth\CanResetPassword;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -67,15 +67,20 @@ class User extends Authenticatable implements FilamentUser
     /**
      * Anonymize the user's personal data (GDPR compliance)
      */
-    public function anonymize(int $adminId = null): void
+    public function anonymize(?int $adminId = null): void
     {
-        $this->name = 'Anonymer Benutzer ' . $this->id;
-        $this->email = 'deleted-' . $this->id . '@anonymous.local';
-        $this->phone = null;
-        $this->remarks = null;
-        $this->anonymized_at = now();
-        $this->anonymized_by = $adminId;
-        $this->save();
+        static::withTrashed()->where('id', $this->id)->update([
+            'name' => 'Anonymer Benutzer '.$this->id,
+            'email' => 'deleted-'.$this->id.'@anonymous.local',
+            'password' => bcrypt(Str::random(64)),
+            'phone' => null,
+            'remarks' => null,
+            'remember_token' => null,
+            'anonymized_at' => now(),
+            'anonymized_by' => $adminId,
+        ]);
+
+        $this->refresh();
     }
 
     /**
@@ -83,6 +88,6 @@ class User extends Authenticatable implements FilamentUser
      */
     public function isAnonymized(): bool
     {
-        return !is_null($this->anonymized_at);
+        return ! is_null($this->anonymized_at);
     }
 }
