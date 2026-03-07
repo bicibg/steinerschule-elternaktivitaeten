@@ -55,11 +55,13 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        $user = User::create([
+        $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+        $user->skipWelcomeEmail = true;
+        $user->save();
 
         Auth::login($user);
 

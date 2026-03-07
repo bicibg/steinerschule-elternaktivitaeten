@@ -17,6 +17,21 @@ class User extends Authenticatable implements FilamentUser
     use HasFactory, Notifiable, SoftDeletes;
 
     /**
+     * When true, skip sending the welcome email on creation.
+     * Used for self-registration where the user already knows their password.
+     */
+    public bool $skipWelcomeEmail = false;
+
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            if (! $user->skipWelcomeEmail) {
+                $user->notify(new \App\Notifications\WelcomeNewUserNotification);
+            }
+        });
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
